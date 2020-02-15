@@ -1,0 +1,44 @@
+- Deathmatch Menu:
+	Create a new screen that leads the player to:
+	* main deathmatch menu:
+		- shows statistics such as kills, deaths, damage dealt (in most recent match), etc(?)
+		- allows player to view statistics for other players (?)
+		- buttons to start match, cancel start (if initiated by player), vote to stop, change chars, etc
+	* maps submenu:
+		- describes what each map is (maybe with screenshots?)
+		- allows the player to start a map vote (vote with all maps in the game)
+		- allows the player to start a vote for a specific map (with yes/no options)
+	* teams submenu:
+		- describes the different team modes (ffa, rvb, 2pt, custom)
+		- allows the player to pick a preferred team for red v blue
+		- allows the player to pick a teammate for 2-player teams
+		- allows the player to pick a team for custom
+	* gear submenu:
+		- shows all gear players can use, categorized by slots:
+			melee 1
+			melee 2
+			melee 3
+			melee 4
+			consumable (like fire crystals)
+			armor
+			hat
+		- shows a description of each item (written desc, stats, screenshots?)
+		- allows players to change which gear they use for each slot (except consumable)
+		  note: check "Alternate Gear" for more info
+	* maybe more later idk, more specific details / concept art images would help
+	the main goal is to make deathmatch-specific functions easier to access (people tend to forget the commands
+	exist or just not know about them. did you know the mod has an afk function?) as well as giving players more info
+	about stuff without making someone else explain it for them
+
+	
+- Alternate Gear:
+	basic idea: each weapon in the game has its own role, and deathmatch isn't complete without all 4 of them
+	so the idea is that we could make new weapons to work as alternatives for an existing weapon
+	the alternatives would have similarities to the original, such as usage animation or range or w/e and would
+	serve the same purpose but would be functionally different and hopefully unique enough for people to want
+	to pick a favorite that isn't defined by some meta that develops behind my back
+	
+	maybe something like a fossil-theme hammer that spawns a bone cage before jumping, or a ice-theme sword
+	that protects the player using ice. i don't have any good specific ideas in mind currently but i think there's
+	already a lot of work to do before we get to this point
+	
