@@ -16,7 +16,7 @@ return {
 		MATCHINIT = "Preparing players for next match...",
 		MATCHBEGIN = "Deathmatch started!",
 		LATEJOIN = "Player joined late! Restarting deathmatch initiation!",
-		NEARSTARTDESPAWN = "Restarting deathmatch initiation for despawning player."
+		NEARSTARTDESPAWN = "Restarting deathmatch initiation for despawning player.",
 		
 		SETTEAMMODE = "Set deathmatch team mode to %s.",
 		SETTEAMMODE_CUSTOM = "Set deathmatch mode to custom. Use /setteam before a match starts to assign custom teams.",

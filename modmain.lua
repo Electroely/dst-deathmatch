@@ -1,7 +1,7 @@
 local G = GLOBAL
 local gamemodename = "deathmatch" 
 G.DEATHMATCH_STRINGS = G.require("deathmatch_strings")
-
+local DEATHMATCH_STRINGS = G.DEATHMATCH_STRINGS
 local DEATHMATCH_POPUPS = DEATHMATCH_STRINGS.POPUPS
 
 local PopupDialogScreen = G.require("screens/redux/popupdialog")
@@ -711,7 +711,7 @@ if G.TheNet:GetServerGameMode() == gamemodename then
 	
 	G.AddUserCommand("afk", {
 		prettyname = DEATHMATCH_STRINGS.USERCOMMANDS.AFK.NAME, 
-		desc = DEATHMATCH_STRINGS.USERCOMMANDS.AFK.DESC", 
+		desc = DEATHMATCH_STRINGS.USERCOMMANDS.AFK.DESC, 
 		permission = G.COMMAND_PERMISSION.USER,
 		slash = true,
 		usermenu = false,
