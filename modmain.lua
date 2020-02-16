@@ -1,59 +1,8 @@
 local G = GLOBAL
 local gamemodename = "deathmatch" 
+G.DEATHMATCH_STRINGS = G.require("deathmatch_strings")
 
-local DEATHMATCH_POPUPS = { --TODO: we need a strings file...
-	welcome = {
-		"Welcome to Deathmatch",
-		[[Fight other players using weapons from The Forge in this arena-based player vs player gamemode!
-		Please read the Info Sign for more information.
-		]] 
-		},
-	welcome_loner = {
-		"Welcome to Deathmatch",
-		[[This is a PvP game mode, so you'll need other players to play.
-		Please read the Info Sign for more information.
-		]]
-	},
-	infosign_1 = {
-		"Starting a match",
-		[[You can start a Deathmatch by typing the chat command '/dm start'.
-		(The Info Sign will show more info if read again)
-		]]
-	},
-	infosign_2 = {
-		"Spectating (1)",
-		[[If you die, you can spectate by selecting which player you want to watch on-screen.
-		You can also turn yourself into a ghost by typing /spectate. 
-		]]
-	},
-	infosign_3 = {
-		"Spectating (2)",
-		[[Please note that you cannot be revived in team battles if you're a ghost.
-		Also note that you can return to the lobby by typing /spectate as a ghost.]]
-	},
-	infosign_4 = {
-		"Combat",
-		[[You have access to 4 weapons. 
-		They all do the same damage in a melee attack, but each has a unique ability you can use by right-clicking.]],
-	},
-	infosign_5 = {
-		"Playing in Teams",
-		[[You can start a vote to enable or disable teams. There's two options:
-		Red vs Blue splits the players into two teams.
-		2-Player Teams groups the players in pairs.]]
-	},
-	infosign_5 = {
-		"Changing the Arena",
-		[[You can start a vote to change the selected arena. There are 3 options:
-		Atrium, Desert and Pig Village.
-		Voting for an arena mid-match will apply the change in the next match.]]
-	},
-	infosign_6 = {
-		"Items",
-		[[You can pick up various stat boosts that spawn in the middle of the arena.
-		You can also find one-time use weapons like the Hearthsfire Crystals.]]
-	}
-}
+local DEATHMATCH_POPUPS = DEATHMATCH_STRINGS.POPUPS
 
 local PopupDialogScreen = G.require("screens/redux/popupdialog")
 AddPrefabPostInit("player_classified", function(inst)
@@ -643,7 +592,7 @@ AddPrefabPostInit("world", function(inst)
 		inst:DoTaskInTime(0, function(inst)
 			inst.components.deathmatch_manager:SetGamemode(1)
 			inst.components.deathmatch_manager:SetNextArena("random")
-			G.print("remember to announce on steam group!")
+			G.print("remember to announce on steam group!") --TODO: remove
 		end)
 		inst:ListenForEvent("wehaveawinner", function(world, winner)
 			if type(winner) == "number" then
@@ -725,8 +674,8 @@ if G.TheNet:GetServerGameMode() == gamemodename then
 	G.require("usercommands").GetCommandFromName("rollback").vote = false
 
 	G.AddUserCommand("setteam", {
-		prettyname = "Set Team", 
-		desc = "Change your team to red, blue, yellow, green, orang, cyan, pink, or black.", 
+		prettyname = DEATHMATCH_STRINGS.USERCOMMANDS.SETTEAM.NAME, 
+		desc = DEATHMATCH_STRINGS.USERCOMMANDS.SETTEAM.DESC, 
 		permission = G.COMMAND_PERMISSION.USER,
 		slash = true,
 		usermenu = false,
@@ -746,8 +695,8 @@ if G.TheNet:GetServerGameMode() == gamemodename then
 	})
 
 	G.AddUserCommand("spectate", {
-		prettyname = "Spectate", 
-		desc = "Turn into a ghost player to spectate on the match.", 
+		prettyname = DEATHMATCH_STRINGS.USERCOMMANDS.SPECTATE.NAME, 
+		desc = DEATHMATCH_STRINGS.USERCOMMANDS.SPECTATE.DESC, 
 		permission = G.COMMAND_PERMISSION.USER,
 		slash = true,
 		usermenu = false,
@@ -761,8 +710,8 @@ if G.TheNet:GetServerGameMode() == gamemodename then
 	})
 	
 	G.AddUserCommand("afk", {
-		prettyname = "Toggle AFK", 
-		desc = "Toggle permanent spectator mode.", 
+		prettyname = DEATHMATCH_STRINGS.USERCOMMANDS.AFK.NAME, 
+		desc = DEATHMATCH_STRINGS.USERCOMMANDS.AFK.DESC", 
 		permission = G.COMMAND_PERMISSION.USER,
 		slash = true,
 		usermenu = false,
@@ -781,9 +730,9 @@ if G.TheNet:GetServerGameMode() == gamemodename then
 	})
 
 	G.AddUserCommand("deathmatch", {
-		prettyname = "Manage Deathmatch", 
+		prettyname = DEATHMATCH_STRINGS.USERCOMMANDS.DEATHMATCH.NAME, 
 		aliases = {"dm"},
-		desc = "Start or stop a deathmatch.", 
+		desc = DEATHMATCH_STRINGS.USERCOMMANDS.DEATHMATCH.DESC, 
 		permission = G.COMMAND_PERMISSION.USER,
 		slash = true,
 		usermenu = false,
@@ -794,7 +743,7 @@ if G.TheNet:GetServerGameMode() == gamemodename then
 			local dm = G.TheWorld.components.deathmatch_manager
 			if params.action == "start" then
 				if G.TheWorld.net.components.worldvoter:IsVoteActive() then
-					G.TheNet:Announce("Can't start deathmatch while vote is active.")
+					G.TheNet:Announce(DEATHMATCH_STRINGS.CHATMESSAGES.STARTMATCH_VOTEACTIVE)
 				elseif not (dm.doingreset or dm.matchinprogress or dm.matchstarting) then
 					dm:ResetDeathmatch()
 				end
@@ -807,9 +756,9 @@ if G.TheNet:GetServerGameMode() == gamemodename then
 	})
 
 G.AddUserCommand("despawn", {
-    prettyname = "Despawn", 
+    prettyname = DEATHMATCH_STRINGS.USERCOMMANDS.DESPAWN.NAME, 
 	aliases = {},
-    desc = "Change your character to another character", 
+    desc = DEATHMATCH_STRINGS.USERCOMMANDS.DESPAWN.DESC, 
     permission = G.COMMAND_PERMISSION.USER,
     slash = true,
     usermenu = false,
@@ -826,17 +775,17 @@ G.AddUserCommand("despawn", {
 		local status = caller.HUD.controls.deathmatch_status
 		if status ~= nil then
 			if status.data.match_status == 1 then
-				G.TheNet:SystemMessage("Can't despawn during a match!")
+				G.TheNet:SystemMessage(DEATHMATCH_STRINGS.CHATMESSAGES.DESPAWN_MIDMATCH)
 			elseif status.date.match_status == 2 then
-				G.TheNet:SystemMessage("Can't despawn during match startup!")
+				G.TheNet:SystemMessage(DEATHMATCH_STRINGS.CHATMESSAGES.DESPAWN_STARTING)
 			end
 		end
 	end
 })
 
 AddUserCommand("setteammode", {
-    prettyname = "Change mode", 
-    desc = "Change deathmatch game mode to Free for all, Red VS Blue or 2-Player Teams.", 
+    prettyname = DEATHMATCH_STRINGS.USERCOMMANDS.SETTEAMMODE.NAME, 
+    desc = DEATHMATCH_STRINGS.USERCOMMANDS.SETTEAMMODE.DESC, 
     permission = G.COMMAND_PERMISSION.ADMIN,
     confirm = false,
     slash = true,
@@ -850,8 +799,8 @@ AddUserCommand("setteammode", {
     votecountvisible = true,
     voteallownotvoted = true,
     voteoptions = {"Free For All", "Red vs. Blue", "2-Player Teams", "Custom"}, 
-    votetitlefmt = "Change Deathmatch mode to...", 
-    votenamefmt = "Change deathmatch mode", 
+    votetitlefmt = DEATHMATCH_STRINGS.USERCOMMANDS.SETTEAMMODE.VOTETITLE, 
+    votenamefmt = DEATHMATCH_STRINGS.USERCOMMANDS.SETTEAMMODE.VOTENAME, 
     votepassedfmt = "Vote complete!", 
     votecanstartfn = VoteUtil.DefaultCanStartVote,
     voteresultfn = VoteUtil.DefaultMajorityVote,
@@ -873,8 +822,9 @@ AddUserCommand("setteammode", {
 })
 
 AddUserCommand("setarena", {
-    prettyname = "Change Arena", 
-    desc = "Choose between the available arenas in the game.", 
+	aliases = {"setmap"},
+    prettyname = DEATHMATCH_STRINGS.USERCOMMANDS.SETARENA.NAME, 
+    desc = DEATHMATCH_STRINGS.USERCOMMANDS.SETARENA.DESC, 
     permission = G.COMMAND_PERMISSION.ADMIN,
     confirm = false,
     slash = true,
@@ -888,8 +838,8 @@ AddUserCommand("setarena", {
     votecountvisible = true,
     voteallownotvoted = true,
     voteoptions = {"Atrium", "Desert", "Pig Village", "Random"}, 
-    votetitlefmt = "Change arena to...", 
-    votenamefmt = "Change Arena", 
+    votetitlefmt = DEATHMATCH_STRINGS.USERCOMMANDS.SETARENA.VOTETITLE, 
+    votenamefmt = DEATHMATCH_STRINGS.USERCOMMANDS.SETARENA.VOTENAME, 
     votepassedfmt = "Vote complete!", 
     votecanstartfn = VoteUtil.DefaultCanStartVote,
     voteresultfn = VoteUtil.DefaultMajorityVote,

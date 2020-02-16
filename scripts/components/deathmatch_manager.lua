@@ -288,14 +288,14 @@ local function OnPlayerJoined(inst, player)
 		player.Transform:SetPosition(pos:Get())
 		if self.matchinprogress or self.matchstarting then
 			player:DoTaskInTime(1, function()
-				TheNet:SystemMessage("A match is currently in progress. Please wait until it ends or spectate using /spectate.")
+				TheNet:SystemMessage(DEATHMATCH_STRINGS.CHATMESSAGES.JOIN_MIDMATCH)
 			end)
 		end
 		GiveLobbyInventory(player)
 	end
 	if #TheNet:GetClientTable() == 2 then
 		player:DoTaskInTime(1, function()
-			TheNet:SystemMessage("Two or more people are required to play. Use \"/dm start\" to start.")
+			TheNet:SystemMessage(DEATHMATCH_STRINGS.CHATMESSAGES.JOIN_ALONE)
 		end)
 	end
 end
@@ -353,14 +353,8 @@ local Deathmatch_Manager = Class(function(self, inst)
 	self.timer_current = 0
 	self.leadingplayer = nil
 	
-	self.announcestrings = {
-	MATCHOVER = "Deathmatch is over!",
-	MATCHRESET = "Starting next deathmatch in 10 seconds...",
-	MATCHINIT = "Preparing players for next match...",
-	MATCHBEGIN = "Deathmatch started!",
-	LATEJOIN = "Player joined late! Restarting deathmatch initiation!",
-	NEARSTARTDESPAWN = "Restarting deathmatch initiation for despawning player."
-	}
+	self.announcestrings = DEATHMATCH_STRINGS.ANNOUNCE
+	
 	self.itemstable = {
 	"spear_gungnir",
 	"spear_lance",
@@ -826,11 +820,11 @@ function Deathmatch_Manager:SetGamemode(mode)
 	self.gamemode = mode
 	if mode ~= 0 then
 		self.allow_teamswitch_user = false
-		TheNet:Announce("Set deathmatch mode to "..self.gamemodes[mode].name..".")
+		TheNet:Announce(string.format(DEATHMATCH_STRINGS.ANNOUNCE.SETTEAMMODE, self.gamemodes[mode].name))
 		self.inst.net:PushEvent("deathmatch_matchmodechange", mode)
 	else
 		self.allow_teamswitch_user = true
-		TheNet:Announce("Set deathmatch mode to custom. Use /setteam before a match starts to assign custom teams.")
+		TheNet:Announce(DEATHMATCH_STRINGS.ANNOUNCE.SETTEAMMODE_CUSTOM)
 		self.inst.net:PushEvent("deathmatch_matchmodechange", 4)
 	end
 end
