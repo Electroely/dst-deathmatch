@@ -1,5 +1,5 @@
 - wortox drops a soul when he dies
 - spectator spinner doesn't list players properly (fixed, needs testing)
 - switching to spectator mode during match countdown does not re-assign teams
-- players can stall indefinitely by despawning repeatedly (more of an annoyance than an oversight)
+- players can stall indefinitely by despawning repeatedly (more of an annoyance than a bug)
 - you can parry thrown bombs (fixed, needs testing)

@@ -8,6 +8,26 @@
 		- makes it more apparent to people who despawn that they might miss a match
 	* players shouldn't be able to despawn after timer starts
 
+- Scale Firebomb landing timer with distance thrown
+	the closer to themselves the player throws it, the faster it hits the ground
+	
+- New Pickup Buffs
+	buffs that last forever but only have a limited effect, usually stackable
+	* buff that reduces damage taken from next hit by 75%
+	* buff that makes the next special not trigger a cooldown
+	* maybe more buffs along these lines
+
+
+- Team Chat
+	* press T to open chat for team
+	* like whispers, but would show [T] instead of [W]
+	* chat would only visible for members of the player's team
+	
+- Team Preference
+	* chat command to pick a preferred team in rvb
+	* chat command to pick a player to be paired with in 2pt
+	
+
 - Deathmatch Menu:
 	Create a new screen that leads the player to:
 	* main deathmatch menu:
