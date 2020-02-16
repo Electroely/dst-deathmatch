@@ -146,6 +146,7 @@ local function fn(inst, prefab)
 		end
 	end)
 	
+	--------------------------------------------------------------------------------------
 	if not PERKS_ENABLED then return end
 	if prefab == "willow" and TheWorld.ismastersim then
 		inst.components.health.fire_damage_scale = 0

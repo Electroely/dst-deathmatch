@@ -35,16 +35,22 @@ local Deathmatch_SpectatorSpinner = Class(Widget, function(self, owner)
 	end)
 	
 	TheWorld:ListenForEvent("playerexited", function(player)
-		if self then
+		if self and self.shown then
 			self.spinner:SetOptions(GetOptionsList())
 		end
 	end)
 	
 	TheWorld:ListenForEvent("playerentered", function(player)
-		if self then
+		if self and self.shown then
 			self.spinner:SetOptions(GetOptionsList())
 		end
 	end)
 end)
+
+local Show_old = Deathmatch_SpectatorSpinner.Show
+function Deathmatch_SpectatorSpinner:Show(...)
+	self.spinner:SetOptions(GetOptionsList())
+	Show_old(self, ...)
+end
 
 return Deathmatch_SpectatorSpinner

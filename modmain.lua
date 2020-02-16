@@ -1,6 +1,61 @@
 local G = GLOBAL
 local gamemodename = "deathmatch" 
 
+local DEATHMATCH_POPUPS = { --TODO: we need a strings file...
+	welcome = {
+		"Welcome to Deathmatch",
+		[[Fight other players using weapons from The Forge in this arena-based player vs player gamemode!
+		Please read the Info Sign for more information.
+		]] 
+		},
+	welcome_loner = {
+		"Welcome to Deathmatch",
+		[[This is a PvP game mode, so you'll need other players to play.
+		Please read the Info Sign for more information.
+		]]
+	},
+	infosign_1 = {
+		"Starting a match",
+		[[You can start a Deathmatch by typing the chat command '/dm start'.
+		(The Info Sign will show more info if read again)
+		]]
+	},
+	infosign_2 = {
+		"Spectating (1)",
+		[[If you die, you can spectate by selecting which player you want to watch on-screen.
+		You can also turn yourself into a ghost by typing /spectate. 
+		]]
+	},
+	infosign_3 = {
+		"Spectating (2)",
+		[[Please note that you cannot be revived in team battles if you're a ghost.
+		Also note that you can return to the lobby by typing /spectate as a ghost.]]
+	},
+	infosign_4 = {
+		"Combat",
+		[[You have access to 4 weapons. 
+		They all do the same damage in a melee attack, but each has a unique ability you can use by right-clicking.]],
+	},
+	infosign_5 = {
+		"Playing in Teams",
+		[[You can start a vote to enable or disable teams. There's two options:
+		Red vs Blue splits the players into two teams.
+		2-Player Teams groups the players in pairs.]]
+	},
+	infosign_5 = {
+		"Changing the Arena",
+		[[You can start a vote to change the selected arena. There are 3 options:
+		Atrium, Desert and Pig Village.
+		Voting for an arena mid-match will apply the change in the next match.]]
+	},
+	infosign_6 = {
+		"Items",
+		[[You can pick up various stat boosts that spawn in the middle of the arena.
+		You can also find one-time use weapons like the Hearthsfire Crystals.]]
+	}
+}
+
+local PopupDialogScreen = G.require("screens/redux/popupdialog")
 AddPrefabPostInit("player_classified", function(inst)
 	if G.TheNet:GetServerGameMode() == gamemodename then
 		inst._arenaeffects = G.net_string(inst.GUID, "deathmatch.arenaeffect", "arenachanged")
@@ -22,6 +77,26 @@ AddPrefabPostInit("player_classified", function(inst)
 		inst._privatemessage = G.net_string(inst.GUID, "deathmatch.privatemessage", "pmdirty")
 		inst._privatemessage_sender = G.net_string(inst.GUID, "deathmatch.privatemessage_sender")
 		inst._privatemessage_team = G.net_byte(inst.GUID, "deathmatch.privatemessage_team")
+		
+		inst._deathmatchpopup = G.net_string(inst.GUID, "deathmatch.popupname", "ondeathmatchpopup")
+		if G.TheWorld.ismastersim then
+			inst:ListenForEvent("pushdeathmatchpopup", function(inst, popupname)
+				inst._deathmatchpopup:set(popupname)
+				inst._deathmatchpopup:set_local("") --to make sure it's always dirty
+			end, inst._parent)
+		end
+		if not G.TheNet:IsDedicated() then
+			inst:ListenForEvent("ondeathmatchpopup", function(inst)
+				--i might need to code special cases for welcome and welcome_loner so
+				--they're saved clientside and no player has to see on every time they
+				--join a server
+				local n = inst._deathmatchpopup:value()
+				G.TheFrontEnd:PushScreen(PopupDialogScreen(DEATHMATCH_POPUPS[n][1], DEATHMATCH_POPUPS[n][2],
+					{
+						{text="Close", cb = function() G.TheFrontEnd:PopScreen() end}
+					}))
+			end)
+		end
 	end
 end)
 --G.getmetatable(G.TheNet).__index.GetDefaultVoteEnabled = function() return true end
@@ -38,7 +113,7 @@ G.DEATHMATCH_TEAMS = {
 {name="Blue", colour={0.5,0.5,1,1}},
 {name="Yellow", colour={1,1,0.5,1}},
 {name="Green", colour={0.5,1,0.5,1}},
-{name="Orang", colour={1,0.5,0,1}},
+{name="Orange", colour={1,0.5,0,1}},
 {name="Cyan", colour={0.5,1,1,1}},
 {name="Pink", colour={1,0.5,1,1}},
 {name="Black", colour={97/255, 80/255, 132/255, 1}},
@@ -370,7 +445,7 @@ AddPlayerPostInit(function(inst)
 			inst.components.combat.hitrange = 2.5
 			inst.components.combat.playerdamagepercent = 1
 			inst:DoTaskInTime(0, function(inst)
-				if inst.userid then
+				--[[if inst.userid then
 					if inst.userid == "KU_0GXbSok4" then
 						inst.AnimState:HideSymbol("face")
 						inst.AnimState:HideSymbol("hair")
@@ -380,25 +455,10 @@ AddPlayerPostInit(function(inst)
 					elseif inst.userid == "KU_zHxWQFz3" and inst.prefab == "wolfgang" then
 						inst.AnimState:SetBuild("wolfgang_mighty")
 					end
-				end
+				end]]
 			end)
 		end
-		----- wortox
-		inst:DoTaskInTime(0, function()
-			if inst._onentitydroplootfn ~= nil then
-				inst:RemoveEventCallback("entity_droploot", inst._onentitydroplootfn, G.TheWorld)
-				inst._onentitydroplootfn = nil
-			end
-			if inst._onentitydeathfn ~= nil then
-				inst:RemoveEventCallback("entity_death", inst._onentitydeathfn, G.TheWorld)
-				inst._onentitydeathfn = nil
-			end
-			if inst._onstarvedtrapsoulsfn ~= nil then
-				inst:RemoveEventCallback("starvedtrapsouls", inst._onstarvedtrapsoulsfn, G.TheWorld)
-				inst._onstarvedtrapsoulsfn = nil
-			end
-		end)
-		---- wormwood
+		----- wormwood
 		if inst.prefab == "wormwood" and G.TheWorld.ismastersim then
 			--quick fix to bloom speed: apply speed debuff to negate the buff
 			--i'll sort this out later... i promise...

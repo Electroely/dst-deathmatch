@@ -3,7 +3,7 @@ v19.3
 - Fixed players dropping souls when dying near a Wortox player
 - Fixed a bug where the dead player spectating (aka spectator spinner) system did not list players properly
 - Fixed a bug where attempting to despawn at the wrong time did not tell players why they can't despawn
-- Fixed a bug where parrying the explosion of thrown hearthsfire crystals 
+- Fixed a bug where parrying the explosion of thrown hearthsfire crystals did damage to the thrower
 
 
 - Players can no longer despawn while a match is starting
