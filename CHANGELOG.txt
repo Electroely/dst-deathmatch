@@ -1,4 +1,4 @@
-v19.3
+v19.2
 - Fixed Wormwood getting a speed boost from bloom
 - Fixed players dropping souls when dying near a Wortox player
 - Fixed a bug where the dead player spectating (aka spectator spinner) system did not list players properly
@@ -9,3 +9,5 @@ v19.3
 - Players can no longer despawn while a match is starting
 - Entering or exiting spectator mode while a match is starting will no longer cause team imbalances (assuming
   number of players without the spectators is even)
+- Hearthsfire Crystals will land significantly faster if thrown close to the user
+- Updated various strings
