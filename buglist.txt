@@ -1,3 +1,3 @@
-- wortox drops a soul when he dies
-- switching to spectator mode during match countdown does not re-assign teams
-- players can stall indefinitely by despawning repeatedly (more of an annoyance than a bug)
+- wortox drops a soul when he dies (fixed, needs testing, might need a better fix later)
+- switching to spectator mode during match countdown does not re-assign teams (fixed, needs testing)
+- players can stall indefinitely by despawning repeatedly (needs testing, but players can no longer despawn during countdown)

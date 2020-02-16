@@ -396,6 +396,7 @@ local Deathmatch_Manager = Class(function(self, inst)
 	self.enabledarts = true
 	self.allow_teamswitch_user = true
 	self.allow_endmatch_user = true
+	self.matchstarting = false
 	self.matchinprogress = false
 	self.doingreset = false
 	self.players_in_match = {}
@@ -870,6 +871,9 @@ function Deathmatch_Manager:ToggleSpectator(player)
 			table.remove(self.players_in_match, idx) 
 		end
 		OnPlayerDeath(self.inst, player)
+	end
+	if self.doingreset then
+		self:GroupTeams(self.gamemodes[self.gamemode].teammode)
 	end
 end
 

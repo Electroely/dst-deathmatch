@@ -412,6 +412,10 @@ AddPlayerPostInit(function(inst)
 end)
 
 -----------------------------------------------------------------------------------------
+AddPrefabPostInit("wortox_soul", function(inst)
+	inst:DoTaskInTime(0, inst.Remove)
+end)
+
 AddPrefabPostInit("beehive", function(inst)
 	if G.TheWorld.ismastersim and G.TheNet:GetServerGameMode() == gamemodename then
 		inst:DoTaskInTime(0, function(inst)
@@ -464,7 +468,7 @@ AddPrefabPostInit("lavaarena_armormediumrecharger", function(inst)
 	end
 end)
 G.STRINGS.NAME_DETAIL_EXTENTION.LAVAARENA_ARMORMEDIUMRECHARGER = "80% Protection\n+25% Faster Cooldown"
-
+ 
 AddPrefabPostInit("glommer", function(inst)
 	inst:RemoveComponent("lootdropper")
 	inst:AddComponent("lootdropper")
@@ -754,15 +758,17 @@ G.AddUserCommand("despawn", {
     vote = false,
     serverfn = function(params, caller)
 		local dm = G.TheWorld.components.deathmatch_manager
-		if (caller and caller.IsValid and caller:IsValid()) and (caller:HasTag("spectator") or (not dm:IsPlayerInMatch(caller)) or (not dm.matchinprogress)) then
+		if (caller and caller.IsValid and caller:IsValid()) and (caller:HasTag("spectator") or (not dm:IsPlayerInMatch(caller)) or not (dm.doingreset or dm.matchinprogress or dm.matchstarting)) then
 			G.TheWorld:PushEvent("ms_playerdespawnanddelete", caller)
 		end
     end,
 	localfn = function(params, caller)
 		local status = caller.HUD.controls.deathmatch_status
 		if status ~= nil then
-			if status.data.matchstatus == 1 then
-				TheNet:SystemMessage("Can't switch during a match!")
+			if status.data.match_status == 1 then
+				G.TheNet:SystemMessage("Can't despawn during a match!")
+			elseif status.date.match_status == 2 then
+				G.TheNet:SystemMessage("Can't despawn during match startup!")
 			end
 		end
 	end
