@@ -1,3 +1,13 @@
+- QoL Tweaks:
+	stuff to make playing more enjoyable. preferably features that wouldn't take long to implement
+	* popups instead of system messages
+		- can be client-sided
+		- require manual user confirmation rather than fading away
+		- can list more info at once
+	* timer in character select
+		- makes it more apparent to people who despawn that they might miss a match
+	* players shouldn't be able to despawn after timer starts
+
 - Deathmatch Menu:
 	Create a new screen that leads the player to:
 	* main deathmatch menu:
