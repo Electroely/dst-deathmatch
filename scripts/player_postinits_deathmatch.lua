@@ -131,6 +131,12 @@ local function fn(inst, prefab)
 		inst.fake_body:Remove()
 	end
 	
+	inst:ListenForEvent("attacked", function(inst, data)
+		if data and data.stimuli and data.stimuli == "kb" then
+			inst:PushEvent("knockback", {knocker = data.weapon or inst, radius = 1, strengthmult = 3})
+		end
+	end)
+	
 	inst:ListenForEvent("death", function(inst) 
 		if inst.enable_shadow  and SHADOW_ENABLED then
 			inst:DoTaskInTime(2.5, function() 
