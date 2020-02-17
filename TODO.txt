@@ -1,3 +1,10 @@
+-More Maps:
+	-Lunar island/ lunar based map
+	-Boat map? Maybe with some of those Whirlpools I created a while back
+	-A map with the Forest stalker, his light bulbs are powerups
+	-A Maze arena with a somewhat powerful weapon in the middle, the weapon can be knocked out of players inventories?
+		-yooo, Maybe a maze with antlion and his sand spikes, and the maze shifts and changes every minute or two?
+
 - QoL Tweaks:
 	stuff to make playing more enjoyable. preferably features that wouldn't take long to implement
 	* popups instead of system messages

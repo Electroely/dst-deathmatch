@@ -390,6 +390,7 @@ AddPlayerPostInit(function(inst)
 				inst.OnPreLoad = nil
 			end
 			if inst:HasTag("monster") then inst:RemoveTag("monster") end
+			if inst:HasTag("merm") then inst:RemoveTag("merm") end --Pigs still attack wurt
 			inst.components.health:SetMaxHealth(health)
 			inst.components.combat.hitrange = 2.5
 			inst.components.combat.playerdamagepercent = 1
@@ -641,6 +642,10 @@ AddClassPostConstruct("widgets/controls", function(self, owner)
 		self.status.brain.Show = function() end -- im gay
 	end
 end)
+
+--[[AddClassPostConstruct("screens/redux/lobbyscreen", function(self, owner)
+	self.deathmatch_status = self:AddChild(G.require("widgets/deathmatch_lobbytimer")(owner))
+end)]]
 
 ---------------------------------------------------------------------
 local _name = GLOBAL.STRINGS.NAMES
