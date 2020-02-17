@@ -134,7 +134,8 @@ local function fn(inst, prefab)
 	inst:ListenForEvent("attacked", function(inst, data)
 		if data and data.stimuli and data.stimuli == "kb" then
 			inst:DoTaskInTime(0, function()
-				inst:PushEvent("knockback", {knocker = data.weapon or inst, radius = 1, strengthmult = 1})
+				local knocker = data.weapon and data.weapon:IsValid() and data.weapon or data.attacker or inst
+				inst:PushEvent("knockback", {knocker = knocker or data.attacker or inst, radius = 1, strengthmult = 1})
 			end)
 		end
 	end)
