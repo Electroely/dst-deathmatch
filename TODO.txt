@@ -1,3 +1,8 @@
+- Command to let players change cosmetic states:
+	* figure out a command name, lol
+	* would let wormwood, wolfgang and wurt (am i missing others?) change into their alternate forms
+	* purely cosmetic
+
 - QoL Tweaks:
 	stuff to make playing more enjoyable. preferably features that wouldn't take long to implement
 	* popups instead of system messages
