@@ -1,11 +1,12 @@
 local G = GLOBAL
 local require = G.require
--- i wrote these 2 functions real quick cause i'll need em later
---[[
+local debug = G.debug
+
 local function GetUpValue(func, varname)
 	local i = 1
 	local n, v = debug.getupvalue(func, 1)
 	while v ~= nil do
+		print("checking",n, v, "to fetch")
 		if n == varname then
 			return v
 		end
@@ -17,6 +18,7 @@ local function ReplaceUpValue(func, varname, newvalue)
 	local i = 1
 	local n, v = debug.getupvalue(func, 1)
 	while v ~= nil do
+		print("checking",n, v, "to replace")
 		if n == varname then
 			debug.setupvalue(func, i, newvalue)
 			return
@@ -24,11 +26,11 @@ local function ReplaceUpValue(func, varname, newvalue)
 		i = i + 1
 		n, v = debug.getupvalue(func, i)
 	end
-end]]
+end
 
 -- wormwood
 AddPrefabPostInit("wormwood", function(inst)
-	if not TheWorld.ismastersim then return end
+	if not G.TheWorld.ismastersim then return end
 	--quick fix to bloom speed: apply speed debuff to negate the buff
 	--i'll sort this out later... i promise...
 	inst.components.locomotor:SetExternalSpeedMultiplier(inst, "deathmatchwormwood", 10/12)
@@ -37,7 +39,7 @@ end)
 
 --wigfrid
 AddPrefabPostInit("wathgrithr", function(inst)
-	if not TheWorld.ismastersim then return end
+	if not G.TheWorld.ismastersim then return end
 	inst.event_listeners.onattackother[inst][2] = nil
 end)
 

@@ -316,7 +316,7 @@ end)
 G.require("player_postinits_deathmatch") --so... why did i separate this into its own thing if im adding a postinit here regardless...?
 --TODO: move all of the code here to player_postinits_deathmatch and organize it better
 --character-specific changes go into charperkremoval.lua
-modimport("charperkremoval")
+modimport("scripts/charperkremoval")
 AddPlayerPostInit(function(inst)
 	inst.requestmousepos = G.net_event(inst.GUID, "net_locationrequest")
 	inst.numattackers = 0
