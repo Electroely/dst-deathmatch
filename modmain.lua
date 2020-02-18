@@ -422,7 +422,7 @@ AddPlayerPostInit(function(inst)
 end)
 
 -----------------------------------------------------------------------------------------
-AddPrefabPostInit("wortox_soul", function(inst)
+AddPrefabPostInit("wortox_soul_spawn", function(inst)
 	inst:DoTaskInTime(0, inst.Remove)
 end)
 
