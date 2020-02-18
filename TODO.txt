@@ -1,10 +1,3 @@
--More Maps:
-	-Lunar island/ lunar based map
-	-Boat map? Maybe with some of those Whirlpools I created a while back
-	-A map with the Forest stalker, his light bulbs are powerups
-	-A Maze arena with a somewhat powerful weapon in the middle, the weapon can be knocked out of players inventories?
-		-yooo, Maybe a maze with antlion and his sand spikes, and the maze shifts and changes every minute or two?
-
 - QoL Tweaks:
 	stuff to make playing more enjoyable. preferably features that wouldn't take long to implement
 	* popups instead of system messages
@@ -14,9 +7,8 @@
 	* timer in character select
 		- makes it more apparent to people who despawn that they might miss a match
 	* players shouldn't be able to despawn after timer starts
-
-- Scale Firebomb landing timer with distance thrown
-	the closer to themselves the player throws it, the faster it hits the ground
+	* spectator ghosts have the same spectator spinner as dead players
+	* spectator spinner shouldn't target spectator ghosts (except self)
 	
 - New Pickup Buffs
 	buffs that last forever but only have a limited effect, usually stackable
@@ -79,3 +71,9 @@
 	that protects the player using ice. i don't have any good specific ideas in mind currently but i think there's
 	already a lot of work to do before we get to this point
 	
+-More Maps:
+	-Lunar island/ lunar based map
+	-Boat map? Maybe with some of those Whirlpools I created a while back
+	-A map with the Forest stalker, his light bulbs are powerups
+	-A Maze arena with a somewhat powerful weapon in the middle, the weapon can be knocked out of players inventories?
+		-yooo, Maybe a maze with antlion and his sand spikes, and the maze shifts and changes every minute or two?
