@@ -313,7 +313,10 @@ AddComponentPostInit("playercontroller", function(self) -- aoetargeting compabil
 	end
 end)
 
-G.require("player_postinits_deathmatch")
+G.require("player_postinits_deathmatch") --so... why did i separate this into its own thing if im adding a postinit here regardless...?
+--TODO: move all of the code here to player_postinits_deathmatch and organize it better
+--character-specific changes go into charperkremoval.lua
+modimport("charperkremoval")
 AddPlayerPostInit(function(inst)
 	inst.requestmousepos = G.net_event(inst.GUID, "net_locationrequest")
 	inst.numattackers = 0
@@ -360,7 +363,6 @@ AddPlayerPostInit(function(inst)
 		end
 		
 		if G.TheWorld.ismastersim then
-			if inst.components.beaverness then inst.components.beaverness:StopTimeEffect() end
 			inst.deathmatch_pickuptasks = {}
 			inst.components.combat.damagemultiplier = 1
 			inst.components.combat:SetPlayerStunlock(G.PLAYERSTUNLOCK.SOMETIMES)
@@ -381,39 +383,9 @@ AddPlayerPostInit(function(inst)
 				end
 			end)
 			local health = 150
-			if inst.prefab == "wathgrithr" then
-				health = 150
-				inst.event_listeners.onattackother[inst][2] = nil
-			elseif inst.prefab == "wolfgang" then
-				inst.OnLoad = nil
-				inst.OnNewSpawn = nil
-				inst.OnPreLoad = nil
-			end
-			if inst:HasTag("monster") then inst:RemoveTag("monster") end
-			if inst:HasTag("merm") then inst:RemoveTag("merm") end --Pigs still attack wurt
 			inst.components.health:SetMaxHealth(health)
 			inst.components.combat.hitrange = 2.5
 			inst.components.combat.playerdamagepercent = 1
-			inst:DoTaskInTime(0, function(inst)
-				--[[if inst.userid then
-					if inst.userid == "KU_0GXbSok4" then
-						inst.AnimState:HideSymbol("face")
-						inst.AnimState:HideSymbol("hair")
-						inst.AnimState:HideSymbol("hair_hat")
-						inst.AnimState:OverrideSymbol("headbase", "goosemoose_build", "goosemoose_head")
-						inst.AnimState:OverrideSymbol("headbase_hat", "goosemoose_build", "goosemoose_head")
-					elseif inst.userid == "KU_zHxWQFz3" and inst.prefab == "wolfgang" then
-						inst.AnimState:SetBuild("wolfgang_mighty")
-					end
-				end]]
-			end)
-		end
-		----- wormwood
-		if inst.prefab == "wormwood" and G.TheWorld.ismastersim then
-			--quick fix to bloom speed: apply speed debuff to negate the buff
-			--i'll sort this out later... i promise...
-			inst.components.locomotor:SetExternalSpeedMultiplier(inst, "deathmatchwormwood", 10/12)
-			inst:DoTaskInTime(1, inst.OnLoad)
 		end
 		---------- character perks
 		G.require("player_postinits_deathmatch")(inst, inst.prefab)

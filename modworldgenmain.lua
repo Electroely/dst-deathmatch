@@ -19,6 +19,7 @@ main reason i made this in the first place is because the darkness gimmick of at
 is ruined by the nicknames mod, which a lot of people regularly use
 i might just make the mod disable that mod (and a few others if necessary) and show an
 ingame popup when that happens
+update: looks like some people crash because of client mods... should i bring this back?
 local mods_whitelist = {
 	["workshop-352373173"]=true, 
 	["workshop-343753877"]=true 
@@ -101,7 +102,17 @@ AddLevel("DEATHMATCH", {
 			prefabswaps_start = "classic",
             petrification = "none",
 			wildfires = "never",
+			--TODO: worldsize huge here
         },
         background_node_range = {0,1},
     })
+	
+--atrium bacons get removed because they're too close to the ocean, this should fix that
+G.require("map/graphnode")
+local Node_AddEntity_old = G.Node.AddEntity
+function G.Node:AddEntity(prefab, points_x, points_y, current_pos_idx, entitiesOut, width, height, prefab_list, prefab_data, rand_offset)
+	local tile = G.WorldSim:GetTile(points_x[current_pos_idx], points_y[current_pos_idx]) 
+	G.PopulateWorld_AddEntity(prefab, points_x[current_pos_idx], points_y[current_pos_idx], tile, entitiesOut, width, height, prefab_list, prefab_data, rand_offset)
+end
+
 	
