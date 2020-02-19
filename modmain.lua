@@ -588,6 +588,8 @@ end)
 
 ---------------------------------------------------------------------
 local Text = G.require("widgets/text")
+local Deathmatch_LobbyTimer = G.require("widgets/deathmatch_lobbytimer")
+
 AddClassPostConstruct("widgets/controls", function(self, owner)
 	if G.TheNet:GetServerGameMode() == "deathmatch" then
 		self.deathmatch_playerlist = self.topleft_root:AddChild(G.require("widgets/deathmatch_playerlist")(owner))
@@ -615,10 +617,10 @@ AddClassPostConstruct("widgets/controls", function(self, owner)
 	end
 end)
 
---[[AddClassPostConstruct("screens/redux/lobbyscreen", function(self, owner)
-	self.deathmatch_timer = self:AddChild(G.require("widgets/deathmatch_lobbytimer"))
+AddClassPostConstruct("screens/redux/lobbyscreen", function(self)
+	self.deathmatch_timer = self.root:AddChild(Deathmatch_LobbyTimer())
 	self.deathmatch_timer:SetPosition(40, 310, 0)
-end)]]
+end)
 
 ---------------------------------------------------------------------
 local _name = GLOBAL.STRINGS.NAMES

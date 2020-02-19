@@ -10,19 +10,18 @@ local function SecondsToTimer(secs)
 	return "00:00" 
 end
 
-local Deathmatch_LobbyTimer = Class(Widget, function(self, owner)
+local Deathmatch_LobbyTimer = Class(Widget, function(self)
 	Widget._ctor(self, "Deathmatch_LobbyTimer")
-	self.owner = owner
-	
+
 	self.timer = self:AddChild(Text(NEWFONT_OUTLINE, 40))
 	
-	--self.owner:DoPeriodicTask(1, function()
-		--self:OnUpdate()
-	--end)
+	TheWorld:DoPeriodicTask(1, function()
+		self:OnUpdate()
+	end)
 end)
 
 function Deathmatch_LobbyTimer:OnUpdate()
-	self.timer:SetString(tostring(SecondsToTimer(owner.HUD.controls.deathmatch_status.data.timer_current)))
+	self.timer:SetString(tostring(SecondsToTimer(TheWorld.net.deathmatch_netvars.globalvars.timercurrent:value())))
 end
 
 return Deathmatch_LobbyTimer
