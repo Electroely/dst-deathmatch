@@ -616,7 +616,8 @@ AddClassPostConstruct("widgets/controls", function(self, owner)
 end)
 
 --[[AddClassPostConstruct("screens/redux/lobbyscreen", function(self, owner)
-	self.deathmatch_status = self:AddChild(G.require("widgets/deathmatch_lobbytimer")(owner))
+	self.deathmatch_timer = self:AddChild(G.require("widgets/deathmatch_lobbytimer"))
+	self.deathmatch_timer:SetPosition(40, 310, 0)
 end)]]
 
 ---------------------------------------------------------------------

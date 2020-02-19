@@ -80,5 +80,13 @@
 	-Lunar island/ lunar based map
 	-Boat map? Maybe with some of those Whirlpools I created a while back
 	-A map with the Forest stalker, his light bulbs are powerups
+	-Map with malbatross, get its feathers to get stuff?
 	-A Maze arena with a somewhat powerful weapon in the middle, the weapon can be knocked out of players inventories?
 		-yooo, Maybe a maze with antlion and his sand spikes, and the maze shifts and changes every minute or two?
+			-The way this could work is, we have some different object layers in tiled with different mazes constructed on each layer with the sandblocks,
+			each maze's sandblocks has a tag like "maze1" In the game, we make all sandblocks with maze1 appear first, and then make all sandblocks with maze2
+			appear and so on, It'd be better if it was truly random but I dunno how to do that ecksdee
+	-MUSHROOM DRUG LAND
+		-eat SHROOMS to get larger or smaller like mario
+	
+-A sign in the lobby that lists change log and new updates, maaaybe?

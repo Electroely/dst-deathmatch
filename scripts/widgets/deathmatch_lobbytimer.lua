@@ -11,40 +11,18 @@ local function SecondsToTimer(secs)
 end
 
 local Deathmatch_LobbyTimer = Class(Widget, function(self, owner)
-	self.owner = owner
 	Widget._ctor(self, "Deathmatch_LobbyTimer")
+	self.owner = owner
 	
 	self.timer = self:AddChild(Text(NEWFONT_OUTLINE, 40))
-	self.timer:SetPosition(100, 310, 0)
-	self.timer.StartCounting = function(timer)
-		if timer.inst.updatetask ~= nil then
-			timer.inst.updatetask:Cancel()
-			timer.inst.updatetask = nil
-		end
-		timer.inst.updatetask = timer.inst:DoPeriodicTask(1, function()
-			if self.data.timer_current > 0 then
-				self.data.timer_current = self.data.timer_current - 1
-				self.timer:Update()
-			else
-				timer:StopCounting()
-			end
-		end)
-	end
-	self.timer.StopCounting = function(timer)
-		if timer.inst.updatetask ~= nil then
-			timer.inst.updatetask:Cancel()
-			timer.inst.updatetask = nil
-		end
-		self.data.timer_current = 0
-		self.timer:Update()
-	end
-	self.timer.Update = function(timer)
-		timer:SetString(tostring(SecondsToTimer(self.data.timer_current)))
-	end
+	
+	--self.owner:DoPeriodicTask(1, function()
+		--self:OnUpdate()
+	--end)
 end)
 
-function Deathmatch_LobbyTimer:Refresh()
-
+function Deathmatch_LobbyTimer:OnUpdate()
+	self.timer:SetString(tostring(SecondsToTimer(owner.HUD.controls.deathmatch_status.data.timer_current)))
 end
 
 return Deathmatch_LobbyTimer
