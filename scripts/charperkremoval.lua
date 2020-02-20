@@ -28,13 +28,37 @@ local function ReplaceUpValue(func, varname, newvalue)
 	end
 end
 
+--here comes the worst hack i've ever had to do ever
+local SetBloomStage = nil
+function G.require(modulename, ...)
+	--using the local version of require since it isn't replaced
+	local val = require(modulename, ...) 
+	--there's a probably a better way to do this so TODO
+	if val == require("prefabs/player_common") then
+		local val_old = val
+		function val(name, customprefabs, customassets, common_postinit, ...)
+			if name == "wormwood" then
+				--no more ground plants (they annoying) and no speed boost
+				ReplaceUpValue(common_postinit, "PlantTick", function() end)
+				ReplaceUpValue(common_postinit, "SetStatsLevel", function() end)
+				SetBloomStage = GetUpValue(common_postinit, "SetBloomStage")
+			end
+		end
+	end
+end
+
 -- wormwood
 AddPrefabPostInit("wormwood", function(inst)
 	if not G.TheWorld.ismastersim then return end
-	--quick fix to bloom speed: apply speed debuff to negate the buff
-	--i'll sort this out later... i promise...
-	inst.components.locomotor:SetExternalSpeedMultiplier(inst, "deathmatchwormwood", 10/12)
-	inst:DoTaskInTime(1, inst.OnLoad)
+	inst.SetBloomStage = SetBloomStage
+	--old wormwood speed removal code
+	--i will now just make world not perma spring (TODO) and let /setstate control bloom
+	--TODO: make /setstate save
+	--inst.components.locomotor:SetExternalSpeedMultiplier(inst, "deathmatchwormwood", 10/12)
+	--inst:DoTaskInTime(1, inst.OnLoad)
+	inst.OnLoad = nil
+	inst.OnNewSpawn = nil
+	inst.OnPreLoad = nil
 end)
 
 --wigfrid

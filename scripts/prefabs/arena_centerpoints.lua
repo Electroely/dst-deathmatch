@@ -65,6 +65,7 @@ local common_fn = function()
 	
 	local dt = 0
 	local lasttime = GetTime()
+	--[[this unused code is just gunna be a huge performance hit
 	inst._detecttask = inst:DoPeriodicTask(2/10, function(inst)
 		local x, y, z = inst:GetPosition():Get()
 		local ents = TheSim:FindEntities(x, y, z, inst.range, {"player"})
@@ -96,7 +97,7 @@ local common_fn = function()
 			inst.players_storm[k] = not k:IsNear(inst, inst.storm_range)
 			onsandstormchange(inst, k)
 		end
-	end)
+	end)]]
 	
 	return inst
 end

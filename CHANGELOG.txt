@@ -11,3 +11,14 @@ v19.2
   number of players without the spectators is even)
 - Hearthsfire Crystals will land significantly faster if thrown close to the user
 - Updated various strings
+
+v19.3
+Fixed a typo
+
+v19.4
+- Fixed bug where Wortox spawns a soul upon death
+- Fixed a bug where Wurt would get attacked by Pigmen without provoking them
+
+- Hearthsfire Crystals now do strong knockback if blown up through melee attacks
+- Wormwood will no longer spawn in bloom
+- Wormwood in full bloom no longer creates flowers on the ground (test)

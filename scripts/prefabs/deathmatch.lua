@@ -183,6 +183,11 @@ local configs = {
 	},
 }
 local function PushConfig(config)
+	--TODO: am i not storing the previous config in any way?!
+	--i could make it so that music doesn't restart if switching
+	--from non-specific to specific
+	--though i may have to set up some "relationships" code so that
+	--it doesn't play hog music in lobby
 	if not TheNet:IsDedicated() and ThePlayer ~= nil then
 		if not configs[config].specific then
 			ThePlayer.SoundEmitter:KillSound("bgm")
@@ -224,7 +229,7 @@ end
 
 local function common_postinit(inst)
     --Add waves
-    inst.entity:AddWaveComponent()
+    inst.entity:AddWaveComponent() --klei hasn't removed this...?
     inst.WaveComponent:SetWaveParams(13.5, 2.5)						-- wave texture u repeat, forward distance between waves
     inst.WaveComponent:SetWaveSize(80, 3.5)							-- wave mesh width and height
     inst.WaveComponent:SetWaveTexture("images/wave.tex")
@@ -251,7 +256,8 @@ local function common_postinit(inst)
     end
 	
 	inst:DoTaskInTime(0, function(inst)
-		inst.state.isspring = true
+		--no more of that wormwood bloom (also spring map is dead now)
+		--inst.state.isspring = true 
 		inst.state.isautumn = true
 	end)
 end

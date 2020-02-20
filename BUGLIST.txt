@@ -1,3 +1,6 @@
 - wortox drops a soul when he dies (fixed, needs testing, might need a better fix later)
 - switching to spectator mode during match countdown does not re-assign teams (fixed, needs testing)
 - players can stall indefinitely by despawning repeatedly (needs testing, but players can no longer despawn during countdown)
+
+- pigs targetting players is very wonky in so many situations and it really needs to be more consistent
+(note from electro: i'll fix this one since i have a good idea of how the current targetting works)
