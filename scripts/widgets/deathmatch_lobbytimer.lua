@@ -17,7 +17,12 @@ local Deathmatch_LobbyTimer = Class(Widget, function(self)
 	self.timer:SetString(tostring(SecondsToTimer(TheWorld.net.components.deathmatch_timer:GetTime())))
 	
 	self.timer.inst:DoPeriodicTask(1/2, function()
-		self:OnUpdate()
+		if TheWorld.net.deathmatch_netvars.globalvars.matchstatus:value() == 0 then
+			self.timer:Show()
+			self:OnUpdate()
+		else
+			self.timer:Hide()
+		end
 	end)
 end)
 

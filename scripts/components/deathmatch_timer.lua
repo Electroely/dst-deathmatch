@@ -7,10 +7,6 @@ local Deathmatch_Timer = Class(function(self, inst)
 			self.timer_current = self.timer_current - 1
 		end
 	end)
-	
-	inst:ListenForEvent("deathmatch_timercurrentchange", function(inst, val)
-	
-	end)
 end)
 
 function Deathmatch_Timer:SetTime(time)
