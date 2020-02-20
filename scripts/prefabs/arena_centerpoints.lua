@@ -65,7 +65,6 @@ local common_fn = function()
 	
 	local dt = 0
 	local lasttime = GetTime()
-	--[[this unused code is just gunna be a huge performance hit
 	inst._detecttask = inst:DoPeriodicTask(2/10, function(inst)
 		local x, y, z = inst:GetPosition():Get()
 		local ents = TheSim:FindEntities(x, y, z, inst.range, {"player"})
@@ -78,14 +77,14 @@ local common_fn = function()
 			players_found[v] = true
 		end
 		
-		local currenttime = GetTime()
+		--[[local currenttime = GetTime()
 		dt = currenttime - lasttime
 		lasttime = currenttime
 		if inst.storm_shrinking and inst.storm_range > inst.min_storm_range then
 		-- shrink at 0.5 unit/sec
 			inst.storm_range = inst.storm_range - 0.5*dt
 			inst.storm_circle:scale(inst.storm_range)
-		end
+		end]]
 		
 		
 		for k, v in pairs(inst.players_inside) do
@@ -94,10 +93,10 @@ local common_fn = function()
 				inst.players_inside[k] = nil
 				break
 			end
-			inst.players_storm[k] = not k:IsNear(inst, inst.storm_range)
-			onsandstormchange(inst, k)
+			--[[inst.players_storm[k] = not k:IsNear(inst, inst.storm_range)
+			onsandstormchange(inst, k)]]
 		end
-	end)]]
+	end)
 	
 	return inst
 end

@@ -229,7 +229,7 @@ end
 
 local function common_postinit(inst)
     --Add waves
-    inst.entity:AddWaveComponent() --klei hasn't removed this...?
+    inst.entity:AddWaveComponent() --klei hasn't removed this...? --Hornet: Their is still waves in the world, the dark ones the waterfalls go into in RoT
     inst.WaveComponent:SetWaveParams(13.5, 2.5)						-- wave texture u repeat, forward distance between waves
     inst.WaveComponent:SetWaveSize(80, 3.5)							-- wave mesh width and height
     inst.WaveComponent:SetWaveTexture("images/wave.tex")

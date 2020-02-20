@@ -14,14 +14,15 @@ local Deathmatch_LobbyTimer = Class(Widget, function(self)
 	Widget._ctor(self, "Deathmatch_LobbyTimer")
 
 	self.timer = self:AddChild(Text(NEWFONT_OUTLINE, 40))
+	self.timer:SetString(tostring(SecondsToTimer(TheWorld.net.components.deathmatch_timer:GetTime())))
 	
-	TheWorld:DoPeriodicTask(1, function()
+	self.timer.inst:DoPeriodicTask(1/2, function()
 		self:OnUpdate()
 	end)
 end)
 
 function Deathmatch_LobbyTimer:OnUpdate()
-	self.timer:SetString(tostring(SecondsToTimer(TheWorld.net.deathmatch_netvars.globalvars.timercurrent:value())))
+	self.timer:SetString(tostring(SecondsToTimer(TheWorld.net.components.deathmatch_timer:GetTime())))
 end
 
 return Deathmatch_LobbyTimer

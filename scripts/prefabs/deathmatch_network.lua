@@ -127,6 +127,7 @@ local function fn()
 	inst:AddComponent("seasons")
 	inst:AddComponent("worldreset")
     inst:AddComponent("worldtemperature")
+	inst:AddComponent("deathmatch_timer")
 
     inst.PostInit = PostInit
     inst.OnRemoveEntity = OnRemoveEntity
@@ -301,11 +302,7 @@ local function fn()
 		SetDirty(inst.deathmatch_netvars.globalvars.arena, val)
 	end)
 	inst:ListenForEvent("deathmatch_timercurrentdirty", function(inst)
-		if ThePlayer and ThePlayer.HUD then
-			ThePlayer.HUD.controls.deathmatch_status.data.timer_current = inst.deathmatch_netvars.globalvars.timercurrent:value()
-			ThePlayer.HUD.controls.deathmatch_status.timer:StartCounting()
-			ThePlayer.HUD.controls.deathmatch_status.timer:Update()
-		end
+		inst.components.deathmatch_timer.timer_current = inst.deathmatch_netvars.globalvars.timercurrent:value()
 	end)
 	local function refreshdmstatuswidget()
 		if ThePlayer and ThePlayer.HUD then
