@@ -74,6 +74,8 @@ local function MakePickUp(name)
 		inst.entity:AddAnimState()
 		inst.entity:AddNetwork()
 		
+		MakeInventoryPhysics(inst)
+		
 		inst.AnimState:SetBuild("pickup")
 		inst.AnimState:SetBank("pickup")
 		inst.AnimState:PlayAnimation("idle")
