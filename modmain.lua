@@ -1,4 +1,5 @@
 local G = GLOBAL
+local tonumber = G.tonumber
 local gamemodename = "deathmatch" 
 G.DEATHMATCH_STRINGS = G.require("deathmatch_strings")
 local DEATHMATCH_STRINGS = G.DEATHMATCH_STRINGS
@@ -709,6 +710,23 @@ if G.TheNet:GetServerGameMode() == gamemodename then
 		end,
 	})
 
+	G.AddUserCommand("setstate", {
+		aliases = {"setcycle", "setlook"},
+		prettyname = DEATHMATCH_STRINGS.USERCOMMANDS.SETSTATE.NAME, 
+		desc = DEATHMATCH_STRINGS.USERCOMMANDS.SETSTATE.DESC, 
+		permission = G.COMMAND_PERMISSION.USER,
+		slash = true,
+		usermenu = false,
+		servermenu = false,
+		params = {"num"},
+		vote = false,
+		serverfn = function(params, caller)
+			if caller.ChangeCosmeticState and tonumber(params.num) then
+				caller:ChangeCosmeticState(math.floor(tonumber(params.num)))
+			end
+		end,
+	})
+
 	G.AddUserCommand("deathmatch", {
 		prettyname = DEATHMATCH_STRINGS.USERCOMMANDS.DEATHMATCH.NAME, 
 		aliases = {"dm"},
@@ -835,6 +853,7 @@ AddUserCommand("setarena", {
 		end
     end,
 })
+
 end
 -------------------------------------------------------------------------------------------
 

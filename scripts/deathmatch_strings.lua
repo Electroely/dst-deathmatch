@@ -34,6 +34,10 @@ return {
 			NAME = "Toggle AFK",
 			DESC = "Toggle permanent spectator mode."
 		},
+		SETSTATE = {
+			NAME = "Change Look",
+			DESC = "Change your look to another your character can take.",
+		},
 		DEATHMATCH = {
 			NAME = "Deathmatch Action",
 			DESC = "Valid actions: start, stop"
@@ -54,7 +58,6 @@ return {
 			VOTENAME = "Change Arena",
 			VOTETITLE = "Change arena to...",
 		},
-		
 	},
 	
 	POPUPS = {
