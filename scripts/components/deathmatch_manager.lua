@@ -866,7 +866,7 @@ function Deathmatch_Manager:ToggleSpectator(player)
 		end
 		OnPlayerDeath(self.inst, player)
 	end
-	if self.doingreset then
+	if (self.doingreset or self.matchstarting) and self.gamemode ~= 0 then
 		self:GroupTeams(self.gamemodes[self.gamemode].teammode)
 	end
 end

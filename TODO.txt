@@ -12,6 +12,9 @@
 	
 - Figure out a better transition between cosmetic states for wolfgang and wurt
 
+- Methods of stopping a "snowballing" Team in the team modes
+	* Add Telltale hearts in some way, can't drop the old fashioned way in the middle since winning teams would just hog those
+	
 - New Pickup Buffs
 	buffs that last forever but only have a limited effect, usually stackable
 	* buff that reduces damage taken from next hit by 75%

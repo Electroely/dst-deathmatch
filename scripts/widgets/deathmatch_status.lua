@@ -77,38 +77,17 @@ local Deathmatch_Status = Class(Widget, function(self, owner)
 	
 	self.timer = self:AddChild(Text(NEWFONT_OUTLINE, 40))
 	self.timer:SetPosition(0, -75)
-	self.timer.StartCounting = function(timer)
-		if timer.inst.updatetask ~= nil then
-			timer.inst.updatetask:Cancel()
-			timer.inst.updatetask = nil
-		end
-		timer.inst.updatetask = timer.inst:DoPeriodicTask(1, function()
-			if self.data.timer_current > 0 then
-				self.data.timer_current = self.data.timer_current - 1
-				self.timer:Update()
-			else
-				timer:StopCounting()
-			end
-		end)
-	end
-	self.timer.StopCounting = function(timer)
-		if timer.inst.updatetask ~= nil then
-			timer.inst.updatetask:Cancel()
-			timer.inst.updatetask = nil
-		end
-		self.data.timer_current = 0
-		self.timer:Update()
-	end
-	self.timer.Update = function(timer)
-		timer:SetString(tostring(SecondsToTimer(self.data.timer_current)))
-	end
+	self.timer.inst:DoPeriodicTask(1/2, function()
+		self.timer:SetString(tostring(SecondsToTimer(TheWorld.net.components.deathmatch_timer:GetTime())))
+	end)
+	
+	self.timer:SetString(tostring(SecondsToTimer(TheWorld.net.components.deathmatch_timer:GetTime())))
 	
 	self.arena = self:AddChild(Text(NEWFONT_OUTLINE, 20))
 	self.arena:SetPosition(50, -45)
 	self.arena.Update = function(arenastr)
 		arenastr:SetString("|  " .. ARENAS[self.data.arena+1])
 	end
-	
 end)
 
 function Deathmatch_Status:Refresh()
@@ -123,9 +102,6 @@ function Deathmatch_Status:Refresh()
 	self.status:Update()
 	self.mode:Update()
 	self.arena:Update()
-	if self.data.match_mode == 1 and self.timer.inst.updatetask ~= nil then
-		self.timer:StartCounting()
-	end
 end
 
 return Deathmatch_Status
