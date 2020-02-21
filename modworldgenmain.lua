@@ -102,7 +102,7 @@ AddLevel("DEATHMATCH", {
 			prefabswaps_start = "classic",
             petrification = "none",
 			wildfires = "never",
-			--TODO: worldsize huge here
+			world_size = "huge",
         },
         background_node_range = {0,1},
     })

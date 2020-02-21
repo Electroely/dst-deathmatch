@@ -21,4 +21,6 @@ v19.4
 
 - Hearthsfire Crystals now do strong knockback if blown up through melee attacks
 - Wormwood will no longer spawn in bloom
-- Wormwood in full bloom no longer creates flowers on the ground (test)
+- Wormwood in full bloom no longer creates flowers on the ground
+- Wormwood, Wolfgang and Wurt can now change their look using one of these chat commands: /setstate, /setcycle or /setlook
+

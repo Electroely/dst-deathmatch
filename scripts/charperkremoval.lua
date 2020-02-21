@@ -58,15 +58,21 @@ end
 require("prefabs/wormwood")
 G.require = require --putting in back the original because i dont want to perma replace
 
+local function CosmeticSaveData(inst)
+	function inst:OnSave(data)
+		data.cosmeticstate = self.cosmeticstate
+	end
+	function inst:OnLoad(data)
+		if data.cosmeticstate ~= nil then
+			inst:ChangeCosmeticState(data.cosmeticstate)
+		end
+	end
+end
+
 -- wormwood
 AddPrefabPostInit("wormwood", function(inst)
 	if not G.TheWorld.ismastersim then return end
 	inst.SetBloomStage = SetBloomStage
-	--old wormwood speed removal code
-	--i will now just make world not perma spring (TODO) and let /setstate control bloom
-	--TODO: make /setstate save
-	--inst.components.locomotor:SetExternalSpeedMultiplier(inst, "deathmatchwormwood", 10/12)
-	--inst:DoTaskInTime(1, inst.OnLoad)
 	inst.OnLoad = nil
 	inst.OnNewSpawn = nil
 	inst.OnPreLoad = nil
@@ -80,6 +86,7 @@ AddPrefabPostInit("wormwood", function(inst)
 			self.cosmeticstate = num
 		end
 	end
+	CosmeticSaveData(inst)
 end)
 
 --wigfrid
@@ -107,6 +114,7 @@ AddPrefabPostInit("wolfgang", function(inst)
 			self.cosmeticstate = num
 		end
 	end
+	CosmeticSaveData(inst)
 end)
 
 --webber
@@ -138,6 +146,7 @@ AddPrefabPostInit("wurt", function(inst)
 			self.cosmeticstate = num
 		end
 	end
+	CosmeticSaveData(inst)
 end)
 
 AddPrefabPostInit("woodie", function(inst)

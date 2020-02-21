@@ -262,9 +262,27 @@ local function common_postinit(inst)
 	end)
 end
 
-
+local function OnSave(inst, data)
+	data.despawnplayerdata = despawnplayerdata
+end
+local function OnLoad(inst, data)
+	if data.despawnplayerdata ~= nil then
+		inst.despawnplayerdata = data.despawnplayerdata
+	end
+end
 local function master_postinit(inst)
-
+	inst.despawnplayerdata = {} --for saving day count in /despawn
+	inst:ListenForEvent("ms_newplayerspawned", function(world, player)
+		if inst.despawnplayerdata[player.userid] ~= nil then
+			if player.LoadForReroll ~= nil then
+				player:LoadForReroll(inst.despawnplayerdata[player.userid])
+			end
+			inst.despawnplayerdata[player.userid] = nil
+		end
+	end)
+	
+	inst.OnSave = OnSave --does this even work with worlds?
+	inst.OnLoad = OnLoad
 end
 
 return MakeWorld("deathmatch", prefabs, assets, common_postinit, master_postinit, {"deathmatch"})

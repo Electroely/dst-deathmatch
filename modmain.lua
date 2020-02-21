@@ -395,6 +395,8 @@ AddPlayerPostInit(function(inst)
 end)
 
 -----------------------------------------------------------------------------------------
+--TODO: move all of these prefab postinits into their own file
+--also, wortox soul removal should go into charperkremoval
 AddPrefabPostInit("wortox_soul_spawn", function(inst)
 	inst:DoTaskInTime(0, inst.Remove)
 end)
@@ -764,8 +766,10 @@ G.AddUserCommand("despawn", {
     params = {},
     vote = false,
     serverfn = function(params, caller)
-		local dm = G.TheWorld.components.deathmatch_manager
-		if (caller and caller.IsValid and caller:IsValid()) and (caller:HasTag("spectator") or (not dm.matchstarting and not dm:IsPlayerInMatch(caller)) or not (dm.doingreset or dm.matchinprogress)) then
+		local dm = G.TheWorld.components.deathmatch_manager --caller:HasTag("spectator") or (not dm.matchstarting and not dm:IsPlayerInMatch(caller)) or not (dm.doingreset or dm.matchinprogress
+		if (caller and caller.IsValid and caller:IsValid()) and 
+		(caller:HasTag("spectator") or (not dm:isPlayerInMatch(caller)) or (not dm.matchstarting)) then
+			G.TheWorld.despawnplayerdata[caller.userid] = caller.SaveForReroll ~= nil and caller:SaveForReroll() or nil
 			G.TheWorld:PushEvent("ms_playerdespawnanddelete", caller)
 		end
     end,
