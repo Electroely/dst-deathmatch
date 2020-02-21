@@ -1,8 +1,3 @@
-- Command to let players change cosmetic states:
-	* figure out a command name, lol
-	* would let wormwood, wolfgang and wurt (am i missing others?) change into their alternate forms
-	* purely cosmetic
-
 - QoL Tweaks:
 	stuff to make playing more enjoyable. preferably features that wouldn't take long to implement
 	* popups instead of system messages
@@ -15,12 +10,13 @@
 	* spectator ghosts have the same spectator spinner as dead players
 	* spectator spinner shouldn't target spectator ghosts (except self)
 	
+- Figure out a better transition between cosmetic states for wolfgang and wurt
+
 - New Pickup Buffs
 	buffs that last forever but only have a limited effect, usually stackable
 	* buff that reduces damage taken from next hit by 75%
 	* buff that makes the next special not trigger a cooldown
 	* maybe more buffs along these lines
-
 
 - Team Chat
 	* press T to open chat for team
