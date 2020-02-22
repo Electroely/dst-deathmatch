@@ -253,6 +253,7 @@ local function common_postinit(inst)
 		--[[inst:ListenForEvent("registerlobbypoint", function(world, point)
 			world.lobbypoint = point
 		end)]]
+        inst.Map:SetTransparentOcean(true)
     end
 	
 	inst:DoTaskInTime(0, function(inst)
@@ -263,7 +264,7 @@ local function common_postinit(inst)
 end
 
 local function OnSave(inst, data)
-	data.despawnplayerdata = despawnplayerdata
+	data.despawnplayerdata = inst.despawnplayerdata
 end
 local function OnLoad(inst, data)
 	if data.despawnplayerdata ~= nil then
@@ -281,7 +282,7 @@ local function master_postinit(inst)
 		end
 	end)
 	
-	inst.OnSave = OnSave --does this even work with worlds?
+	inst.OnSave = OnSave --does this even work with worlds? Hornet: Yes, it does. I believe OnSave and OnLoad works for entities with the Transform functions
 	inst.OnLoad = OnLoad
 end
 

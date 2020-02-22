@@ -495,6 +495,63 @@ AddPrefabPostInit("glommer", function(inst)
 	inst:AddComponent("lootdropper")
 end)
 end
+
+local function getPlayerCount(onlyalive)
+	local count = 0
+	for k, v in pairs(G.AllPlayers) do
+		if not v:HasTag("spectator") and (not onlyalive or not v.components.health:IsDead()) then
+			count = count + 1
+		end
+	end
+	return count
+end
+
+local function launchitem(item, angle)
+    local speed = math.random() * 4 + 2
+    angle = (angle + math.random() * 60 - 30) * G.DEGREES
+    item.Physics:SetVel(speed * math.cos(angle), math.random() * 2 + 8, speed * math.sin(angle))
+end
+
+local function SpawnPickup(inst)
+    local x, y, z = inst.Transform:GetWorldPosition()
+	local pos = G.TheWorld.centerpoint:GetPosition()
+	local count = getPlayerCount(true)
+    local angle = math.random(360)
+	local nearbyplayers = 0
+	for k, v in pairs(G.TheWorld.components.deathmatch_manager.players_in_match) do
+		if v and v:IsValid() and not v.components.health:IsDead() and v:GetDistanceSqToPoint(pos) <= 25 then
+			nearbyplayers = nearbyplayers + 1
+		end
+	end
+	
+	if G.TheWorld.components.deathmatch_manager.enabledarts and nearbyplayers ~= 0 and nearbyplayers <= count/2 then
+		local bomb = G.SpawnPrefab("deathmatch_oneusebomb")
+        bomb.Transform:SetPosition(x, 4.5, z)
+        launchitem(bomb, angle)
+	end
+
+    for k = 1, math.floor(count/2) do
+        local pickup = G.SpawnPrefab(G.GetRandomItem(G.TheWorld.components.deathmatch_manager.pickupprefabs))
+        pickup.Transform:SetPosition(x, 4.5, z)
+        launchitem(pickup, angle)
+		if pickup.Fade ~= nil then
+			pickup:DoTaskInTime(15, pickup.Fade)
+		end
+    end
+end
+
+AddPrefabPostInit("pigking", function(inst)
+	if not G.TheWorld.ismastersim then
+		return
+	end
+	
+	inst.poweruptask = inst:DoPeriodicTask(11, function()
+		if G.TheWorld.components.deathmatch_manager.arena == "pigvillage" and G.TheWorld.components.deathmatch_manager.matchinprogress then
+			inst.sg:GoToState("cointoss")
+			inst:DoTaskInTime(2 / 3, SpawnPickup)
+		end
+	end)
+end)
 -----------------------------------------------------------------------------------------
 
 -- teamer entities
