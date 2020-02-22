@@ -1,9 +1,36 @@
 local G = GLOBAL
 local tonumber = G.tonumber
+local debug = G.debug
 local gamemodename = "deathmatch" 
 G.DEATHMATCH_STRINGS = G.require("deathmatch_strings")
 local DEATHMATCH_STRINGS = G.DEATHMATCH_STRINGS
 local DEATHMATCH_POPUPS = DEATHMATCH_STRINGS.POPUPS
+
+local function GetUpValue(func, varname)
+	local i = 1
+	local n, v = debug.getupvalue(func, 1)
+	while v ~= nil do
+		print("checking",n, v, "to fetch")
+		if n == varname then
+			return v
+		end
+		i = i + 1
+		n, v = debug.getupvalue(func, i)
+	end
+end
+local function ReplaceUpValue(func, varname, newvalue)
+	local i = 1
+	local n, v = debug.getupvalue(func, 1)
+	while v ~= nil do
+		print("checking",n, v, "to replace")
+		if n == varname then
+			debug.setupvalue(func, i, newvalue)
+			return
+		end
+		i = i + 1
+		n, v = debug.getupvalue(func, i)
+	end
+end
 
 local PopupDialogScreen = G.require("screens/redux/popupdialog")
 AddPrefabPostInit("player_classified", function(inst)
@@ -258,7 +285,16 @@ AddComponentPostInit("playeractionpicker", function(self)
 	end
 end)
 
-AddComponentPostInit("playercontroller", function(self) -- aoetargeting compability for non-hand slot items
+AddComponentPostInit("playercontroller", function(self) 
+	--no need to hold force attack for players
+	local ValidateAttackTarget_old = GetUpValue(self.GetAttackTarget, "ValidateAttackTarget")
+	ReplaceUpValue(self.GetAttackTarget, "ValidateAttackTarget", function(combat, target, force_attack, x, z, has_weapon, reach, ...)
+		if target and target:HasTag("player") then
+			force_attack = true
+		end
+		return ValidateAttackTarget_old(combat, target, force_attack, x, z, has_weapon, reach, ...)
+	end)
+	-- aoetargeting compability for non-hand slot items
 	local HasAOETargeting_Old = self.HasAOETargeting
 	self.HasAOETargeting = function(self)
 		local test = HasAOETargeting_Old(self)
