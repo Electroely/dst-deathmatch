@@ -253,6 +253,8 @@ local function common_postinit(inst)
 		--[[inst:ListenForEvent("registerlobbypoint", function(world, point)
 			world.lobbypoint = point
 		end)]]
+		inst:AddComponent("wavemanager")
+
         inst.Map:SetTransparentOcean(true)
     end
 	
