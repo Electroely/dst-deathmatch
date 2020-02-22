@@ -10,7 +10,7 @@ Layouts["DeathmatchArena"] = StaticLayout.Get("map/static_layouts/arena_lobby", 
         })
 Layouts["DeathmatchArena"].ground_types[17] = G.GROUND.DECIDUOUS
 Layouts["DeathmatchArena"].ground_types[18] = G.GROUND.DESERT_DIRT
-Layouts["DeathmatchArena"].ground_types[19] = G.GROUND.IMPASSABLE --for some reason it won't spawn impassable
+Layouts["DeathmatchArena"].ground_types[19] = G.GROUND.OCEAN_COASTAL
 AddClassPostConstruct("widgets/redux/worldcustomizationtab", function(self)
 	G.EVENTSERVER_LEVEL_LOCATIONS["DEATHMATCH"] = {"deathmatch"}
 end)
@@ -75,7 +75,6 @@ AddLocation({
         keep_disconnected_tiles = true,
         wormhole_prefab = nil,
         roads = "never",
-		has_ocean = true
     },
     required_prefabs = {
     },

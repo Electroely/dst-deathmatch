@@ -181,6 +181,14 @@ local configs = {
 		music = "",
 		waves = false,
 	},
+	ocean = {
+		colourcube = "day05_cc",
+		lighting = {200 / 255, 200 / 255, 200 / 255},
+		music = "saltydog/music/malbatross",
+		waves = true,
+		wave_texture = "images/wave_shadow.tex",
+		ocean = true,
+	},
 }
 local function PushConfig(config)
 	--TODO: am i not storing the previous config in any way?!
@@ -221,7 +229,17 @@ local function PushConfig(config)
 			elseif (configs[config].specific and configs[config].waves == false) or (not configs[config].specific and not configs[config].waves) then
 				TheWorld.WaveComponent:SetWaveSize(0,0)
 			end
+			if configs[config].wave_texture ~= nil then
+				TheWorld.WaveComponent:SetWaveTexture(configs[config].wave_texture)
+			else
+				TheWorld.WaveComponent:SetWaveTexture("images/wave.tex")
+			end
 			TheWorld.WaveComponent:Init(0,0)
+		end
+		if configs[config].ocean then
+			TheWorld.Map:SetTransparentOcean(true)
+		else
+			TheWorld.Map:SetTransparentOcean(false) --waves dissapear if this is on, so we gotta disable it
 		end
 	end
 end
@@ -240,7 +258,8 @@ local function common_postinit(inst)
     --Initialize lua components
     inst:AddComponent("ambientlighting")
 	inst.state.atrium_active = false
-
+	
+	inst.has_ocean = true
 
     --Dedicated server does not require these components
     --NOTE: ambient lighting is required by light watchers
@@ -254,8 +273,6 @@ local function common_postinit(inst)
 			world.lobbypoint = point
 		end)]]
 		inst:AddComponent("wavemanager")
-
-        inst.Map:SetTransparentOcean(true)
     end
 	
 	inst:DoTaskInTime(0, function(inst)

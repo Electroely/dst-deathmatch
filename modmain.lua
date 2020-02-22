@@ -516,6 +516,16 @@ AddPrefabPostInit("pigking", function(inst)
 		end
 	end)
 end)
+
+AddPrefabPostInit("oar", function(inst)
+	if not G.TheWorld.ismastersim then
+		return
+	end
+	
+	inst.components.oar.force = 2 --Oars are way too weak right now, they should be stronger
+	
+	inst:RemoveComponent("finiteuses")
+end)
 -----------------------------------------------------------------------------------------
 
 -- teamer entities
@@ -896,14 +906,14 @@ AddUserCommand("setarena", {
     voteminpasscount = 1,
     votecountvisible = true,
     voteallownotvoted = true,
-    voteoptions = {"Atrium", "Desert", "Pig Village", "Random"}, 
+    voteoptions = {"Atrium", "Desert", "Pig Village", "Ocean", "Random"}, 
     votetitlefmt = DEATHMATCH_STRINGS.USERCOMMANDS.SETARENA.VOTETITLE, 
     votenamefmt = DEATHMATCH_STRINGS.USERCOMMANDS.SETARENA.VOTENAME, 
     votepassedfmt = "Vote complete!", 
     votecanstartfn = VoteUtil.DefaultCanStartVote,
     voteresultfn = VoteUtil.DefaultMajorityVote,
     serverfn = function(params, caller)
-		local arenas = { [1]="atrium", [2]="desert", [3]="pigvillage", [4]="random", atrium="atrium", desert="desert", pigvillage="pigvillage", spring="spring", random="random" }
+		local arenas = { [1]="atrium", [2]="desert", [3]="pigvillage", [4]="random", atrium="atrium", desert="desert", pigvillage="pigvillage", spring="spring", random="random", ocean = "ocean" }
 		local dm = G.TheWorld.components.deathmatch_manager
 		local mode = params.arena
 		if mode ~= nil and arenas[mode] ~= nil then

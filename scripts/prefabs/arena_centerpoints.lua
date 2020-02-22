@@ -139,7 +139,8 @@ return MakeArenaCenterpoint("atrium"),
 	MakeArenaCenterpoint("desert"),
 	MakeArenaCenterpoint("spring"),
 	MakeArenaCenterpoint("pigvillage", pigvillage_postinit),
-	MakeArenaCenterpoint("cave")
+	MakeArenaCenterpoint("cave"),
+	MakeArenaCenterpoint("ocean")
 	
 	--[[when adding new arenas, make sure to update:
 	this file

@@ -86,6 +86,11 @@ local arena_configs = {
 			fullmoonfn(self.inst)
 		end,
 	},
+	ocean = {
+		extraitems = { "oar" },
+		spawnradius = 20.5,
+		nopickups = true,
+	},
 }
 
 local arena_idx = {
@@ -94,6 +99,7 @@ local arena_idx = {
 	["desert"] = 2,
 	["pigvillage"] = 3,
 	["spring"] = 4,
+	["ocean"] = 5,
 }
 
 
