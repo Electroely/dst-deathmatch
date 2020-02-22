@@ -281,7 +281,7 @@ local function master_postinit(inst)
 		end
 	end)
 	
-	inst.OnSave = OnSave --does this even work with worlds?
+	inst.OnSave = OnSave --does this even work with worlds? Hornet: Yes, it does. I believe OnSave and OnLoad works for entities with the Transform functions
 	inst.OnLoad = OnLoad
 end
 
