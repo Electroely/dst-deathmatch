@@ -14,7 +14,7 @@ local Deathmatch_LobbyTimer = Class(Widget, function(self)
 	Widget._ctor(self, "Deathmatch_LobbyTimer")
 
 	self.timer = self:AddChild(Text(NEWFONT_OUTLINE, 30))
-	self.timer:SetString("New match starts in "..tostring(SecondsToTimer(TheWorld.net.components.deathmatch_timer:GetTime())).."! Hurry up!")
+	self.timer:SetString("A new match starts in "..tostring(SecondsToTimer(TheWorld.net.components.deathmatch_timer:GetTime())).."! Hurry up!")
 	
 	self.inst:DoPeriodicTask(5*FRAMES, function()
 		self:OnUpdate()
@@ -36,7 +36,7 @@ end)
 
 function Deathmatch_LobbyTimer:OnUpdate()
 	if self.shown then
-		self.timer:SetString("New match starts in "..tostring(SecondsToTimer(TheWorld.net.components.deathmatch_timer:GetTime())).."! Hurry up!")
+		self.timer:SetString("A new match starts in "..tostring(SecondsToTimer(TheWorld.net.components.deathmatch_timer:GetTime())).."! Hurry up!")
 	end
 end
 
