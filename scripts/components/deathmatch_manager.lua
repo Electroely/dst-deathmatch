@@ -477,6 +477,7 @@ end
 
 function Deathmatch_Manager:ReleasePlayers()
 	if self.players_in_match ~= nil then
+		self.inst.net:PushEvent("deathmatch_matchstatuschange", 3)
 		self.doingreset = false
 		self.matchstarting = true
 		self.inst:DoTaskInTime(7, function() TheNet:Announce(self.announcestrings.MATCHBEGIN) end)

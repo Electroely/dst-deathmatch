@@ -13,21 +13,36 @@ end
 local Deathmatch_LobbyTimer = Class(Widget, function(self)
 	Widget._ctor(self, "Deathmatch_LobbyTimer")
 
-	self.timer = self:AddChild(Text(NEWFONT_OUTLINE, 40))
-	self.timer:SetString(tostring(SecondsToTimer(TheWorld.net.components.deathmatch_timer:GetTime())))
+	self.timer = self:AddChild(Text(NEWFONT_OUTLINE, 25))
+	self.timer:SetString("New match starts in "..tostring(SecondsToTimer(TheWorld.net.components.deathmatch_timer:GetTime())).."! Hurry up!")
 	
-	self.timer.inst:DoPeriodicTask(1/2, function()
-		if TheWorld.net.deathmatch_netvars.globalvars.matchstatus:value() == 2 then
-			self.timer:Show()
-			self:OnUpdate()
-		else
-			self.timer:Hide()
-		end
+	self.inst:DoPeriodicTask(5*FRAMES, function()
+		self:OnUpdate()
 	end)
+	
+	if TheWorld.net.deathmatch_netvars.globalvars.matchstatus:value() ~= 2 then
+		self:Hide()
+	end
+	
+	self.OnNetStatusDirty = function(wrld)
+		if TheWorld.net.deathmatch_netvars.globalvars.matchstatus:value() == 2 then
+			self:Show()
+		else
+			self:Hide()
+		end
+	end
+	TheWorld.net:ListenForEvent("deathmatch_matchstatusdirty", self.OnNetStatusDirty)
 end)
 
 function Deathmatch_LobbyTimer:OnUpdate()
-	self.timer:SetString(tostring(SecondsToTimer(TheWorld.net.components.deathmatch_timer:GetTime())))
+	if self.shown then
+		self.timer:SetString("New match starts in "..tostring(SecondsToTimer(TheWorld.net.components.deathmatch_timer:GetTime())).."! Hurry up!")
+	end
+end
+
+function Deathmatch_LobbyTimer:Kill(...)
+	TheWorld.net:RemoveEventCallback("deathmatch_matchstatusdirty", self.OnNetStatusDirty)
+	return Widget.Kill(self, ...)
 end
 
 return Deathmatch_LobbyTimer

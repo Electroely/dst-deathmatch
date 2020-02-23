@@ -46,6 +46,8 @@ local Deathmatch_Status = Class(Widget, function(self, owner)
 		elseif self.data.match_status == 1 then
 			status:SetString("Match in progress!")
 		elseif self.data.match_status == 2 then
+			status:SetString("Preparing next match...")
+		elseif self.data.match_status == 3 then
 			status:SetString("Starting next match...")
 		end
 		if status:GetRegionSize() ~= nil then

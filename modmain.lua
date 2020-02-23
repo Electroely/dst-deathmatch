@@ -715,7 +715,7 @@ end)
 
 AddClassPostConstruct("screens/redux/lobbyscreen", function(self)
 	self.deathmatch_timer = self.root:AddChild(Deathmatch_LobbyTimer())
-	self.deathmatch_timer:SetPosition(40, 310, 0)
+	self.deathmatch_timer:SetPosition(10, 340, 0)
 end)
 
 ---------------------------------------------------------------------
@@ -861,7 +861,7 @@ G.AddUserCommand("despawn", {
     serverfn = function(params, caller)
 		local dm = G.TheWorld.components.deathmatch_manager --caller:HasTag("spectator") or (not dm.matchstarting and not dm:IsPlayerInMatch(caller)) or not (dm.doingreset or dm.matchinprogress
 		if (caller and caller.IsValid and caller:IsValid()) and 
-		(caller:HasTag("spectator") or (not dm:isPlayerInMatch(caller)) or (not dm.matchstarting)) then
+		(caller:HasTag("spectator") or (not dm:IsPlayerInMatch(caller)) or (not dm.matchstarting)) then
 			G.TheWorld.despawnplayerdata[caller.userid] = caller.SaveForReroll ~= nil and caller:SaveForReroll() or nil
 			G.TheWorld:PushEvent("ms_playerdespawnanddelete", caller)
 		end
