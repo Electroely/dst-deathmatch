@@ -393,14 +393,14 @@
   <object id="443" type="mushtree_small" x="2837.33" y="4648"/>
   <object id="444" type="mushtree_small" x="2920" y="4574.67"/>
   <object id="445" type="mushtree_small" x="3002.67" y="4596"/>
-  <object id="548" type="boat" x="4736" y="4032"/>
-  <object id="549" type="boat" x="4992" y="4032"/>
-  <object id="550" type="boat" x="5184" y="4224"/>
-  <object id="551" type="boat" x="5184" y="4480"/>
-  <object id="552" type="boat" x="4992" y="4672"/>
-  <object id="553" type="boat" x="4736" y="4672"/>
-  <object id="554" type="boat" x="4544" y="4480"/>
-  <object id="555" type="boat" x="4544" y="4224"/>
+  <object id="548" type="boatspawner" x="4736" y="4032"/>
+  <object id="549" type="boatspawner" x="4992" y="4032"/>
+  <object id="550" type="boatspawner" x="5184" y="4224"/>
+  <object id="551" type="boatspawner" x="5184" y="4480"/>
+  <object id="552" type="boatspawner" x="4992" y="4672"/>
+  <object id="553" type="boatspawner" x="4736" y="4672"/>
+  <object id="554" type="boatspawner" x="4544" y="4480"/>
+  <object id="555" type="boatspawner" x="4544" y="4224"/>
   <object id="556" type="arena_centerpoint_ocean" x="4864" y="4352"/>
  </objectgroup>
 </map>

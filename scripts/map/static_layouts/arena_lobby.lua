@@ -3983,7 +3983,7 @@ return {
         {
           id = 548,
           name = "",
-          type = "boat",
+          type = "boatspawner",
           shape = "rectangle",
           x = 4736,
           y = 4032,
@@ -3996,7 +3996,7 @@ return {
         {
           id = 549,
           name = "",
-          type = "boat",
+          type = "boatspawner",
           shape = "rectangle",
           x = 4992,
           y = 4032,
@@ -4009,7 +4009,7 @@ return {
         {
           id = 550,
           name = "",
-          type = "boat",
+          type = "boatspawner",
           shape = "rectangle",
           x = 5184,
           y = 4224,
@@ -4022,7 +4022,7 @@ return {
         {
           id = 551,
           name = "",
-          type = "boat",
+          type = "boatspawner",
           shape = "rectangle",
           x = 5184,
           y = 4480,
@@ -4035,7 +4035,7 @@ return {
         {
           id = 552,
           name = "",
-          type = "boat",
+          type = "boatspawner",
           shape = "rectangle",
           x = 4992,
           y = 4672,
@@ -4048,7 +4048,7 @@ return {
         {
           id = 553,
           name = "",
-          type = "boat",
+          type = "boatspawner",
           shape = "rectangle",
           x = 4736,
           y = 4672,
@@ -4061,7 +4061,7 @@ return {
         {
           id = 554,
           name = "",
-          type = "boat",
+          type = "boatspawner",
           shape = "rectangle",
           x = 4544,
           y = 4480,
@@ -4074,7 +4074,7 @@ return {
         {
           id = 555,
           name = "",
-          type = "boat",
+          type = "boatspawner",
           shape = "rectangle",
           x = 4544,
           y = 4224,

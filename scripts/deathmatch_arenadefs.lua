@@ -1,3 +1,28 @@
+local inc = 0
+local function atriumkeychanged(inst)
+	local self = TheWorld.components.deathmatch_manager
+	self.enablepickups = TheWorld.state.atrium_active
+end
+local fullmoonfn = function(inst)
+	inc = inc + 1
+	if inc == 2 then
+		inst:PushEvent("fakefullmoon", true)
+		for k, v in pairs(Ents) do 
+			if v.prefab == "pigman" then
+				v:DoTaskInTime(math.random(), function() v.components.werebeast:SetWere(30) end)
+			end
+		end
+	elseif inc == 3 then
+		inc = 0
+		inst:PushEvent("fakefullmoon", false)
+		for k, v in pairs(Ents) do 
+			if v.prefab == "moonpig" then
+				v:DoTaskInTime(math.random(), function() v.components.werebeast:SetNormal() end)
+			end
+		end
+	end
+end
+
 local ARENAS = {
 	lobby = {
 		arena_effects = {
@@ -8,6 +33,8 @@ local ARENAS = {
 		},
 	},
 	atrium = {
+		name = "Atrium"
+		--
 		arena_effects = {
 			lighting = {0.1,0.1,0.1},
 			cctable = { ["true"]=resolvefilepath("images/colour_cubes/ruins_light_cc.tex"), ["false"]=resolvefilepath("images/colour_cubes/ruins_dark_cc.tex") },
@@ -40,6 +67,8 @@ local ARENAS = {
 		end,
 	},
 	desert = {
+		name = "Desert"
+		--
 		arena_effects = {
 			lighting = {200 / 255, 200 / 255, 200 / 255},
 			colourcube = "summer_day_cc",
@@ -50,6 +79,8 @@ local ARENAS = {
 		spawnradius = 16,
 	},
 	spring = {
+		name = "Spring Island"
+		--
 		arena_effects = {
 			lighting = {200 / 255, 200 / 255, 200 / 255},
 			colourcube = "spring_day_cc",
@@ -61,6 +92,8 @@ local ARENAS = {
 		nopickups = true,
 	},
 	pigvillage = {
+		name = "Pig Village"
+		--
 		arena_effects = {
 			lighting = {200 / 255, 200 / 255, 200 / 255},
 			colourcube = "day05_cc",
@@ -113,6 +146,8 @@ local ARENAS = {
 		},
 	},
 	ocean = {
+		name = "Ocean"
+		--
 		arena_effects = {
 			colourcube = "day05_cc",
 			lighting = {200 / 255, 200 / 255, 200 / 255},
@@ -125,6 +160,10 @@ local ARENAS = {
 		extraitems = { "oar" },
 		spawnradius = 20.5,
 		nopickups = true,
+		
+		matchendfn = function()
+			
+		end,
 	},
 }
 

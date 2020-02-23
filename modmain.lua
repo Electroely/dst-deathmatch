@@ -89,6 +89,7 @@ PrefabFiles = {
 	"fakeplayer",
 	"deathmatch_oneusebomb",
 	"shadowweapons",
+	"boatspawner",
 }
 Assets = {
 	Asset("ANIM", "anim/hat_snortoise.zip")
@@ -941,6 +942,17 @@ end)
 AddComponentAction("INVENTORY", "explosiveballoonmaker", function(inst, doer, actions)
 	if inst.components.explosiveballoonmaker.enabled:value() then
 		table.insert(actions, G.ACTIONS.MAKEEXPLOSIVEBALLOON)
+	end
+end)
+
+AddComponentAction("POINT", "aoespell", function(inst, doer, pos, actions, right) --Hornet: Can't use specials on boats, Lets fix that!
+	if right and
+		(   inst.components.aoetargeting == nil or inst.components.aoetargeting:IsEnabled()
+		) and
+		(   inst.components.aoetargeting ~= nil and inst.components.aoetargeting.alwaysvalid or
+			(G.TheWorld.Map:IsPassableAtPoint(pos.x, pos.y, pos.z, false, false) and not G.TheWorld.Map:IsGroundTargetBlocked(pos))
+		) then
+		table.insert(actions, G.ACTIONS.CASTAOE)
 	end
 end)
 

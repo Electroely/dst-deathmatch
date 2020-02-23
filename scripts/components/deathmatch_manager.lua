@@ -408,6 +408,8 @@ local Deathmatch_Manager = Class(function(self, inst)
 	self.damagedealt = {}
 	self.removeallitems = true
 	
+	self.ocean_spawnpoints = {} --this needs to be improved later
+	
 	
 	inst:ListenForEvent("playerdied", OnPlayerDeath)
 	inst:ListenForEvent("registerdamagedealt", RegisterDamageDealt)
@@ -506,6 +508,7 @@ function Deathmatch_Manager:StartDeathmatch()
 	self.inst.centerpoint = findcenter()
 	TheNet:Announce(self.announcestrings.MATCHINIT)
 	self.inst.net:PushEvent("deathmatch_timercurrentchange", 7)
+	self.inst:PushEvent("deathmatch_start")
 	if getPlayers() ~= nil then
 		self.doingreset = true
 		for k, v in pairs(self.spawneditems) do
@@ -524,6 +527,7 @@ function Deathmatch_Manager:StartDeathmatch()
 		end
 		self.enablepickups = not arena_configs[self.arena].nopickups == true
 		local players, spectators = getPlayers()
+		local key = 1
 		for k, v in pairs(players) do 
 			local items = deepcopy(self.itemstable)
 			AddTable(items, arena_configs[self.arena].extraitems)
@@ -563,22 +567,34 @@ function Deathmatch_Manager:StartDeathmatch()
 					v.components.health:SetPercent(1)
 				end)
 			end
+
 			if self.inst.centerpoint ~= nil then
 				local pos = self.inst.centerpoint:GetPosition()
 				if not v.components.health:IsDead() then v.sg:GoToState("idle") end
 				v:AddTag("notarget")
 				self.inst:PushEvent("startchoosinggear")
-				local theta = (k/getPlayerCount()* 2 * PI)
-				local radius = arena_configs[self.arena] ~= nil and arena_configs[self.arena].spawnradius or 10
-				local offset = GetValidPoint(pos, theta, radius)
-				if offset ~= nil then
-					offset.x = offset.x + pos.x
-					offset.z = offset.z + pos.z
-					v.Transform:SetPosition(offset.x, 0, offset.z)
+				
+				if self.arena == "ocean" then
+					print(key)
+					v.Transform:SetPosition(self.ocean_spawnpoints[key].Transform:GetWorldPosition())
 					v:SnapCamera()
-					if DM_FADE then
-						v:ScreenFade(false)
-						v:ScreenFade(true, 1)
+					key = key + 1
+					if key > 8 then
+						key = 1
+					end
+				else
+					local theta = (k/getPlayerCount()* 2 * PI)
+					local radius = arena_configs[self.arena] ~= nil and arena_configs[self.arena].spawnradius or 10
+					local offset = GetValidPoint(pos, theta, radius)
+					if offset ~= nil then
+						offset.x = offset.x + pos.x
+						offset.z = offset.z + pos.z
+						v.Transform:SetPosition(offset.x, 0, offset.z)
+						v:SnapCamera()
+						if DM_FADE then
+							v:ScreenFade(false)
+							v:ScreenFade(true, 1)
+						end
 					end
 				end
 			end
@@ -657,6 +673,10 @@ function Deathmatch_Manager:StopDeathmatch()
 			end)
 		end)
 	end
+	
+	self.inst:DoTaskInTime(5, function()
+		c_removeall("boat")
+	end)
 	self.players_in_match = {}
 end
 
