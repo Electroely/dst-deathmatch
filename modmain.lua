@@ -715,7 +715,9 @@ end)
 
 AddClassPostConstruct("screens/redux/lobbyscreen", function(self)
 	self.deathmatch_timer = self.root:AddChild(Deathmatch_LobbyTimer())
-	self.deathmatch_timer:SetPosition(10, 340, 0)
+	self.deathmatch_timer:SetPosition(0, -20, 0)
+	self.deathmatch_timer:SetVAnchor(G.ANCHOR_TOP)
+	self.deathmatch_timer:SetHAnchor(G.ANCHOR_MIDDLE)
 end)
 
 ---------------------------------------------------------------------
