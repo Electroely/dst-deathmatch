@@ -4,6 +4,7 @@ local gamemodename = "deathmatch"
 G.DEATHMATCH_STRINGS = G.require("deathmatch_strings")
 local DEATHMATCH_STRINGS = G.DEATHMATCH_STRINGS
 local DEATHMATCH_POPUPS = DEATHMATCH_STRINGS.POPUPS
+local ARENAS = G.require("deathmatch_arenadefs")
 
 local PopupDialogScreen = G.require("screens/redux/popupdialog")
 AddPrefabPostInit("player_classified", function(inst)
@@ -907,14 +908,14 @@ AddUserCommand("setarena", {
     voteminpasscount = 1,
     votecountvisible = true,
     voteallownotvoted = true,
-    voteoptions = {"Atrium", "Desert", "Pig Village", "Ocean", "Random"}, 
+    voteoptions = ARENAS.NAMES,
     votetitlefmt = DEATHMATCH_STRINGS.USERCOMMANDS.SETARENA.VOTETITLE, 
     votenamefmt = DEATHMATCH_STRINGS.USERCOMMANDS.SETARENA.VOTENAME, 
     votepassedfmt = "Vote complete!", 
     votecanstartfn = VoteUtil.DefaultCanStartVote,
     voteresultfn = VoteUtil.DefaultMajorityVote,
     serverfn = function(params, caller)
-		local arenas = { [1]="atrium", [2]="desert", [3]="pigvillage", [4]="random", atrium="atrium", desert="desert", pigvillage="pigvillage", spring="spring", random="random", ocean = "ocean" }
+		local arenas = ARENAS.VOTEOPTIONS
 		local dm = G.TheWorld.components.deathmatch_manager
 		local mode = params.arena
 		if mode ~= nil and arenas[mode] ~= nil then

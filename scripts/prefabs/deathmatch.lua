@@ -1,5 +1,7 @@
 require("prefabs/world")
 
+local ARENAS = require("deathmatch_arenadefs")
+
 local assets =
 {
     Asset("SCRIPT", "scripts/prefabs/world.lua"),
@@ -135,61 +137,6 @@ local prefabs =
     "succulent_plant",
 }
 
-local configs = {
-	lobby = {
-		lighting = {200 / 255, 200 / 255, 200 / 255},
-		colourcube = "day05_cc",
-		waves = true,
-		music = "dontstarve/music/gramaphone_ragtime",
-	},
-	atrium = {
-		lighting = {0.1,0.1,0.1},
-		--colourcube = "ruins_dark_cc",
-		cctable = { ["true"]=resolvefilepath("images/colour_cubes/ruins_light_cc.tex"), ["false"]=resolvefilepath("images/colour_cubes/ruins_dark_cc.tex") },
-		ccphasefn = { blendtime = 2, events = { "atriumactivechanged" },fn = function() return tostring(TheWorld.state.atrium_active) end},
-		music = "dontstarve/music/music_epicfight_stalker", 
-		waves = false,
-	},
-	desert = {
-		lighting = {200 / 255, 200 / 255, 200 / 255},
-		colourcube = "summer_day_cc",
-		music = "dontstarve_DLC001/music/music_epicfight_summer",
-		waves = true,
-	},
-	spring = {
-		lighting = {200 / 255, 200 / 255, 200 / 255},
-		colourcube = "spring_day_cc",
-		music = "dontstarve_DLC001/music/music_epicfight_spring",
-		waves = true,
-	},
-	pigvillage = {
-		lighting = {200 / 255, 200 / 255, 200 / 255},
-		colourcube = "day05_cc",
-		music = "dontstarve/music/music_pigking_minigame",
-		waves = true,
-	},
-	pigvillage_fm = {
-		--music = "dontstarve/music/gramaphone_efs",
-		--waves = true,
-		specific = true,
-		colourcube = "purple_moon_cc",
-		lighting = {84 / 255, 122 / 255, 156 / 255},
-	},
-	cave = {
-		colourcube = "sinkhole_cc",
-		lighting = {0.1,0.1,0.1},
-		music = "",
-		waves = false,
-	},
-	ocean = {
-		colourcube = "day05_cc",
-		lighting = {200 / 255, 200 / 255, 200 / 255},
-		music = "saltydog/music/malbatross",
-		waves = true,
-		wave_texture = "images/wave_shadow.tex",
-		ocean = true,
-	},
-}
 local function PushConfig(config)
 	--TODO: am i not storing the previous config in any way?!
 	--i could make it so that music doesn't restart if switching
@@ -197,46 +144,46 @@ local function PushConfig(config)
 	--though i may have to set up some "relationships" code so that
 	--it doesn't play hog music in lobby
 	if not TheNet:IsDedicated() and ThePlayer ~= nil then
-		if not configs[config].specific then
+		if not ARENAS.CONFIGS[config].specific then
 			ThePlayer.SoundEmitter:KillSound("bgm")
 		end
-		TheSim:SetVisualAmbientColour(unpack(configs[config].lighting))
-		if configs[config].colourcube ~= nil then
+		TheSim:SetVisualAmbientColour(unpack(ARENAS.CONFIGS[config].lighting))
+		if ARENAS.CONFIGS[config].colourcube ~= nil then
 			print("changing colorcube...")
-			local path = softresolvefilepath("images/colour_cubes/"..configs[config].colourcube..".tex")
+			local path = softresolvefilepath("images/colour_cubes/"..ARENAS.CONFIGS[config].colourcube..".tex")
 			if path ~= nil then
 				ThePlayer.components.playervision:SetCustomCCTable({ day=path, dusk=path, night=path, full_moon=path })
 			end
-		elseif configs[config].cctable ~= nil then
+		elseif ARENAS.CONFIGS[config].cctable ~= nil then
 			print("changing colorcube table...")
-			ThePlayer.components.playervision:SetCustomCCTable(configs[config].cctable)
-			if configs[config].ccphasefn ~= nil then
-				ThePlayer.components.playervision.currentccphasefn = configs[config].ccphasefn
-				ThePlayer:PushEvent("ccphasefn", configs[config].ccphasefn)
+			ThePlayer.components.playervision:SetCustomCCTable(ARENAS.CONFIGS[config].cctable)
+			if ARENAS.CONFIGS[config].ccphasefn ~= nil then
+				ThePlayer.components.playervision.currentccphasefn = ARENAS.CONFIGS[config].ccphasefn
+				ThePlayer:PushEvent("ccphasefn", ARENAS.CONFIGS[config].ccphasefn)
 			end
-		elseif not configs[config].specific then
+		elseif not ARENAS.CONFIGS[config].specific then
 			ThePlayer.components.playervision:SetCustomCCTable(nil)
 		end
-		if configs[config].music ~= nil then
-			if configs[config].specific then
+		if ARENAS.CONFIGS[config].music ~= nil then
+			if ARENAS.CONFIGS[config].specific then
 				ThePlayer.SoundEmitter:KillSound("bgm")
 			end
-			ThePlayer.SoundEmitter:PlaySound(configs[config].music, "bgm")
+			ThePlayer.SoundEmitter:PlaySound(ARENAS.CONFIGS[config].music, "bgm")
 		end
 		if TheWorld.WaveComponent ~= nil then
-			if configs[config].waves then
+			if ARENAS.CONFIGS[config].waves then
 				TheWorld.WaveComponent:SetWaveSize(80, 3.5)
-			elseif (configs[config].specific and configs[config].waves == false) or (not configs[config].specific and not configs[config].waves) then
+			elseif (ARENAS.CONFIGS[config].specific and ARENAS.CONFIGS[config].waves == false) or (not ARENAS.CONFIGS[config].specific and not ARENAS.CONFIGS[config].waves) then
 				TheWorld.WaveComponent:SetWaveSize(0,0)
 			end
-			if configs[config].wave_texture ~= nil then
-				TheWorld.WaveComponent:SetWaveTexture(configs[config].wave_texture)
+			if ARENAS.CONFIGS[config].wave_texture ~= nil then
+				TheWorld.WaveComponent:SetWaveTexture(ARENAS.CONFIGS[config].wave_texture)
 			else
 				TheWorld.WaveComponent:SetWaveTexture("images/wave.tex")
 			end
 			TheWorld.WaveComponent:Init(0,0)
 		end
-		if configs[config].ocean then
+		if ARENAS.CONFIGS[config].ocean then
 			TheWorld.Map:SetTransparentOcean(true)
 		else
 			TheWorld.Map:SetTransparentOcean(false) --waves dissapear if this is on, so we gotta disable it

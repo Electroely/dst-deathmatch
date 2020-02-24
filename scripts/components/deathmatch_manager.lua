@@ -1,107 +1,4 @@
-local inc = 0
-local function atriumkeychanged(inst)
-	local self = TheWorld.components.deathmatch_manager
-	self.enablepickups = TheWorld.state.atrium_active
-end
-local fullmoonfn = function(inst)
-	inc = inc + 1
-	if inc == 2 then
-		inst:PushEvent("fakefullmoon", true)
-		for k, v in pairs(Ents) do 
-			if v.prefab == "pigman" then
-				v:DoTaskInTime(math.random(), function() v.components.werebeast:SetWere(30) end)
-			end
-		end
-	elseif inc == 3 then
-		inc = 0
-		inst:PushEvent("fakefullmoon", false)
-		for k, v in pairs(Ents) do 
-			if v.prefab == "moonpig" then
-				v:DoTaskInTime(math.random(), function() v.components.werebeast:SetNormal() end)
-			end
-		end
-	end
-end
-
-local arena_configs = {
-	atrium = {
-		spawnradius = 20.5,
-		--extraitems = { "minerhat" },
-		matchstartfn = function()
-			local self = TheWorld.components.deathmatch_manager
-			if self.atrium_gate == nil then
-				for k, v in pairs(Ents) do
-					if v.prefab == "atrium_gate" then self.atrium_gate = v end
-				end
-			end
-			if self.atrium_gate.components.trader.enabled then
-				self.atrium_gate.components.trader.onaccept(self.atrium_gate)
-			end
-			self.inst:ListenForEvent("atriumactivechanged", atriumkeychanged)
-		end,
-		matchendfn = function()
-			local self = TheWorld.components.deathmatch_manager
-			for k, v in pairs(Ents) do
-				if v.prefab == "atrium_key" then
-					v:Remove()
-				end
-			end
-			self.inst:RemoveEventCallback("atriumactivechanged", atriumkeychanged)
-		end,
-	},
-	desert = {
-		spawnradius = 16
-	},
-	spring = {
-		spawnradius = 16,
-		nopickups = true,
-	},
-	pigvillage = {
-		spawnradius = 12,
-		nopickups = true,
-		matchstartfn = function()
-			TheWorld:PushEvent("fakefullmoon", false)
-			local self = TheWorld.components.deathmatch_manager
-			if self._fullmoontask ~= nil then
-				self._fullmoontask:Cancel()
-				self._fullmoontask = nil
-			end
-			if self.glommer == nil or self.glommer.components.health:IsDead() then
-				self.glommer = SpawnPrefab("glommer")
-				local x, _, z = self.inst.centerpoint:GetPosition():Get()
-				self.glommer.Transform:SetPosition(x, 10, z)
-			end
-			self._fullmoontask = self.inst:DoPeriodicTask(30, fullmoonfn)
-		end,
-		matchendfn = function()
-			local self = TheWorld.components.deathmatch_manager
-			if self._fullmoontask ~= nil then
-				self._fullmoontask:Cancel()
-				self._fullmoontask = nil
-			end
-			if self.glommer ~= nil and not self.glommer.components.health:IsDead() then
-				self.glommer.components.health:Kill()
-			end
-			inc = -1
-			fullmoonfn(self.inst)
-		end,
-	},
-	ocean = {
-		extraitems = { "oar" },
-		spawnradius = 20.5,
-		nopickups = true,
-	},
-}
-
-local arena_idx = {
-	["random"] = 0,
-	["atrium"] = 1,
-	["desert"] = 2,
-	["pigvillage"] = 3,
-	["spring"] = 4,
-	["ocean"] = 5,
-}
-
+local ARENAS = require("deathmatch_arenadefs")
 
 local function GetValidPoint(position, start_angle, radius, attempts)
 	return FindValidPositionByFan(start_angle, radius, attempts,
@@ -525,12 +422,12 @@ function Deathmatch_Manager:StartDeathmatch()
 				end
 			end
 		end
-		self.enablepickups = not arena_configs[self.arena].nopickups == true
+		self.enablepickups = not ARENAS.CONFIGS[self.arena].nopickups == true
 		local players, spectators = getPlayers()
 		local key = 1
 		for k, v in pairs(players) do 
 			local items = deepcopy(self.itemstable)
-			AddTable(items, arena_configs[self.arena].extraitems)
+			AddTable(items, ARENAS.CONFIGS[self.arena].extraitems)
 			AddTable(items, v.deathmatch_startitems)
 			for k2, v2 in pairs(items) do
 				local item = SpawnPrefab(v2)
@@ -549,8 +446,8 @@ function Deathmatch_Manager:StartDeathmatch()
 				
 				table.insert(self.spawnedgear, item)
 			end
-			--[[if arena_configs[self.arena].extraitems ~= nil then
-				for k2, v2 in pairs(arena_configs[self.arena].extraitems) do
+			--[[if ARENAS.CONFIGS[self.arena].extraitems ~= nil then
+				for k2, v2 in pairs(ARENAS.CONFIGS[self.arena].extraitems) do
 					local item = SpawnPrefab(v2)
 					v.components.inventory:GiveItem(item)
 					if item.components.rechargeable then item.components.rechargeable:StartRecharge() end
@@ -584,7 +481,7 @@ function Deathmatch_Manager:StartDeathmatch()
 					end
 				else
 					local theta = (k/getPlayerCount()* 2 * PI)
-					local radius = arena_configs[self.arena] ~= nil and arena_configs[self.arena].spawnradius or 10
+					local radius = ARENAS.CONFIGS[self.arena] ~= nil and ARENAS.CONFIGS[self.arena].spawnradius or 10
 					local offset = GetValidPoint(pos, theta, radius)
 					if offset ~= nil then
 						offset.x = offset.x + pos.x
@@ -610,8 +507,8 @@ function Deathmatch_Manager:StartDeathmatch()
 				v:ScreenFade(true, 1)
 			end
 		end
-		if arena_configs[self.arena] and arena_configs[self.arena].matchstartfn then
-			arena_configs[self.arena].matchstartfn()
+		if ARENAS.CONFIGS[self.arena] and ARENAS.CONFIGS[self.arena].matchstartfn then
+			ARENAS.CONFIGS[self.arena].matchstartfn()
 		end
 		print("Reset successful! Queuing player release...")
 		self:ReleasePlayers()
@@ -628,13 +525,13 @@ function Deathmatch_Manager:StopDeathmatch()
 	self.timer_current = 0
 	self.inst.net:PushEvent("deathmatch_timercurrentchange", 0)
 	self.inst.net:PushEvent("deathmatch_matchstatuschange", 0)
-	self.inst.net:PushEvent("deathmatch_arenachange", arena_idx[self.upcoming_arena])
+	self.inst.net:PushEvent("deathmatch_arenachange", ARENAS.IDX[self.upcoming_arena])
 	if self.pickuptask ~= nil then
 		self.pickuptask:Cancel()
 		self.pickuptask = nil
 	end
-	if arena_configs[self.arena] and arena_configs[self.arena].matchendfn ~= nil then
-		arena_configs[self.arena].matchendfn()
+	if ARENAS.CONFIGS[self.arena] and ARENAS.CONFIGS[self.arena].matchendfn ~= nil then
+		ARENAS.CONFIGS[self.arena].matchendfn()
 	end
 	for k, v in pairs(self.spawnedpickups) do
 		if v and v:IsValid() then
@@ -710,7 +607,7 @@ function Deathmatch_Manager:ResetDeathmatch()
 	end)
 	self.inst.net:PushEvent("deathmatch_matchstatuschange", 2)
 	self.inst.net:PushEvent("deathmatch_timercurrentchange", 10)
-	self.inst.net:PushEvent("deathmatch_arenachange", arena_idx[self.arena])
+	self.inst.net:PushEvent("deathmatch_arenachange", ARENAS.IDX[self.arena])
 	self.doingreset = true
 end
 
@@ -762,9 +659,9 @@ local function SpawnPickUp(inst)
 end
 
 function Deathmatch_Manager:SetNextArena(arena)
-	self.upcoming_arena = (arena == "random" or arena_configs[arena] ~= nil) and arena or "random"
+	self.upcoming_arena = (arena == "random" or ARENAS.CONFIGS[arena] ~= nil) and arena or "random"
 	if not (self.matchinprogress or self.doingreset or self.matchstarting) then
-		self.inst.net:PushEvent("deathmatch_arenachange", arena_idx[self.upcoming_arena])
+		self.inst.net:PushEvent("deathmatch_arenachange", ARENAS.IDX[self.upcoming_arena])
 	end
 end
 

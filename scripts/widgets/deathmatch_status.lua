@@ -1,3 +1,7 @@
+local Text = require("widgets/text")
+local Widget = require("widgets/widget")
+local ARENAS = require("deathmatch_arenadefs")
+
 local function SecondsToTimer(secs) 
 	if secs ~= nil and type(secs) == "number" then 
 		local mins = math.floor(secs/60) 
@@ -6,24 +10,13 @@ local function SecondsToTimer(secs)
 	end 
 	return "00:00" 
 end 
+
 local DEATHMATCH_GAMEMODES = {
 	{name="Free For All"},
 	{name="Red vs. Blue"},
 	{name="2-Player Teams"},
 	{name="Custom Teams"}
 }
-
-local ARENAS = {
-	"Random",
-	"Atrium",
-	"Desert",
-	"Pig Village",
-	"Spring Island",
-	"Ocean",
-}
-
-local Text = require("widgets/text")
-local Widget = require("widgets/widget")
 
 local Deathmatch_Status = Class(Widget, function(self, owner)
 
@@ -88,7 +81,7 @@ local Deathmatch_Status = Class(Widget, function(self, owner)
 	self.arena = self:AddChild(Text(NEWFONT_OUTLINE, 20))
 	self.arena:SetPosition(50, -45)
 	self.arena.Update = function(arenastr)
-		arenastr:SetString("|  " .. ARENAS[self.data.arena+1])
+		arenastr:SetString("|  " .. ARENAS.NAMES[self.data.arena+1])
 	end
 end)
 

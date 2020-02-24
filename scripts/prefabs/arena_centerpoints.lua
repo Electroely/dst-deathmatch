@@ -150,4 +150,6 @@ return MakeArenaCenterpoint("atrium"),
 	vote options
 	
 	TODO: just make a fucking global table elec please
+	
+	hornet: done, :]
 	]]
