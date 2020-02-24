@@ -316,6 +316,38 @@ AddComponentPostInit("playercontroller", function(self) -- aoetargeting compabil
 	end
 end)
 
+AddComponentPostInit("drownable", function(self)
+	function self:Teleport()
+		local boats = {}
+		
+		for k, v in pairs(G.Ents) do
+			if v and v.prefab == "boat" then
+				table.insert(boats, v)
+			end
+		end
+		
+		if #boats => 1 then
+			local pos = boats[math.random(#boats)]:GetPosition()
+		end
+
+		if self.inst.Physics ~= nil and pos ~= nil then
+			self.inst.Physics:Teleport(pos.x, pos.y, pos.z)
+		elseif self.inst.Transform ~= nil then
+			self.inst.Transform:SetPosition(pos.x, pos.y, pos.z)
+		end
+	end
+	
+	function self:OnFallInOcean(shore_x, shore_y, shore_z)
+		self.src_x, self.src_y, self.src_z = self.inst.Transform:GetWorldPosition()
+
+		if shore_x == nil then
+			shore_x, shore_y, shore_z = G.FindRandomPointOnShoreFromOcean(self.src_x, self.src_y, self.src_z)
+		end
+
+		self.dest_x, self.dest_y, self.dest_z = shore_x, shore_y, shore_z
+	end
+end)
+
 G.require("player_postinits_deathmatch") --so... why did i separate this into its own thing if im adding a postinit here regardless...?
 --TODO: move all of the code here to player_postinits_deathmatch and organize it better
 --character-specific changes go into charperkremoval.lua

@@ -473,7 +473,8 @@ function Deathmatch_Manager:StartDeathmatch()
 				
 				if self.arena == "ocean" then
 					print(key)
-					v.Transform:SetPosition(self.ocean_spawnpoints[key].Transform:GetWorldPosition())
+					local boat_pos = self.ocean_spawnpoints[key]:GetPosition()
+					v.Transform:SetPosition(boat_pos.x, boat_pos.y, boat_pos.z)
 					v:SnapCamera()
 					key = key + 1
 					if key > 8 then

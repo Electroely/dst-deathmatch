@@ -115,6 +115,8 @@ local function fn(inst, prefab)
 		return
 	end
 	
+	inst:AddComponent("drownable")
+	
 	inst.revive = function(inst)
 		inst.sg:GoToState("idle")
 		doRez(inst)
