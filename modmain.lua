@@ -859,19 +859,19 @@ G.AddUserCommand("despawn", {
     params = {},
     vote = false,
     serverfn = function(params, caller)
-		local dm = G.TheWorld.components.deathmatch_manager --caller:HasTag("spectator") or (not dm.matchstarting and not dm:IsPlayerInMatch(caller)) or not (dm.doingreset or dm.matchinprogress
-		if (caller and caller.IsValid and caller:IsValid()) and 
-		(caller:HasTag("spectator") or (not dm:IsPlayerInMatch(caller)) or (not dm.matchstarting)) then
-			G.TheWorld.despawnplayerdata[caller.userid] = caller.SaveForReroll ~= nil and caller:SaveForReroll() or nil
-			G.TheWorld:PushEvent("ms_playerdespawnanddelete", caller)
+		local dm = G.TheWorld.components.deathmatch_manager
+		if not (caller and caller.IsValid and caller:IsValid()) or dm.doingreset or dm:IsPlayerInMatch(caller) then
+			return
 		end
+		G.TheWorld.despawnplayerdata[caller.userid] = caller.SaveForReroll ~= nil and caller:SaveForReroll() or nil
+		G.TheWorld:PushEvent("ms_playerdespawnanddelete", caller)
     end,
 	localfn = function(params, caller)
-		local status = caller.HUD.controls.deathmatch_status
+		local status = G.TheWorld.net.deathmatch_netvars.globalvars.matchstatus:value()
 		if status ~= nil then
-			if status.data.match_status == 1 then
+			if status == 1 then
 				G.TheNet:SystemMessage(DEATHMATCH_STRINGS.CHATMESSAGES.DESPAWN_MIDMATCH)
-			elseif status.data.match_status == 2 then
+			elseif status == 2 then
 				G.TheNet:SystemMessage(DEATHMATCH_STRINGS.CHATMESSAGES.DESPAWN_STARTING)
 			end
 		end

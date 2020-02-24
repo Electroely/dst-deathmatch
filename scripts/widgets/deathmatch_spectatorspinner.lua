@@ -6,9 +6,11 @@ local function GetOptionsList()
 	local options = {}
 	if AllPlayers ~= nil then
 		for k, v in pairs(AllPlayers) do
-			local txt = v.name or ""
-			local data = v
-			table.insert(options, { text=txt, data=data })
+			if v == ThePlayer or not v:HasTag("spectator") then
+				local txt = v.name or ""
+				local data = v
+				table.insert(options, { text=txt, data=data })
+			end
 		end
 	end
 	return options

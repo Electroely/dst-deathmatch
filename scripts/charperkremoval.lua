@@ -2,6 +2,8 @@ local G = GLOBAL
 local require = G.require
 local debug = G.debug
 
+local printwrap = G.printwrap
+
 local function GetUpValue(func, varname)
 	local i = 1
 	local n, v = debug.getupvalue(func, 1)
@@ -30,6 +32,7 @@ end
 
 --here comes the worst hack i've ever had to do ever
 local SetBloomStage = nil
+local beardfns = {}
 function G.require(modulename, ...)
 	--using the local version of require since it isn't replaced
 	local val = require(modulename, ...) 
@@ -49,6 +52,13 @@ function G.require(modulename, ...)
 				ReplaceUpValue(SetBloomStage, "SetStatsLevel", function() end)
 				ReplaceUpValue(OnRespawnedFromGhost, "OnSeasonProgress", function() end)
 				
+			elseif (name == "wilson" or name == "webber") and master_postinit ~= nil then
+				beardfns[name] = {
+					GetUpValue(master_postinit, "OnResetBeard"),
+					GetUpValue(master_postinit, "OnGrowShortBeard"),
+					GetUpValue(master_postinit, "OnGrowMediumBeard"),
+					GetUpValue(master_postinit, "OnGrowLongBeard"),
+				}
 			end
 			return val_old(name, customprefabs, customassets, common_postinit, master_postinit, ...)
 		end
@@ -56,16 +66,28 @@ function G.require(modulename, ...)
 	return val
 end
 require("prefabs/wormwood")
+require("prefabs/wilson")
+require("prefabs/webber")
 G.require = require --putting in back the original because i dont want to perma replace
 
 local function CosmeticSaveData(inst)
-	function inst:OnSave(data)
+	if G.TheWorld.ismastersim then return end
+	local OnSave_old = inst.OnSave
+	function inst:OnSave(data, ...)
+		if OnSave_old then OnSave_old(self, data, ...) end
 		data.cosmeticstate = self.cosmeticstate
+		printwrap("Saving data for player", data)
 	end
-	function inst:OnLoad(data)
-		if data.cosmeticstate ~= nil then
-			inst:ChangeCosmeticState(data.cosmeticstate)
+	local OnLoad_old = inst.OnLoad
+	function inst:OnLoad(data, ...)
+		printwrap("Loading data for player", data)
+		if data and data.cosmeticstate ~= nil then
+			self:DoTaskInTime(1, function()
+				self.cosmeticstate = data.cosmeticstate
+				self:ChangeCosmeticState(data.cosmeticstate)
+			end)
 		end
+		if OnLoad_old then OnLoad_old(self, data, ...) end
 	end
 end
 
@@ -78,7 +100,7 @@ AddPrefabPostInit("wormwood", function(inst)
 	inst.OnPreLoad = nil
 	
 	--new function for /setstate
-	inst.cosmeticstate = 1
+	inst.cosmeticstate = inst.cosmeticstate or 1
 	function inst:ChangeCosmeticState(num) --input: number 1-4
 		num = num -1
 		if num >= 0 and num <= 3 and self.SetBloomStage then
@@ -88,6 +110,21 @@ AddPrefabPostInit("wormwood", function(inst)
 	end
 	CosmeticSaveData(inst)
 end)
+
+--beard men
+for k, v in pairs({"wilson", "webber"}) do
+	AddPrefabPostInit(v, function(inst)
+		inst.beardfns = beardfns[v]
+		inst.cosmeticstate = inst.cosmeticstate or 1
+		function inst:ChangeCosmeticState(num)
+			if num >= 1 and num <= 4 and inst.beardfns ~= nil then
+				inst.cosmeticstate = num
+				inst.beardfns[num](inst)
+			end
+		end
+		CosmeticSaveData(inst)
+	end)
+end
 
 --wigfrid
 AddPrefabPostInit("wathgrithr", function(inst)
@@ -101,9 +138,9 @@ AddPrefabPostInit("wolfgang", function(inst)
 	inst.OnNewSpawn = nil
 	inst.OnPreLoad = nil
 	
-	inst.cosmeticstate = 2
+	inst.cosmeticstate = inst.cosmeticstate or 2
 	function inst:ChangeCosmeticState(num)--1-3: wimpy, normal, mighty
-		if num ~= self.cosmeticstate and num >= 1 and num <= 3 then
+		if num >= 1 and num <= 3 then
 			if num == 1 then
 				self.components.skinner:SetSkinMode("wimpy_skin", "wolfgang_skinny")
 			elseif num == 2 then
@@ -132,12 +169,14 @@ end)
 AddPrefabPostInit("wurt", function(inst)
 	inst:RemoveTag("merm")
 	
-	inst.cosmeticstate = 1
+	inst.cosmeticstate = inst.cosmeticstate or 1
 	function inst:ChangeCosmeticState(num)
-		if num ~= self.cosmeticstate and num >= 1 and num <= 2 then
-			local fx = G.SpawnPrefab("small_puff") --fx because it looks awkward
-			fx.Transform:SetScale(1.5, 1.5, 1.5)
-			fx.Transform:SetPosition(self.Transform:GetWorldPosition())
+		if num >= 1 and num <= 2 then
+			if num ~= self.cosmeticstate then
+				local fx = G.SpawnPrefab("small_puff") --fx because it looks awkward
+				fx.Transform:SetScale(1.5, 1.5, 1.5)
+				fx.Transform:SetPosition(self.Transform:GetWorldPosition())
+			end
 			if num == 1 then
 				self.components.skinner:SetSkinMode("normal_skin", "wurt")
 			else

@@ -467,7 +467,7 @@ function Deathmatch_Manager:GetLeadingPlayer() -- damage-wise
 	if self.players_in_match ~= nil then
 		for k, v in pairs(self.players_in_match) do
 			if (not v.components.health:IsDead()) and self.damagedealt[v] and self.damagedealt[v] > leadingplayerdamage then
-				leadingplayer = v
+				leadingplayer = v.components.teamer.team == 0 and v or v.components.teamer.team
 				leadingplayerdamage = self.damagedealt[v]
 			end
 		end
@@ -630,6 +630,8 @@ function Deathmatch_Manager:StopDeathmatch()
 			v:PushEvent("respawnfromcorpse",{quick=true, delay = 1})
 			if not v.components.health:IsDead() then v.sg:GoToState("idle") end
 			if v:HasTag("spectator") and not v:HasTag("spectator_perma") then
+				self:ToggleSpectator(v)
+			elseif v:HasTag("spectator_perma") then
 				self:ToggleSpectator(v)
 			end
 			local pos = self.inst.lobbypoint:GetPosition()
@@ -840,6 +842,7 @@ function Deathmatch_Manager:ToggleSpectator(player)
 			player.Transform:SetPosition(self.inst.lobbypoint:GetPosition():Get())
 		end
 		GiveLobbyInventory(player)
+		player:PushEvent("ms_exitspectator")
 	else
 		player:AddTag("spectator")
 		if not player.components.health:IsDead() then
@@ -866,6 +869,7 @@ function Deathmatch_Manager:ToggleSpectator(player)
 			table.remove(self.players_in_match, idx) 
 		end
 		OnPlayerDeath(self.inst, player)
+		player:PushEvent("ms_becamespectator")
 	end
 	if (self.doingreset or self.matchstarting) and self.gamemode ~= 0 then
 		self:GroupTeams(self.gamemodes[self.gamemode].teammode)
