@@ -466,7 +466,7 @@ function Deathmatch_Manager:GetLeadingPlayer() -- damage-wise
 	local leadingplayerdamage = 0
 	if self.players_in_match ~= nil then
 		for k, v in pairs(self.players_in_match) do
-			if self.damagedealt[v] and self.damagedealt[v] > leadingplayerdamage then
+			if (not v.components.health:IsDead()) and self.damagedealt[v] and self.damagedealt[v] > leadingplayerdamage then
 				leadingplayer = v
 				leadingplayerdamage = self.damagedealt[v]
 			end
@@ -753,8 +753,8 @@ function Deathmatch_Manager:BeginMatch()
 	self.inst.net:PushEvent("deathmatch_timercurrentchange", self.timer_time)
 	self.timertask = self.inst:DoPeriodicTask(1, function()
 		if self.timer_current <= 0 then
-			self:StopDeathmatch()
 			self.inst:PushEvent("wehaveawinner", self:GetLeadingPlayer())
+			self:StopDeathmatch()
 		else
 			self.timer_current = self.timer_current - 1
 		end

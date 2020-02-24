@@ -272,13 +272,16 @@ local function OnLoad(inst, data)
 end
 local function master_postinit(inst)
 	inst.despawnplayerdata = {} --for saving day count in /despawn
-	inst:ListenForEvent("ms_newplayerspawned", function(world, player)
-		if inst.despawnplayerdata[player.userid] ~= nil then
-			if player.LoadForReroll ~= nil then
-				player:LoadForReroll(inst.despawnplayerdata[player.userid])
+	inst:ListenForEvent("ms_newplayercharacterspawned", function(inst, data)
+		local player = data.player
+		inst:DoTaskInTime(0, function(inst)
+			if inst.despawnplayerdata[player.userid] ~= nil then
+				if player.LoadForReroll ~= nil then
+					player:LoadForReroll(inst.despawnplayerdata[player.userid])
+				end
+				inst.despawnplayerdata[player.userid] = nil
 			end
-			inst.despawnplayerdata[player.userid] = nil
-		end
+		end)
 	end)
 	
 	inst.OnSave = OnSave --does this even work with worlds? Hornet: Yes, it does. I believe OnSave and OnLoad works for entities with the Transform functions
