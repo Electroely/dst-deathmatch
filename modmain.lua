@@ -326,7 +326,7 @@ AddComponentPostInit("drownable", function(self)
 			end
 		end
 		
-		if #boats => 1 then
+		if #boats >= 1 then
 			local pos = boats[math.random(#boats)]:GetPosition()
 		end
 
