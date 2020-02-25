@@ -8,7 +8,7 @@ local function GetUpValue(func, varname)
 	local i = 1
 	local n, v = debug.getupvalue(func, 1)
 	while v ~= nil do
-		print("checking",n, v, "to fetch")
+		print("UPVAL GET", varname ,n, v)
 		if n == varname then
 			return v
 		end
@@ -20,7 +20,7 @@ local function ReplaceUpValue(func, varname, newvalue)
 	local i = 1
 	local n, v = debug.getupvalue(func, 1)
 	while v ~= nil do
-		print("checking",n, v, "to replace")
+		print("UPVAL REPLACE",varname,n, v)
 		if n == varname then
 			debug.setupvalue(func, i, newvalue)
 			return
@@ -48,6 +48,8 @@ function G.require(modulename, ...)
 				
 				
 				--no more ground plants (they annoying) and no speed boost (keeping pollen for now)
+				--ReplaceUpValue(master_postinit, "OnNewSpawn", function() end)
+				--ReplaceUpValue(master_postinit, "OnRespawnedFromGhost", function() end)
 				ReplaceUpValue(EnableFullBloom, "PlantTick", function() end)
 				ReplaceUpValue(SetBloomStage, "SetStatsLevel", function() end)
 				ReplaceUpValue(OnRespawnedFromGhost, "OnSeasonProgress", function() end)
@@ -71,7 +73,7 @@ require("prefabs/webber")
 G.require = require --putting in back the original because i dont want to perma replace
 
 local function CosmeticSaveData(inst)
-	if G.TheWorld.ismastersim then return end
+	if not G.TheWorld.ismastersim then return end
 	local OnSave_old = inst.OnSave
 	function inst:OnSave(data, ...)
 		if OnSave_old then OnSave_old(self, data, ...) end
@@ -82,8 +84,8 @@ local function CosmeticSaveData(inst)
 	function inst:OnLoad(data, ...)
 		printwrap("Loading data for player", data)
 		if data and data.cosmeticstate ~= nil then
-			self:DoTaskInTime(1, function()
-				self.cosmeticstate = data.cosmeticstate
+			self.cosmeticstate = data.cosmeticstate
+			self:DoTaskInTime(0, function()
 				self:ChangeCosmeticState(data.cosmeticstate)
 			end)
 		end
@@ -98,13 +100,13 @@ AddPrefabPostInit("wormwood", function(inst)
 	inst.OnLoad = nil
 	inst.OnNewSpawn = nil
 	inst.OnPreLoad = nil
+	inst._forcestage = true
 	
 	--new function for /setstate
 	inst.cosmeticstate = inst.cosmeticstate or 1
 	function inst:ChangeCosmeticState(num) --input: number 1-4
-		num = num -1
-		if num >= 0 and num <= 3 and self.SetBloomStage then
-			self:SetBloomStage(num)
+		if num >= 1 and num <= 4 and self.SetBloomStage then
+			self:SetBloomStage(num-1)
 			self.cosmeticstate = num
 		end
 	end
