@@ -1,33 +1,6 @@
 --it's much easier to keep everything organized if we put every major feature in its own file
 local G = GLOBAL
 
-local function UserOnline(clienttable, userid)
-	local found = false
-	local name = nil
-	for k, v in pairs(clienttable) do
-		if v.userid == userid then
-			found = true
-			name = v.name
-		end
-	end
-	return found, name
-end
-local function GetPlayerTable()
-	local clienttbl = G.TheNet:GetClientTable()
-	if clienttbl == nil then
-		return {}
-	elseif G.TheNet:GetServerIsClientHosted() then
-		return clienttbl
-	end
-	
-    for i, v in ipairs(clienttbl) do
-        if v.performance ~= nil then
-            table.remove(clienttbl, i)
-            break
-        end
-    end
-    return clienttbl
-end
 local function SetDirty(netvar, val)
 	netvar:set_local(val)
 	netvar:set(val)
