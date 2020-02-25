@@ -6,6 +6,9 @@ G.DEATHMATCH_STRINGS = G.require("deathmatch_strings")
 local DEATHMATCH_STRINGS = G.DEATHMATCH_STRINGS
 local DEATHMATCH_POPUPS = DEATHMATCH_STRINGS.POPUPS
 
+--mod import extra files
+modimport("scripts/deathmatch_teamchat")
+
 local function GetUpValue(func, varname)
 	local i = 1
 	local n, v = debug.getupvalue(func, 1)
@@ -51,9 +54,6 @@ AddPrefabPostInit("player_classified", function(inst)
 		end
 		G.TheWorld:ListenForEvent("startchoosinggear", function() inst._choosinggear:set(true) end)
 		G.TheWorld:ListenForEvent("donechoosinggear", function() inst._choosinggear:set(false) end)
-		inst._privatemessage = G.net_string(inst.GUID, "deathmatch.privatemessage", "pmdirty")
-		inst._privatemessage_sender = G.net_string(inst.GUID, "deathmatch.privatemessage_sender")
-		inst._privatemessage_team = G.net_byte(inst.GUID, "deathmatch.privatemessage_team")
 		
 		inst._deathmatchpopup = G.net_string(inst.GUID, "deathmatch.popupname", "ondeathmatchpopup")
 		if G.TheWorld.ismastersim then

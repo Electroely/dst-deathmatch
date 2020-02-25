@@ -36,4 +36,8 @@ function Teamer:IsTeamedWith(target)
 	end
 end
 
+function Teamer:GetTeam()
+	return self.team
+end
+
 return Teamer
