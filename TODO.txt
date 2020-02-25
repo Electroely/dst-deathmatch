@@ -1,10 +1,16 @@
-- QoL Tweaks:
-	stuff to make playing more enjoyable. preferably features that wouldn't take long to implement
-	* spectator ghosts have the same spectator spinner as dead players
-	* spectator spinner shouldn't target spectator ghosts (except self)
+- Team Preference
+	* chat command to pick a preferred team in rvb
+	* chat command to pick a player to be paired with in 
+	update:
+	* use /setteam to pick a preferred team color in both modes
+	* ability to request paring through player info screen (the one that shows up when you examine someone)
 	
-- Figure out a better transition between cosmetic states for wolfgang and wurt
-
+- Methods of stopping a "snowballing" Team in the team modes
+	* Add Telltale hearts in some way, can't drop the old fashioned way in the middle since winning teams would just hog those
+	update:
+	change reviving speed to be fast, but slows down the more people are revived in a match.
+	telltale hearts skip revival animation entirely, but the speed penalty becomes a revival health penalty
+	
 - Anti-camping mechanics
 	How about this: everytime a player dies, everyone gets a damage boost based on how much dmg they dealt in the match
 	as for the mechanics...
@@ -13,16 +19,18 @@
 		(% of players remaining)*(damage dealt by player / total damage dealt in match)*base mult
 	- that way players will be encouraged to fight more, and it wouldnt be an rng roll like items
 	
-- Methods of stopping a "snowballing" Team in the team modes
-	* Add Telltale hearts in some way, can't drop the old fashioned way in the middle since winning teams would just hog those
-	update:
-	change reviving speed to be fast, but slows down the more people are revived in a match.
-	telltale hearts skip revival animation entirely, but the speed penalty becomes a revival health penalty
-	
 - Pig King should sleep when the full moon happens in the Pig Village map
 - Pig King should throw powerups randomly around him rather than in a specific direction (ik its random but still)
 - Powerups shouldn't land very far from Pig King (min dist to avoid bouncing off him, max dist to limit to wood turf?)
 
+- Figure out a better transition between cosmetic states for wolfgang and wurt
+
+- Deathmatch Info Popups
+	- remember how I said popups were too intrusive? what if did added again
+	- ...but made them less intrusive this time? they could be little textboxes in a corner with lots of text
+	  and an x button in the corner, kind of like the ones in ONI
+	- re-using the current popup push code would work, since the actual widget being used is only in 1-2 lines
+	  
 - New Pickup Buffs
 	buffs that last forever but only have a limited effect, usually stackable
 	* buff that reduces damage taken from next hit by 75%
@@ -32,19 +40,6 @@
 	maybe an alternative pickup for each one of existing ones?
 	they'd all be in the style mentioned above BUT they only spawn when there's no contest for mid?
 	
-
-- Team Chat
-	* press T to open chat for team
-	* like whispers, but would show [T] instead of [W]
-	* chat would only visible for members of the player's team
-	
-- Team Preference
-	* chat command to pick a preferred team in rvb
-	* chat command to pick a player to be paired with in 
-	update:
-	* use /setteam to pick a preferred team color in both modes
-	* ability to request paring through player info screen (the one that shows up when you examine someone)
-
 - Deathmatch Menu:
 	Create a new screen that leads the player to:
 	* main deathmatch menu:
@@ -88,6 +83,11 @@
 	maybe something like a fossil-theme hammer that spawns a bone cage before jumping, or a ice-theme sword
 	that protects the player using ice. i don't have any good specific ideas in mind currently but i think there's
 	already a lot of work to do before we get to this point
+	
+- Capture the flag mode
+	The key mechanics in the Atrium map make people fight over the key a lot, so why not make a mode where fighting over the key is the main goal?
+	Not sure if the world can fit new maps as-is, so we can't really do a CTF map for each map (unless we make a 2nd world for ctf style modes?)
+	doesn't have to be just regular ctf. maybe there could be something like mk8 shine theif for ffa, and maybe something else for 2pt
 	
 -More Maps:
 	-Lunar island/ lunar based map
