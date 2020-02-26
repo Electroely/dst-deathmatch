@@ -343,14 +343,13 @@ local function MakeSpectator(player, bool)
 	end
 end
 
-
-
 dm = nil -- gotta remove later
 local Deathmatch_Manager = Class(function(self, inst)
 
 	self.inst = inst
 	self.timer_time = 600
 	self.timer_current = 0
+	self.revivals = 0
 	self.leadingplayer = nil
 	
 	self.announcestrings = DEATHMATCH_STRINGS.ANNOUNCE
@@ -667,6 +666,7 @@ function Deathmatch_Manager:ResetDeathmatch()
 	TheNet:Announce(self.announcestrings.MATCHRESET)
 	self.voters.endmatch = {}
 	self.damagedealt = {}
+	self.revivals = 0
 	self.matchinprogress = false
 	if self.pickuptask ~= nil then
 		self.pickuptask:Cancel()
@@ -874,6 +874,38 @@ function Deathmatch_Manager:ToggleSpectator(player)
 	if (self.doingreset or self.matchstarting) and self.gamemode ~= 0 then
 		self:GroupTeams(self.gamemodes[self.gamemode].teammode)
 	end
+end
+
+function Deathmatch_Manager:OnPlayerRevived(player, source)
+	self.inst:DoTaskInTime(0, function(inst) --delay by a frame so other functions can do their checks
+		self.revivals = self.revivals + 1
+		if source and source:HasTag("player") then
+			local item = source.components.inventory:GetEquippedItem(EQUIPSLOTS.HANDS)
+			if item and item.prefab == "deathmatch_reviverheart" then
+				item:Remove() --Consume Heart
+			end
+		end
+	end)
+end
+
+function Deathmatch_Manager:GetPlayerRevivalTimeMult(reviver)
+	if reviver and reviver:HasTag("player") then
+		local item = reviver.components.inventory:GetEquippedItem(EQUIPSLOTS.HANDS)
+		if item and item.prefab == "deathmatch_reviverheart" then
+			return 1
+		end
+	end
+	return math.pow(2, self.revivals)
+end
+
+function Deathmatch_Manager:GetPlayerRevivalHealthPct(reviver)
+	if reviver and reviver:HasTag("player") then
+		local item = reviver.components.inventory:GetEquippedItem(EQUIPSLOTS.HANDS)
+		if item and item.prefab == "deathmatch_reviverheart" then
+			return 0.5 / math.pow(2, self.revivals)
+		end
+	end
+	return 0.25
 end
 
 return Deathmatch_Manager

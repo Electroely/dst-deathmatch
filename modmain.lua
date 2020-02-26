@@ -115,6 +115,7 @@ PrefabFiles = {
 	"atrium_key_light",
 	"fakeplayer",
 	"deathmatch_oneusebomb",
+	"deathmatch_reviverheart",
 	"shadowweapons",
 }
 Assets = {
@@ -423,6 +424,20 @@ AddPlayerPostInit(function(inst)
 			inst.components.health:SetMaxHealth(health)
 			inst.components.combat.hitrange = 2.5
 			inst.components.combat.playerdamagepercent = 1
+			
+			inst:AddComponent("corpsereviver") -- from the forge code
+			function inst.components.corpsereviver:GetReviverSpeedMult(target)
+				return G.TheWorld.components.deathmatch_manager:GetPlayerRevivalTimeMult(self.inst)
+			end
+			inst.components.revivablecorpse:SetReviveHealthPercent(1)
+			function inst.components.corpsereviver:GetAdditionalReviveHealthPercent()
+				return G.TheWorld.components.deathmatch_manager:GetPlayerRevivalHealthPct(self.inst)-1
+			end
+			inst:ListenForEvent("respawnfromcorpse", function(inst, data)
+				if data and data.source then
+					G.TheWorld.components.deathmatch_manager:OnPlayerRevived(inst, data.source)
+				end
+			end)
 		end
 		---------- character perks
 		G.require("player_postinits_deathmatch")(inst, inst.prefab)
@@ -729,6 +744,10 @@ _name.PICKUP_COOLDOWN = "Instant Refresh\nResets cooldown of all weapons in inve
 
 _name.DEATHMATCH_INFOSIGN = "Info Sign"
 _name.DUMMYTARGET = "Target Dummy"
+_name.DEATHMATCH_REVIVERHEART = "Telltale Heart"
+
+local _tuning = GLOBAL.TUNING
+_tuning.REVIVE_CORPSE_ACTION_TIME = 2 --in deathmatch, revivals start out fast but get slower
 ----------------------------------------------------------------------
 local function FindKeyFromName(name)
 	if name ~= nil and G.type(name) == "string" and name:lower() ~= "none" then
