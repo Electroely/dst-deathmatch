@@ -1,5 +1,25 @@
 --it's much easier to keep everything organized if we put every major feature in its own file
 local G = GLOBAL
+G.require("emoji_items")
+
+local function GetOwnedEmojiList(userid) --this only works clientside if its the player checking their own list
+	local owned_emojis = {}
+	for item_type, emoji in pairs(G.EMOJI_ITEMS) do
+		if (not emoji.data.requires_validation) or 
+		(G.ThePlayer ~= nil and G.ThePlayer.userid == userid and G.TheInventory:CheckOwnership(item_type)) or
+		G.TheInventory:CheckClientOwnership(userid, item_type) then
+			owned_emojis[emoji.input_name] = emoji.data.utf8_str
+		end
+	end
+	return owned_emojis
+end
+local function FilterEmojisForUser(userid, message)
+	local emojilist = GetOwnedEmojiList(userid)
+	for input_string, char in pairs(emojilist) do
+		message = string.gsub(message, ":"..input_string..":", char)
+	end
+	return message
+end
 
 local function SetDirty(netvar, val)
 	netvar:set_local(val)
@@ -18,9 +38,13 @@ AddClassPostConstruct("screens/chatinputscreen", function(self, whisper, team)
 	local run_old = self.Run
 	self.Run = function(...)
 		if self.team then
-			G.ThePlayer:PushEvent("sendprivatemessage", self.chat_edit:GetString())
+			local chatstring = self.chat_edit:GetString()
+			if string.len(chatstring) == 0 or string.sub(chatstring, 0, 1) == "/" then
+				return run_old(...)
+			end
+			G.ThePlayer:PushEvent("sendprivatemessage", chatstring)
 		else
-			run_old(...)
+			return run_old(...)
 		end
 	end
 end)
@@ -41,10 +65,16 @@ AddPrefabPostInit("player_classified", function(inst)
 	--inst._privatemessage_team = G.net_byte(inst.GUID, "deathmatch.privatemessage_team")
 	
 	inst:DoTaskInTime(0, function(inst)
-		if inst._parent ~= nil then inst._parent = inst.entity:GetParent() end
+		if inst._parent == nil then inst._parent = inst.entity:GetParent() end
+		print("INIT TEAMCHAT LISTENERS", inst, inst._parent)
 		inst:ListenForEvent("sendprivatemessage", function(player, data)
 			print("SENDPM", player, data)
 			SendModRPCToServer(GetModRPC(modname, "deathmatch_privatemessage"), data)
+			--the emoji gets sent clientside immediately. might make debugging harder but its less jarring
+			data = FilterEmojisForUser(player.userid, data)
+			inst._privatemessage_sender:set_local(player.userid)
+			inst._privatemessage:set_local(data)
+			inst:PushEvent("pmdirty")
 		end, inst._parent)
 		
 		inst:ListenForEvent("pmdirty", function(inst)
@@ -53,12 +83,20 @@ AddPrefabPostInit("player_classified", function(inst)
 			if player and player.HUD then
 				local team = player.components.teamer:GetTeam()
 				if team == 0 then return end
+				local clientdata = G.TheNet:GetClientTableForUser(inst._privatemessage_sender:value())
+				if clientdata == nil then return end
+				local profileflair = nil
+				for i, v in ipairs(clientdata.vanity) do
+					if string.sub(v, 0, 12) == "profileflair" then
+						profileflair = v
+					end
+				end
 				player.HUD.controls.networkchatqueue:PushMessage(
-					"[T] "..inst._privatemessage_sender:value(),
+					"[T] "..clientdata.name,
 					inst._privatemessage:value(),
 					G.DEATHMATCH_TEAMS[team].colour,
 					false, false,
-					"default") --TODO: what's this argument, exactly
+					profileflair or "default")
 			end
 		end)
 		
@@ -68,9 +106,10 @@ AddPrefabPostInit("player_classified", function(inst)
 			print("PM BROADCAST", player, data)
 			for k, v in pairs(G.AllPlayers) do
 				local team = v.components.teamer:GetTeam()
-				if team ~= 0 and team == player.components.teamer:GetTeam() then
+				print("checking player", v, "of team", team)
+				if v ~= player and team ~= 0 and team == player.components.teamer:GetTeam() then
 					v:PushEvent("receiveprivatemessage", {
-						sender = player:GetDisplayName(),
+						sender = player.userid,
 						message = data
 					})
 				end
@@ -91,5 +130,6 @@ G.require("networkclientrpc")
 AddModRPCHandler(modname, "deathmatch_privatemessage", function(inst, message)
 	if not (G.checkstring(message)) then return end
 	print("PM RPC RECEIVED", inst, message)
+	message = FilterEmojisForUser(inst.userid, message)
 	inst:PushEvent("broadcastprivatemessage", message)
 end)
