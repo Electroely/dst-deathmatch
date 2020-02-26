@@ -41,6 +41,7 @@ AddPrefabPostInit("player_classified", function(inst)
 	--inst._privatemessage_team = G.net_byte(inst.GUID, "deathmatch.privatemessage_team")
 	
 	inst:DoTaskInTime(0, function(inst)
+		if inst._parent ~= nil then inst._parent = inst.entity:GetParent() end
 		inst:ListenForEvent("sendprivatemessage", function(player, data)
 			print("SENDPM", player, data)
 			SendModRPCToServer(GetModRPC(modname, "deathmatch_privatemessage"), data)
