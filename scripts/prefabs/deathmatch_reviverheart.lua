@@ -34,7 +34,7 @@ local function ondropped(inst)
     inst.beattask = inst:DoTaskInTime(0, startbeat)
 end
 
-local function onpickup(inst)
+local function onpickup(inst) --TODO player should drop heart if takes enough damage
     if inst.beattask ~= nil then
         inst.beattask:Cancel()
         inst.beattask = nil
@@ -69,11 +69,17 @@ local function fn()
     inst.components.inventoryitem:SetOnDroppedFn(ondropped)
     inst.components.inventoryitem:SetOnPutInInventoryFn(onpickup)
     inst.components.inventoryitem:SetSinks(true)
-    
     inst.components.inventoryitem.imagename = "reviver"
     
     inst:AddComponent("equippable")
-
+    inst:ListenForEvent("unequipped", function(inst, data)
+		if data and data.owner and data.owner:HasTag("player") then
+			local player = data.owner
+			if player.sg.currentstate and player.sg.currentstate.name == "dolongaction" then
+				player.sg:GoToState("idle") --cancel revive if heart is unequipped
+			end
+		end
+    end)
     --inst:AddComponent("inspectable")
 
     MakeHauntableLaunch(inst)

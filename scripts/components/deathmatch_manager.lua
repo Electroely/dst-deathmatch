@@ -691,14 +691,68 @@ function Deathmatch_Manager:ResetDeathmatch()
 	self.doingreset = true
 end
 
-local function SpawnPickUp(inst)
+function Deathmatch_Manager:GetPickUpItemList(custompos)
+	local result = {}
+	
+	local count = getPlayerCount(true)
+	local pos = custompos or self.inst.centerpoint:GetPosition()
+	local nearbyplayers = 0
+	for k, v in pairs(self.players_in_match) do
+		if v and v:IsValid() and not v.components.health:IsDead() and v:GetDistanceSqToPoint(pos) <= 8*8 then
+			nearbyplayers = nearbyplayers + 1
+		end
+	end
+	if self.enabledarts and (nearbyplayers > 0 and nearbyplayers <= count/2) then
+		table.insert(result, "deathmatch_oneusebomb")
+	end
+	for i = 1, math.floor(count/2) do
+		table.insert(result, GetRandomItem(self.pickupprefabs))
+	end
+	if self.gamemode ~= 1 then
+		local heartcount = 0
+		for k, v in pairs(self.spawnedpickups) do
+			if v.prefab == "deathmatch_reviverheart" then
+				heartcount = heartcount + 1
+			end
+		end
+		if heartcount < 3 and math.random()>0.5 then
+			table.insert(result, "deathmatch_reviverheart")
+		end
+	end
+	return result
+end
+
+function Deathmatch_Manager:DoPickUpSpawn()
+	if not self.enablepickups then return end
+	local items_to_spawn = self:GetPickUpItemList()
+	for i, v in ipairs(items_to_spawn) do
+		local pos = self.inst.centerpoint:GetPosition()
+		local offset = nil
+		while (offset == nil) do
+			offset = FindValidPositionByFan(math.random()*2*PI, 1+math.random()*5, 10,
+				function(offset)
+					return TheWorld.Map:IsPassableAtPoint((pos+offset):Get())
+			end)
+		end
+		local item = SpawnPrefab(v)
+		local fx = SpawnPrefab("small_puff")
+		item.Transform:SetPosition((pos+offset):Get())
+		fx.Transform:SetPosition((pos+offset):Get())
+		table.insert(self.spawnedpickups, item)
+		if item.Fade ~= nil then
+			item:DoTaskInTime(15, item.Fade)
+		end
+	end
+end
+
+local function SpawnPickUp(inst) --gosh this code is AWFUL
 	local self = inst.components.deathmatch_manager
 	if self.enablepickups then
 		local count = getPlayerCount(true)
 		local pos = inst.centerpoint:GetPosition()
 		local nearbyplayers = 0
 		for k, v in pairs(self.players_in_match) do
-			if v and v:IsValid() and not v.components.health:IsDead() and v:GetDistanceSqToPoint(pos) <= 25 then
+			if v and v:IsValid() and not v.components.health:IsDead() and v:GetDistanceSqToPoint(pos) <= 8*8 then
 				nearbyplayers = nearbyplayers + 1
 			end
 		end
@@ -769,7 +823,7 @@ function Deathmatch_Manager:BeginMatch()
 		self.pickuptask:Cancel()
 		self.pickuptask = nil
 	end
-	self.pickuptask = self.inst:DoPeriodicTask(10, SpawnPickUp)
+	self.pickuptask = self.inst:DoPeriodicTask(10, function() self:DoPickUpSpawn() end)
 	for k, v in pairs(self.players_in_match) do
 		v:RemoveTag("notarget")
 		self.inst:PushEvent("donechoosinggear")
