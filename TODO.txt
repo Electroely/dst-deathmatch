@@ -1,15 +1,36 @@
+- Methods of stopping a "snowballing" Team in the team modes (Electro: i'll get to work on this)
+	* Add Telltale hearts in some way, can't drop the old fashioned way in the middle since winning teams would just hog those
+	update:
+	change reviving speed to be fast, but slows down the more people are revived in a match.
+	telltale hearts skip revival animation entirely, but the speed penalty becomes a revival health penalty
+	
+
+- Update Deathmatch Status widget
+	the current one in the top right could use some extra info, such as...
+	* display number of live players in each team in a format maybe similar to:
+		Live players:
+	Electroely	|	Hornet
+	Whimsicott	|	Player4
+	etc
+	or for team battles:
+		Live players:
+	1 Red 		|	1 Blue
+	1 Yellow	|	1 Green
+	etc
+	* display preferred team choice whenever that's implemented (hopefully soon?)
+
 - Team Preference
 	* chat command to pick a preferred team in rvb
 	* chat command to pick a player to be paired with in 
 	update:
 	* use /setteam to pick a preferred team color in both modes
 	* ability to request paring through player info screen (the one that shows up when you examine someone)
-	
-- Methods of stopping a "snowballing" Team in the team modes
-	* Add Telltale hearts in some way, can't drop the old fashioned way in the middle since winning teams would just hog those
-	update:
-	change reviving speed to be fast, but slows down the more people are revived in a match.
-	telltale hearts skip revival animation entirely, but the speed penalty becomes a revival health penalty
+
+- Deathmatch Info Popups
+	- remember how I said popups were too intrusive? what if did added again
+	- ...but made them less intrusive this time? they could be little textboxes in a corner with lots of text
+	  and an x button in the corner, kind of like the ones in ONI
+	- re-using the current popup push code would work, since the actual push widget code is like 1-2 lines
 	
 - Anti-camping mechanics
 	How about this: everytime a player dies, everyone gets a damage boost based on how much dmg they dealt in the match
@@ -24,12 +45,6 @@
 - Powerups shouldn't land very far from Pig King (min dist to avoid bouncing off him, max dist to limit to wood turf?)
 
 - Figure out a better transition between cosmetic states for wolfgang and wurt
-
-- Deathmatch Info Popups
-	- remember how I said popups were too intrusive? what if did added again
-	- ...but made them less intrusive this time? they could be little textboxes in a corner with lots of text
-	  and an x button in the corner, kind of like the ones in ONI
-	- re-using the current popup push code would work, since the actual widget being used is only in 1-2 lines
 	  
 - New Pickup Buffs
 	buffs that last forever but only have a limited effect, usually stackable
