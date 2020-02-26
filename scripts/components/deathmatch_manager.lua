@@ -405,7 +405,6 @@ function Deathmatch_Manager:StartDeathmatch()
 	self.inst.centerpoint = findcenter()
 	TheNet:Announce(self.announcestrings.MATCHINIT)
 	self.inst.net:PushEvent("deathmatch_timercurrentchange", 7)
-	self.inst:PushEvent("deathmatch_start")
 	if getPlayers() ~= nil then
 		self.doingreset = true
 		for k, v in pairs(self.spawneditems) do
@@ -571,10 +570,7 @@ function Deathmatch_Manager:StopDeathmatch()
 			end)
 		end)
 	end
-	
-	self.inst:DoTaskInTime(5, function()
-		c_removeall("boat")
-	end)
+
 	self.players_in_match = {}
 end
 
@@ -606,6 +602,7 @@ function Deathmatch_Manager:ResetDeathmatch()
 	self.startdeathmatchtask = self.inst:DoTaskInTime(10, function()
 		self:StartDeathmatch()
 	end)
+	self.inst:PushEvent("deathmatch_start")
 	self.inst.net:PushEvent("deathmatch_matchstatuschange", 2)
 	self.inst.net:PushEvent("deathmatch_timercurrentchange", 10)
 	self.inst.net:PushEvent("deathmatch_arenachange", ARENAS.IDX[self.arena])

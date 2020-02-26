@@ -317,34 +317,41 @@ AddComponentPostInit("playercontroller", function(self) -- aoetargeting compabil
 end)
 
 AddComponentPostInit("drownable", function(self)
+	local _Teleport = self.Teleport
 	function self:Teleport()
-		local boats = {}
+		if G.TheWorld.components.deathmatch_manager.arena == "ocean" then
+			local boats = {}
 		
-		for k, v in pairs(G.Ents) do
-			if v and v.prefab == "boat" then
-				table.insert(boats, v)
+			for k, v in pairs(G.Ents) do
+				if v and v.prefab == "boat" then
+					table.insert(boats, v)
+				end
 			end
-		end
 		
-		if #boats >= 1 then
 			local pos = boats[math.random(#boats)]:GetPosition()
-		end
 
-		if self.inst.Physics ~= nil and pos ~= nil then
-			self.inst.Physics:Teleport(pos.x, pos.y, pos.z)
-		elseif self.inst.Transform ~= nil then
-			self.inst.Transform:SetPosition(pos.x, pos.y, pos.z)
+			if self.inst.Physics ~= nil and pos ~= nil then
+				self.inst.Physics:Teleport(pos.x, pos.y, pos.z)
+			elseif self.inst.Transform ~= nil and pos ~= nil then
+				self.inst.Transform:SetPosition(pos.x, pos.y, pos.z)
+			end
+		else
+			return _Teleport(self)
 		end
 	end
 	
 	function self:OnFallInOcean(shore_x, shore_y, shore_z)
 		self.src_x, self.src_y, self.src_z = self.inst.Transform:GetWorldPosition()
-
+		
 		if shore_x == nil then
 			shore_x, shore_y, shore_z = G.FindRandomPointOnShoreFromOcean(self.src_x, self.src_y, self.src_z)
 		end
 
 		self.dest_x, self.dest_y, self.dest_z = shore_x, shore_y, shore_z
+	end
+	
+	function self:DropInventory()
+		--no drop inventory, bad
 	end
 end)
 

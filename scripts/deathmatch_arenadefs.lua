@@ -144,7 +144,9 @@ local ARENAS = {
 			nopickups = true,
 			
 			matchendfn = function()
-				
+				TheWorld:DoTaskInTime(6, function()
+					c_removeall("boat")
+				end)
 			end,
 		},
 	},

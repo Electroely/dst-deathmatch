@@ -17,7 +17,9 @@ local function fn()
     end
 
     inst:ListenForEvent("deathmatch_start", function()
-		SpawnPrefab("boat").Transform:SetPosition(inst.Transform:GetWorldPosition())
+		inst:DoTaskInTime(0, function()
+			SpawnPrefab("boat").Transform:SetPosition(inst.Transform:GetWorldPosition())
+		end)
 	end, TheWorld)
 	
 	inst:DoTaskInTime(0, function()
