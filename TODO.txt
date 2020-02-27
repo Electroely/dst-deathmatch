@@ -10,7 +10,8 @@
 	- ...but made them less intrusive this time? they could be little textboxes in a corner with lots of text
 	  and an x button in the corner, kind of like the ones in ONI
 	- re-using the current popup push code would work, since the actual push widget code is like 1-2 lines
-	
+
+-- workshop v1.95 releases here --
 
 - Update Deathmatch Status widget
 	the current one in the top right could use some extra info, such as...
