@@ -8,12 +8,13 @@ local DEATHMATCH_POPUPS = DEATHMATCH_STRINGS.POPUPS
 
 --mod import extra files
 modimport("scripts/deathmatch_teamchat")
+modimport("scripts/deathmatch_componentpostinits")
 
 local function GetUpValue(func, varname)
 	local i = 1
 	local n, v = debug.getupvalue(func, 1)
 	while v ~= nil do
-		print("checking",n, v, "to fetch")
+		--print("checking",n, v, "to fetch")
 		if n == varname then
 			return v
 		end
@@ -25,7 +26,7 @@ local function ReplaceUpValue(func, varname, newvalue)
 	local i = 1
 	local n, v = debug.getupvalue(func, 1)
 	while v ~= nil do
-		print("checking",n, v, "to replace")
+		--print("checking",n, v, "to replace")
 		if n == varname then
 			debug.setupvalue(func, i, newvalue)
 			return
@@ -522,37 +523,23 @@ local function getPlayerCount(onlyalive)
 end
 
 local function launchitem(item, angle)
-    local speed = math.random() * 4 + 2
+    local speed = math.random() * 1.5 + 5
     angle = (angle + math.random() * 60 - 30) * G.DEGREES
     item.Physics:SetVel(speed * math.cos(angle), math.random() * 2 + 8, speed * math.sin(angle))
 end
 
 local function SpawnPickup(inst)
-    local x, y, z = inst.Transform:GetWorldPosition()
 	local pos = G.TheWorld.centerpoint:GetPosition()
-	local count = getPlayerCount(true)
-    local angle = math.random(360)
-	local nearbyplayers = 0
-	for k, v in pairs(G.TheWorld.components.deathmatch_manager.players_in_match) do
-		if v and v:IsValid() and not v.components.health:IsDead() and v:GetDistanceSqToPoint(pos) <= 25 then
-			nearbyplayers = nearbyplayers + 1
-		end
+	local items = G.TheWorld.components.deathmatch_manager:GetPickUpItemList(pos)
+	
+	for k, v in pairs(items) do
+		local angle = math.random(360)
+		local item = G.SpawnPrefab(v)
+		item.Transform:SetPosition(pos.x, 4.5, pos.z)
+		launchitem(item, angle)
+		if item.Fade ~= nil then item:DoTaskInTime(15, item.Fade) end
 	end
 	
-	if G.TheWorld.components.deathmatch_manager.enabledarts and nearbyplayers ~= 0 and nearbyplayers <= count/2 then
-		local bomb = G.SpawnPrefab("deathmatch_oneusebomb")
-        bomb.Transform:SetPosition(x, 4.5, z)
-        launchitem(bomb, angle)
-	end
-
-    for k = 1, math.floor(count/2) do
-        local pickup = G.SpawnPrefab(G.GetRandomItem(G.TheWorld.components.deathmatch_manager.pickupprefabs))
-        pickup.Transform:SetPosition(x, 4.5, z)
-        launchitem(pickup, angle)
-		if pickup.Fade ~= nil then
-			pickup:DoTaskInTime(15, pickup.Fade)
-		end
-    end
 end
 
 AddPrefabPostInit("pigking", function(inst)
