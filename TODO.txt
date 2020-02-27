@@ -1,8 +1,15 @@
-- Methods of stopping a "snowballing" Team in the team modes (Electro: i'll get to work on this)
-	* Add Telltale hearts in some way, can't drop the old fashioned way in the middle since winning teams would just hog those
+- Team Preference
+	* chat command to pick a preferred team in rvb
+	* chat command to pick a player to be paired with in 
 	update:
-	change reviving speed to be fast, but slows down the more people are revived in a match.
-	telltale hearts skip revival animation entirely, but the speed penalty becomes a revival health penalty
+	* use /setteam to pick a preferred team color in both modes
+	* ability to request paring through player info screen (the one that shows up when you examine someone)
+
+- Deathmatch Info Popups
+	- remember how I said popups were too intrusive? what if did added again
+	- ...but made them less intrusive this time? they could be little textboxes in a corner with lots of text
+	  and an x button in the corner, kind of like the ones in ONI
+	- re-using the current popup push code would work, since the actual push widget code is like 1-2 lines
 	
 
 - Update Deathmatch Status widget
@@ -19,19 +26,6 @@
 	etc
 	* display preferred team choice whenever that's implemented (hopefully soon?)
 
-- Team Preference
-	* chat command to pick a preferred team in rvb
-	* chat command to pick a player to be paired with in 
-	update:
-	* use /setteam to pick a preferred team color in both modes
-	* ability to request paring through player info screen (the one that shows up when you examine someone)
-
-- Deathmatch Info Popups
-	- remember how I said popups were too intrusive? what if did added again
-	- ...but made them less intrusive this time? they could be little textboxes in a corner with lots of text
-	  and an x button in the corner, kind of like the ones in ONI
-	- re-using the current popup push code would work, since the actual push widget code is like 1-2 lines
-	
 - Anti-camping mechanics
 	How about this: everytime a player dies, everyone gets a damage boost based on how much dmg they dealt in the match
 	as for the mechanics...
