@@ -2,13 +2,12 @@ local G = GLOBAL
 local require = G.require
 local debug = G.debug
 
-local printwrap = G.printwrap
 
 local function GetUpValue(func, varname)
 	local i = 1
 	local n, v = debug.getupvalue(func, 1)
 	while v ~= nil do
-		print("UPVAL GET", varname ,n, v)
+		--print("UPVAL GET", varname ,n, v)
 		if n == varname then
 			return v
 		end
@@ -20,7 +19,7 @@ local function ReplaceUpValue(func, varname, newvalue)
 	local i = 1
 	local n, v = debug.getupvalue(func, 1)
 	while v ~= nil do
-		print("UPVAL REPLACE",varname,n, v)
+		--print("UPVAL REPLACE",varname,n, v)
 		if n == varname then
 			debug.setupvalue(func, i, newvalue)
 			return
@@ -78,11 +77,9 @@ local function CosmeticSaveData(inst)
 	function inst:OnSave(data, ...)
 		if OnSave_old then OnSave_old(self, data, ...) end
 		data.cosmeticstate = self.cosmeticstate
-		printwrap("Saving data for player", data)
 	end
 	local OnLoad_old = inst.OnLoad
 	function inst:OnLoad(data, ...)
-		printwrap("Loading data for player", data)
 		if data and data.cosmeticstate ~= nil then
 			self.cosmeticstate = data.cosmeticstate
 			self:DoTaskInTime(0, function()
