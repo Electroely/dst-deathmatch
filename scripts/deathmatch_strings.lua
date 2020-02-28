@@ -20,6 +20,7 @@ return {
 		
 		SETTEAMMODE = "Set deathmatch team mode to %s.",
 		SETTEAMMODE_CUSTOM = "Set deathmatch mode to custom. Use /setteam before a match starts to assign custom teams.",
+		SETTEAMMODE_RVB = "Set deathmatch mode to %s. Use /team to pick a side, or stay neutral to be randomized.",
 	},
 	USERCOMMANDS = {
 		SETTEAM = {

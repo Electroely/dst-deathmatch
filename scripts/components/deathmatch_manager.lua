@@ -591,6 +591,12 @@ function Deathmatch_Manager:StartDeathmatch()
 		if arena_configs[self.arena] and arena_configs[self.arena].matchstartfn then
 			arena_configs[self.arena].matchstartfn()
 		end
+		if self.gamemode ~= 0 and self.gamemode <= #self.gamemodes then
+			self:GroupTeams(self.gamemodes[self.gamemode].teammode)
+		end
+		if self.gamemode == 0 then
+			self.allow_teamswitch_user = false
+		end
 		print("Reset successful! Queuing player release...")
 		self:ReleasePlayers()
 	end
@@ -648,9 +654,12 @@ function Deathmatch_Manager:StopDeathmatch()
 				end
 				GiveLobbyInventory(v)
 			end
-			v:DoTaskInTime(5, function(v)
 			v.components.combat.externaldamagetakenmultipliers:SetModifier("deathmatchinvincibility", 0)
-			end)
+			if self.gamemode == 2 then
+				v.components.teamer:SetTeam(v.teamchoice)
+			else
+				v.components.teamer:SetTeam(0)
+			end
 		end)
 	end
 	self.players_in_match = {}
@@ -671,12 +680,6 @@ function Deathmatch_Manager:ResetDeathmatch()
 	if self.pickuptask ~= nil then
 		self.pickuptask:Cancel()
 		self.pickuptask = nil
-	end
-	if self.gamemode ~= 0 and self.gamemode <= #self.gamemodes then
-		self:GroupTeams(self.gamemodes[self.gamemode].teammode)
-	end
-	if self.gamemode == 0 then
-		self.allow_teamswitch_user = false
 	end
 	if self.startdeathmatchtask ~= nil then
 		self.startdeathmatchtask:Cancel()
@@ -851,10 +854,23 @@ function Deathmatch_Manager:Vote(reason, player)
 	end
 end
 
+--todo: for team preference:
+--half mode would use a table where reds are on top and blues on bottom
+--pairs would group the pre-determined pairs first and everyone else after
+--maybe make team grouping only happen when match starts rather than when /dm start is ran?
+-- lua does have a sort table function, use that for half
+-- (team selection would be part of teamer component or independent variable?
+local function sortByRedVBlue(a, b) --true if a comes before b
+	return a.teamchoice == 2 or b.teamchoice == 1
+end
+
 function Deathmatch_Manager:GroupTeams(mode)
 	local players = ScrambleTable(getPlayers())
 	local numplayers = #players
 	if mode == "half" then
+		if numplayers >= 2 then
+			table.sort(players, sortByRedVBlue)
+		end
 		for i, v in ipairs(players) do
 			if i > numplayers/2 then
 				v.components.teamer:SetTeam(1)
@@ -877,12 +893,21 @@ function Deathmatch_Manager:SetGamemode(mode)
 	self.gamemode = mode
 	if mode ~= 0 then
 		self.allow_teamswitch_user = false
-		TheNet:Announce(string.format(DEATHMATCH_STRINGS.ANNOUNCE.SETTEAMMODE, self.gamemodes[mode].name))
+		if mode == 2 then
+			TheNet:Announce(string.format(DEATHMATCH_STRINGS.ANNOUNCE.SETTEAMMODE_RVB, self.gamemodes[mode].name))
+		else
+			TheNet:Announce(string.format(DEATHMATCH_STRINGS.ANNOUNCE.SETTEAMMODE, self.gamemodes[mode].name))
+		end
 		self.inst.net:PushEvent("deathmatch_matchmodechange", mode)
 	else
 		self.allow_teamswitch_user = true
 		TheNet:Announce(DEATHMATCH_STRINGS.ANNOUNCE.SETTEAMMODE_CUSTOM)
 		self.inst.net:PushEvent("deathmatch_matchmodechange", 4)
+	end
+	if self.gamemode == 2 then
+		v.components.teamer:SetTeam(v.teamchoice)
+	else
+		v.components.teamer:SetTeam(0)
 	end
 end
 
