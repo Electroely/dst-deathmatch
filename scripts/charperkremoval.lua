@@ -193,3 +193,7 @@ AddPrefabPostInit("woodie", function(inst)
 	
 	--i'll need to fix the weremeter showing up eventually so here's this
 end)
+-- wortox
+AddPrefabPostInit("wortox_soul_spawn", function(inst)
+	inst:DoTaskInTime(0, inst.Remove)
+end)

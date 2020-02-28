@@ -904,10 +904,12 @@ function Deathmatch_Manager:SetGamemode(mode)
 		TheNet:Announce(DEATHMATCH_STRINGS.ANNOUNCE.SETTEAMMODE_CUSTOM)
 		self.inst.net:PushEvent("deathmatch_matchmodechange", 4)
 	end
-	if self.gamemode == 2 then
-		v.components.teamer:SetTeam(v.teamchoice)
-	else
-		v.components.teamer:SetTeam(0)
+	for k, v in pairs(getPlayers()) do
+		if self.gamemode == 2 then
+			v.components.teamer:SetTeam(v.teamchoice)
+		else
+			v.components.teamer:SetTeam(0)
+		end
 	end
 end
 
