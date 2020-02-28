@@ -1,5 +1,6 @@
 local G = GLOBAL
 local DEATHMATCH_STRINGS = G.DEATHMATCH_STRINGS
+local tonumber = G.tonumber
 
 local function FindKeyFromName(name)
 	if name ~= nil and G.type(name) == "string" and name:lower() ~= "none" then

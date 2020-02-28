@@ -322,6 +322,14 @@ local PairAction = AddAction("DEATHMATCH_PAIRWITH", "Team up with", function(act
 	end
 end)
 PairAction.instant = true
+PairAction.rmb = true
+PairAction.strfn = function(act)
+	if act.doer and act.target and act.doer.components.teamer:IsTeamedWith(act.target) then
+		return "DISBAND"
+	end
+	return "GENERIC"
+end
+G.STRINGS.ACTIONS.DEATHMATCH_PAIRWITH = DEATHMATCH_STRINGS.PAIRWITH_ACTION
 
 AddComponentAction("SCENE", "teamer", function(inst, doer, actions, right)
 	--if right then

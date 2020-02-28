@@ -61,6 +61,10 @@ return {
 		},
 	},
 	
+	PAIRWITH_ACTION = {
+		GENERIC = "Team up with",
+		DISBAND = "Disband"
+	}
 	POPUPS = {
 		welcome = {
 			"Welcome to Deathmatch",

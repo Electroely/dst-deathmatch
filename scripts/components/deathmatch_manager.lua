@@ -946,17 +946,21 @@ function Deathmatch_Manager:DisbandPairTeam(player)
 	for k, v in pairs(getPlayers()) do
 		if v ~= player and v.components.teamer:GetTeam() == team then
 			v.components.teamer:SetTeam(0)
+			if v.pairrequest == player then
+				v.pairrequest = nil
+			end
 			break
 		end
 	end
 	player.components.teamer:SetTeam(0)
+	player.pairrequest = nil
 end
 
 function Deathmatch_Manager:RequestPairing(doer, target)
 	doer.pairrequest = target
-	--if target.pairrequest == doer then
+	if target.pairrequest == doer then
 		self:PresetPair(doer, target)
-	--end
+	end
 end
 
 function Deathmatch_Manager:PresetPair(p1, p2)
