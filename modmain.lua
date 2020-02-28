@@ -310,6 +310,30 @@ AddComponentAction("INVENTORY", "explosiveballoonmaker", function(inst, doer, ac
 	end
 end)
 
+local PairAction = AddAction("DEATHMATCH_PAIRWITH", "Team up with", function(act)
+	if act.doer and act.target then
+		if act.doer:HasTag("spectator") or act.target:HasTag("spectator") then return false end
+		if act.doer.components.teamer:IsTeamedWith(act.target) then
+			G.TheWorld.components.deathmatch_manager:DisbandPairTeam(act.doer)
+			return true
+		end
+		G.TheWorld.components.deathmatch_manager:RequestPairing(act.doer, act.target)
+		return true
+	end
+end)
+PairAction.instant = true
+
+AddComponentAction("SCENE", "teamer", function(inst, doer, actions, right)
+	--if right then
+		if inst:HasTag("spectator") or doer:HasTag("spectator") then return end
+		local mode = G.TheWorld.net.deathmatch_netvars.globalvars.matchmode:value() --3: 2pt
+		local matchstatus = G.TheWorld.net.deathmatch_netvars.globalvars.matchstatus:value()
+		if mode == 3 and (matchstatus == 0 or matchstatus == 2) then
+			table.insert(actions, G.ACTIONS.DEATHMATCH_PAIRWITH)
+		end
+	--end
+end)
+
 local stategraph_postinits = G.require("stategraph_postinits")
 for stategraph, states in pairs(stategraph_postinits) do
 	for _, state in pairs(states) do

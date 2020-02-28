@@ -864,6 +864,27 @@ local function sortByRedVBlue(a, b) --true if a comes before b
 	return a.teamchoice == 2 or b.teamchoice == 1
 end
 
+local function getFirstTeamWithoutPair() --for 2pt paring
+	local players = getPlayers()
+	local teamcounts = {}
+	for i = 1, #DEATHMATCH_TEAMS do
+		teamcounts[i] = 0
+	end
+	for k, v in pairs(players) do
+		local team = v.components.teamer:GetTeam()
+		if team ~= 0 then
+			teamcounts[team] = teamcounts[team] + 1
+		end
+	end
+	for i, v in ipairs(teamcounts) do
+		if v < 2 then
+			return i
+		end
+	end
+	--this really shouldn't ever happen in 2pt mode
+	return 0
+end
+
 function Deathmatch_Manager:GroupTeams(mode)
 	local players = ScrambleTable(getPlayers())
 	local numplayers = #players
@@ -879,8 +900,14 @@ function Deathmatch_Manager:GroupTeams(mode)
 			end
 		end
 	elseif mode == "pairs" then
-		for i, v in ipairs(players) do
-			v.components.teamer:SetTeam(math.ceil(i/2))
+		local teamlessplayers = {}
+		for k, v in pairs(players) do
+			if v.components.teamer:GetTeam() == 0 then
+				table.insert(teamlessplayers, v)
+			end
+		end
+		for i, v in ipairs(teamlessplayers) do
+			v.components.teamer:SetTeam(getFirstTeamWithoutPair())
 		end
 	elseif mode == "ffa" then
 		for i, v in ipairs(players) do
@@ -911,6 +938,49 @@ function Deathmatch_Manager:SetGamemode(mode)
 			v.components.teamer:SetTeam(0)
 		end
 	end
+end
+
+function Deathmatch_Manager:DisbandPairTeam(player)
+	local team = player.components.teamer:GetTeam()
+	if team == 0 then return end
+	for k, v in pairs(getPlayers()) do
+		if v ~= player and v.components.teamer:GetTeam() == team then
+			v.components.teamer:SetTeam(0)
+			break
+		end
+	end
+	player.components.teamer:SetTeam(0)
+end
+
+function Deathmatch_Manager:RequestPairing(doer, target)
+	doer.pairrequest = target
+	--if target.pairrequest == doer then
+		self:PresetPair(doer, target)
+	--end
+end
+
+function Deathmatch_Manager:PresetPair(p1, p2)
+	self:DisbandPairTeam(p1)
+	self:DisbandPairTeam(p2)
+	local usedteams = {}
+	for i = 1, #DEATHMATCH_TEAMS do
+		usedteams[i] = false
+	end
+	for k, v in pairs(getPlayers()) do
+		local team = v.components.teamer:GetTeam()
+		if team ~= 0 then
+			usedteams[team] = true
+		end
+	end
+	local team = 0
+	for i, v in ipairs(usedteams) do
+		if not v then
+			team = i
+			break
+		end
+	end
+	p1.components.teamer:SetTeam(team)
+	p2.components.teamer:SetTeam(team)
 end
 
 function Deathmatch_Manager:ToggleSpectator(player)
