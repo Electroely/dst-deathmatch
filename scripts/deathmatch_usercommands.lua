@@ -31,6 +31,7 @@ AddUserCommand("setteam", {
 	params = {"team"},
 	vote = false,
 	serverfn = function(params, caller)
+		if caller:HasTag("spectator") then return end
 		local teamnum = G.tonumber(params.team)
 		if G.TheWorld.components.deathmatch_manager.allow_teamswitch_user then --custom teams
 			if teamnum ~= nil and teamnum >= 0 and teamnum <= #G.DEATHMATCH_TEAMS then
@@ -48,6 +49,9 @@ AddUserCommand("setteam", {
 		end
 	end,
 	localfn = function(params, caller)
+		if caller:HasTag("spectator") then
+			G.Networking_SystemMessage("This command can't be used in spectator mode.")
+		end
 		local mode = G.TheWorld.net.deathmatch_netvars.globalvars.matchmode:value()
 		local matchstatus = G.TheWorld.net.deathmatch_netvars.globalvars.matchstatus:value()
 		local teamnum = G.tonumber(params.team) 

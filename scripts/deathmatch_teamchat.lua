@@ -119,7 +119,7 @@ AddPrefabPostInit("player_classified", function(inst)
 		inst:ListenForEvent("receiveprivatemessage", function(player, data)
 			print("PM RECIEVED", player, data)
 			if data and data.sender and data.message then
-				inst._privatemessage_sender:set(data.sender)
+				SetDirty(inst._privatemessage_sender, data.sender)
 				SetDirty(inst._privatemessage, data.message)
 			end
 		end, inst._parent)

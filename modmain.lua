@@ -332,14 +332,14 @@ end
 G.STRINGS.ACTIONS.DEATHMATCH_PAIRWITH = DEATHMATCH_STRINGS.PAIRWITH_ACTION
 
 AddComponentAction("SCENE", "teamer", function(inst, doer, actions, right)
-	--if right then
-		if inst:HasTag("spectator") or doer:HasTag("spectator") then return end
+	if right then
+		if inst:HasTag("spectator") or doer:HasTag("spectator") or inst == doer then return end
 		local mode = G.TheWorld.net.deathmatch_netvars.globalvars.matchmode:value() --3: 2pt
 		local matchstatus = G.TheWorld.net.deathmatch_netvars.globalvars.matchstatus:value()
 		if mode == 3 and (matchstatus == 0 or matchstatus == 2) then
 			table.insert(actions, G.ACTIONS.DEATHMATCH_PAIRWITH)
 		end
-	--end
+	end
 end)
 
 local stategraph_postinits = G.require("stategraph_postinits")

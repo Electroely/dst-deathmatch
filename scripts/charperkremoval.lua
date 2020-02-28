@@ -84,6 +84,7 @@ local function CosmeticSaveData(inst)
 			self.cosmeticstate = data.cosmeticstate
 			self:DoTaskInTime(0, function()
 				self:ChangeCosmeticState(data.cosmeticstate)
+				if inst._forcestage then inst._forcestage = nil end
 			end)
 		end
 		if OnLoad_old then OnLoad_old(self, data, ...) end
@@ -98,7 +99,6 @@ AddPrefabPostInit("wormwood", function(inst)
 	inst.OnNewSpawn = nil
 	inst.OnPreLoad = nil
 	inst._forcestage = true
-	
 	--new function for /setstate
 	inst.cosmeticstate = inst.cosmeticstate or 1
 	function inst:ChangeCosmeticState(num) --input: number 1-4
