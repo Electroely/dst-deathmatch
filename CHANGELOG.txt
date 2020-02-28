@@ -38,8 +38,10 @@ v19.5
 - Fixed a bug where player's /setlook choice was not saved between re-connections and server reloads
 - Fixed a bug that caused the spectator spinner to appear targetting another player when it isn't
 
+
 - Teams are now set when the players are teleported to the arena rather than when someone types /dm start
-- Players can now use /setteam or /team to choose whether they want to be in red, blue or either.
+- Players can now use /setteam or /team to choose whether they want to be in red, blue or either
+- Players can now right-click other players before a 2-Player Teams match starts to team up with a specific player
 - Updated pickup spawn areas and mechanics
 - Reviving other players takes 2 seconds now, but the time it takes doubles every time a player is revived
 - Added the Telltale Heart, which can be equipped when reviving someone to reduce the revival time to 2 seconds at the cost of the revivee's health
