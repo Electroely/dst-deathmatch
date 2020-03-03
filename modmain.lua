@@ -266,6 +266,10 @@ AddClassPostConstruct("widgets/controls", function(self, owner)
 		self.deathmatch_chooseyourgear:Hide()
 		
 		--self.deathmatch_infopopup = self.bottom_root:AddChild(Deathmatch_InfoPopup(owner))
+		--self.deathmatch_infopopup:SetPosition(0, 250)
+		--owner.ShowPopup = function()
+			--self.deathmatch_infopopup:NewInfo()
+		--end
 		
 		self.clock:Hide()
 		self.status.stomach:Hide()
