@@ -94,5 +94,13 @@ return {
 			AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
 			]],
 		}
+	},
+	
+	INFO_POPUPS = {
+		JOIN = {
+			icon = "spear_rose.tex",
+			title = "Welcome!",
+			text_body = "Say pal, looks like you're new 'round here! Welcome to the Deathmatch Arena! Here you'll be able to fight others in different arenas to claim victory of number one spot. As you do things these info boxes will popup to give you information on the several mechancis and items in Deathmatch."
+		}
 	}
 }
