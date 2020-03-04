@@ -66,56 +66,33 @@ return {
 		DISBAND = "Disband"
 	},
 	POPUPS = {
-		welcome = {
-			"Welcome to Deathmatch",
-			[[Fight other players using weapons from The Forge in this arena-based player vs player gamemode!
-			Please read the Info Sign for more information.
-			]] 
-			},
-		welcome_loner = {
-			"Welcome to Deathmatch",
-			[[This is a PvP game mode, so you'll need other players to play.
-			Please read the Info Sign for more information.
+		WELCOME = {
+			TITLE = "Welcome to Deathmatch!",
+			BODY = [[
+				Welcome to Deathmatch! In this mode, you can fight 
+				other players in battle arenas using weapons from 
+				The Forge! This window will show you various tips as 
+				new things happen while you play. You can view all 
+				tips by typing "/dm help" in chat. 
+				You'll need two or more people to play. Once ready, you 
+				can type "/dm start" to start a match. Have fun!
 			]]
 		},
-		infosign_1 = {
-			"Starting a match",
-			[[You can start a Deathmatch by typing the chat command '/dm start'.
-			(The Info Sign will show more info if read again)
-			]]
-		},
-		infosign_2 = {
-			"Spectating (1)",
-			[[If you die, you can spectate by selecting which player you want to watch on-screen.
-			You can also turn yourself into a ghost by typing /spectate. 
-			]]
-		},
-		infosign_3 = {
-			"Spectating (2)",
-			[[Please note that you cannot be revived in team battles if you're a ghost.
-			Also note that you can return to the lobby by typing /spectate as a ghost.]]
-		},
-		infosign_4 = {
-			"Combat",
-			[[You have access to 4 weapons. 
-			They all do the same damage in a melee attack, but each has a unique ability you can use by right-clicking.]],
-		},
-		infosign_5 = {
-			"Playing in Teams",
-			[[You can start a vote to enable or disable teams. There's two options:
-			Red vs Blue splits the players into two teams.
-			2-Player Teams groups the players in pairs.]]
-		},
-		infosign_6 = {
-			"Changing the Arena",
-			[[You can start a vote to change the selected arena. There are 3 options:
-			Atrium, Desert and Pig Village.
-			Voting for an arena mid-match will apply the change in the next match.]]
-		},
-		infosign_7 = {
-			"Items",
-			[[You can pick up various stat boosts that spawn in the middle of the arena.
-			You can also find one-time use weapons like the Hearthsfire Crystals.]]
+		SIZETEST = {
+			TITLE = "AAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+			BODY = [[
+			AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+			AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+			AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+			AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+			AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+			AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+			AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+			AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+			AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+			AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+			AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+			]],
 		}
 	}
 }
