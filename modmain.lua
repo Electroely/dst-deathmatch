@@ -11,47 +11,25 @@ modimport("scripts/deathmatch_teamchat")
 modimport("scripts/deathmatch_componentpostinits")
 modimport("scripts/deathmatch_prefabpostinits")
 modimport("scripts/deathmatch_usercommands")
+modimport("scripts/deathmatch_tipsmanager")
 
-local PopupDialogScreen = G.require("screens/redux/popupdialog")
 AddPrefabPostInit("player_classified", function(inst)
-	if G.TheNet:GetServerGameMode() == gamemodename then
-		inst._arenaeffects = G.net_string(inst.GUID, "deathmatch.arenaeffect", "arenachanged")
-		inst:ListenForEvent("arenachanged", function(inst, data)
-			G.TheWorld:PushEvent("applyarenaeffects", inst._arenaeffects:value())
+	inst._arenaeffects = G.net_string(inst.GUID, "deathmatch.arenaeffect", "arenachanged")
+	inst:ListenForEvent("arenachanged", function(inst, data)
+		G.TheWorld:PushEvent("applyarenaeffects", inst._arenaeffects:value())
+	end)
+	inst._choosinggear = G.net_bool(inst.GUID, "deathmatch.choosinggear", "choosinggearchanged")
+	if not G.TheWorld.ismastersim then
+		inst:ListenForEvent("choosinggearchanged", function(inst, data)
+			if inst._parent.HUD and inst._choosinggear:value() then
+				inst._parent.HUD.controls.deathmatch_chooseyourgear:Show()
+			elseif inst._parent.HUD then
+				inst._parent.HUD.controls.deathmatch_chooseyourgear:Hide()
+			end
 		end)
-		inst._choosinggear = G.net_bool(inst.GUID, "deathmatch.choosinggear", "choosinggearchanged")
-		if not G.TheWorld.ismastersim then
-			inst:ListenForEvent("choosinggearchanged", function(inst, data)
-				if inst._parent.HUD and inst._choosinggear:value() then
-					inst._parent.HUD.controls.deathmatch_chooseyourgear:Show()
-				elseif inst._parent.HUD then
-					inst._parent.HUD.controls.deathmatch_chooseyourgear:Hide()
-				end
-			end)
-		end
-		G.TheWorld:ListenForEvent("startchoosinggear", function() inst._choosinggear:set(true) end)
-		G.TheWorld:ListenForEvent("donechoosinggear", function() inst._choosinggear:set(false) end)
-		
-		inst._deathmatchpopup = G.net_string(inst.GUID, "deathmatch.popupname", "ondeathmatchpopup")
-		if G.TheWorld.ismastersim then
-			inst:ListenForEvent("pushdeathmatchpopup", function(inst, popupname)
-				inst._deathmatchpopup:set(popupname)
-				inst._deathmatchpopup:set_local("") --to make sure it's always dirty
-			end, inst._parent)
-		end
-		if not G.TheNet:IsDedicated() then
-			inst:ListenForEvent("ondeathmatchpopup", function(inst)
-				--i might need to code special cases for welcome and welcome_loner so
-				--they're saved clientside and no player has to see on every time they
-				--join a server
-				local n = inst._deathmatchpopup:value()
-				G.TheFrontEnd:PushScreen(PopupDialogScreen(DEATHMATCH_POPUPS[n][1], DEATHMATCH_POPUPS[n][2],
-					{
-						{text="Close", cb = function() G.TheFrontEnd:PopScreen() end}
-					}))
-			end)
-		end
 	end
+	G.TheWorld:ListenForEvent("startchoosinggear", function() inst._choosinggear:set(true) end)
+	G.TheWorld:ListenForEvent("donechoosinggear", function() inst._choosinggear:set(false) end)
 end)
 --G.getmetatable(G.TheNet).__index.GetDefaultVoteEnabled = function() return true end
 local announce_old = G.getmetatable(G.TheNet).__index.AnnounceResurrect
@@ -75,7 +53,7 @@ G.DEATHMATCH_TEAMS = {
 
 PrefabFiles = {
 	"lavaarena", --to load the assets
-	"quagmire",
+	--quagmire",
 	"deathmatch_pickups",
 	"explosiveballoons_empty",
 	"teleporterhat",

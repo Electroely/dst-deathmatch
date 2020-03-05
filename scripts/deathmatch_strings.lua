@@ -65,7 +65,8 @@ return {
 		GENERIC = "Team up with",
 		DISBAND = "Disband"
 	},
-	POPUPS = {
+	POPUPS = { --newlines and tabs are ignored when loading body strings
+				--*NEWLINE gets parsed into a newline
 		WELCOME = {
 			TITLE = "Welcome to Deathmatch!",
 			BODY = [[
@@ -77,22 +78,6 @@ return {
 				You'll need two or more people to play. Once ready, you 
 				can type "/dm start" to start a match. Have fun!
 			]]
-		},
-		SIZETEST = {
-			TITLE = "AAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
-			BODY = [[
-			AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
-			AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
-			AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
-			AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
-			AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
-			AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
-			AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
-			AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
-			AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
-			AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
-			AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
-			]],
 		},
 		TEAMS_ENABLED = { --shows up when a match actually starts or when player enters a team
 			TITLE = "Team Battles",
@@ -125,8 +110,63 @@ return {
 				other person. You can choose who to be paired with by clicking 
 				the player in the lobby, and telling them to do the same. *NEWLINE
 				Make sure to be there for your teammate when they need you, 
-				and revive them if they do die!
+				and revive them if they die!
 			]]
+		},
+		--if a player goes for too long without using a weapon ability
+		CASTAOEEXPLAIN = {
+			TITLE = "Using the Weapons",
+			BODY = [[
+				The weapons you can use in this game mode each have a unique 
+				ability. You can use this ability by pressing the right mouse button 
+				with your weapon equipped. Different abilities are good at different 
+				jobs, so try to make use of them all. 
+			]]
+		},
+		--when a player picks up a firebomb
+		FIREBOMBEXPLAIN = {
+			TITLE = "Hearthsfire Crystals",
+			BODY = [[
+			
+			]]
+		},
+		--when a player picks up a telltale heart
+		REVIVERHEARTEXPLAIN = {
+			TITLE = "Telltale Hearts",
+			BODY = [[
+			
+			]]
+		},
+		
+		------ below this line are tips only available through /dm help
+		PICKUPEXPLAIN = {
+			TITLE = "About Powerups",
+			BODY = [[
+				
+			]]
+		},
+		DESPAWNEXPLAIN = {
+			TITLE = "Changing Characters",
+			BODY = [[
+			
+			]]
+		},
+		
+		SIZETEST = {
+			TITLE = "AAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+			BODY = [[
+			AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+			AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+			AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+			AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+			AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+			AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+			AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+			AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+			AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+			AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+			AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+			]],
 		},
 	},
 	
