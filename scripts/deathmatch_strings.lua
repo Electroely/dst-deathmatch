@@ -93,7 +93,41 @@ return {
 			AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
 			AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
 			]],
-		}
+		},
+		TEAMS_ENABLED = { --shows up when a match actually starts or when player enters a team
+			TITLE = "Team Battles",
+			BODY = [[
+				In team battles, your goal is to be the last team standing. 
+				You can't hurt your teammates with any attacks.*NEWLINE
+				You can revive fallen teammates, too. Reviving someone the first time 
+				only takes a couple of seconds, but the time it takes doubles every 
+				time someone's revived. Reviving with a Telltale Heart equipped 
+				will always take 2 seconds, but comes with a cost...
+			]]
+		},
+		--teammode specific popups happen when the player enters lobby
+		--the first time after the teammode is enabled
+		TEAMMODE_HALF = {
+			TITLE = "Red vs. Blue",
+			BODY = [[
+				In the Red vs. Blue team mode, you're placed into one of 
+				two teams. You can type "/team" followed by "red", "blue", 
+				or "none" before a match starts to pick whether you want to be 
+				on a specific team or if you could go either way.*NEWLINE
+				It'd be a good idea to make sure none of your teammates are 
+				left alone. A numbers disadvantage is the last thing you'd want.
+			]]
+		},
+		TEAMMODE_PAIRS = {
+			TITLE = "2-Player Teams",
+			BODY = [[
+				In the 2-Player Teams team mode, you're paired up with one 
+				other person. You can choose who to be paired with by clicking 
+				the player in the lobby, and telling them to do the same. *NEWLINE
+				Make sure to be there for your teammate when they need you, 
+				and revive them if they do die!
+			]]
+		},
 	},
 	
 	INFO_POPUPS = {

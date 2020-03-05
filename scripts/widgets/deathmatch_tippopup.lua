@@ -6,7 +6,8 @@ local function GetDeathmatchPopupString(name)
 	local data = DEATHMATCH_STRINGS.POPUPS[name]
 	local body = string.gsub(data.BODY, "\n", "")
 	body = string.gsub(body, "\t", "")
-	return data.TITLE, string.gsub(body, "\n", "")
+	body = string.gsub(body, "*NEWLINE", "\n")
+	return data.TITLE, body
 end
 
 --strings will be pulled from DEATHMATCH_STRINGS.POPUPS[title] if text is nil
@@ -32,8 +33,9 @@ local Deathmatch_TipPopup = Class(Widget, function(self, title, text)
 	self:SetBody(text)
 	
 	--	TODO
-	self.closeButton = self:AddChild(TEMPLATES.IconButton(iconAtlas, iconTexture, "Close", false, false, function() self:Kill() end))
-	self.closeButton:SetPosition(200, 100)
+	self.closeButton = self:AddChild(TEMPLATES.IconButton("images/button_icons.xml", "info.tex", "Close", false, false, function() self:Kill() end))
+	self.closeButton:SetScale(0.75, 0.75)
+	self.closeButton:SetPosition(130, 95)
 end)
 
 function Deathmatch_TipPopup:SetPopupName(name)
