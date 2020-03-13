@@ -81,6 +81,8 @@ local function onpickup(inst, owner)
         inst.beat_fx:Remove()
         inst.beat_fx = nil
     end
+	
+	owner:PushEvent("pushdeathmatchtip", "REVIVERHEARTEXPLAIN")
 end
 
 local function fn()

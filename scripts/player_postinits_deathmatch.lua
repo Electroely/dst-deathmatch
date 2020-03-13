@@ -235,7 +235,6 @@ local function fn(inst, prefab)
 		inst:ListenForEvent("onattackother", OnAttack)
 	end
 	---------------------------------------------------------------------------- 
-	
 end
 
 return fn

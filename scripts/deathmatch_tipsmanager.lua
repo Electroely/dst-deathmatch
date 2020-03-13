@@ -38,6 +38,9 @@ local function GetIdByName(name)
 	G.assert(false, "tried to find a nonregistered tip "..name)
 end
 
+local player_userid = { --Hornet: We store the info here on wether or not the player has already gotten that tip
+
+}
 
 AddPrefabPostInit("player_classified", function(inst)
 
@@ -48,7 +51,6 @@ AddPrefabPostInit("player_classified", function(inst)
 			inst._parent:PushEvent("deathmatchpopupreceived", TIP_IDS[inst._deathmatch_tipid:value()])
 		end
 	end)
-	
 end)
 
 AddPlayerPostInit(function(inst) 
@@ -60,9 +62,10 @@ AddPlayerPostInit(function(inst)
 				inst.HUD.deathmatch_tip:Kill()
 			end
 			inst.HUD.deathmatch_tip = inst.HUD:AddChild(DeathmatchTipPopupWidget(data))
+			inst.HUD.deathmatch_tip:MoveTo({x = 1600, y = 300, z = 0}, {x = 1200 , y = 300, z = 0}, 0.7, nil)
 		end)
 	else
-		inst:ListenForEvent("pushdeathmatchtip", function(inst, data)
+		inst:ListenForEvent("pushdeathmatchtip", function(inst, data)			
 			if inst.player_classified == nil then return end
 			SetDirty(inst.player_classified._deathmatch_tipid, GetIdByName(data))
 		end)

@@ -212,6 +212,10 @@ AddPlayerPostInit(function(inst)
 					G.TheWorld.components.deathmatch_manager:OnPlayerRevived(inst, data.source)
 				end
 			end)
+			
+			inst:DoTaskInTime(5, function()
+				inst:PushEvent("pushdeathmatchtip", "WELCOME")
+			end)
 		end
 		---------- character perks
 		G.require("player_postinits_deathmatch")(inst, inst.prefab)
@@ -222,7 +226,6 @@ end)
 ---------------------------------------------------------------------
 local Text = G.require("widgets/text")
 local Deathmatch_LobbyTimer = G.require("widgets/deathmatch_lobbytimer")
-local Deathmatch_InfoPopup = G.require("widgets/deathmatch_infopopup")
 
 AddClassPostConstruct("widgets/controls", function(self, owner)
 	if G.TheNet:GetServerGameMode() == "deathmatch" then
@@ -242,12 +245,6 @@ AddClassPostConstruct("widgets/controls", function(self, owner)
 		self.deathmatch_chooseyourgear = self.bottom_root:AddChild(G.require("widgets/deathmatch_chooseyourgear")(owner))
 		self.deathmatch_chooseyourgear:SetPosition(0,300)
 		self.deathmatch_chooseyourgear:Hide()
-		
-		--self.deathmatch_infopopup = self.bottom_root:AddChild(Deathmatch_InfoPopup(owner))
-		--self.deathmatch_infopopup:SetPosition(0, 250)
-		--owner.ShowPopup = function()
-			--self.deathmatch_infopopup:NewInfo()
-		--end
 		
 		self.clock:Hide()
 		self.status.stomach:Hide()
