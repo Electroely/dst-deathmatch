@@ -70,6 +70,7 @@ local function onpickup(inst, owner)
 	end
 	if owner ~= nil then
 		inst:ListenForEvent("attacked", onholderattacked, owner)
+		owner:PushEvent("pushdeathmatchtip", "REVIVERHEARTEXPLAIN")
 		inst._owner = owner
 		inst._listening = true
 	end
@@ -81,8 +82,6 @@ local function onpickup(inst, owner)
         inst.beat_fx:Remove()
         inst.beat_fx = nil
     end
-	
-	owner:PushEvent("pushdeathmatchtip", "REVIVERHEARTEXPLAIN")
 end
 
 local function fn()

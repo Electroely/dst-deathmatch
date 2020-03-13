@@ -5,7 +5,7 @@ local prefabs = {
 }
 
 local function onputininventory(inst, data)
-	owner:PushEvent("pushdeathmatchtip", "FIREBOMBEXPLAIN")
+	data.owner:PushEvent("pushdeathmatchtip", "FIREBOMBEXPLAIN")
 end
 
 local fn = function()

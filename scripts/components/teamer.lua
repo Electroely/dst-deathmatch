@@ -14,7 +14,9 @@ local Teamer = Class(function(self, inst)
 end)
 
 function Teamer:SetTeam(teamnum)
-	self.inst:PushEvent("pushdeathmatchtip", "TEAMS_ENABLED")
+	if self.team ~= 0 then
+		self.inst:PushEvent("pushdeathmatchtip", "TEAMS_ENABLED")
+	end
 	
 	local oldteam = self.team
 	if TheWorld.ismastersim then
