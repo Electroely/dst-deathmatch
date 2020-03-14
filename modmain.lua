@@ -72,6 +72,8 @@ PrefabFiles = {
 	"deathmatch_oneusebomb",
 	"deathmatch_reviverheart",
 	"shadowweapons",
+	
+	"swineclops_fists",
 }
 Assets = {
 	Asset("ANIM", "anim/hat_snortoise.zip")
