@@ -1,4 +1,10 @@
 local G = GLOBAL
+local FrontEndExists = false
+for k, v in pairs(G) do
+	if k == "TheFrontEnd" then
+		FrontEndExists = true
+	end
+end
 local Layouts = GLOBAL.require("map/layouts").Layouts
 local StaticLayout = GLOBAL.require("map/static_layout")
 local LOCKS = GLOBAL.LOCKS
@@ -13,7 +19,12 @@ Layouts["DeathmatchArena"].ground_types[18] = G.GROUND.DESERT_DIRT
 AddClassPostConstruct("widgets/redux/worldcustomizationtab", function(self)
 	G.EVENTSERVER_LEVEL_LOCATIONS["DEATHMATCH"] = {"deathmatch"}
 end)
-
+if FrontEndExists then
+	local scrn = G.TheFrontEnd:GetActiveScreen()
+	if scrn and scrn.name == "ServerCreationScreen" then
+		G.EVENTSERVER_LEVEL_LOCATIONS["DEATHMATCH"] = {"deathmatch"}
+	end
+end
 --[[ disabling mod whitelist for now because it's buggy and i don't like it
 main reason i made this in the first place is because the darkness gimmick of atrium
 is ruined by the nicknames mod, which a lot of people regularly use
@@ -86,6 +97,7 @@ AddStartLocation("deathmatch", {
     start_node = "Blank",
 })
 
+G.LEVELTYPE.DEATHMATCH = "DEATHMATCH"
 AddLevel("DEATHMATCH", {
         id = "DEATHMATCH",
         name = "Deathmatch Arena Set",

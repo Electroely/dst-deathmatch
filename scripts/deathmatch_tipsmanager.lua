@@ -51,20 +51,48 @@ AddPrefabPostInit("player_classified", function(inst)
 	
 end)
 
+local function PushDeathmatchTip(player, name, force) --todo
+	if player.player_classified == nil then return end
+	SetDirty(player.player_classified._deathmatch_tipid, GetIdByName(name))
+	if not G.TheNet:IsDedicated() and player == G.ThePlayer then
+		player.player_classified:PushEvent("deathmatch_tipiddirty")
+	end
+end
+
+--these'll be defined later
+local onItemGet
+local onAttacked
+
 AddPlayerPostInit(function(inst) 
-	if not G.TheWorld.ismastersim then
+	if not G.TheWorld.ismastersim or not G.TheNet:IsDedicated() then
 		inst:ListenForEvent("deathmatchpopupreceived", function(inst, data)
 			if inst.HUD == nil then return end
-			--TODO: manage multiple tipes
+			--TODO: manage multiple tips
 			if inst.HUD.deathmatch_tip then
 				inst.HUD.deathmatch_tip:Kill()
 			end
 			inst.HUD.deathmatch_tip = inst.HUD:AddChild(DeathmatchTipPopupWidget(data))
+			inst.HUD.deathmatch_tip:SetPosition(200,400)
 		end)
-	else
-		inst:ListenForEvent("pushdeathmatchtip", function(inst, data)
-			if inst.player_classified == nil then return end
-			SetDirty(inst.player_classified._deathmatch_tipid, GetIdByName(data))
-		end)
+		
 	end
+	if not G.TheWorld.ismastersim then return end
+	inst:ListenForEvent("pushdeathmatchtip", function(inst, data)
+		PushDeathmatchTip(inst, data)
+	end)
+	
+	----------- everything beyond this point should be activation code
+	return --keep this here for testing the above code first
+	
+	--inst:ListenForEvent("itemget", onItemGet)
 end)
+
+function onItemGet(inst, data)
+	local item = data.item
+	if item == nil then return end
+	if item.prefab == "lavaarena_firebomb" then
+		inst:PushEvent("pushdeathmatchtip", "FIREBOMBEXPLAIN")
+	elseif item.prefab == "deathmatch_reviverheart" then
+		inst:PushEvent("pushdeathmatchtip", "REVIVERHEARTEXPLAIN")
+	end
+end

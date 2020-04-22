@@ -171,7 +171,6 @@ local configs = {
 	pigvillage_fm = {
 		--music = "dontstarve/music/gramaphone_efs",
 		--waves = true,
-		specific = true,
 		colourcube = "purple_moon_cc",
 		lighting = {84 / 255, 122 / 255, 156 / 255},
 	},
@@ -182,48 +181,49 @@ local configs = {
 		waves = false,
 	},
 }
-local function PushConfig(config)
-	--TODO: am i not storing the previous config in any way?!
-	--i could make it so that music doesn't restart if switching
-	--from non-specific to specific
-	--though i may have to set up some "relationships" code so that
-	--it doesn't play hog music in lobby
-	if not TheNet:IsDedicated() and ThePlayer ~= nil then
-		if not configs[config].specific then
-			ThePlayer.SoundEmitter:KillSound("bgm")
+
+local function PushConfig(name)
+	--rewrote this function to be significantly less painful to look at
+	if TheNet:IsDedicated() or ThePlayer == nil then return end
+	local data = configs[name]
+	
+	--apply lighting
+	TheSim:SetVisualAmbientColour(unpack(data.lighting))
+	
+	--apply colorcube
+	if data.colourcube ~= nil then
+		local path = softresolvefilepath("images/colour_cubes/"..data.colourcube..".tex")
+		if path ~= nil then
+			ThePlayer.components.playervision:SetCustomCCTable({ day=path, dusk=path, night=path, full_moon=path })
 		end
-		TheSim:SetVisualAmbientColour(unpack(configs[config].lighting))
-		if configs[config].colourcube ~= nil then
-			print("changing colorcube...")
-			local path = softresolvefilepath("images/colour_cubes/"..configs[config].colourcube..".tex")
-			if path ~= nil then
-				ThePlayer.components.playervision:SetCustomCCTable({ day=path, dusk=path, night=path, full_moon=path })
-			end
-		elseif configs[config].cctable ~= nil then
-			print("changing colorcube table...")
-			ThePlayer.components.playervision:SetCustomCCTable(configs[config].cctable)
-			if configs[config].ccphasefn ~= nil then
-				ThePlayer.components.playervision.currentccphasefn = configs[config].ccphasefn
-				ThePlayer:PushEvent("ccphasefn", configs[config].ccphasefn)
-			end
-		elseif not configs[config].specific then
-			ThePlayer.components.playervision:SetCustomCCTable(nil)
-		end
-		if configs[config].music ~= nil then
-			if configs[config].specific then
-				ThePlayer.SoundEmitter:KillSound("bgm")
-			end
-			ThePlayer.SoundEmitter:PlaySound(configs[config].music, "bgm")
-		end
-		if TheWorld.WaveComponent ~= nil then
-			if configs[config].waves then
-				TheWorld.WaveComponent:SetWaveSize(80, 3.5)
-			elseif (configs[config].specific and configs[config].waves == false) or (not configs[config].specific and not configs[config].waves) then
-				TheWorld.WaveComponent:SetWaveSize(0,0)
-			end
-			TheWorld.WaveComponent:Init(0,0)
+	elseif data.cctable ~= nil then
+		ThePlayer.components.playervision:SetCustomCCTable(data.cctable)
+		if data.ccphasefn ~= nil then
+			ThePlayer.components.playervision.currentccphasefn = data.ccphasefn
+			ThePlayer:PushEvent("ccphasefn", data.ccphasefn)
 		end
 	end
+	
+	--apply music
+	local music = data.music
+	if music ~= nil then --maps without music will have to input an empty string
+		local old_music = ThePlayer._currentarenamusic
+		if music ~= old_music then
+			ThePlayer.SoundEmitter:KillSound("bgm")
+			ThePlayer.SoundEmitter:PlaySound(music, "bgm")
+			ThePlayer._currentarenamusic = music
+		end
+	end
+	
+	--apply waves
+	if data.waves then
+		TheWorld.WaveComponent:SetWaveSize(80, 3.5)
+		TheWorld.WaveComponent:Init(0,0)
+	elseif data.waves == false then --waves = nil means don't change current
+		TheWorld.WaveComponent:SetWaveSize(0,0)
+		TheWorld.WaveComponent:Init(0,0)
+	end
+	
 end
 
 

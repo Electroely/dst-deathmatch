@@ -1,6 +1,8 @@
 --The name of the mod displayed in the 'mods' screen.
 name = "Deathmatch"
-
+if folder_name == "dst-deathmatch" then
+	name = "Deathmatch (GIT)"
+end
 --A description of the mod.
 description = "WIP"
 

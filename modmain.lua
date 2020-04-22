@@ -191,7 +191,7 @@ AddPlayerPostInit(function(inst)
 				end
 				if data and data.damage then
 					local ind = G.SpawnPrefab("damagenumber")
-					ind:Push(inst, data.target, data.damage, false)
+					ind:Push(inst, data.target, math.floor(data.damage), data.stimuli~=nil)
 				end
 			end)
 			local health = 150
