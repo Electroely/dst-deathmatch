@@ -40,18 +40,18 @@ function G.require(modulename, ...)
 		function val(name, customprefabs, customassets, common_postinit, master_postinit, ...)
 			if name == "wormwood" and master_postinit ~= nil then
 				--i hate this. i'm gunna need to do a chain of upvalues
-				local OnRespawnedFromGhost = GetUpValue(master_postinit, "OnRespawnedFromGhost")
-				local OnSeasonProgress = GetUpValue(OnRespawnedFromGhost, "OnSeasonProgress")
-				SetBloomStage = GetUpValue(OnSeasonProgress, "SetBloomStage")
-				local EnableFullBloom = GetUpValue(SetBloomStage, "EnableFullBloom") --i think i can just override this with an empty fn but i want pollen
-				
+				--local OnRespawnedFromGhost = GetUpValue(master_postinit, "OnRespawnedFromGhost")
+				--local OnSeasonProgress = GetUpValue(OnRespawnedFromGhost, "OnSeasonProgress")
+				--SetBloomStage = GetUpValue(OnSeasonProgress, "SetBloomStage")
+				--local EnableFullBloom = GetUpValue(SetBloomStage, "EnableFullBloom") --i think i can just override this with an empty fn but i want pollen
+				local UpdateBloomStage = GetUpValue(master_postinit, "UpdateBloomStage")
 				
 				--no more ground plants (they annoying) and no speed boost (keeping pollen for now)
 				--ReplaceUpValue(master_postinit, "OnNewSpawn", function() end)
 				--ReplaceUpValue(master_postinit, "OnRespawnedFromGhost", function() end)
-				ReplaceUpValue(EnableFullBloom, "PlantTick", function() end)
-				ReplaceUpValue(SetBloomStage, "SetStatsLevel", function() end)
-				ReplaceUpValue(OnRespawnedFromGhost, "OnSeasonProgress", function() end)
+				-- temp comment: ReplaceUpValue(EnableFullBloom, "PlantTick", function() end)
+				ReplaceUpValue(UpdateBloomStage, "SetStatsLevel", function() end)
+				-- outdated: ReplaceUpValue(OnRespawnedFromGhost, "OnSeasonProgress", function() end)
 				
 			elseif (name == "wilson" or name == "webber") and master_postinit ~= nil then
 				beardfns[name] = {
@@ -94,16 +94,18 @@ end
 -- wormwood
 AddPrefabPostInit("wormwood", function(inst)
 	if not G.TheWorld.ismastersim then return end
-	inst.SetBloomStage = SetBloomStage
+	--inst.SetBloomStage = SetBloomStage
 	inst.OnLoad = nil
 	inst.OnNewSpawn = nil
 	inst.OnPreLoad = nil
 	inst._forcestage = true
+	inst.components.bloomness.calcratefn = function() return 0 end
 	--new function for /setstate
 	inst.cosmeticstate = inst.cosmeticstate or 1
 	function inst:ChangeCosmeticState(num) --input: number 1-4
-		if num >= 1 and num <= 4 and self.SetBloomStage then
-			self:SetBloomStage(num-1)
+		if num >= 1 and num <= 4 and self.components.bloomness then
+			--self:SetBloomStage(num-1)
+			self.components.bloomness:SetLevel(num-1)
 			self.cosmeticstate = num
 		end
 	end
