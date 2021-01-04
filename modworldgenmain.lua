@@ -25,6 +25,21 @@ if FrontEndExists then
 		G.EVENTSERVER_LEVEL_LOCATIONS["DEATHMATCH"] = {"deathmatch"}
 	end
 end
+
+local worldtiledefs = require("worldtiledefs")
+local index_to_remove = nil
+local removed_item = nil
+local index_to_insert_at = nil
+for k, v in pairs(worldtiledefs.ground) do
+	if v[1] == G.GROUND.QUAGMIRE_GATEWAY then
+		index_to_remove = k
+		removed_item = v
+	elseif v[1] == G.GROUND.QUAGMIRE_SOIL then
+		index_to_insert_at = k
+	end
+end
+table.remove(worldtiledefs.ground, index_to_remove)
+table.insert(worldtiledefs.ground, index_to_insert_at, removed_item)
 --[[ disabling mod whitelist for now because it's buggy and i don't like it
 main reason i made this in the first place is because the darkness gimmick of atrium
 is ruined by the nicknames mod, which a lot of people regularly use
@@ -118,6 +133,15 @@ AddLevel("DEATHMATCH", {
         },
         background_node_range = {0,1},
     })
+--you've forced my hand, klei.
+local levels = require("map/levels")
+local GetDefaultLevelData_old = levels.GetDefaultLevelData
+function levels.GetDefaultLevelData(leveltype, location, ...)
+	if leveltype == "DEATHMATCH" then
+		location = "deathmatch"
+	end
+	return GetDefaultLevelData_old(leveltype, location, ...)
+end
 	
 --atrium bacons get removed because they're too close to the ocean, this should fix that
 G.require("map/graphnode")

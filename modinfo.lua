@@ -36,11 +36,11 @@ configuration_options = {}
 game_modes = {
 	{ name = "deathmatch",
 		label = "Deathmatch",
-		description = [[Fight to the death with other players!
+		description = [[Last one standing wins!
 
-*Fight in the Forge Arena using weapons from The Forge!
+*Fight in Deathmatch Arenas using weapons from The Forge!
 *Stay near the middle to pick up boosts and gain an advantage!
-*Last player standing wins!]],
+*Brawl in a free-for-all or team up with your friends!]],
 		settings = {
 			internal = true,
 			level_type = "DEATHMATCH",

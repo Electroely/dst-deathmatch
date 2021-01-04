@@ -11,7 +11,7 @@ modimport("scripts/deathmatch_teamchat")
 modimport("scripts/deathmatch_componentpostinits")
 modimport("scripts/deathmatch_prefabpostinits")
 modimport("scripts/deathmatch_usercommands")
-modimport("scripts/deathmatch_tipsmanager")
+--modimport("scripts/deathmatch_tipsmanager")
 
 AddPrefabPostInit("player_classified", function(inst)
 	inst._arenaeffects = G.net_string(inst.GUID, "deathmatch.arenaeffect", "arenachanged")
