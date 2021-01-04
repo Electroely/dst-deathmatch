@@ -50,3 +50,9 @@ v19.5
 - Other spectators can no longer be selected on the spectator spinner (only applies to ghosts; you can still watch another person's dead body if you want to)
 - Wilson and Webber can now use /setlook to change their appearance
 - Players marked as AFK will now enter spectator mode at the end of every match (so please only use /afk to stay in spectator mode)
+
+v19.6
+- Added server tag (Deathmatch servers can now be searched for by typing "deathmatch")
+- Improved support for player-hosting and dedicated server setup (getting closer to release)
+- Fixed crash with Pith Pike
+

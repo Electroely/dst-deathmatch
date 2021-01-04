@@ -1,3 +1,6 @@
+fixing for 19.6:
+- telltale heart mechanics are buggy afaik, need to test and fix
+
 - wortox drops a soul when he dies (fixed, needs testing, might need a better fix later)
 - switching to spectator mode during match countdown does not re-assign teams (fixed, needs testing)
 - players can stall indefinitely by despawning repeatedly (needs testing, but players can no longer despawn during countdown)

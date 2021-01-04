@@ -1,3 +1,7 @@
+- Add silhouettes for new characters
+
+---- workshop 19.6 -----
+
 - Deathmatch Info Popups
 	- remember how I said popups were too intrusive? what if did added again
 	- ...but made them less intrusive this time? they could be little textboxes in a corner with lots of text

@@ -31,7 +31,7 @@ icon = "modicon.tex"
 
 forumthread = ""
 
-configuration_options = {}
+configuration_options = {"deathmatch"}
 
 game_modes = {
 	{ name = "deathmatch",
