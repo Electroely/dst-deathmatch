@@ -24,14 +24,14 @@ all_clients_require_mod = true
 client_only_mod = false
 
 --This lets people search for servers with this mod by these tags
-server_filter_tags = {}
+server_filter_tags = {"deathmatch"}
 
 icon_atlas = "modicon.xml"
 icon = "modicon.tex"
 
 forumthread = ""
 
-configuration_options = {"deathmatch"}
+configuration_options = {}
 
 game_modes = {
 	{ name = "deathmatch",
