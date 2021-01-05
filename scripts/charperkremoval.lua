@@ -39,19 +39,6 @@ function G.require(modulename, ...)
 		local val_old = val
 		function val(name, customprefabs, customassets, common_postinit, master_postinit, ...)
 			if name == "wormwood" and master_postinit ~= nil then
-				--i hate this. i'm gunna need to do a chain of upvalues
-				--local OnRespawnedFromGhost = GetUpValue(master_postinit, "OnRespawnedFromGhost")
-				--local OnSeasonProgress = GetUpValue(OnRespawnedFromGhost, "OnSeasonProgress")
-				--SetBloomStage = GetUpValue(OnSeasonProgress, "SetBloomStage")
-				--local EnableFullBloom = GetUpValue(SetBloomStage, "EnableFullBloom") --i think i can just override this with an empty fn but i want pollen
-				local UpdateBloomStage = GetUpValue(master_postinit, "UpdateBloomStage")
-				
-				--no more ground plants (they annoying) and no speed boost (keeping pollen for now)
-				--ReplaceUpValue(master_postinit, "OnNewSpawn", function() end)
-				--ReplaceUpValue(master_postinit, "OnRespawnedFromGhost", function() end)
-				-- temp comment: ReplaceUpValue(EnableFullBloom, "PlantTick", function() end)
-				ReplaceUpValue(UpdateBloomStage, "SetStatsLevel", function() end)
-				-- outdated: ReplaceUpValue(OnRespawnedFromGhost, "OnSeasonProgress", function() end)
 				
 			elseif (name == "wilson" or name == "webber") and master_postinit ~= nil then
 				beardfns[name] = {
@@ -91,7 +78,16 @@ local function CosmeticSaveData(inst)
 	end
 end
 
+
 -- wormwood
+local PollenTick = nil --forward declare
+local NewPollenTick = function(inst)
+	if not inst:HasTag("spectator") and PollenTick ~= nil then PollenTick(inst) end
+end
+local PlantTick = nil
+local NewPlantTick = function(inst)
+	if not inst:HasTag("spectator") and PlantTick ~= nil then PlantTick(inst) end
+end
 AddPrefabPostInit("wormwood", function(inst)
 	if not G.TheWorld.ismastersim then return end
 	--inst.SetBloomStage = SetBloomStage
@@ -99,7 +95,18 @@ AddPrefabPostInit("wormwood", function(inst)
 	inst.OnNewSpawn = nil
 	inst.OnPreLoad = nil
 	inst._forcestage = true
+	--perk modification code
 	inst.components.bloomness.calcratefn = function() return 0 end
+	ReplaceUpValue(inst.UpdateBloomStage, "SetStatsLevel", function() end)
+	local EnableFullBloom = GetUpValue(inst.UpdateBloomStage, "EnableFullBloom")
+	PollenTick = GetUpValue(EnableFullBloom, "PollenTick")
+	if PollenTick ~= NewPollenTick then
+		ReplaceUpValue(EnableFullBloom, "PollenTick", NewPollenTick)
+	end
+	PlantTick = GetUpValue(EnableFullBloom, "PlantTick")
+	if PlantTick ~= NewPlantTick then
+		ReplaceUpValue(EnableFullBloom, "PlantTick", NewPlantTick)
+	end
 	--new function for /setstate
 	inst.cosmeticstate = inst.cosmeticstate or 1
 	function inst:ChangeCosmeticState(num) --input: number 1-4
