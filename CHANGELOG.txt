@@ -55,4 +55,8 @@ v19.6
 - Added server tag (Deathmatch servers can now be searched for by typing "deathmatch")
 - Improved support for player-hosting and dedicated server setup (getting closer to release)
 - Fixed crash with Pith Pike
+- Added health bar icons for the new characters
+- Fixed Wormwood's visual effects persisting through spectator mode
+- Fixed various bugs with team-based game modes and the telltale heart
+- Fixed rare crash when a match ends
 

@@ -44,7 +44,7 @@ G.DEATHMATCH_TEAMS = {
 {name="Red", colour={1,0.5,0.5,1}},
 {name="Blue", colour={0.5,0.5,1,1}},
 {name="Yellow", colour={1,1,0.5,1}},
-{name="Green", colour={0.5,1,0.5,1}},
+{name="Green", colour={0.25,1,0.25,1}},
 {name="Orange", colour={1,0.5,0,1}},
 {name="Cyan", colour={0.5,1,1,1}},
 {name="Pink", colour={1,0.5,1,1}},
@@ -74,7 +74,8 @@ PrefabFiles = {
 	"shadowweapons",
 }
 Assets = {
-	Asset("ANIM", "anim/hat_snortoise.zip")
+	Asset("ANIM", "anim/hat_snortoise.zip"),
+	Asset("ANIM", "anim/partyhealth_extras.zip"),
 }
 local function UserOnline(clienttable, userid)
 	local found = false
@@ -272,7 +273,22 @@ AddClassPostConstruct("screens/redux/lobbyscreen", function(self)
 	self.deathmatch_timer = self.panel_root:AddChild(Deathmatch_LobbyTimer())
 	self.deathmatch_timer:SetPosition(-160, 340)
 end)
-
+local CHARACTERS_EXTRAS = {
+	walter = true,
+	wormwood = true,
+	wortox = true,
+	wurt = true,
+}
+AddClassPostConstruct("widgets/teammatehealthbadge", function(self)
+	local SetPlayer_old = self.SetPlayer
+	self.SetPlayer = function(self, player, ...)
+		local rtn = {SetPlayer_old(self, player, ...)}
+		if player and CHARACTERS_EXTRAS[player.prefab] then
+			self.anim:GetAnimState():OverrideSymbol("character_wilson", "partyhealth_extras", "character_"..player.prefab)
+		end
+		return G.unpack(rtn)
+	end
+end)
 ---------------------------------------------------------------------
 local _name = GLOBAL.STRINGS.NAMES
 
