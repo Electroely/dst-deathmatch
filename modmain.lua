@@ -205,11 +205,22 @@ AddPlayerPostInit(function(inst)
 			end
 			inst.components.revivablecorpse:SetReviveHealthPercent(1)
 			function inst.components.corpsereviver:GetAdditionalReviveHealthPercent()
+				local val = G.TheWorld.components.deathmatch_manager:GetPlayerRevivalHealthPct(self.inst)-1
+				print(val)
 				return G.TheWorld.components.deathmatch_manager:GetPlayerRevivalHealthPct(self.inst)-1
 			end
 			inst:ListenForEvent("respawnfromcorpse", function(inst, data)
 				if data and data.source then
 					G.TheWorld.components.deathmatch_manager:OnPlayerRevived(inst, data.source)
+				end
+			end)
+			--remove heart
+			inst:ListenForEvent("ms_respawnedfromghost", function(inst, data)
+				if data and data.corpse and data.reviver ~= nil and data.reviver:HasTag("player") then
+					local item = data.reviver.components.inventory:GetEquippedItem(G.EQUIPSLOTS.HANDS)
+					if item and item.prefab == "deathmatch_reviverheart" then
+						item:Remove() --Consume Heart
+					end
 				end
 			end)
 		end

@@ -510,10 +510,16 @@ function Deathmatch_Manager:StartDeathmatch()
 			v:Remove()
 		end
 		if self.removeallitems then
+			local to_remove = {}
+			local numremove = 0
 			for k, v in pairs(Ents) do 
 				if v.prefab == "balloon" or v.components.inventoryitem then
-					v:Remove()
+					numremove = numremove + 1
+					to_remove[numremove] = v
 				end
+			end
+			for i = 1, numremove do
+				to_remove[i]:Remove()
 			end
 		end
 		self.enablepickups = not arena_configs[self.arena].nopickups == true
@@ -627,6 +633,7 @@ function Deathmatch_Manager:StopDeathmatch()
 			v:Remove()
 		end
 	end
+	self.spawnedpickups = {}
 	if self.gamemode == 0 then
 		self.allow_teamswitch_user = true
 	end
@@ -714,7 +721,7 @@ function Deathmatch_Manager:GetPickUpItemList(custompos)
 	if self.gamemode ~= 1 then
 		local heartcount = 0
 		for k, v in pairs(self.spawnedpickups) do
-			if v.prefab == "deathmatch_reviverheart" then
+			if v:IsValid() and v.prefab == "deathmatch_reviverheart" then
 				heartcount = heartcount + 1
 			end
 		end
@@ -861,7 +868,7 @@ end
 -- lua does have a sort table function, use that for half
 -- (team selection would be part of teamer component or independent variable?
 local function sortByRedVBlue(a, b) --true if a comes before b
-	return a.teamchoice == 2 or b.teamchoice == 1
+	return (a.teamchoice == 2 and b.teamchoice ~= 2) or (b.teamchoice == 1 and a.teamchoice ~= 1)
 end
 
 local function getFirstTeamWithoutPair() --for 2pt paring
@@ -1033,15 +1040,7 @@ function Deathmatch_Manager:ToggleSpectator(player)
 end
 
 function Deathmatch_Manager:OnPlayerRevived(player, source)
-	self.inst:DoTaskInTime(0, function(inst) --delay by a frame so other functions can do their checks
-		self.revivals = self.revivals + 1
-		if source and source:HasTag("player") then
-			local item = source.components.inventory:GetEquippedItem(EQUIPSLOTS.HANDS)
-			if item and item.prefab == "deathmatch_reviverheart" then
-				item:Remove() --Consume Heart
-			end
-		end
-	end)
+	self.revivals = self.revivals + 1
 end
 
 function Deathmatch_Manager:GetPlayerRevivalTimeMult(reviver)
@@ -1058,8 +1057,10 @@ function Deathmatch_Manager:GetPlayerRevivalHealthPct(reviver)
 	if reviver and reviver:HasTag("player") then
 		local item = reviver.components.inventory:GetEquippedItem(EQUIPSLOTS.HANDS)
 		if item and item.prefab == "deathmatch_reviverheart" then
-			return 0.5 / math.pow(2, self.revivals)
+			print("player has heart")
+			return 0.5 / math.pow(2, self.revivals-1)
 		end
+		print("player doesnt have heart")
 	end
 	return 0.25
 end

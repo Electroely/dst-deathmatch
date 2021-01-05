@@ -83,6 +83,7 @@ local function SpawnPickup(inst)
 		local item = G.SpawnPrefab(v)
 		item.Transform:SetPosition(pos.x, 4.5, pos.z)
 		launchitem(item, angle)
+		table.insert(G.TheWorld.components.deathmatch_manager.spawnedpickups, item)
 		if item.Fade ~= nil then item:DoTaskInTime(15, item.Fade) end
 	end
 	
