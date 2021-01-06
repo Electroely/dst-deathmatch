@@ -9,6 +9,7 @@ return {
 		
 		JOIN_MIDMATCH = "A match is currently in progress. Please wait until it ends or spectate using /spectate.",
 		JOIN_ALONE = "Two or more people are required to play. Use \"/dm start\" to start.",
+		JOIN_LOBBY = "Welcome to Deathmatch! Use \"/dm start\" to start a match.",
 	},
 	ANNOUNCE = {
 		MATCHOVER = "Deathmatch is over!",

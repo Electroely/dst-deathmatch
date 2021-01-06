@@ -98,15 +98,15 @@ AddPrefabPostInit("wormwood", function(inst)
 	--perk modification code
 	inst.components.bloomness.calcratefn = function() return 0 end
 	ReplaceUpValue(inst.UpdateBloomStage, "SetStatsLevel", function() end)
-	local EnableFullBloom = GetUpValue(inst.UpdateBloomStage, "EnableFullBloom")
-	PollenTick = GetUpValue(EnableFullBloom, "PollenTick")
-	if PollenTick ~= NewPollenTick then
-		ReplaceUpValue(EnableFullBloom, "PollenTick", NewPollenTick)
-	end
-	PlantTick = GetUpValue(EnableFullBloom, "PlantTick")
-	if PlantTick ~= NewPlantTick then
-		ReplaceUpValue(EnableFullBloom, "PlantTick", NewPlantTick)
-	end
+	-- local EnableFullBloom = GetUpValue(inst.UpdateBloomStage, "EnableFullBloom")
+	-- PollenTick = GetUpValue(EnableFullBloom, "PollenTick")
+	-- if PollenTick ~= NewPollenTick then
+		-- ReplaceUpValue(EnableFullBloom, "PollenTick", NewPollenTick)
+	-- end
+	-- PlantTick = GetUpValue(EnableFullBloom, "PlantTick")
+	-- if PlantTick ~= NewPlantTick then
+		-- ReplaceUpValue(EnableFullBloom, "PlantTick", NewPlantTick)
+	-- end
 	--new function for /setstate
 	inst.cosmeticstate = inst.cosmeticstate or 1
 	function inst:ChangeCosmeticState(num) --input: number 1-4
@@ -127,10 +127,17 @@ for k, v in pairs({"wilson", "webber"}) do
 		function inst:ChangeCosmeticState(num)
 			if num >= 1 and num <= 4 and inst.beardfns ~= nil then
 				inst.cosmeticstate = num
-				inst.beardfns[num](inst)
+				inst.beardfns[num](inst, inst.components.beard and inst.components.beard.skinname or nil)
 			end
 		end
 		CosmeticSaveData(inst)
+		if G.TheWorld.ismastersim then
+			local SetBeardSkin = inst.components.beard.SetSkin
+			inst.components.beard.SetSkin = function(self, skin)
+				self.skinname = skin
+				inst.beardfns[inst.cosmeticstate](inst, skin)
+			end
+		end
 	end)
 end
 

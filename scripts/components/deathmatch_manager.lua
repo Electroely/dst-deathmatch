@@ -259,7 +259,7 @@ end
 local function OnPlayerLeft(inst, player)
 	local self = inst.components.deathmatch_manager
 	self.damagedealt[player] = nil
-	OnPlayerDeath(inst)
+	OnPlayerDeath(player)
 	local contains, idx = TableContains(self.players_in_match, player)
 	if contains then
 		table.remove(self.players_in_match, idx)
@@ -296,6 +296,10 @@ local function OnPlayerJoined(inst, player)
 	if #TheNet:GetClientTable() == 2 then
 		player:DoTaskInTime(1, function()
 			TheNet:SystemMessage(DEATHMATCH_STRINGS.CHATMESSAGES.JOIN_ALONE)
+		end)
+	elseif not (self.matchinprogress or self.matchstarting) then
+		player:DoTaskInTime(1, function()
+			TheNet:SystemMessage(DEATHMATCH_STRINGS.CHATMESSAGES.JOIN_LOBBY)
 		end)
 	end
 end
