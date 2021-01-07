@@ -115,7 +115,7 @@ AddStartLocation("deathmatch", {
 G.LEVELTYPE.DEATHMATCH = "DEATHMATCH"
 AddLevel("DEATHMATCH", {
         id = "DEATHMATCH",
-        name = "Deathmatch Arena Set",
+        name = "Deathmatch Arenas",
         desc = "Duke it out with your friends in a redesigned Player vs Player gamemode!",
         location = "deathmatch", -- this is actually the prefab name
         version = 3,

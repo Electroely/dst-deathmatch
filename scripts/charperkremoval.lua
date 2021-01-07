@@ -15,6 +15,15 @@ local function GetUpValue(func, varname)
 		n, v = debug.getupvalue(func, i)
 	end
 end
+local function PrintUpValues(func) --debug
+	local i = 1
+	local n, v = debug.getupvalue(func, 1)
+	while v ~= nil do
+		print("UPVAL", n, v)
+		i = i + 1
+		n, v = debug.getupvalue(func, i)
+	end
+end
 local function ReplaceUpValue(func, varname, newvalue)
 	local i = 1
 	local n, v = debug.getupvalue(func, 1)
@@ -30,7 +39,6 @@ local function ReplaceUpValue(func, varname, newvalue)
 end
 
 --here comes the worst hack i've ever had to do ever
-local SetBloomStage = nil
 local beardfns = {}
 function G.require(modulename, ...)
 	--using the local version of require since it isn't replaced
@@ -38,9 +46,7 @@ function G.require(modulename, ...)
 	if modulename == "prefabs/player_common" then
 		local val_old = val
 		function val(name, customprefabs, customassets, common_postinit, master_postinit, ...)
-			if name == "wormwood" and master_postinit ~= nil then
-				
-			elseif (name == "wilson" or name == "webber") and master_postinit ~= nil then
+			if (name == "wilson" or name == "webber") and master_postinit ~= nil then
 				beardfns[name] = {
 					GetUpValue(master_postinit, "OnResetBeard"),
 					GetUpValue(master_postinit, "OnGrowShortBeard"),
@@ -90,23 +96,17 @@ local NewPlantTick = function(inst)
 end
 AddPrefabPostInit("wormwood", function(inst)
 	if not G.TheWorld.ismastersim then return end
-	--inst.SetBloomStage = SetBloomStage
 	inst.OnLoad = nil
 	inst.OnNewSpawn = nil
 	inst.OnPreLoad = nil
 	inst._forcestage = true
 	--perk modification code
 	inst.components.bloomness.calcratefn = function() return 0 end
-	ReplaceUpValue(inst.UpdateBloomStage, "SetStatsLevel", function() end)
-	-- local EnableFullBloom = GetUpValue(inst.UpdateBloomStage, "EnableFullBloom")
-	-- PollenTick = GetUpValue(EnableFullBloom, "PollenTick")
-	-- if PollenTick ~= NewPollenTick then
-		-- ReplaceUpValue(EnableFullBloom, "PollenTick", NewPollenTick)
-	-- end
-	-- PlantTick = GetUpValue(EnableFullBloom, "PlantTick")
-	-- if PlantTick ~= NewPlantTick then
-		-- ReplaceUpValue(EnableFullBloom, "PlantTick", NewPlantTick)
-	-- end
+	inst:ListenForEvent("ms_becameghost", function(inst)
+		inst:DoTaskInTime(0, function(inst)
+			inst:ChangeCosmeticState(inst.cosmeticstate)
+		end)
+	end)
 	--new function for /setstate
 	inst.cosmeticstate = inst.cosmeticstate or 1
 	function inst:ChangeCosmeticState(num) --input: number 1-4
@@ -212,4 +212,9 @@ end)
 -- wortox
 AddPrefabPostInit("wortox_soul_spawn", function(inst)
 	inst:DoTaskInTime(0, inst.Remove)
+end)
+
+AddComponentPostInit("beard", function(self)
+	local OnRespawn = GetUpValue(self.OnRemoveFromEntity, "OnRespawn")
+	self.inst:RemoveEventCallback("ms_respawnedfromghost", OnRespawn)
 end)

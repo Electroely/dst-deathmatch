@@ -228,6 +228,10 @@ AddPlayerPostInit(function(inst)
 		---------- character perks
 		G.require("player_postinits_deathmatch")(inst, inst.prefab)
 		inst.starting_inventory = {}
+		---------- debug
+		function inst:Respawn()
+			self:PushEvent("respawnfromcorpse")
+		end
 	end
 end)
 
@@ -427,15 +431,28 @@ G.ACTIONS.LOOKAT.fn = function(act, ...)
 end
 
 -----------------------------------------------------------------------------
-
+local function checknumber(v)
+	return type(v) == "number"
+end
 AddModRPCHandler(modname, "deathmatch_currentreticule_change", function(inst, slot)
 	if inst == nil or slot == nil then return end
 	if inst.components.playercontroller then
+		local valid = false
+		for k, v in pairs(G.EQUIPSLOTS) do
+			if slot == v then
+				valid = true
+				break
+			end
+		end
+		if not valid then return end
 		inst.components.playercontroller.reticuleitemslot = slot
 	end
 end)
 
 AddModRPCHandler(modname, "locationrequest", function(inst, x, z)
+	if not (checknumber(x) and checknumber(z)) then
+		return
+	end
 	local pos = G.Vector3(x, 0, z)
 	inst._spintargetpos = pos
 end)

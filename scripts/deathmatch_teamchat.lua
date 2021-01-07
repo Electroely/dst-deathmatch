@@ -127,8 +127,9 @@ AddPrefabPostInit("player_classified", function(inst)
 end)
 
 G.require("networkclientrpc")
+local MAX_MESSAGE_LEN = 150 --i guess?
 AddModRPCHandler(modname, "deathmatch_privatemessage", function(inst, message)
-	if not (G.checkstring(message)) then return end
+	if not (G.checkstring(message)) or string.len(message) > MAX_MESSAGE_LEN then return end
 	print("PM RPC RECEIVED", inst, message)
 	message = FilterEmojisForUser(inst.userid, message)
 	inst:PushEvent("broadcastprivatemessage", message)
