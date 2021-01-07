@@ -12,6 +12,7 @@ local fullmoonfn = function(inst)
 				v:DoTaskInTime(math.random(), function() v.components.werebeast:SetWere(30) end)
 			end
 		end
+		local self = TheWorld.components.deathmatch_manager
 		if self.glommer == nil or not self.glommer:IsValid() or self.glommer.components.health:IsDead() then
 			self.glommer = SpawnPrefab("glommer")
 			local x, _, z = self.inst.centerpoint:GetPosition():Get()

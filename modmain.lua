@@ -279,6 +279,7 @@ AddClassPostConstruct("screens/redux/lobbyscreen", function(self)
 	self.deathmatch_timer:SetPosition(-160, 340)
 end)
 local CHARACTERS_EXTRAS = {
+	warly = true,
 	walter = true,
 	wormwood = true,
 	wortox = true,

@@ -143,7 +143,7 @@ local configs = {
 		music = "dontstarve/music/gramaphone_ragtime",
 	},
 	atrium = {
-		lighting = {0.1,0.1,0.1},
+		lighting = {0.3,0.3,0.3},
 		--colourcube = "ruins_dark_cc",
 		cctable = { ["true"]=resolvefilepath("images/colour_cubes/ruins_light_cc.tex"), ["false"]=resolvefilepath("images/colour_cubes/ruins_dark_cc.tex") },
 		ccphasefn = { blendtime = 2, events = { "atriumactivechanged" },fn = function() return tostring(TheWorld.state.atrium_active) end},

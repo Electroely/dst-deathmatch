@@ -46,22 +46,27 @@ is ruined by the nicknames mod, which a lot of people regularly use
 i might just make the mod disable that mod (and a few others if necessary) and show an
 ingame popup when that happens
 update: looks like some people crash because of client mods... should i bring this back?
-local mods_whitelist = {
-	["workshop-352373173"]=true, 
-	["workshop-343753877"]=true 
+ill convert it to a blacklist... curse you, item info!]]
+local mods_blacklist = {
+	["workshop-347079953"]=true,
+	["workshop-836583293"]=true,
+	["workshop-1901927445"]=true,
+	["workshop-2049203096"]=true,
 }
-local modidx_cptbasjdn = G.KnownModIndex.IsModCompatibleWithMode --mashed keyboard on that last part
+local IsModCompatibleWithMode_old = G.KnownModIndex.IsModCompatibleWithMode 
 G.KnownModIndex.IsModCompatibleWithMode = function(self, modname, dlc)
-	if (not mods_whitelist[modname]) and self.savedata.known_mods[modname] and self.savedata.known_mods[modname].disabled_incompatible_with_mode then
+	--if (not mods_whitelist[modname]) and self.savedata.known_mods[modname] and self.savedata.known_mods[modname].disabled_incompatible_with_mode then
+	if mods_blacklist[modname] then
+		print("disabling ",modname," for being incompatible")
 		return false
 	end
-	return modidx_cptbasjdn(self, modname, dlc)
+	return IsModCompatibleWithMode_old(self, modname, dlc)
 end
-for k, v in pairs(G.KnownModIndex:GetClientModNames()) do
-	--G.KnownModIndex:DisableBecauseIncompatibleWithMode(v)
-	G.KnownModIndex.savedata.known_mods[v].disabled_incompatible_with_mode = true
-end
-]]
+-- for k, v in pairs(G.KnownModIndex:GetClientModNames()) do
+	-- --G.KnownModIndex:DisableBecauseIncompatibleWithMode(v)
+	-- G.KnownModIndex.savedata.known_mods[v].disabled_incompatible_with_mode = true
+-- end
+
 
 AddTaskSet("deathmatch_taskset", {
     name = "Deathmatch Arenas",
