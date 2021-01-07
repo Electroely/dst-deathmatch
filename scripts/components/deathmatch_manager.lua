@@ -12,6 +12,11 @@ local fullmoonfn = function(inst)
 				v:DoTaskInTime(math.random(), function() v.components.werebeast:SetWere(30) end)
 			end
 		end
+		if self.glommer == nil or not self.glommer:IsValid() or self.glommer.components.health:IsDead() then
+			self.glommer = SpawnPrefab("glommer")
+			local x, _, z = self.inst.centerpoint:GetPosition():Get()
+			self.glommer.Transform:SetPosition(x, 0, z)
+		end
 	elseif inc == 3 then
 		inc = 0
 		inst:PushEvent("fakefullmoon", false)
@@ -66,10 +71,10 @@ local arena_configs = {
 				self._fullmoontask:Cancel()
 				self._fullmoontask = nil
 			end
-			if self.glommer == nil or self.glommer.components.health:IsDead() then
+			if self.glommer == nil or not self.glommer:IsValid() or self.glommer.components.health:IsDead() then
 				self.glommer = SpawnPrefab("glommer")
 				local x, _, z = self.inst.centerpoint:GetPosition():Get()
-				self.glommer.Transform:SetPosition(x, 10, z)
+				self.glommer.Transform:SetPosition(x, 0, z)
 			end
 			self._fullmoontask = self.inst:DoPeriodicTask(30, fullmoonfn)
 		end,

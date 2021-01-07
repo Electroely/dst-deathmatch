@@ -63,6 +63,10 @@ v19.6
 v19.7
 - Fixed some /setstate bugs with Wormwood, Wilson and Webber
 - Fixed some server-crashing exploits
+- Fixed bug with player disconnect handling code
 
+- Changed Deathmatch world name (from "Deathmatch Arena Set" to "Deathmatch Arenas")
+- Pig Village no longer has a cobblestone road
+- Tweaked Glommer
 - Webber and Wilson will now have the beard skin respective to their main skin when they spawn in
 - Increased size of player health list
