@@ -1,6 +1,8 @@
-- Add silhouettes for new characters
-
----- workshop 19.6 -----
+- Swell Shoal map
+	- circular map with pool of ocean water in the middle
+	- Malbatross circles this pool and dashes through its center
+	- Drops its feathers (attacked? after dashing? figure it out!)
+	- Feathers can be picked up and horded for small, stacking stat boosts. Taking damage removes a feather from the target's inv
 
 - Deathmatch Info Popups
 	- remember how I said popups were too intrusive? what if did added again
@@ -30,10 +32,6 @@
 		(% of players remaining)*(damage dealt by player / total damage dealt in match)*base mult
 	- that way players will be encouraged to fight more, and it wouldnt be an rng roll like items
 	
-- Pig King should sleep when the full moon happens in the Pig Village map
-- Pig King should throw powerups randomly around him rather than in a specific direction (ik its random but still)
-- Powerups shouldn't land very far from Pig King (min dist to avoid bouncing off him, max dist to limit to wood turf?)
-
 - Figure out a better transition between cosmetic states for wolfgang and wurt
 	  
 - New Pickup Buffs

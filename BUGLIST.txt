@@ -1,2 +1,6 @@
+- Wormwood still shows visual effects while blooming
+- Wigfrid shows her Inspiration meter
+- Wendy's rework perks were never removed
+
 - pigs targetting players is very wonky in so many situations and it really needs to be more consistent
 (note from electro: i'll fix this one since i have a good idea of how the current targetting works)

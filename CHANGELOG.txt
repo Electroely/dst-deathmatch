@@ -60,3 +60,9 @@ v19.6
 - Fixed various bugs with team-based game modes and the telltale heart
 - Fixed rare crash when a match ends
 
+v19.7
+- Fixed some /setstate bugs with Wormwood, Wilson and Webber
+- Fixed some server-crashing exploits
+
+- Webber and Wilson will now have the beard skin respective to their main skin when they spawn in
+- Increased size of player health list
