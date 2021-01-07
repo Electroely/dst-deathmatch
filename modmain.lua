@@ -243,6 +243,7 @@ local Deathmatch_InfoPopup = G.require("widgets/deathmatch_infopopup")
 AddClassPostConstruct("widgets/controls", function(self, owner)
 	if G.TheNet:GetServerGameMode() == "deathmatch" then
 		self.deathmatch_playerlist = self.topleft_root:AddChild(G.require("widgets/deathmatch_playerlist")(owner))
+		self.deathmatch_playerlist:SetPosition(150, 0-(G.RESOLUTION_Y/2)-25)
 		self.deathmatch_status = self.topright_root:AddChild(G.require("widgets/deathmatch_status")(owner))
 		self.deathmatch_status:SetPosition(-150,-20)
 		self.deathmatch_status.inst:DoPeriodicTask(3, function() self.deathmatch_status:Refresh() end)

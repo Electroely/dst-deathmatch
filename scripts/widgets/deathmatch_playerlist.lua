@@ -157,7 +157,7 @@ end)
 function Deathmatch_Playerlist:BuildPlayerList(players)
     if not self.player_list then 
         self.player_list = self.proot:AddChild(Widget("deathmatch_player_list"))
-        self.player_list:SetPosition(45,-215,0)
+        self.player_list:SetPosition(0,0)--(45,-215,0)
     end
 	
 	if players == nil then
@@ -169,18 +169,18 @@ function Deathmatch_Playerlist:BuildPlayerList(players)
 	
 	
         self.list_root = self.player_list:AddChild(Widget("list_root"))
-        self.list_root:SetPosition(90, 5)
+        self.list_root:SetPosition(0,0)--(90, 5)
 
         self.row_root = self.player_list:AddChild(Widget("row_root"))
-        self.row_root:SetPosition(90, 35)
+        self.row_root:SetPosition(0,0)--(90, 35)
 	
-	
+		local list_height = RESOLUTION_Y
 		self.player_widgets = {}
-		for i = 1, 6 do
+		for i = 1, math.ceil(list_height/60) do
 			table.insert(self.player_widgets, listingConstructor(players[i] or {}, i, self.row_root))
 		end
 		--items, listwidth, listheight, itemheight, itempadding, updatefn, widgetstoupdate, widgetXOffset, always_show_static, starting_offset, yInit, bar_width_scale_factor, bar_height_scale_factor, scrollbar_style
-		self.scroll_list = self.list_root:AddChild(ScrollableList(players, 200, 350, 60, 7, UpdateListing, self.player_widgets, 7, nil, nil, -15, .8))
+		self.scroll_list = self.list_root:AddChild(ScrollableList(players, 200, list_height, 60, 7, UpdateListing, self.player_widgets, 7, nil, nil, -15, .8))
         self.scroll_list.bg:Kill() -- no need for focus
 		self.scroll_list:LayOutStaticWidgets(-15)
         self.scroll_list:SetPosition(0,0)
