@@ -92,6 +92,10 @@ local arena_configs = {
 			fullmoonfn(self.inst)
 		end,
 	},
+	malbatross = {
+		spawnradius = 16,
+		nopickups = true,
+	}
 }
 
 local arena_idx = {
@@ -100,6 +104,7 @@ local arena_idx = {
 	["desert"] = 2,
 	["pigvillage"] = 3,
 	["spring"] = 4,
+	["malbatross"] = 5,
 }
 
 

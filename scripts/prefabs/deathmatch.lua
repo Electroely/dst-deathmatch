@@ -174,12 +174,19 @@ local configs = {
 		colourcube = "purple_moon_cc",
 		lighting = {84 / 255, 122 / 255, 156 / 255},
 	},
-	cave = {
-		colourcube = "sinkhole_cc",
-		lighting = {0.1,0.1,0.1},
-		music = "",
-		waves = false,
-	},
+	-- cave = {
+		-- colourcube = "sinkhole_cc",
+		-- lighting = {0.1,0.1,0.1},
+		-- music = "",
+		-- waves = false,
+	-- },
+	malbatross = {
+		lighting = {200 / 255, 200 / 255, 200 / 255},
+		colourcube = "day05_cc",
+		waves = true,
+		music = "saltydog/music/malbatross",
+		has_ocean = true,
+	}
 }
 
 local function PushConfig(name)
@@ -223,7 +230,15 @@ local function PushConfig(name)
 		TheWorld.WaveComponent:SetWaveSize(0,0)
 		TheWorld.WaveComponent:Init(0,0)
 	end
-	TheWorld.Map:SetUndergroundFadeHeight(0)
+	
+	if data.has_ocean then
+		TheWorld.Map:SetTransparentOcean(true)
+		TheWorld.Map:SetUndergroundFadeHeight(5)
+	else
+		TheWorld.Map:SetTransparentOcean(false)
+		TheWorld.Map:SetUndergroundFadeHeight(0)
+	end
+	
 	
 end
 
@@ -251,7 +266,7 @@ local function common_postinit(inst)
 			PushConfig(fxname)
 		end)
 
-		inst.Map:SetTransparentOcean(true)
+		--inst.Map:SetTransparentOcean(true)
 
 		--[[inst:ListenForEvent("registerlobbypoint", function(world, point)
 			world.lobbypoint = point
