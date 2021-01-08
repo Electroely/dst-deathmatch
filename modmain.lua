@@ -337,6 +337,17 @@ AddComponentAction("INVENTORY", "explosiveballoonmaker", function(inst, doer, ac
 	end
 end)
 
+AddComponentAction("POINT", "aoespell", function(inst, doer, pos, actions, right) --Hornet: Can't use specials on boats, Lets fix that!
+	if right and
+		(   inst.components.aoetargeting == nil or inst.components.aoetargeting:IsEnabled()
+		) and
+		(   inst.components.aoetargeting ~= nil and inst.components.aoetargeting.alwaysvalid or
+			(G.TheWorld.Map:IsPassableAtPoint(pos.x, pos.y, pos.z, false, false) and not G.TheWorld.Map:IsGroundTargetBlocked(pos))
+		) then
+		table.insert(actions, G.ACTIONS.CASTAOE)
+	end
+end)
+
 local PairAction = AddAction("DEATHMATCH_PAIRWITH", "Team up with", function(act)
 	if act.doer and act.target then
 		if act.doer:HasTag("spectator") or act.target:HasTag("spectator") then return false end
