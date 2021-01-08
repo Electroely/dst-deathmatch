@@ -1,3 +1,4 @@
+local ARENA_DEFS = require("prefabs/arena_defs")
 require("prefabs/world")
 
 local assets =
@@ -135,64 +136,17 @@ local prefabs =
     "succulent_plant",
 }
 
-local configs = {
-	lobby = {
-		lighting = {200 / 255, 200 / 255, 200 / 255},
-		colourcube = "day05_cc",
-		waves = true,
-		music = "dontstarve/music/gramaphone_ragtime",
-	},
-	atrium = {
-		lighting = {0.3,0.3,0.3},
-		--colourcube = "ruins_dark_cc",
-		cctable = { ["true"]=resolvefilepath("images/colour_cubes/ruins_light_cc.tex"), ["false"]=resolvefilepath("images/colour_cubes/ruins_dark_cc.tex") },
-		ccphasefn = { blendtime = 2, events = { "atriumactivechanged" },fn = function() return tostring(TheWorld.state.atrium_active) end},
-		music = "dontstarve/music/music_epicfight_stalker", 
-		waves = false,
-	},
-	desert = {
-		lighting = {200 / 255, 200 / 255, 200 / 255},
-		colourcube = "summer_day_cc",
-		music = "dontstarve_DLC001/music/music_epicfight_summer",
-		waves = true,
-	},
-	spring = {
-		lighting = {200 / 255, 200 / 255, 200 / 255},
-		colourcube = "spring_day_cc",
-		music = "dontstarve_DLC001/music/music_epicfight_spring",
-		waves = true,
-	},
-	pigvillage = {
-		lighting = {200 / 255, 200 / 255, 200 / 255},
-		colourcube = "day05_cc",
-		music = "dontstarve/music/music_pigking_minigame",
-		waves = true,
-	},
+local EXTRA_CONFIGS = { --hornet: improve this plz
 	pigvillage_fm = {
-		--music = "dontstarve/music/gramaphone_efs",
-		--waves = true,
 		colourcube = "purple_moon_cc",
 		lighting = {84 / 255, 122 / 255, 156 / 255},
-	},
-	-- cave = {
-		-- colourcube = "sinkhole_cc",
-		-- lighting = {0.1,0.1,0.1},
-		-- music = "",
-		-- waves = false,
-	-- },
-	malbatross = {
-		lighting = {200 / 255, 200 / 255, 200 / 255},
-		colourcube = "day05_cc",
-		waves = true,
-		music = "saltydog/music/malbatross",
-		has_ocean = true,
 	}
 }
 
 local function PushConfig(name)
 	--rewrote this function to be significantly less painful to look at
 	if TheNet:IsDedicated() or ThePlayer == nil then return end
-	local data = configs[name]
+	local data = EXTRA_CONFIGS[name] or ARENA_DEFS[name].CONFIGS
 	
 	--apply lighting
 	TheSim:SetVisualAmbientColour(unpack(data.lighting))
@@ -222,6 +176,13 @@ local function PushConfig(name)
 		end
 	end
 	
+	--apply oceancolor
+	if data.oceancolor then
+		TheWorld.Map:SetClearColor(data.oceancolor[1], data.oceancolor[2], data.oceancolor[3], data.oceancolor[4])    
+	else
+		TheWorld.Map:SetClearColor(0,0,0,1)
+	end
+	
 	--apply waves
 	if data.waves then
 		TheWorld.WaveComponent:SetWaveSize(80, 3.5)
@@ -239,7 +200,9 @@ local function PushConfig(name)
 		TheWorld.Map:SetUndergroundFadeHeight(0)
 	end
 	
-	
+	if data.fadeheight ~= nil then
+		TheWorld.Map:SetUndergroundFadeHeight(data.fadeheight)
+	end
 end
 
 
@@ -265,7 +228,7 @@ local function common_postinit(inst)
 		inst:ListenForEvent("applyarenaeffects", function(inst, fxname)
 			PushConfig(fxname)
 		end)
-
+		
 		--inst.Map:SetTransparentOcean(true)
 
 		--[[inst:ListenForEvent("registerlobbypoint", function(world, point)

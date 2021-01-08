@@ -20,6 +20,33 @@ end
 
 ---------------------------------------------------
 
+local inc = 0
+local function atriumkeychanged(inst)
+	local self = TheWorld.components.deathmatch_manager
+	self.enablepickups = TheWorld.state.atrium_active
+end
+local fullmoonfn = function(inst)
+	inc = inc + 1
+	if inc == 2 then
+		inst:PushEvent("fakefullmoon", true)
+		for k, v in pairs(Ents) do 
+			if v.prefab == "pigman" then
+				v:DoTaskInTime(math.random(), function() v.components.werebeast:SetWere(30) end)
+			end
+		end
+	elseif inc == 3 then
+		inc = 0
+		inst:PushEvent("fakefullmoon", false)
+		for k, v in pairs(Ents) do 
+			if v.prefab == "moonpig" then
+				v:DoTaskInTime(math.random(), function() v.components.werebeast:SetNormal() end)
+			end
+		end
+	end
+end
+
+---------------------------------------------------
+
 local ARENA_DEFS = {
 	lobby = {
 		postinit = lobby_postinit,
@@ -33,6 +60,8 @@ local ARENA_DEFS = {
 	},
 	
 	atrium = {
+		name = "Atrium",
+		--
 		spawnradius = 20.5,
 		matchstartfn = function()
 			local self = TheWorld.components.deathmatch_manager
@@ -57,7 +86,8 @@ local ARENA_DEFS = {
 		end,
 		--
 		CONFIGS = {
-			lighting = {0.1,0.1,0.1},
+			fadeheight = 5,
+			lighting = {0.3,0.3,0.3},
 			cctable = { ["true"]=resolvefilepath("images/colour_cubes/ruins_light_cc.tex"), ["false"]=resolvefilepath("images/colour_cubes/ruins_dark_cc.tex") },
 			ccphasefn = { blendtime = 2, events = { "atriumactivechanged" },fn = function() return tostring(TheWorld.state.atrium_active) end},
 			music = "dontstarve/music/music_epicfight_stalker", 
@@ -66,6 +96,8 @@ local ARENA_DEFS = {
 	},
 	
 	desert = {
+		name = "Desert",
+		--
 		spawnradius = 16,
 		--
 		CONFIGS = {
@@ -76,28 +108,9 @@ local ARENA_DEFS = {
 		},
 	},
 	
-	spring = {
-		spawnradius = 16,
-		nopickups = true,
-		--
-		CONFIGS = {
-			lighting = {200 / 255, 200 / 255, 200 / 255},
-			colourcube = "spring_day_cc",
-			music = "dontstarve_DLC001/music/music_epicfight_spring",
-			waves = true,
-		},
-	},
-	
-	cave = {
-		CONFIGS = {
-			colourcube = "sinkhole_cc",
-			lighting = {0.1,0.1,0.1},
-			music = "",
-			waves = false,
-		},
-	},
-	
 	pigvillage = {
+		name = "Pig Village",
+		--
 		postinit = pigvillage_postinit,
 		--
 		spawnradius = 12,
@@ -135,17 +148,46 @@ local ARENA_DEFS = {
 			waves = true,
 		}
 	},
+	
+	spring = {
+		name = "Spring Island",
+		--
+		spawnradius = 16,
+		nopickups = true,
+		--
+		CONFIGS = {
+			lighting = {200 / 255, 200 / 255, 200 / 255},
+			colourcube = "spring_day_cc",
+			music = "dontstarve_DLC001/music/music_epicfight_spring",
+			waves = true,
+		},
+	},
+	
+	malbatross = {
+		name = "The Shoal",
+		--
+		spawnradius = 16,
+		min_pickup_dist = 0,
+		max_pickup_dist = 3.5,
+		--
+		CONFIGS = {
+			lighting = {200 / 255, 200 / 255, 200 / 255},
+			colourcube = "day05_cc",
+			waves = true,
+			music = "saltydog/music/malbatross",
+			has_ocean = true,
+			oceancolor = {TUNING.OCEAN_SHADER.OCEAN_FLOOR_COLOR[1] / 255, TUNING.OCEAN_SHADER.OCEAN_FLOOR_COLOR[2] / 255, TUNING.OCEAN_SHADER.OCEAN_FLOOR_COLOR[3] / 255, TUNING.OCEAN_SHADER.OCEAN_FLOOR_COLOR[4] / 255}
+		},
+	},
 }
 
 local ARENA_IDX = {
 	["random"] = 0,
+	["atrium"] = 1,
+	["desert"] = 2,
+	["pigvillage"] = 3,
+	["spring"] = 4,
 }
-
---[[
-for k, v in pairs(ARENA_DEFS) do
-	table.insert(ARENA_IDX, [v] = #ARENA_IDX + 1)
-end
-]]
 
 return ARENA_DEFS
 

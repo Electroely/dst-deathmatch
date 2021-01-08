@@ -52,14 +52,14 @@ end
 
 
 -- wormwood
-local PollenTick = nil --forward declare
+--[[local PollenTick = nil --forward declare
 local NewPollenTick = function(inst)
 	if not inst:HasTag("spectator") and PollenTick ~= nil then PollenTick(inst) end
 end
 local PlantTick = nil
 local NewPlantTick = function(inst)
 	if not inst:HasTag("spectator") and PlantTick ~= nil then PlantTick(inst) end
-end
+end]]
 AddPrefabPostInit("wormwood", function(inst)
 	if not G.TheWorld.ismastersim then return end
 	inst.OnLoad = nil
@@ -85,10 +85,17 @@ AddPrefabPostInit("wormwood", function(inst)
 	end
 	CosmeticSaveData(inst)
 	
-	--[[
-	ReplaceUpValue(inst.UpdateBloomStage, "PollenTick", NewPollenTick)
-	ReplaceUpValue(inst.UpdateBloomStage, "PlantTick", NewPlantTick)
-	]]
+	--[[local EnableFullBloom = GetUpValue(inst.SetBloomStage, "EnableFullBloom")
+	local PollenTick = GetUpValue(EnableFullBloom, "PollenTick")
+	local PlantTick = GetUpValue(EnableFullBloom, "PlantTick")
+	
+	ReplaceUpValue(EnableFullBloom, "PollenTick", function(inst)
+		if not inst:HasTag("spectator") and PollenTick ~= nil then PollenTick(inst) end
+	end)
+	
+	ReplaceUpValue(EnableFullBloom, "PlantTick", function(inst)
+		if not inst:HasTag("spectator") and PlantTick ~= nil then PlantTick(inst) end
+	end)]]
 end)
 
 --beard men

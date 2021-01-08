@@ -1,3 +1,5 @@
+local ARENA_DEFS = require("prefabs/arena_defs")
+
 local prefabs = {}
 
 local assets = {}
@@ -39,12 +41,7 @@ local common_fn = function()
 	if not TheWorld.ismastersim then
 		return inst
 	end
-	--[[ playerprox is unreliable, onfar fn doesn't include player that went far which is a bit bs
-	inst:AddComponent("playerprox")
-    inst.components.playerprox:SetDist(4, 5)
-    inst.components.playerprox.onnear = onnear
-    inst.components.playerprox.onfar = onfar
-	]]
+
 	inst.range = inst.range or 52
 	inst.players_inside = {}
 	inst.players_storm = {}
@@ -101,26 +98,6 @@ local common_fn = function()
 	return inst
 end
 
-local function lobby_postinit(inst)
-	inst.onfar = nil
-	if TheWorld.ismastersim then
-		TheWorld.lobbypoint = inst
-	end
-end
-
-local function pigvillage_postinit(inst)
-	TheWorld:ListenForEvent("fakefullmoon", function(wrld, shouldpush)
-		if shouldpush then
-			inst.presetname = "pigvillage_fm"
-		else
-			inst.presetname = "pigvillage"
-		end
-		for k, v in pairs(inst.players_inside) do
-			inst:onnear(k)
-		end
-	end)
-end
-
 local function MakeArenaCenterpoint(name, custom_postinit)
 	local function fn()
 		local inst = common_fn()
@@ -134,19 +111,12 @@ local function MakeArenaCenterpoint(name, custom_postinit)
 	return Prefab("arena_centerpoint_"..name, fn, assets, prefabs)
 end
 
-return MakeArenaCenterpoint("atrium"), 
-	MakeArenaCenterpoint("lobby", lobby_postinit),
-	MakeArenaCenterpoint("desert"),
-	MakeArenaCenterpoint("spring"),
-	MakeArenaCenterpoint("pigvillage", pigvillage_postinit),
-	MakeArenaCenterpoint("malbatross")
-	
-	--[[when adding new arenas, make sure to update:
-	this file
-	dm world
-	dm manager
-	dm status
-	vote options
-	
-	TODO: just make a fucking global table elec please
-	]]
+local centerpoints = {}
+for k, data in pairs(ARENA_DEFS) do
+	print(data)
+	print(data.postinit)
+    local pref = MakeArenaCenterpoint(k, data.postinit)
+	table.insert(centerpoints, pref)
+end
+
+return unpack(centerpoints)
