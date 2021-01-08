@@ -16,6 +16,8 @@ Layouts["DeathmatchArena"] = StaticLayout.Get("map/static_layouts/arena_lobby", 
         })
 Layouts["DeathmatchArena"].ground_types[17] = G.GROUND.DECIDUOUS
 Layouts["DeathmatchArena"].ground_types[18] = G.GROUND.DESERT_DIRT
+Layouts["DeathmatchArena"].ground_types[19] = G.GROUND.OCEAN_SWELL
+Layouts["DeathmatchArena"].ground_types[20] = G.GROUND.OCEAN_ROUGH
 AddClassPostConstruct("widgets/redux/worldcustomizationtab", function(self)
 	G.EVENTSERVER_LEVEL_LOCATIONS["DEATHMATCH"] = {"deathmatch"}
 end)
@@ -79,6 +81,7 @@ AddTaskSet("deathmatch_taskset", {
     },
 	set_pieces = {
 	},
+	has_ocean = true,
 })
 
 AddTask("Deathmatch_WorldTask", {
