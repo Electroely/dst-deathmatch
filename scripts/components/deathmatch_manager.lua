@@ -94,7 +94,8 @@ local arena_configs = {
 	},
 	malbatross = {
 		spawnradius = 16,
-		nopickups = true,
+		min_pickup_dist = 0,
+		max_pickup_dist = 3.5,
 	}
 }
 
@@ -754,7 +755,10 @@ function Deathmatch_Manager:DoPickUpSpawn()
 		local pos = self.inst.centerpoint:GetPosition()
 		local offset = nil
 		while (offset == nil) do
-			offset = FindValidPositionByFan(math.random()*2*PI, 1+math.random()*5, 10,
+			local min_dist = arena_configs[self.arena].min_pickup_dist or 1
+			local max_dist = arena_configs[self.arena].max_pickup_dist or 6
+			local dist = min_dist + math.random()*(max_dist-min_dist)
+			offset = FindValidPositionByFan(math.random()*2*PI, dist, 10,
 				function(offset)
 					return TheWorld.Map:IsPassableAtPoint((pos+offset):Get())
 			end)
@@ -768,6 +772,16 @@ function Deathmatch_Manager:DoPickUpSpawn()
 			item:DoTaskInTime(15, item.Fade)
 		end
 	end
+end
+
+function Deathmatch_Manager:GetDrowningRespawnPos()
+	local center = self.inst.centerpoint and self.inst.centerpoint:GetPosition() or self.inst.lobbypoint:GetPosition()
+	local dist = arena_configs[self.arena].spawnradius or 12
+	local offset = FindValidPositionByFan(math.random()*2*PI, dist, 10,
+		function(offset)
+			return TheWorld.Map:IsPassableAtPoint((center+offset):Get())
+	end) or Vector3(0,0,0)
+	return (center+offset):Get()
 end
 
 local function SpawnPickUp(inst) --gosh this code is AWFUL

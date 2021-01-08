@@ -308,7 +308,6 @@
   <object type="beehive" x="632" y="3056"/>
   <object type="arena_centerpoint_spring" x="752" y="2768"/>
   <object type="arena_centerpoint_pigvillage" x="4800" y="704"/>
-  <object type="researchlab2" x="5090" y="2338"/>
   <object type="arena_centerpoint_malbatross" x="5088" y="2592"/>
   <object type="boat" x="5088" y="2592"/>
   <object type="oceanfish_shoalspawner" x="5088" y="2592"/>

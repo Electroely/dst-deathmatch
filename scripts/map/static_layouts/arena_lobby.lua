@@ -2469,17 +2469,6 @@ return {
         },
         {
           name = "",
-          type = "researchlab2",
-          shape = "rectangle",
-          x = 5090,
-          y = 2338,
-          width = 0,
-          height = 0,
-          visible = true,
-          properties = {}
-        },
-        {
-          name = "",
           type = "arena_centerpoint_malbatross",
           shape = "rectangle",
           x = 5088,

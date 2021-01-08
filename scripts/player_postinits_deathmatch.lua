@@ -173,8 +173,26 @@ local function fn(inst, prefab)
 			end) 
 		end
 	end)
-	--------------------------------------------------------------------------------------
+	
+	inst:AddTag("stronggrip")
+	if inst.components.drownable ~= nil then
+		inst.components.drownable:SetCustomTuningsFn(function(inst)
+			return {
+				HEALTH_PENALTY = 0,
+				HEALTH = 50,
+				HUNGER = 0,
+				SANITY = 0,
+				WETNESS = 0,  
+			}
+		end)
+		inst.components.drownable.OnFallInOcean = function(self)
+			self.src_x, self.src_y, self.src_z = self.inst.Transform:GetWorldPosition()
+			self.dest_x, self.dest_y, self.dest_z = TheWorld.components.deathmatch_manager:GetDrowningRespawnPos()
+		end
+	end
+	
 	if not PERKS_ENABLED then return end
+	--------------------------------------------------------------------------------------
 	if prefab == "willow" and TheWorld.ismastersim then
 		inst.components.health.fire_damage_scale = 0
 		local function OnAttack(inst, data)
