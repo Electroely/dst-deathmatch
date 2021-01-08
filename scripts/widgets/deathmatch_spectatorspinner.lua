@@ -16,6 +16,7 @@ local function GetOptionsList()
 	return options
 end
 
+local initlisteners = false
 local Deathmatch_SpectatorSpinner = Class(Widget, function(self, owner)
 
 	self.owner = owner
@@ -36,17 +37,22 @@ local Deathmatch_SpectatorSpinner = Class(Widget, function(self, owner)
 		end
 	end)
 	
-	TheWorld:ListenForEvent("playerexited", function(player)
-		if self and self.shown then
-			self.spinner:SetOptions(GetOptionsList())
-		end
-	end)
-	
-	TheWorld:ListenForEvent("playerentered", function(player)
-		if self and self.shown then
-			self.spinner:SetOptions(GetOptionsList())
-		end
-	end)
+	if not initlisteners then
+		TheWorld:ListenForEvent("playerexited", function(player)
+			local self = ThePlayer and ThePlayer.HUD.controls.deathmatch_spectatorspinner or nil
+			if self and self.shown then
+				self.spinner:SetOptions(GetOptionsList())
+			end
+		end)
+		
+		TheWorld:ListenForEvent("playerentered", function(player)
+			local self = ThePlayer and ThePlayer.HUD.controls.deathmatch_spectatorspinner or nil
+			if self and self.shown then
+				self.spinner:SetOptions(GetOptionsList())
+			end
+		end)
+		initlisteners = true
+	end
 end)
 
 local Show_old = Deathmatch_SpectatorSpinner.Show

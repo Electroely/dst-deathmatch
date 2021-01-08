@@ -1,4 +1,3 @@
-- Crash when despawning and respawning with spectator spinner shown
 - Telltale hearts start spawning as soon as mode changes
 - Ghost entry in bottom of new player list
 - Wormwood still shows visual effects while spectating

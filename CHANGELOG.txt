@@ -77,3 +77,6 @@ v19.8
 
 - Item Info will now be force-disabled
 - Increased ambient brightness of the Atrium
+
+v19.9
+- Fixed crash when despawning as a spectator.
