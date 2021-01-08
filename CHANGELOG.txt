@@ -79,4 +79,7 @@ v19.8
 - Increased ambient brightness of the Atrium
 
 v19.9
-- Fixed crash when despawning as a spectator.
+- Fixed crash when despawning as a spectator
+
+- Updated edge of world textures to look more like what they did before Turn of Tides
+- The telltale heart now has an equipped sprite

@@ -775,7 +775,7 @@ function Deathmatch_Manager:DoPickUpSpawn()
 end
 
 function Deathmatch_Manager:GetDrowningRespawnPos()
-	local center = self.inst.centerpoint and self.inst.centerpoint:GetPosition() or self.inst.lobbypoint:GetPosition()
+	local center = (self.inst.centerpoint and self.matchinprogress) and self.inst.centerpoint:GetPosition() or self.inst.lobbypoint:GetPosition()
 	local dist = arena_configs[self.arena].spawnradius or 12
 	local offset = FindValidPositionByFan(math.random()*2*PI, dist, 10,
 		function(offset)
