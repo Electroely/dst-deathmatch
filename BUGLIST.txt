@@ -1,4 +1,7 @@
-- Wormwood still shows visual effects while blooming
+- Crash when despawning and respawning with spectator spinner shown
+- Telltale hearts start spawning as soon as mode changes
+- Ghost entry in bottom of new player list
+- Wormwood still shows visual effects while spectating
 - Wigfrid shows her Inspiration meter
 - Wendy's rework perks were never removed
 

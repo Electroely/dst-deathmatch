@@ -1,3 +1,5 @@
+- Telltale heart rework: make them a complexprojectile you throw at your teammates to revive them. Same hp revival mechanics as current, but the heart spawns get rarer as more people are revived.
+
 - Swell Shoal map
 	- circular map with pool of ocean water in the middle
 	- Malbatross circles this pool and dashes through its center
