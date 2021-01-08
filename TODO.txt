@@ -1,5 +1,17 @@
 - Telltale heart rework: make them a complexprojectile you throw at your teammates to revive them. Same hp revival mechanics as current, but the heart spawns get rarer as more people are revived.
 
+- Lunar Grotto Map
+        - Map with lots of lunar mushtrees, and light flowers
+        - One use bug nets occasionally spawn in the middle
+        - Lightflower bulbs visually are replaced with a powerup looking bulb
+        - Lightflower bulbs when picked will spawn a light bug which has its bulb replaced with a powerup
+        - Light bugs can be caught and murdered to gain their powerup or kept to have other lightbugs circle around the player and give a small buff to the player
+        - Circling light bugs will only provide half or a third of the original powerup
+        - Players are encouraged to mix and match their light bug circles (e.g. have 2 speed light bugs and one damage light bug)
+        - Players are also encouraged to kill other players light bugs to get rid of their buffs
+        - P.S. (Maybe specials dont damage light bugs? I mean one or two hammer specials and bam light bugs are gone in an instant)
+
+
 - Swell Shoal map
 	- circular map with pool of ocean water in the middle
 	- Malbatross circles this pool and dashes through its center
