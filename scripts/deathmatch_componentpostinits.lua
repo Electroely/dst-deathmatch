@@ -1,32 +1,8 @@
 --i'll move all component postinits to this file... eventually.
 local G = GLOBAL
-local debug = G.debug
-
-local function GetUpValue(func, varname)
-	local i = 1
-	local n, v = debug.getupvalue(func, 1)
-	while v ~= nil do
-		--print("checking",n, v, "to fetch")
-		if n == varname then
-			return v
-		end
-		i = i + 1
-		n, v = debug.getupvalue(func, i)
-	end
-end
-local function ReplaceUpValue(func, varname, newvalue)
-	local i = 1
-	local n, v = debug.getupvalue(func, 1)
-	while v ~= nil do
-		--print("checking",n, v, "to replace")
-		if n == varname then
-			debug.setupvalue(func, i, newvalue)
-			return
-		end
-		i = i + 1
-		n, v = debug.getupvalue(func, i)
-	end
-end
+local UpValues = require("deathmatch_upvaluehacker")
+local GetUpValue = UpValues.Get
+local ReplaceUpValue = UpValues.Replace
 
 AddComponentPostInit("inventory", function(self)
 	--make it so that items picked up mid-match can't go into the

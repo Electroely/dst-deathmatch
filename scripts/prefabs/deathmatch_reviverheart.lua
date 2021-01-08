@@ -1,6 +1,7 @@
 local assets =
 {
     Asset("ANIM", "anim/bloodpump.zip"),
+	Asset("ANIM", "anim/swap_reviverheart.zip"),
 }
 
 local function PlayBeatAnimation(inst)
@@ -83,6 +84,17 @@ local function onpickup(inst, owner)
     end
 end
 
+local function onequip(inst, owner)
+    owner.AnimState:OverrideSymbol("swap_object", "swap_reviverheart", "swap_reviverheart")
+    owner.AnimState:Show("ARM_carry")
+    owner.AnimState:Hide("ARM_normal")
+end
+
+local function onunequip(inst, owner)
+    owner.AnimState:Hide("ARM_carry")
+    owner.AnimState:Show("ARM_normal")
+end
+
 local function fn()
     local inst = CreateEntity()
 
@@ -112,6 +124,8 @@ local function fn()
     inst.components.inventoryitem.imagename = "reviver"
     
     inst:AddComponent("equippable")
+    inst.components.equippable:SetOnEquip(onequip)
+    inst.components.equippable:SetOnUnequip(onunequip)
     inst:ListenForEvent("unequipped", function(inst, data)
 		if data and data.owner and data.owner:HasTag("player") then
 			local player = data.owner

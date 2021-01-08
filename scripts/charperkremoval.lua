@@ -1,43 +1,9 @@
 local G = GLOBAL
 local require = G.require
-local debug = G.debug
 
-
-local function GetUpValue(func, varname)
-	local i = 1
-	local n, v = debug.getupvalue(func, 1)
-	while v ~= nil do
-		--print("UPVAL GET", varname ,n, v)
-		if n == varname then
-			return v
-		end
-		i = i + 1
-		n, v = debug.getupvalue(func, i)
-	end
-end
-local function PrintUpValues(func) --debug
-	local i = 1
-	local n, v = debug.getupvalue(func, 1)
-	while v ~= nil do
-		print("UPVAL", n, v)
-		i = i + 1
-		n, v = debug.getupvalue(func, i)
-	end
-end
-local function ReplaceUpValue(func, varname, newvalue)
-	local i = 1
-	local n, v = debug.getupvalue(func, 1)
-	while v ~= nil do
-		--print("UPVAL REPLACE",varname,n, v)
-		if n == varname then
-			debug.setupvalue(func, i, newvalue)
-			return
-		end
-		i = i + 1
-		n, v = debug.getupvalue(func, i)
-	end
-end
-
+local UpValues = require("deathmatch_upvaluehacker")
+local GetUpValue = UpValues.Get
+local ReplaceUpValue = UpValues.Replace
 --here comes the worst hack i've ever had to do ever
 local beardfns = {}
 function G.require(modulename, ...)
@@ -102,6 +68,7 @@ AddPrefabPostInit("wormwood", function(inst)
 	inst._forcestage = true
 	--perk modification code
 	inst.components.bloomness.calcratefn = function() return 0 end
+	ReplaceUpValue(inst.UpdateBloomStage, "SetStatsLevel", function() end)
 	inst:ListenForEvent("ms_becameghost", function(inst)
 		inst:DoTaskInTime(0, function(inst)
 			inst:ChangeCosmeticState(inst.cosmeticstate)

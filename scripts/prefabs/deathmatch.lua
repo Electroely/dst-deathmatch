@@ -223,6 +223,7 @@ local function PushConfig(name)
 		TheWorld.WaveComponent:SetWaveSize(0,0)
 		TheWorld.WaveComponent:Init(0,0)
 	end
+	TheWorld.Map:SetUndergroundFadeHeight(0)
 	
 end
 
