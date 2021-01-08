@@ -1,6 +1,10 @@
 PERKS_ENABLED = false
 SHADOW_ENABLED = true
 -------------------------------------------
+local UpValues = require("deathmatch_upvaluehacker")
+local GetUpValue = UpValues.Get
+local ReplaceUpValue = UpValues.Replace
+-------------------------------------------
 local function GhostActionFilter(inst, action)
     return action.ghost_valid
 end
@@ -90,11 +94,18 @@ local function doRez(inst, data)
 	SerializeUserSession(inst)
 	inst:ShowActions(true)
 	inst:SetCameraDistance()
+	if inst.rezhealth ~= nil then
+		inst.components.health:SetPercent(inst.rezhealth)
+		inst.rezhealth = nil
+	end
 end
 ---------------------------------------------------------------
 local exts = require("prefabs/player_common_extensions")
-local orfpc_old = exts.OnRespawnFromPlayerCorpse
+local OnRespawnFromPlayerCorpse_old = exts.OnRespawnFromPlayerCorpse
 exts.OnRespawnFromPlayerCorpse = function(inst, data)
+	if inst:HasTag("corpse") then
+		inst.rezhealth = data.health
+	end
 	if data and data.instant and inst.components.health and inst.components.health:IsDead() then
 		doRez(inst, data)
 		inst.sg:GoToState("idle")
@@ -105,9 +116,17 @@ exts.OnRespawnFromPlayerCorpse = function(inst, data)
 			doRez(inst, data)
 		end)
 	else
-		orfpc_old(inst, data)
+		OnRespawnFromPlayerCorpse_old(inst, data)
 	end
 end
+local DoActualRezFromCorpse_old = GetUpValue(OnRespawnFromPlayerCorpse_old, "DoActualRezFromCorpse")
+ReplaceUpValue(OnRespawnFromPlayerCorpse_old, "DoActualRezFromCorpse", function(inst, source)
+	DoActualRezFromCorpse_old(inst, source)
+	if inst.rezhealth ~= nil then
+		inst.components.health:SetPercent(inst.rezhealth)
+		inst.rezhealth = nil
+	end
+end)
 ---------------------------------------------------------------
 local function fn(inst, prefab)
 	
@@ -154,7 +173,6 @@ local function fn(inst, prefab)
 			end) 
 		end
 	end)
-	
 	--------------------------------------------------------------------------------------
 	if not PERKS_ENABLED then return end
 	if prefab == "willow" and TheWorld.ismastersim then
