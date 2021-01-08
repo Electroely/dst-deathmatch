@@ -70,3 +70,10 @@ v19.7
 - Tweaked Glommer
 - Webber and Wilson will now have the beard skin respective to their main skin when they spawn in
 - Increased size of player health list
+
+v19.8
+- Fixed crash with Glommer
+- Fixed missing Warly healthbar icon
+
+- Item Info will now be force-disabled
+- Increased ambient brightness of the Atrium
