@@ -267,10 +267,19 @@ AddClassPostConstruct("widgets/controls", function(self, owner)
 		--end
 		
 		self.clock:Hide()
+		
+		if self.seasonclock ~= nil then
+			self.seasonclock:Hide()
+		end
+		
 		self.status.stomach:Hide()
 		self.status.stomach.Show = function() end
 		self.status.brain:Hide()
 		self.status.brain.Show = function() end -- im gay
+		
+		if self.status.inspirationbadge ~= nil then
+			self.status.inspirationbadge:Hide()
+		end
 	end
 end)
 

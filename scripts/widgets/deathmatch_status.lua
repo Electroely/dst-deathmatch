@@ -12,6 +12,7 @@ local DEATHMATCH_GAMEMODES = {
 	{name="2-Player Teams"},
 	{name="Custom Teams"}
 }
+
 local ARENAS = {
 	"Random",
 	"Atrium",

@@ -1,7 +1,6 @@
 - Telltale hearts start spawning as soon as mode changes
 - Ghost entry in bottom of new player list
 - Wormwood still shows visual effects while spectating
-- Wigfrid shows her Inspiration meter
 - Wendy's rework perks were never removed
 
 - pigs targetting players is very wonky in so many situations and it really needs to be more consistent

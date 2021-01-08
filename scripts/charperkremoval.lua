@@ -117,6 +117,11 @@ AddPrefabPostInit("wormwood", function(inst)
 		end
 	end
 	CosmeticSaveData(inst)
+	
+	--[[
+	ReplaceUpValue(inst.UpdateBloomStage, "PollenTick", NewPollenTick)
+	ReplaceUpValue(inst.UpdateBloomStage, "PlantTick", NewPlantTick)
+	]]
 end)
 
 --beard men
