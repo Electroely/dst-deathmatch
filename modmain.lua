@@ -278,6 +278,7 @@ AddClassPostConstruct("widgets/controls", function(self, owner)
 		
 		if self.status.inspirationbadge ~= nil then
 			self.status.inspirationbadge:Hide()
+			self.status.inspirationbadge.Show = function() end
 		end
 		
 		self.inst:DoTaskInTime(0, function() --Hide Combined Status elements
