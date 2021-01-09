@@ -2,6 +2,7 @@ local assets =
 {
     Asset("ANIM", "anim/bloodpump.zip"),
 	Asset("ANIM", "anim/swap_reviverheart.zip"),
+	Asset("ANIM", "anim/bloodpump_extra.zip"),
 }
 
 local function PlayBeatAnimation(inst)
@@ -84,6 +85,49 @@ local function onpickup(inst, owner)
     end
 end
 
+local function onthrown(inst)
+	inst:AddTag("NOCLICK")
+	
+	inst.AnimState:PlayAnimation("thrown", true)
+	
+	inst.Physics:SetMass(1)
+	inst.Physics:SetCapsule(0.2, 0.2)
+	inst.Physics:SetFriction(0)
+	inst.Physics:SetDamping(0)
+	inst.Physics:SetCollisionGroup(COLLISION.CHARACTERS)
+	inst.Physics:ClearCollisionMask()
+	inst.Physics:CollidesWith(COLLISION.GROUND)
+	inst.Physics:CollidesWith(COLLISION.OBSTACLES)
+	inst.Physics:CollidesWith(COLLISION.ITEMS)
+	
+	if inst._listening then
+		inst:RemoveEventCallback("attacked", onholderattacked, inst._owner)
+		inst._owner = nil
+	end
+end
+local REVIVE_RANGE = 2
+local function onlanded(inst, thrower)
+	local x, y, z = inst.Transform:GetWorldPosition()
+	local ents = TheSim:FindEntities(x, y, z, 2, {"player"})
+	local target = nil
+	if thrower then
+		for k, v in pairs(ents) do
+			if v:HasTag("corpse") and thrower.components.teamer:IsTeamedWith(v) then
+				target = v
+				break
+			end
+		end
+	end
+	if target ~= nil then
+		local revivepct = 0.5 / math.pow(2, TheWorld.components.deathmatch_manager.revivals-1)
+		target:PushEvent("respawnfromcorpse", {health=revivepct})
+		inst:Remove()
+	else
+		inst:RemoveTag("NOCLICK")
+		PlayBeatAnimation(inst)
+	end
+end
+
 local function onequip(inst, owner)
     owner.AnimState:OverrideSymbol("swap_object", "swap_reviverheart", "swap_reviverheart")
     owner.AnimState:Show("ARM_carry")
@@ -135,6 +179,13 @@ local function fn()
 		end
     end)
     --inst:AddComponent("inspectable")
+	
+	inst:AddComponent("complexprojectile")
+    inst.components.complexprojectile:SetHorizontalSpeed(15)
+    inst.components.complexprojectile:SetGravity(-35)
+    inst.components.complexprojectile:SetLaunchOffset(Vector3(.25, 1, 0))
+    inst.components.complexprojectile:SetOnLaunch(onthrown)
+	inst.components.complexprojectile:SetOnHit(onlanded)
 
     MakeHauntableLaunch(inst)
 
