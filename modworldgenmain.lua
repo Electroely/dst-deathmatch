@@ -18,6 +18,8 @@ Layouts["DeathmatchArena"].ground_types[17] = G.GROUND.DECIDUOUS
 Layouts["DeathmatchArena"].ground_types[18] = G.GROUND.DESERT_DIRT
 Layouts["DeathmatchArena"].ground_types[19] = G.GROUND.OCEAN_SWELL
 Layouts["DeathmatchArena"].ground_types[20] = G.GROUND.OCEAN_ROUGH
+
+Layouts["DeathmatchArena"].ground_types[34] = G.GROUND.FUNGUSMOON
 AddClassPostConstruct("widgets/redux/worldcustomizationtab", function(self)
 	G.EVENTSERVER_LEVEL_LOCATIONS["DEATHMATCH"] = {"deathmatch"}
 end)

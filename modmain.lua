@@ -71,6 +71,9 @@ PrefabFiles = {
 	"fakeplayer",
 	"deathmatch_oneusebomb",
 	"deathmatch_reviverheart",
+	"deathmatch_bugnet",
+	"powerflier",
+	"powerup_flower",
 	"shadowweapons",
 }
 Assets = {
@@ -268,7 +271,7 @@ AddClassPostConstruct("widgets/controls", function(self, owner)
 		
 		self.clock:Hide()
 		
-		if self.seasonclock ~= nil then
+		if self.seasonclock ~= nil then --Todo, Hornet: this isnt working
 			self.seasonclock:Hide()
 		end
 		
@@ -312,6 +315,8 @@ _name.PICKUP_LIGHTDEFENSE = "Defense Boost\n-50% Damage Taken\nLasts 15 Seconds"
 _name.PICKUP_LIGHTSPEED = "Speed Boost\n+50% Movement Speed\nLasts 10 Seconds"
 _name.PICKUP_LIGHTHEALING = "Health Restoration\nRestore 10-20 Health"
 _name.PICKUP_COOLDOWN = "Instant Refresh\nResets cooldown of all weapons in inventory"
+
+_name.POWERFLIER = "Powerflier"
 
 _name.DEATHMATCH_INFOSIGN = "Info Sign"
 _name.DUMMYTARGET = "Target Dummy"

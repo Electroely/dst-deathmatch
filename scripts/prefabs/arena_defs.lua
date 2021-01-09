@@ -179,6 +179,23 @@ local ARENA_DEFS = {
 			oceancolor = {TUNING.OCEAN_SHADER.OCEAN_FLOOR_COLOR[1] / 255, TUNING.OCEAN_SHADER.OCEAN_FLOOR_COLOR[2] / 255, TUNING.OCEAN_SHADER.OCEAN_FLOOR_COLOR[3] / 255, TUNING.OCEAN_SHADER.OCEAN_FLOOR_COLOR[4] / 255}
 		},
 	},
+	
+	grotto = {
+		name = "Lunar Grotto",
+		--
+		spawnradius = 20,
+		overridepickups = {
+			"deathmatch_bugnet",
+		},
+		--
+		CONFIGS = {
+			fadeheight = 5,
+			lighting = {200 / 255, 200 / 255, 200 / 255},
+			colourcube = "day05_cc", --lunacy_regular_cc
+			waves = false,
+			music = "dontstarve/music/music_danger_cave",
+		}
+	}
 }
 
 local ARENA_IDX = {

@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<spriter_data scml_version="1.0" generator="BrashMonkey Spriter" generator_version="r11">
+    <folder id="0" name="damagebulb">
+        <file id="0" name="damagebulb/damagebulb-0.png" width="111" height="108" pivot_x="0.495270" pivot_y="0.512153"/>
+    </folder>
+    <folder id="1" name="cooldownbulb">
+        <file id="0" name="cooldownbulb/cooldownbulb-0.png" width="111" height="108" pivot_x="0.495270" pivot_y="0.512153"/>
+    </folder>
+    <folder id="2" name="healbulb">
+        <file id="0" name="healbulb/healbulb-0.png" width="111" height="108" pivot_x="0.495270" pivot_y="0.512153"/>
+    </folder>
+    <folder id="3" name="speedbulb">
+        <file id="0" name="speedbulb/speedbulb-0.png" width="111" height="108" pivot_x="0.495270" pivot_y="0.512153"/>
+    </folder>
+    <folder id="4" name="defensebulb">
+        <file id="0" name="defensebulb/defensebulb-0.png" width="111" height="108" pivot_x="0.495270" pivot_y="0.512153"/>
+    </folder>
+    <entity id="0" name="powerflier">
+        <animation id="0" name="anim" length="34" interval="100">
+            <mainline>
+                <key id="0">
+                    <object_ref id="0" timeline="0" key="0" z_index="0"/>
+                    <object_ref id="1" timeline="1" key="0" z_index="1"/>
+                    <object_ref id="2" timeline="2" key="0" z_index="2"/>
+                    <object_ref id="3" timeline="3" key="0" z_index="3"/>
+                    <object_ref id="4" timeline="4" key="0" z_index="4"/>
+                </key>
+            </mainline>
+            <timeline id="0" name="cooldownbulb-0">
+                <key id="0" spin="0">
+                    <object folder="1" file="0" x="-59.52381" y="46.428571"/>
+                </key>
+            </timeline>
+            <timeline id="1" name="damagebulb-0">
+                <key id="0" spin="0">
+                    <object folder="0" file="0" x="89.285714" y="39.285714"/>
+                </key>
+            </timeline>
+            <timeline id="2" name="defensebulb-0">
+                <key id="0" spin="0">
+                    <object folder="4" file="0" x="-202.380952" y="39.285714"/>
+                </key>
+            </timeline>
+            <timeline id="3" name="healbulb-0">
+                <key id="0" spin="0">
+                    <object folder="2" file="0" x="-346.428571" y="33.333333"/>
+                </key>
+            </timeline>
+            <timeline id="4" name="speedbulb-0">
+                <key id="0" spin="0">
+                    <object folder="3" file="0" x="234.52381" y="33.333333"/>
+                </key>
+            </timeline>
+        </animation>
+    </entity>
+</spriter_data>

@@ -36,8 +36,7 @@ local common_fn = function()
 	
 	inst:AddTag("CLASSIFIED")
 	inst.setting = nil
-	
-	
+
 	if not TheWorld.ismastersim then
 		return inst
 	end
@@ -113,8 +112,6 @@ end
 
 local centerpoints = {}
 for k, data in pairs(ARENA_DEFS) do
-	print(data)
-	print(data.postinit)
     local pref = MakeArenaCenterpoint(k, data.postinit)
 	table.insert(centerpoints, pref)
 end

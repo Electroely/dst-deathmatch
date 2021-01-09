@@ -7,6 +7,7 @@ local arena_idx = {
 	["pigvillage"] = 3,
 	["spring"] = 4,
 	["malbatross"] = 5,
+	["grotto"] = 6,
 }
 
 
@@ -633,7 +634,7 @@ function Deathmatch_Manager:GetPickUpItemList(custompos)
 		table.insert(result, "deathmatch_oneusebomb")
 	end
 	for i = 1, math.floor(count/2) do
-		table.insert(result, GetRandomItem(self.pickupprefabs))
+		table.insert(result, GetRandomItem(arena_configs[self.arena].overridepickups or self.pickupprefabs))
 	end
 	if self.gamemode ~= 1 then
 		local heartcount = 0

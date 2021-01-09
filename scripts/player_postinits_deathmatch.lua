@@ -159,6 +159,21 @@ local function fn(inst, prefab)
 		end
 	end)
 	
+	local powerups = {
+		["damage"] = "pickup_lightdamaging",
+		["defense"] = "pickup_lightdefense",
+		["speed"] = "pickup_lightspeed",
+		["heal"] = "pickup_lighthealing",
+		["cooldown"] = "pickup_cooldown",
+	}
+	
+	inst:ListenForEvent("murdered", function(inst, data)
+		if data.victim and data.victim.prefab == "powerflier" then
+			local powerup = SpawnPrefab(powerups[data.victim.powerup])
+			powerup.components.inventoryitem.onpickupfn(powerup, inst)
+		end
+	end)
+	
 	inst:ListenForEvent("death", function(inst) 
 		if inst.enable_shadow  and SHADOW_ENABLED then
 			inst:DoTaskInTime(2.5, function() 
