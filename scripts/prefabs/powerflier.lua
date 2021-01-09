@@ -2,6 +2,21 @@ local assets =
 {
     Asset("ANIM", "anim/lightflier.zip"),
     Asset("ANIM", "anim/powerflier_bulbs.zip"),
+	
+	Asset("ATLAS", "images/inventoryimages/cooldownbulb.xml"),
+	Asset("IMAGE", "images/inventoryimages/cooldownbulb.tex"),
+	
+	Asset("ATLAS", "images/inventoryimages/damagebulb.xml"),
+	Asset("IMAGE", "images/inventoryimages/damagebulb.tex"),
+	
+	Asset("ATLAS", "images/inventoryimages/speedbulb.xml"),
+	Asset("IMAGE", "images/inventoryimages/speedbulb.tex"),
+	
+	Asset("ATLAS", "images/inventoryimages/healbulb.xml"),
+	Asset("IMAGE", "images/inventoryimages/healbulb.tex"),
+	
+	Asset("ATLAS", "images/inventoryimages/defensebulb.xml"),
+	Asset("IMAGE", "images/inventoryimages/defensebulb.tex"),
 }
 
 local prefabs =
@@ -216,10 +231,8 @@ local function onformationdisband(inst)
 		local leader = inst.components.formationleader.target
 		
 		leader.components.combat.externaldamagemultipliers:RemoveModifier("powerflier", "damage")
-		leader.components.combat.externaldamagemultipliers:RemoveModifier("powerflier", "defense")
-		leader.components.combat.externaldamagemultipliers:RemoveModifier("powerflier", "speed")
-		leader.components.combat.externaldamagemultipliers:RemoveModifier("powerflier", "cooldown")
-		leader.components.combat.externaldamagemultipliers:RemoveModifier("powerflier", "heal")
+		leader.components.combat.externaldamagetakenmultipliers:RemoveModifier("powerflier", "defense")
+		leader.components.locomotor:RemoveExternalSpeedMultiplier("powerflier", "speed")
     end
 end
 
@@ -354,6 +367,9 @@ local function SetPowerup(inst, powerup)
 	inst.powerup = powerup
 
 	inst.AnimState:OverrideSymbol("lightbulb", "powerflier_bulbs", inst.powerup.."bulb")
+	
+	inst.components.inventoryitem.atlasname = "images/inventoryimages/"..inst.powerup.."bulb.xml"
+	inst.components.inventoryitem.imagename = inst.powerup.."bulb"
 end
 
 local powerups = {

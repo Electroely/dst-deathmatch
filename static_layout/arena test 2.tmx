@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.2" tiledversion="1.3.0" orientation="orthogonal" renderorder="right-down" compressionlevel="0" width="90" height="90" tilewidth="64" tileheight="64" infinite="0" nextlayerid="3" nextobjectid="351">
+<map version="1.2" tiledversion="1.3.0" orientation="orthogonal" renderorder="right-down" compressionlevel="0" width="90" height="90" tilewidth="64" tileheight="64" infinite="0" nextlayerid="3" nextobjectid="360">
  <tileset firstgid="1" source="dont_starve/ground_deathmatch.tsx"/>
  <layer id="1" name="BG_TILES" width="90" height="90">
   <data encoding="csv">
@@ -312,49 +312,43 @@
   <object id="214" type="boat" x="5088" y="2592"/>
   <object id="215" type="oceanfish_shoalspawner" x="5088" y="2592"/>
   <object id="216" type="arena_centerpoint_grotto" x="1056" y="4635.82"/>
-  <object id="217" type="mushtree_moon" x="648" y="4384"/>
   <object id="218" type="mushtree_moon" x="708" y="4342"/>
   <object id="219" type="mushtree_moon" x="810" y="4282"/>
   <object id="220" type="mushtree_moon" x="946" y="4248"/>
-  <object id="221" type="mushtree_moon" x="814" y="4398"/>
   <object id="222" type="grotto_pool_small" x="896" y="4328"/>
   <object id="223" type="mushtree_moon" x="550" y="4450"/>
-  <object id="224" type="mushtree_moon" x="730" y="4442"/>
-  <object id="225" type="grotto_pool_small" x="1270" y="4592"/>
+  <object id="225" type="grotto_pool_small" x="1298" y="4635.33"/>
   <object id="226" type="mushtree_moon" x="646" y="4464"/>
   <object id="227" type="mushtree_moon" x="560" y="4616"/>
-  <object id="228" type="grotto_pool_small" x="916" y="4562"/>
+  <object id="228" type="grotto_pool_small" x="929" y="4552"/>
   <object id="229" type="mushtree_moon" x="658" y="4584"/>
   <object id="230" type="mushtree_moon" x="736" y="4584"/>
   <object id="231" type="mushtree_moon" x="830" y="4466"/>
   <object id="232" type="mushtree_moon" x="808" y="4556"/>
-  <object id="233" type="mushtree_moon" x="880" y="4418"/>
+  <object id="233" type="mushtree_moon" x="894" y="4404"/>
   <object id="234" type="mushtree_moon" x="990" y="4320"/>
   <object id="235" type="mushtree_moon" x="954" y="4466"/>
-  <object id="236" type="mushtree_moon" x="1125.61" y="4345.13"/>
-  <object id="237" type="mushtree_moon" x="1059.7" y="4243.87"/>
+  <object id="237" type="mushtree_moon" x="1123.7" y="4227.87"/>
   <object id="238" type="grotto_pool_small" x="1521.04" y="4549.78"/>
-  <object id="239" type="mushtree_moon" x="1184.17" y="4258"/>
+  <object id="239" type="mushtree_moon" x="1170.17" y="4322"/>
   <object id="240" type="grotto_pool_small" x="1348.78" y="4378.22"/>
   <object id="241" type="mushtree_moon" x="1425.43" y="4312.78"/>
   <object id="242" type="mushtree_moon" x="1046" y="4396.83"/>
   <object id="243" type="mushtree_moon" x="1290.26" y="4283.35"/>
-  <object id="244" type="mushtree_moon" x="1244.74" y="4458.13"/>
+  <object id="244" type="mushtree_moon" x="1264.74" y="4428.13"/>
   <object id="245" type="mushtree_moon" x="1257.74" y="4365.91"/>
-  <object id="246" type="grotto_pool_big" x="1139.35" y="4536"/>
-  <object id="247" type="mushtree_moon" x="1375.87" y="4498.65"/>
-  <object id="248" type="mushtree_moon" x="1312.96" y="4492.09"/>
-  <object id="249" type="mushtree_moon" x="1375.87" y="4564.09"/>
+  <object id="246" type="grotto_pool_big" x="1055.85" y="4635.5"/>
+  <object id="247" type="mushtree_moon" x="1430.87" y="4463.65"/>
+  <object id="248" type="mushtree_moon" x="1324.96" y="4467.09"/>
+  <object id="249" type="mushtree_moon" x="1372.87" y="4558.09"/>
   <object id="250" type="mushtree_moon" x="1447.74" y="4625.78"/>
   <object id="251" type="mushtree_moon" x="1401.17" y="4675.91"/>
   <object id="252" type="mushtree_moon" x="1410.48" y="4396.91"/>
-  <object id="253" type="mushtree_moon" x="1545.3" y="4415.3"/>
-  <object id="254" type="mushtree_moon" x="1479.65" y="4441.78"/>
+  <object id="254" type="mushtree_moon" x="1520.65" y="4463.78"/>
   <object id="255" type="mushtree_moon" x="984" y="4956"/>
   <object id="257" type="mushtree_moon" x="1191.33" y="4913.33"/>
-  <object id="258" type="mushtree_moon" x="1316" y="4822"/>
-  <object id="259" type="mushtree_moon" x="1150" y="4970"/>
-  <object id="260" type="mushtree_moon" x="1270" y="4900"/>
+  <object id="258" type="mushtree_moon" x="1344" y="4842"/>
+  <object id="260" type="mushtree_moon" x="1274" y="4890"/>
   <object id="261" type="mushtree_moon" x="892" y="4984"/>
   <object id="262" type="mushtree_moon" x="1066" y="5014"/>
   <object id="263" type="grotto_pool_small" x="896" y="5074"/>
@@ -363,30 +357,24 @@
   <object id="267" type="mushtree_moon" x="1048" y="5178"/>
   <object id="268" type="mushtree_moon" x="1096" y="5094"/>
   <object id="269" type="grotto_pool_small" x="1166" y="5038"/>
-  <object id="270" type="mushtree_moon" x="1172" y="5114"/>
+  <object id="270" type="mushtree_moon" x="1146" y="5182"/>
   <object id="271" type="mushtree_moon" x="1216" y="4990"/>
   <object id="272" type="mushtree_moon" x="828" y="5154"/>
-  <object id="273" type="mushtree_moon" x="1290" y="5038"/>
+  <object id="273" type="mushtree_moon" x="1290" y="5080"/>
   <object id="274" type="mushtree_moon" x="804" y="4658"/>
   <object id="275" type="mushtree_moon" x="850" y="4888"/>
-  <object id="276" type="mushtree_moon" x="678" y="4694"/>
   <object id="278" type="mushtree_moon" x="594" y="4716"/>
   <object id="279" type="mushtree_moon" x="558" y="4790"/>
   <object id="280" type="grotto_pool_small" x="684" y="4766"/>
-  <object id="281" type="mushtree_moon" x="606" y="4836"/>
-  <object id="282" type="mushtree_moon" x="712" y="4866"/>
   <object id="284" type="mushtree_moon" x="638" y="4940"/>
-  <object id="285" type="mushtree_moon" x="1566" y="4624"/>
-  <object id="286" type="mushtree_moon" x="1516" y="4704"/>
-  <object id="287" type="mushtree_moon" x="1610" y="4696"/>
-  <object id="289" type="mushtree_moon" x="1372" y="4770"/>
-  <object id="290" type="mushtree_moon" x="1446" y="4744"/>
-  <object id="291" type="mushtree_moon" x="1518" y="4768"/>
+  <object id="286" type="mushtree_moon" x="1592" y="4626"/>
+  <object id="287" type="mushtree_moon" x="1616" y="4724"/>
+  <object id="290" type="mushtree_moon" x="1458" y="4742"/>
+  <object id="291" type="mushtree_moon" x="1534" y="4780"/>
   <object id="292" type="mushtree_moon" x="1448" y="4824"/>
   <object id="293" type="mushtree_moon" x="1542" y="4854"/>
-  <object id="294" type="grotto_pool_small" x="1378" y="4880"/>
+  <object id="294" type="grotto_pool_small" x="1386" y="4900"/>
   <object id="295" type="mushtree_moon" x="1330" y="4946"/>
-  <object id="296" type="mushtree_moon" x="1400" y="4978"/>
   <object id="299" type="mushtree_moon" x="1470" y="4914"/>
   <object id="300" type="mushtree_moon" x="710" y="4980"/>
   <object id="301" type="mushtree_moon" x="672" y="5068"/>
@@ -396,45 +384,54 @@
   <object id="307" type="mushtree_moon" x="760.667" y="4754.67"/>
   <object id="308" type="mushtree_moon" x="800.667" y="4813.33"/>
   <object id="309" type="powerup_flower" x="912" y="4694.67"/>
-  <object id="310" type="powerup_flower" x="996" y="4708"/>
-  <object id="311" type="powerup_flower" x="1210.67" y="4668"/>
+  <object id="310" type="powerup_flower" x="1007" y="4755"/>
+  <object id="311" type="powerup_flower" x="1264.67" y="4693"/>
   <object id="312" type="powerup_flower" x="884" y="4821.33"/>
   <object id="313" type="powerup_flower" x="984" y="4877.33"/>
-  <object id="314" type="powerup_flower" x="1010.67" y="4782.67"/>
-  <object id="315" type="powerup_flower" x="1084" y="4908"/>
-  <object id="316" type="powerup_flower" x="1088" y="4750.67"/>
-  <object id="317" type="powerup_flower" x="1221.33" y="4741.33"/>
+  <object id="314" type="powerup_flower" x="1041.67" y="4832.67"/>
+  <object id="315" type="powerup_flower" x="1070" y="4916"/>
+  <object id="316" type="powerup_flower" x="1164" y="4763.67"/>
+  <object id="317" type="powerup_flower" x="1247.33" y="4768.33"/>
   <object id="318" type="powerup_flower" x="1154.67" y="4833.33"/>
   <object id="319" type="powerup_flower" x="850.667" y="4744"/>
   <object id="320" type="powerup_flower" x="938.667" y="4768"/>
-  <object id="321" type="powerup_flower" x="1153.33" y="4709.33"/>
-  <object id="322" type="powerup_flower" x="712" y="4916"/>
-  <object id="323" type="powerup_flower" x="608" y="4778.67"/>
-  <object id="324" type="powerup_flower" x="737.333" y="4672"/>
+  <object id="321" type="powerup_flower" x="1190.33" y="4643.33"/>
+  <object id="322" type="powerup_flower" x="720" y="4860"/>
+  <object id="323" type="powerup_flower" x="608" y="4830.67"/>
+  <object id="324" type="powerup_flower" x="699.333" y="4670"/>
   <object id="325" type="powerup_flower" x="582.667" y="4529.33"/>
   <object id="326" type="powerup_flower" x="626.667" y="4334.67"/>
-  <object id="327" type="powerup_flower" x="748" y="4492"/>
+  <object id="327" type="powerup_flower" x="740" y="4458"/>
   <object id="328" type="powerup_flower" x="997.333" y="4220"/>
-  <object id="329" type="powerup_flower" x="800" y="4357.33"/>
+  <object id="329" type="powerup_flower" x="800" y="4369.33"/>
   <object id="330" type="powerup_flower" x="980" y="4404"/>
-  <object id="331" type="powerup_flower" x="1193.33" y="4320"/>
+  <object id="331" type="powerup_flower" x="1215.33" y="4240"/>
   <object id="332" type="powerup_flower" x="1072" y="4310.67"/>
   <object id="333" type="powerup_flower" x="1176" y="4416"/>
   <object id="334" type="powerup_flower" x="1349.33" y="4277.33"/>
-  <object id="335" type="powerup_flower" x="1334.67" y="4420"/>
+  <object id="335" type="powerup_flower" x="1345.67" y="4407"/>
   <object id="336" type="powerup_flower" x="1514.67" y="4385.33"/>
-  <object id="337" type="powerup_flower" x="1448" y="4529.33"/>
+  <object id="337" type="powerup_flower" x="1461" y="4529.33"/>
   <object id="338" type="powerup_flower" x="1526.67" y="4620"/>
   <object id="339" type="powerup_flower" x="1578.67" y="4516"/>
-  <object id="340" type="powerup_flower" x="1473.33" y="4784"/>
+  <object id="340" type="powerup_flower" x="1519.33" y="4684"/>
   <object id="341" type="powerup_flower" x="1440" y="4968"/>
-  <object id="342" type="powerup_flower" x="1346.67" y="4841.33"/>
-  <object id="343" type="powerup_flower" x="1225.33" y="4933.33"/>
-  <object id="344" type="powerup_flower" x="1326.67" y="5018.67"/>
-  <object id="345" type="powerup_flower" x="1214.67" y="5116"/>
-  <object id="346" type="powerup_flower" x="1096" y="4952"/>
+  <object id="342" type="powerup_flower" x="1384.67" y="4765.33"/>
+  <object id="343" type="powerup_flower" x="1289.33" y="4999.33"/>
+  <object id="344" type="powerup_flower" x="1372.67" y="5018.67"/>
+  <object id="345" type="powerup_flower" x="1192.67" y="5114"/>
+  <object id="346" type="powerup_flower" x="1142" y="4974"/>
   <object id="347" type="powerup_flower" x="1009.33" y="5134.67"/>
   <object id="348" type="powerup_flower" x="930.667" y="4898.67"/>
   <object id="349" type="powerup_flower" x="892" y="5130.67"/>
+  <object id="351" type="powerup_flower" x="1006" y="4526.67"/>
+  <object id="352" type="powerup_flower" x="1119.33" y="4426"/>
+  <object id="353" type="powerup_flower" x="1142.33" y="4519.33"/>
+  <object id="354" type="powerup_flower" x="1199" y="4466.67"/>
+  <object id="355" type="powerup_flower" x="1226.67" y="4580.67"/>
+  <object id="356" type="powerup_flower" x="1024" y="4449.33"/>
+  <object id="357" type="powerup_flower" x="1087.67" y="4474.33"/>
+  <object id="358" type="powerup_flower" x="1271" y="4523.33"/>
+  <object id="359" type="powerup_flower" x="882.667" y="4618"/>
  </objectgroup>
 </map>
