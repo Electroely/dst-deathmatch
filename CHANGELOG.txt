@@ -81,5 +81,9 @@ v19.8
 v19.9
 - Fixed crash when despawning as a spectator
 
-- Updated edge of world textures to look more like what they did before Turn of Tides
+- Abilities can now be used closer to the edge of the world
+- The top-left player list will now sort itself based on leading player or teams (not both)
 - The telltale heart now has an equipped sprite
+- The telltale heart can now be thrown at teammates to revive them
+- The telltale heart will spawn less often as more people are revived in a match
+- Updated edge of world textures to look more like what they did before Turn of Tides
