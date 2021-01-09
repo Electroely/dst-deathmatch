@@ -145,7 +145,9 @@ AddComponentPostInit("playercontroller", function(self)
 			local ents = G.TheSim:FindEntities(x,y,z,8, nil, {"INLIMBO","NOCLICK"}, {"_inventoryitem","corpse"})
 			for k, v in pairs(ents) do
 				if priority_prefabs[v.prefab] and self.inst:IsNear(v, 1) then
-					force_target = v
+					if not v:HasTag("corpse") or self.inst.components.teamer:IsTeamedWith(v) then
+						force_target = v
+					end
 				end
 			end
 			if force_target == nil then
