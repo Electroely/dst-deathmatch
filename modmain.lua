@@ -364,6 +364,12 @@ AddComponentAction("POINT", "aoespell", function(inst, doer, pos, actions, right
 	end
 end)
 
+AddComponentAction("USEITEM", "complexprojectile", function(inst, doer, target, actions, right)
+	if target and target.components.revivablecorpse and target.components.health and target.components.health:IsDead() then
+		table.insert(actions, ACTIONS.TOSS)
+	end 
+end)
+
 local PairAction = AddAction("DEATHMATCH_PAIRWITH", "Team up with", function(act)
 	if act.doer and act.target then
 		if act.doer:HasTag("spectator") or act.target:HasTag("spectator") then return false end
