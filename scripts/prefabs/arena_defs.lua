@@ -191,7 +191,7 @@ local ARENA_DEFS = {
 		CONFIGS = {
 			fadeheight = 5,
 			lighting = {200 / 255, 200 / 255, 200 / 255},
-			colourcube = "day05_cc", --lunacy_regular_cc
+			colourcube = "caves_default", --lunacy_regular_cc
 			waves = false,
 			music = "dontstarve/music/music_danger_cave",
 		}

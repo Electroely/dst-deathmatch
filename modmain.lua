@@ -317,6 +317,7 @@ _name.PICKUP_LIGHTHEALING = "Health Restoration\nRestore 10-20 Health"
 _name.PICKUP_COOLDOWN = "Instant Refresh\nResets cooldown of all weapons in inventory"
 
 _name.POWERFLIER = "Powerflier"
+_name.POWERUP_FLOWER = "Power Flower"
 
 _name.DEATHMATCH_INFOSIGN = "Info Sign"
 _name.DUMMYTARGET = "Target Dummy"

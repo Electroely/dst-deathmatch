@@ -56,6 +56,40 @@ local function LeaderOnUpdate(inst)
         inst._offset.z = Lerp(inst._offset.z, targetoffset_z, FORMATION_OFFSET_LERP)
         
         inst.Transform:SetPosition(inst._offset.x, ty, inst._offset.z)
+		
+		local powerups = {}
+		
+		for k, v in pairs(leader.formation) do
+			if v and v:IsValid() and v.powerup ~= nil then
+				table.insert(powerups, v.powerup)
+			end
+		end
+		
+		local buffs = {}
+		
+		for k, v in pairs(powerups) do
+			buffs[v] = (buffs[v] or 0) + 1
+		end
+		
+		if buffs["damage"] ~= nil then
+			leader.target.components.combat.externaldamagemultipliers:SetModifier("powerflier", 1 + (buffs["damage"] * 0.1), "damage")
+		end
+		
+		if buffs["defense"] ~= nil then
+			leader.target.components.combat.externaldamagetakenmultipliers:SetModifier("powerflier", buffs["defense"] * 0.1, "defense")
+		end
+		
+		if buffs["speed"] ~= nil then
+			leader.target.components.locomotor:SetExternalSpeedMultiplier(leader.target, "speed", 1 + (buffs["speed"] * 0.1))
+		end
+		
+		if buffs["cooldown"] ~= nil then
+			--TODO
+		end
+		
+		if buffs["heal"] ~= nil then
+			--TODO
+		end
     end
 end
 
@@ -178,6 +212,14 @@ end
 local function onformationdisband(inst)
     if inst.components.formationleader.target ~= nil then
         inst.components.formationleader.target._lightflier_formation = nil
+		
+		local leader = inst.components.formationleader.target
+		
+		leader.components.combat.externaldamagemultipliers:RemoveModifier("powerflier", "damage")
+		leader.components.combat.externaldamagemultipliers:RemoveModifier("powerflier", "defense")
+		leader.components.combat.externaldamagemultipliers:RemoveModifier("powerflier", "speed")
+		leader.components.combat.externaldamagemultipliers:RemoveModifier("powerflier", "cooldown")
+		leader.components.combat.externaldamagemultipliers:RemoveModifier("powerflier", "heal")
     end
 end
 

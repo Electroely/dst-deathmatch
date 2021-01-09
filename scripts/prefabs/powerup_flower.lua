@@ -11,6 +11,14 @@ local prefabs =
     "powerflier",
 }
 
+local powerups = {
+	"cooldown",
+	"damage",
+	"defense",
+	"heal",
+	"speed",
+}
+
 local LIGHT_MIN_TIME = 4
 local LIGHT_MAX_TIME = 8
 
@@ -71,6 +79,10 @@ local function StartCallForLightflierTask(inst)
 end
 
 local function onregenfn(inst)
+	inst.powerup = GetRandomItem(powerups)
+	
+	inst.AnimState:OverrideSymbol("bulb", "powerflier_bulbs", inst.powerup.."bulb")
+	
     inst.AnimState:PlayAnimation("grow")
     inst.AnimState:PushAnimation("idle", true)
 end
@@ -120,14 +132,6 @@ local function OnLoadPostPass(inst, ents, data)
     end
 end
 
-local powerups = {
-	"cooldown",
-	"damage",
-	"defense",
-	"heal",
-	"speed",
-}
-
 local function commonfn(bank, build)
     local inst = CreateEntity()
 
@@ -154,7 +158,7 @@ local function commonfn(bank, build)
 
     inst.MiniMapEntity:SetIcon("bulb_plant.png")
 
-    inst:SetPrefabNameOverride("flower_cave")
+    --inst:SetPrefabNameOverride("flower_cave")
 
     inst.entity:SetPristine()
 
@@ -222,7 +226,7 @@ local function single()
     inst.AnimState:SetBank("bulb_plant"..inst.plantname)
     inst.AnimState:SetBuild("bulb_plant"..inst.plantname)
     
-    inst.components.pickable:SetUp(nil, TUNING.LIGHTFLIER_FLOWER.REGROW_TIME)
+    inst.components.pickable:SetUp(nil, 15)
 
     return inst
 end
