@@ -190,20 +190,51 @@ function Deathmatch_Playerlist:BuildPlayerList(players)
 	end
 end
 
+local function priorityfn(data)
+	local p = data.entity
+	if p == nil then
+		return -10 --always at the bottom
+	end
+	if p == ThePlayer then
+		return 10 --always at the top
+	end
+	if p:HasTag("spectator") then
+		return -9
+	end
+	if p.components.teamer:IsTeamedWith(ThePlayer) then
+		return 9
+	end
+	local priority = 8
+	local team = p.components.teamer:GetTeam()
+	if team ~= 0 then
+		priority = priority - team--8*team*(1/#DEATHMATCH_TEAMS)
+	end
+	local healthpct = p.components.healthsyncer:GetPercent()
+	priority = priority + 0.1*healthpct
+	
+	return priority
+end
+local function sortfn(a, b)
+	return (a.list_priority or 0) > (b.list_priority or 0)
+end
 function Deathmatch_Playerlist:GetPlayerTable()
 	local clienttbl = TheNet:GetClientTable()
 	if clienttbl == nil then
 		return {}
-	elseif TheNet:GetServerIsClientHosted() then
-		return clienttbl
 	end
-	
+	if not TheNet:GetServerIsClientHosted() then
+		for i, v in ipairs(clienttbl) do
+			if v.performance ~= nil then
+				table.remove(clienttbl, i)
+				break
+			end
+		end
+	end
     for i, v in ipairs(clienttbl) do
-        if v.performance ~= nil then
-            table.remove(clienttbl, i)
-            break
-        end
+		v.entity = UserToPlayer(v.userid)
+		v.list_priority = priorityfn(v)
     end
+	table.sort(clienttbl, sortfn)
     return clienttbl
 end
 
