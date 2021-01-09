@@ -370,7 +370,7 @@ AddComponentAction("USEITEM", "complexprojectile", function(inst, doer, target, 
 		table.insert(actions, G.ACTIONS.TOSS)
 	end 
 end)
-
+G.ACTIONS.TOSS.priority = 5
 local PairAction = AddAction("DEATHMATCH_PAIRWITH", "Team up with", function(act)
 	if act.doer and act.target then
 		if act.doer:HasTag("spectator") or act.target:HasTag("spectator") then return false end

@@ -126,6 +126,9 @@ local function onlanded(inst, thrower)
 	else
 		inst:RemoveTag("NOCLICK")
 		PlayBeatAnimation(inst)
+		local pos = inst:GetPosition()
+		MakeInventoryPhysics(inst)
+		inst.Transform:SetPosition(pos:Get())
 	end
 end
 

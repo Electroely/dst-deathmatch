@@ -82,8 +82,11 @@ v19.9
 - Fixed crash when despawning as a spectator
 
 - Abilities can now be used closer to the edge of the world
+- Adjusted priority of action-button actions to prioritize nearby healing pickups and not over-prioritize revival
 - The top-left player list will now sort itself based on leading player or teams (not both)
 - The telltale heart now has an equipped sprite
 - The telltale heart can now be thrown at teammates to revive them
+- Trying to give a telltale heart to a dead player will instead throw it at them
 - The telltale heart will spawn less often as more people are revived in a match
+- Temporarily disabled "custom" teammode
 - Updated edge of world textures to look more like what they did before Turn of Tides
