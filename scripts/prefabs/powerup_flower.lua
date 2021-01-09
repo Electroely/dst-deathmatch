@@ -121,7 +121,6 @@ local function OnGoHome(inst, child)
     if not inst.components.pickable:CanBePicked() then
         inst.components.pickable:Regen()
     end
-    ForceOn(inst)
 end
 
 local function OnLoadPostPass(inst, ents, data)
