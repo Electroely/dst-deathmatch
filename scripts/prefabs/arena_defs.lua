@@ -184,6 +184,8 @@ local ARENA_DEFS = {
 		name = "Lunar Grotto",
 		--
 		spawnradius = 20,
+		min_pickup_dist = 5,
+		max_pickup_dist = 10,
 		overridepickups = {
 			"deathmatch_bugnet",
 		},

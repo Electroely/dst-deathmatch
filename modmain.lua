@@ -271,10 +271,6 @@ AddClassPostConstruct("widgets/controls", function(self, owner)
 		
 		self.clock:Hide()
 		
-		if self.seasonclock ~= nil then --Todo, Hornet: this isnt working
-			self.seasonclock:Hide()
-		end
-		
 		self.status.stomach:Hide()
 		self.status.stomach.Show = function() end
 		self.status.brain:Hide()
@@ -283,6 +279,20 @@ AddClassPostConstruct("widgets/controls", function(self, owner)
 		if self.status.inspirationbadge ~= nil then
 			self.status.inspirationbadge:Hide()
 		end
+		
+		self.inst:DoTaskInTime(0, function() --Hide Combined Status elements
+			if self.seasonclock ~= nil then
+				self.seasonclock:Hide()
+			end
+			
+			if self.status.temperature ~= nil then
+				self.status.temperature:Hide()
+			end
+			
+			if self.status.tempbadge ~= nil then
+				self.status.tempbadge:Hide()
+			end
+		end)
 	end
 end)
 
@@ -316,7 +326,7 @@ _name.PICKUP_LIGHTSPEED = "Speed Boost\n+50% Movement Speed\nLasts 10 Seconds"
 _name.PICKUP_LIGHTHEALING = "Health Restoration\nRestore 10-20 Health"
 _name.PICKUP_COOLDOWN = "Instant Refresh\nResets cooldown of all weapons in inventory"
 
-_name.POWERFLIER = "Powerflier"
+_name.POWERFLIER = "Powerbug"
 _name.POWERUP_FLOWER = "Power Flower"
 
 _name.DEATHMATCH_INFOSIGN = "Info Sign"
