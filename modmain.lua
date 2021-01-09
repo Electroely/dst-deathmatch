@@ -365,8 +365,8 @@ AddComponentAction("POINT", "aoespell", function(inst, doer, pos, actions, right
 end)
 
 AddComponentAction("USEITEM", "complexprojectile", function(inst, doer, target, actions, right)
-	if target and target.components.revivablecorpse and target.components.health and target.components.health:IsDead() then
-		table.insert(actions, ACTIONS.TOSS)
+	if target and target:HasTag("player") and target:HasTag("corpse") then
+		table.insert(actions, G.ACTIONS.TOSS)
 	end 
 end)
 
