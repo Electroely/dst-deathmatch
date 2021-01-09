@@ -133,7 +133,28 @@ AddComponentPostInit("playeractionpicker", function(self)
 	end
 end)
 
+local priority_prefabs = {
+	pickup_lighthealing = true,
+}
 AddComponentPostInit("playercontroller", function(self) 
+	--adjusted spacebar priority for deathlatch
+	local GetActionButtonAction_old = self.GetActionButtonAction
+	function self:GetActionButtonAction(force_target, ...)
+		if force_target == nil then
+			local x,y,z = self.inst.Transform:GetWorldPosition()
+			local ents = G.TheSim:FindEntities(x,y,z,8, nil, {"INLIMBO","NOCLICK"}, {"_inventoryitem","corpse"})
+			for k, v in pairs(ents) do
+				if priority_prefabs[v.prefab] and self.inst:IsNear(v, 1) then
+					force_target = v
+				end
+			end
+			if force_target == nil then
+				force_target = ents[1]
+			end
+		end
+		return GetActionButtonAction_old(self, force_target, ...)
+	end
+	
 	--no need to hold force attack for players
 	local ValidateAttackTarget_old = GetUpValue(self.GetAttackTarget, "ValidateAttackTarget")
 	ReplaceUpValue(self.GetAttackTarget, "ValidateAttackTarget", function(combat, target, force_attack, x, z, has_weapon, reach, ...)

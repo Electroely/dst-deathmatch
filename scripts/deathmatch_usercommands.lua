@@ -191,7 +191,7 @@ AddUserCommand("setteammode", {
     voteminpasscount = 1,
     votecountvisible = true,
     voteallownotvoted = true,
-    voteoptions = {"Free For All", "Red vs. Blue", "2-Player Teams", "Custom"}, 
+    voteoptions = {"Free For All", "Red vs. Blue", "2-Player Teams", --[["Custom"]]}, 
     votetitlefmt = DEATHMATCH_STRINGS.USERCOMMANDS.SETTEAMMODE.VOTETITLE, 
     votenamefmt = DEATHMATCH_STRINGS.USERCOMMANDS.SETTEAMMODE.VOTENAME, 
     votepassedfmt = "Vote complete!", 

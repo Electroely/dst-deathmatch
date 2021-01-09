@@ -643,7 +643,8 @@ function Deathmatch_Manager:GetPickUpItemList(custompos)
 				heartcount = heartcount + 1
 			end
 		end
-		if heartcount < 3 and math.random()>0.5 then
+		local heartchance = 1 / (self.revivals+2)
+		if heartcount < 3 and math.random()<heartchance then
 			table.insert(result, "deathmatch_reviverheart")
 		end
 	end

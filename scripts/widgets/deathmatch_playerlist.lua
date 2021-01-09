@@ -195,15 +195,15 @@ local function priorityfn(data)
 	if p == nil then
 		return -10 --always at the bottom
 	end
-	if p == ThePlayer then
-		return 10 --always at the top
-	end
+	-- if p == ThePlayer then --ThePlayer stuff doesn't make a lot of sense if the list's supposed to be used to find the leader
+		-- return 10 --always at the top
+	-- end
 	if p:HasTag("spectator") then
 		return -9
 	end
-	if p.components.teamer:IsTeamedWith(ThePlayer) then
-		return 9
-	end
+	-- if p.components.teamer:IsTeamedWith(ThePlayer) then
+		-- return 9
+	-- end
 	local priority = 8
 	local team = p.components.teamer:GetTeam()
 	if team ~= 0 then

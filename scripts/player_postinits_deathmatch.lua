@@ -104,7 +104,7 @@ local exts = require("prefabs/player_common_extensions")
 local OnRespawnFromPlayerCorpse_old = exts.OnRespawnFromPlayerCorpse
 exts.OnRespawnFromPlayerCorpse = function(inst, data)
 	if inst:HasTag("corpse") then
-		inst.rezhealth = data.health
+		inst.rezhealth = data and data.health
 	end
 	if data and data.instant and inst.components.health and inst.components.health:IsDead() then
 		doRez(inst, data)
