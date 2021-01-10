@@ -90,3 +90,12 @@ v19.9
 - The telltale heart will spawn less often as more people are revived in a match
 - Temporarily disabled "custom" teammode
 - Updated edge of world textures to look more like what they did before Turn of Tides
+
+v20.0
+- Fixed players colliding with world border when using the Anvil Strike
+- Fixed exploit allowing players to go invisible via the Wardrobe
+
+- Players can now only hold one telltale heart at a time
+- Players will now emit a visual effect when holding a heart in their inventory
+- Players will now drop pickups upon death
+- Players now start with reskintool (for beards)
