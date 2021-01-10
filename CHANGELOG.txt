@@ -99,3 +99,8 @@ v20.0
 - Players will now emit a visual effect when holding a heart in their inventory
 - Players will now drop pickups upon death
 - Players now start with reskintool (for beards)
+
+v20.01 (hotfix)
+- Fixed crash
+
+- Wardrobe can now be used by multiple people at once
