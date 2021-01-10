@@ -197,6 +197,31 @@ local ARENA_DEFS = {
 			waves = false,
 			music = "dontstarve/music/music_danger_cave",
 		}
+	},
+
+	stalker = {
+		name = "Forest Stalker",
+		--
+		spawnradius = 16,
+		nopickups = true,
+		matchstartfn = function()
+			TheWorld.state.isnight = true
+			SpawnPrefab("stalker_forest").Transform:SetPosition(TheWorld.centerpoint.Transform:GetWorldPosition())
+		end,
+		matchendfn = function()
+			TheWorld.state.isnight = false
+			for k, v in pairs(Ents) do
+				if v.prefab == "stalker_forest" then
+					v:Remove()
+				end
+			end
+		end,
+		--
+		CONFIGS = {
+			lighting = {0, 0, 0},
+			colourcube = "night03_cc", --lunacy_regular_cc
+			music = "dontstarve/music/music_epicfight",
+		}
 	}
 }
 

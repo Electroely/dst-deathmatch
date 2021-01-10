@@ -8,6 +8,7 @@ local arena_idx = {
 	["spring"] = 4,
 	["malbatross"] = 5,
 	["grotto"] = 6,
+	["stalker"] = 7
 }
 
 

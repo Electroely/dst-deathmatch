@@ -1,6 +1,58 @@
 local G = GLOBAL
 local tonumber = G.tonumber
 
+local UpValues = require("deathmatch_upvaluehacker")
+local GetUpValue = UpValues.Get
+local ReplaceUpValue = UpValues.Replace
+
+for k, v in pairs({"stalker_fern", "stalker_berry"}) do --crashes if we remove pickable so.
+	AddPrefabPostInit(v, function(inst)
+		if G.TheNet:GetServerGameMode() == "deathmatch" then
+			inst:ListenForEvent("animover", function()
+				inst.components.pickable.caninteractwith = false
+			end)
+		end
+	end)
+end
+
+local powerups = {
+	"cooldown",
+	"damage",
+	"defense",
+	"heal",
+	"speed",
+}
+	
+local buffs = {
+	["damage"] = "pickup_lightdamaging",
+	["defense"] = "pickup_lightdefense",
+	["speed"] = "pickup_lightspeed",
+	["heal"] = "pickup_lighthealing",
+	["cooldown"] = "pickup_cooldown",
+}
+
+for k, v in pairs({"stalker_bulb", "stalker_bulb_double"}) do
+	AddPrefabPostInit(v, function(inst)
+		if G.TheWorld.ismastersim and G.TheNet:GetServerGameMode() == "deathmatch" then
+			inst.powerup = G.GetRandomItem(powerups)
+			inst.AnimState:OverrideSymbol("bulb", "powerflier_bulbs", inst.powerup.."bulb")
+
+			local _OnPicked = inst.components.pickable.onpickedfn
+			inst.components.pickable.onpickedfn = function(inst, picker, ...)
+				if _OnPicked ~= nil then
+					_OnPicked(inst, picker, ...)
+					
+					local powerup = G.SpawnPrefab(buffs[inst.powerup])
+					powerup.components.inventoryitem.onpickupfn(powerup, picker)
+				end
+			end
+			
+			inst.components.pickable.quickpick = true
+			inst.components.pickable:SetUp(nil, 1000000)
+		end
+	end)
+end
+
 AddPrefabPostInit("beehive", function(inst)
 	if G.TheWorld.ismastersim and G.TheNet:GetServerGameMode() == "deathmatch" then
 		inst:DoTaskInTime(0, function(inst)
@@ -110,7 +162,7 @@ for k, v in pairs({ "abigail", "balloon", "boaron" }) do
 	end)
 end
 -- non pickable entities
-for k, v in pairs({"berrybush", "flower", "cactus", "marsh_bush" }) do
+for k, v in pairs({"berrybush", "flower", "cactus", "marsh_bush"}) do
 	AddPrefabPostInit(v, function(inst)
 		if G.TheNet:GetServerGameMode() == "deathmatch" then
 			inst:RemoveComponent("pickable")
@@ -121,7 +173,7 @@ for k, v in pairs({"berrybush", "flower", "cactus", "marsh_bush" }) do
 	end)
 end
 -- indestructable entities
-for k, v in pairs({"beehive", "evergreen"}) do
+for k, v in pairs({"beehive", "evergreen", "deciduoustree"}) do
 	AddPrefabPostInit(v, function(inst)
 		if G.TheNet:GetServerGameMode() == "deathmatch" then
 			if inst.components.workable then 
@@ -134,7 +186,7 @@ for k, v in pairs({"beehive", "evergreen"}) do
 	end)
 end
 -- invincible entities
-for k, v in pairs({"tentacle", "pigman"}) do
+for k, v in pairs({"tentacle", "pigman", "stalker_forest"}) do
 	AddPrefabPostInit(v, function(inst)
 		if G.TheNet:GetServerGameMode() == "deathmatch" then
 			if inst.components.health then
