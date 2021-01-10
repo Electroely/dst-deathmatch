@@ -193,9 +193,13 @@ local function fn(inst, prefab)
 				inst:AddTag("playershadow")
 			end) 
 		end
+		inst.components.inventory:DropEverythingWithTag("deathmatch_pickup")
 	end)
 	
 	inst:AddTag("stronggrip")
+	if inst.components.drownable == nil then
+		inst:AddComponent("drownable")
+	end
 	if inst.components.drownable ~= nil then
 		inst.components.drownable:SetCustomTuningsFn(function(inst)
 			return {

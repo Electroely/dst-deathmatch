@@ -477,7 +477,7 @@ end
 
 -----------------------------------------------------------------------------
 local function checknumber(v)
-	return type(v) == "number"
+	return type(v) == "number" and v < 60 and v > -60
 end
 AddModRPCHandler(modname, "deathmatch_currentreticule_change", function(inst, slot)
 	if inst == nil or slot == nil then return end

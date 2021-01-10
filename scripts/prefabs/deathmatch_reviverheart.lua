@@ -132,6 +132,21 @@ local function onlanded(inst, thrower)
 	end
 end
 
+local HELDFX_MINTIME = 5
+local HELDFX_VAR = 2
+local function doheldfx(inst)
+	local owner = inst.components.inventoryitem.owner
+	if owner ~= nil then
+		local fx = SpawnPrefab("battlesong_healthgain_fx")
+		fx.Transform:SetNoFaced()
+		fx.Transform:SetScale(0.4,0.4,0.4)
+		--local x, y, z = owner.Transform:GetWorldPosition()
+		owner:AddChild(fx)
+		fx.Transform:SetPosition(math.random(-1, 1)*(math.random()/3), 1.6+math.random()/5, math.random(-1, 1)*(math.random()/3))
+	end
+	inst.heldfxtask = inst:DoTaskInTime(HELDFX_MINTIME+math.random()*HELDFX_VAR, doheldfx)
+end
+
 local function onequip(inst, owner)
     owner.AnimState:OverrideSymbol("swap_object", "swap_reviverheart", "swap_reviverheart")
     owner.AnimState:Show("ARM_carry")
@@ -151,7 +166,7 @@ local function fn()
     inst.entity:AddSoundEmitter()
     inst.entity:AddNetwork()
 	
-	inst:AddTag("irreplaceable")
+	inst:AddTag("deathmatch_pickup")
 	
     MakeInventoryPhysics(inst)
 
@@ -159,6 +174,8 @@ local function fn()
     inst.AnimState:SetBuild("bloodpump")
     inst.AnimState:PlayAnimation("idle")
 
+	inst.itemcountlimit = 1 --yes, i know this also applies clientside. needed for spacebar priority fn
+	
     inst.entity:SetPristine()
 
     if not TheWorld.ismastersim then
@@ -170,7 +187,7 @@ local function fn()
     inst.components.inventoryitem:SetOnPutInInventoryFn(onpickup)
     inst.components.inventoryitem:SetSinks(true)
     inst.components.inventoryitem.imagename = "reviver"
-    
+	
     inst:AddComponent("equippable")
     inst.components.equippable:SetOnEquip(onequip)
     inst.components.equippable:SetOnUnequip(onunequip)
@@ -194,6 +211,7 @@ local function fn()
     MakeHauntableLaunch(inst)
 
     inst.beattask = nil
+	inst.heldfxtask = inst:DoTaskInTime(HELDFX_MINTIME+math.random()*HELDFX_VAR, doheldfx)
     ondropped(inst)
 
     inst.PlayBeatAnimation = PlayBeatAnimation

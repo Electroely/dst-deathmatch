@@ -22,6 +22,7 @@ local fn = function()
 	
 	inst:SetPrefabNameOverride("laavarena_firebomb")
 	
+	inst:AddTag("deathmatch_pickup")
 	if not TheWorld.ismastersim then
 		return inst
 	end

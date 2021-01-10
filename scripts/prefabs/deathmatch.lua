@@ -245,10 +245,10 @@ local function common_postinit(inst)
 	local _Finalize = getmetatable(inst.Map).__index["Finalize"]
 	getmetatable(inst.Map).__index["Finalize"] = function(self, number)
 		if self == inst.Map then
-			inst.has_ocean = true
+			--inst.has_ocean = true
 			
 			local tuning = TUNING.OCEAN_SHADER
-            self:SetOceanEnabled(true)
+            self:SetOceanEnabled(inst.has_ocean or false)
 			self:SetOceanTextureBlurParameters(tuning.TEXTURE_BLUR_PASS_SIZE, tuning.TEXTURE_BLUR_PASS_COUNT)
             self:SetOceanNoiseParameters0(tuning.NOISE[1].ANGLE, tuning.NOISE[1].SPEED, tuning.NOISE[1].SCALE, tuning.NOISE[1].FREQUENCY)
             self:SetOceanNoiseParameters1(tuning.NOISE[2].ANGLE, tuning.NOISE[2].SPEED, tuning.NOISE[2].SCALE, tuning.NOISE[2].FREQUENCY)

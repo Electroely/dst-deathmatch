@@ -10,6 +10,13 @@ AddComponentPostInit("inventory", function(self)
 	if self.inst:HasTag("player") then
 		local GiveItem_old = self.GiveItem
 		function self:GiveItem(inst, slot, src_pos, ...)
+			if inst.itemcountlimit then
+				local count = self:GetTotalItemCount(inst.prefab) - (self:IsHolding(inst) and 1 or 0)
+				if count >= inst.itemcountlimit then
+					self:DropItem(inst, true, true)
+					return
+				end
+			end
 			local dm = G.TheWorld.components.deathmatch_manager
 			if slot == nil and 
 				(inst.prevslot == nil or self.itemslots[inst.prevslot] ~= nil) and
@@ -23,6 +30,56 @@ AddComponentPostInit("inventory", function(self)
 			end
 			return GiveItem_old(self, inst, slot, src_pos, ...)
 		end
+		local Equip_old = self.Equip
+		function self:Equip(inst, ...)
+			if inst.itemcountlimit then
+				local count = self:GetTotalItemCount(inst.prefab) - (self:IsHolding(inst) and 1 or 0)
+				if count >= inst.itemcountlimit then
+					self:DropItem(inst, true, true)
+					return
+				end
+			end
+			return Equip_old(self, inst, ...)
+		end
+	end
+	
+	function self:GetTotalItemCount(prefab)
+		local count = 0
+		local containers = {}
+		for slot, item in pairs(self.itemslots) do
+			if item.prefab == prefab then
+				count = count + (item.components.stackable and item.components.stackable:StackSize() or 1)
+			end
+			if item.components.container then
+				table.insert(containers, item)
+			end
+		end
+		for k, v in pairs(G.EQUIPSLOTS) do
+			local item = self:GetEquippedItem(v)
+			if item ~= nil and item.prefab == prefab then
+				count = count + (item.components.stackable and item.components.stackable:StackSize() or 1)
+			end
+			if item ~= nil and item.components.container then
+				table.insert(containers, item)
+			end
+		end
+		local activeitem = self:GetActiveItem()
+		if activeitem ~= nil then
+			if activeitem.prefab == prefab then
+				count = count + (activeitem.components.stackable and activeitem.components.stackable:StackSize() or 1)
+			end
+			if activeitem.components.container then
+				table.insert(containers, activeitem)
+			end
+		end
+		for k, v in pairs(containers) do
+			for slot, item in pairs(v.components.container:GetItems()) do
+				if item.prefab == prefab then
+					count = count + (item.components.stackable and item.components.stackable:StackSize() or 1)
+				end
+			end
+		end
+		return count
 	end
 end)
 
@@ -148,7 +205,8 @@ AddComponentPostInit("playercontroller", function(self)
 				if priority_prefabs[v.prefab] and self.inst:IsNear(v, 1) then
 					force_target = v
 				end
-				if backup_target == nil and (not v:HasTag("corpse") or self.inst.components.teamer:IsTeamedWith(v)) then
+				if backup_target == nil and ((v:HasTag("_inventoryitem") and v.replica.inventoryitem:CanBePickedUp() and not v:HasTag("catchable"))
+					or (v:HasTag("corpse") and self.inst.components.teamer:IsTeamedWith(v))) then
 					backup_target = v
 				end
 			end
@@ -156,6 +214,7 @@ AddComponentPostInit("playercontroller", function(self)
 				force_target = backup_target
 			end
 		end
+		print("doing spacebar with ",force_target)
 		return GetActionButtonAction_old(self, force_target, ...)
 	end
 	

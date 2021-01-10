@@ -50,16 +50,16 @@ local function CosmeticSaveData(inst)
 	end
 end
 
+local function IsValidSkin(inst)
+	if inst.components.skinner == nil then
+		return false
+	end
+	local base_skin = inst.components.skinner:GetClothing().base
+	return base_skin ~= nil and G.Prefabs[base_skin] ~= nil and
+		G.Prefabs[base_skin].base_prefab == inst.prefab then
+end
 
 -- wormwood
---[[local PollenTick = nil --forward declare
-local NewPollenTick = function(inst)
-	if not inst:HasTag("spectator") and PollenTick ~= nil then PollenTick(inst) end
-end
-local PlantTick = nil
-local NewPlantTick = function(inst)
-	if not inst:HasTag("spectator") and PlantTick ~= nil then PlantTick(inst) end
-end]]
 AddPrefabPostInit("wormwood", function(inst)
 	if not G.TheWorld.ismastersim then return end
 	inst.OnLoad = nil
@@ -77,6 +77,7 @@ AddPrefabPostInit("wormwood", function(inst)
 	--new function for /setstate
 	inst.cosmeticstate = inst.cosmeticstate or 1
 	function inst:ChangeCosmeticState(num) --input: number 1-4
+		if not IsValidSkin(self) then return end
 		if num >= 1 and num <= 4 and self.components.bloomness then
 			--self:SetBloomStage(num-1)
 			self.components.bloomness:SetLevel(num-1)
@@ -84,18 +85,6 @@ AddPrefabPostInit("wormwood", function(inst)
 		end
 	end
 	CosmeticSaveData(inst)
-	
-	--[[local EnableFullBloom = GetUpValue(inst.SetBloomStage, "EnableFullBloom")
-	local PollenTick = GetUpValue(EnableFullBloom, "PollenTick")
-	local PlantTick = GetUpValue(EnableFullBloom, "PlantTick")
-	
-	ReplaceUpValue(EnableFullBloom, "PollenTick", function(inst)
-		if not inst:HasTag("spectator") and PollenTick ~= nil then PollenTick(inst) end
-	end)
-	
-	ReplaceUpValue(EnableFullBloom, "PlantTick", function(inst)
-		if not inst:HasTag("spectator") and PlantTick ~= nil then PlantTick(inst) end
-	end)]]
 end)
 
 --beard men
@@ -104,9 +93,10 @@ for k, v in pairs({"wilson", "webber"}) do
 		inst.beardfns = beardfns[v]
 		inst.cosmeticstate = inst.cosmeticstate or 1
 		function inst:ChangeCosmeticState(num)
-			if num >= 1 and num <= 4 and inst.beardfns ~= nil then
-				inst.cosmeticstate = num
-				inst.beardfns[num](inst, inst.components.beard and inst.components.beard.skinname or nil)
+			if not IsValidSkin(self) then return end
+			if num >= 1 and num <= 4 and self.beardfns ~= nil then
+				self.cosmeticstate = num
+				self.beardfns[num](self, self.components.beard and self.components.beard.skinname or nil)
 			end
 		end
 		CosmeticSaveData(inst)
@@ -134,6 +124,7 @@ AddPrefabPostInit("wolfgang", function(inst)
 	
 	inst.cosmeticstate = inst.cosmeticstate or 2
 	function inst:ChangeCosmeticState(num)--1-3: wimpy, normal, mighty
+		if not IsValidSkin(self) then return end
 		if num >= 1 and num <= 3 then
 			if num == 1 then
 				self.components.skinner:SetSkinMode("wimpy_skin", "wolfgang_skinny")
@@ -165,6 +156,7 @@ AddPrefabPostInit("wurt", function(inst)
 	
 	inst.cosmeticstate = inst.cosmeticstate or 1
 	function inst:ChangeCosmeticState(num)
+		if not IsValidSkin(self) then return end
 		if num >= 1 and num <= 2 then
 			if num ~= self.cosmeticstate then
 				local fx = G.SpawnPrefab("small_puff") --fx because it looks awkward

@@ -77,6 +77,7 @@ local lobbyitems = {
 	"lavaarena_rechargerhat",
 	"lavaarena_lightdamagerhat",
 	"teleporterhat_instant",
+	"reskin_tool",
 }
 local function GiveLobbyInventory(player)
 	local inv = player.components.inventory

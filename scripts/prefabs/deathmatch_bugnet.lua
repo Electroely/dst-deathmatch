@@ -41,6 +41,7 @@ local function fn()
 
     inst:AddTag("tool")
     inst:AddTag("weapon")
+	inst:AddTag("deathmatch_pickup")
 
     local swap_data = {sym_build = "swap_bugnet"}
     MakeInventoryFloatable(inst, "med", 0.09, {0.9, 0.4, 0.9}, true, -14.5, swap_data)
