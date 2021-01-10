@@ -200,7 +200,7 @@ local ARENA_DEFS = {
 	},
 
 	stalker = {
-		name = "Forest Stalker",
+		name = "Forest",
 		--
 		spawnradius = 16,
 		nopickups = true,
@@ -229,6 +229,13 @@ local ARENA_DEFS = {
 					v.components.health:Kill()
 				end
 			end
+			TheWorld:DoTaskInTime(5, function()
+				for k, v in pairs(Ents) do
+					if v.prefab == "fossil_piece" or v.prefab == "shadowheart" then
+						v:Remove()
+					end
+				end
+			end)
 		end,
 		--
 		CONFIGS = {
