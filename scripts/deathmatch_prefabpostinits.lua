@@ -31,6 +31,14 @@ local buffs = {
 	["cooldown"] = "pickup_cooldown",
 }
 
+AddPrefabPostInit("stalker_forest", function(inst)
+	if G.TheWorld.ismastersim then
+		return
+	end
+	inst:RemoveComponent("lootdropper")
+	inst:AddComponent("lootdropper")
+end)
+
 for k, v in pairs({"stalker_bulb", "stalker_bulb_double"}) do
 	AddPrefabPostInit(v, function(inst)
 		if G.TheWorld.ismastersim and G.TheNet:GetServerGameMode() == "deathmatch" then
@@ -106,6 +114,9 @@ end)
 G.STRINGS.NAME_DETAIL_EXTENTION.LAVAARENA_ARMORMEDIUMRECHARGER = "80% Protection\n+25% Faster Cooldown"
  
 AddPrefabPostInit("glommer", function(inst)
+	if not G.TheWorld.ismastersim then
+		return
+	end
 	inst:RemoveComponent("lootdropper")
 	inst:AddComponent("lootdropper")
 end)

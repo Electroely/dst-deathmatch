@@ -75,6 +75,9 @@ PrefabFiles = {
 	"powerflier",
 	"powerup_flower",
 	"shadowweapons",
+	
+	"maxwelllight",
+	"maxwelllight_flame",
 }
 Assets = {
 	Asset("ANIM", "anim/hat_snortoise.zip"),

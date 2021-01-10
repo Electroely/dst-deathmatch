@@ -206,13 +206,27 @@ local ARENA_DEFS = {
 		nopickups = true,
 		matchstartfn = function()
 			TheWorld.state.isnight = true
-			SpawnPrefab("stalker_forest").Transform:SetPosition(TheWorld.centerpoint.Transform:GetWorldPosition())
+			
+			local function SpawnStalker(inst)
+				local stalker = SpawnPrefab("stalker_forest")
+				local x, y, z = inst.Transform:GetWorldPosition()
+				local rot = inst.Transform:GetRotation()
+				inst:Remove()
+
+				stalker.Transform:SetPosition(x, y, z)
+				stalker.Transform:SetRotation(rot)
+				stalker.sg:GoToState("resurrect")
+			end
+			local fossil = SpawnPrefab("fossil_stalker")
+			fossil.Transform:SetPosition(TheWorld.centerpoint.Transform:GetWorldPosition())
+			fossil.AnimState:PlayAnimation("1_8")
+			fossil:DoTaskInTime(10 + math.random() * 0.75, SpawnStalker)
 		end,
 		matchendfn = function()
 			TheWorld.state.isnight = false
 			for k, v in pairs(Ents) do
 				if v.prefab == "stalker_forest" then
-					v:Remove()
+					v.components.health:Kill()
 				end
 			end
 		end,
