@@ -80,30 +80,30 @@ local function LeaderOnUpdate(inst)
 			end
 		end
 		
-		local buffs = {}
+		leader.buffs = {}
 		
 		for k, v in pairs(powerups) do
-			buffs[v] = (buffs[v] or 0) + 1
+			leader.buffs[v] = (leader.buffs[v] or 0) + 1
 		end
 		
-		if buffs["damage"] ~= nil then
-			leader.target.components.combat.externaldamagemultipliers:SetModifier("powerflier", 1 + (buffs["damage"] * 0.1), "damage")
+		if leader.buffs["damage"] ~= nil then
+			leader.target.components.combat.externaldamagemultipliers:SetModifier("powerflier", 1 + (leader.buffs["damage"] * 0.1), "damage")
 		end
 		
-		if buffs["defense"] ~= nil then
-			leader.target.components.combat.externaldamagetakenmultipliers:SetModifier("powerflier", buffs["defense"] * 0.1, "defense")
+		if leader.buffs["defense"] ~= nil then
+			leader.target.components.combat.externaldamagetakenmultipliers:SetModifier("powerflier", leader.buffs["defense"] * 0.1, "defense")
 		end
 		
-		if buffs["speed"] ~= nil then
-			leader.target.components.locomotor:SetExternalSpeedMultiplier(leader.target, "speed", 1 + (buffs["speed"] * 0.1))
+		if leader.buffs["speed"] ~= nil then
+			leader.target.components.locomotor:SetExternalSpeedMultiplier(leader.target, "speed", 1 + (leader.buffs["speed"] * 0.1))
 		end
 		
-		if buffs["cooldown"] ~= nil then
+		if leader.buffs["cooldown"] ~= nil then
 			--TODO
 		end
 		
-		if buffs["heal"] ~= nil then
-			--TODO
+		if leader.buffs["heal"] ~= nil then
+			--Health steal calculated in scripts/player_postinits_deathmatch.lua
 		end
     end
 end

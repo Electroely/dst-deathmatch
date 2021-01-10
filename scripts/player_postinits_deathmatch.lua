@@ -174,6 +174,12 @@ local function fn(inst, prefab)
 		end
 	end)
 	
+	inst:ListenForEvent("onattackother", function(inst, data)
+		if inst._lightflier_formation ~= nil and inst._lightflier_formation.components.formationleader.buffs and inst._lightflier_formation.components.formationleader.buffs["heal"] then
+			inst.components.health:DoDelta(inst._lightflier_formation.components.formationleader.buffs["heal"])
+		end
+	end)
+	
 	inst:ListenForEvent("death", function(inst) 
 		if inst.enable_shadow  and SHADOW_ENABLED then
 			inst:DoTaskInTime(2.5, function() 
