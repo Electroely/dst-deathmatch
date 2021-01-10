@@ -657,6 +657,7 @@ function Deathmatch_Manager:DoPickUpSpawn()
 	if not self.enablepickups then return end
 	local items_to_spawn = self:GetPickUpItemList()
 	for i, v in ipairs(items_to_spawn) do
+		--local pos = (arena_configs[self.arena].custom_spawnpoint ~= nil and arena_configs[self.arena.custom_spawnpoint()) or self.inst.centerpoint:GetPosition()
 		local pos = self.inst.centerpoint:GetPosition()
 		local offset = nil
 		while (offset == nil) do

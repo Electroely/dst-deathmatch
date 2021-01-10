@@ -202,7 +202,7 @@ local ARENA_DEFS = {
 	stalker = {
 		name = "Forest",
 		--
-		spawnradius = 16,
+		spawnradius = 14,
 		nopickups = true,
 		matchstartfn = function()
 			TheWorld.state.isnight = true

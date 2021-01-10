@@ -65,7 +65,7 @@ local function arealight()
     inst.lightorder = {5,6,7,8,7}
 	
     inst:AddComponent("playerprox")
-    inst.components.playerprox:SetDist(12, 15)
+    inst.components.playerprox:SetDist(14, 16)
     inst.components.playerprox:SetOnPlayerNear(function() if not inst.components.burnable:IsBurning() then inst.components.burnable:Ignite() end end)
     inst.components.playerprox:SetOnPlayerFar(extinguish)
 
