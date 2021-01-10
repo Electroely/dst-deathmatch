@@ -56,7 +56,7 @@ local function IsValidSkin(inst)
 	end
 	local base_skin = inst.components.skinner:GetClothing().base
 	return base_skin ~= nil and G.Prefabs[base_skin] ~= nil and
-		G.Prefabs[base_skin].base_prefab == inst.prefab then
+		G.Prefabs[base_skin].base_prefab == inst.prefab
 end
 
 -- wormwood

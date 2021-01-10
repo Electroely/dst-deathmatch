@@ -197,6 +197,11 @@ AddPrefabPostInit("atrium_key", function(inst)
 	end
 end)
 
+AddPrefabPostInit("wardrobe", function(inst)
+	if G.TheWorld.ismastersim then
+		inst.components.wardrobe.canbeshared = true
+	end
+end)
 -- register centerpoint client-side as well as server (server-side is already handled by the prefab)
 -- why is it being registered client-side is the real question here
 AddPrefabPostInit("lavaarena_center", function(inst)
