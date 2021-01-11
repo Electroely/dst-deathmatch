@@ -113,7 +113,7 @@ end
 --wigfrid
 AddPrefabPostInit("wathgrithr", function(inst)
 	if not G.TheWorld.ismastersim then return end
-	inst.event_listeners.onattackother[inst][2] = nil
+	inst.event_listeners.onattackother[inst][3] = function() end
 end)
 
 --wolfgang
@@ -185,6 +185,16 @@ AddPrefabPostInit("wortox_soul_spawn", function(inst)
 	inst:DoTaskInTime(0, inst.Remove)
 end)
 
+--walter
+AddPrefabPostInit("wobysmall", function(inst)
+	if G.TheWorld.ismastersim and inst.components.container then
+		inst:DoTaskInTime(0, function(inst)
+			inst.components.container.canbeopened = false
+		end)
+	end
+end)
+
+--beardmen skins
 AddComponentPostInit("beard", function(self)
 	local OnRespawn = GetUpValue(self.OnRemoveFromEntity, "OnRespawn")
 	self.inst:RemoveEventCallback("ms_respawnedfromghost", OnRespawn)
