@@ -203,7 +203,11 @@ local ARENA_DEFS = {
 		name = "Forest",
 		--
 		spawnradius = 14,
-		nopickups = true,
+		nopowerpickups = true,
+		custom_spawnpoint = function()
+			local stalker = TheSim:FindFirstEntityWithTag("stalker")
+			return stalker and stalker:GetPosition()
+		end,
 		matchstartfn = function()
 			TheWorld.state.isnight = true
 			
@@ -220,7 +224,7 @@ local ARENA_DEFS = {
 			local fossil = SpawnPrefab("fossil_stalker")
 			fossil.Transform:SetPosition(TheWorld.centerpoint.Transform:GetWorldPosition())
 			fossil.AnimState:PlayAnimation("1_8")
-			fossil:DoTaskInTime(10 + math.random() * 0.75, SpawnStalker)
+			fossil:DoTaskInTime(15 + math.random() * 0.75, SpawnStalker)
 		end,
 		matchendfn = function()
 			TheWorld.state.isnight = false

@@ -21,7 +21,7 @@ local ARENAS = {
 	"Spring Island",
 	"The Shoal", --malbatross
 	"Lunar Grotto",
-	"Forest Stalker",
+	"Forest", --stalker
 }
 
 local Text = require("widgets/text")

@@ -635,8 +635,10 @@ function Deathmatch_Manager:GetPickUpItemList(custompos)
 	if self.enabledarts and (nearbyplayers > 0 and nearbyplayers <= count/2) then
 		table.insert(result, "deathmatch_oneusebomb")
 	end
-	for i = 1, math.floor(count/2) do
-		table.insert(result, GetRandomItem(arena_configs[self.arena].overridepickups or self.pickupprefabs))
+	if not arena_configs[self.arena].nopowerpickups then
+		for i = 1, math.floor(count/2) do
+			table.insert(result, GetRandomItem(arena_configs[self.arena].overridepickups or self.pickupprefabs))
+		end
 	end
 	if self.gamemode ~= 1 then
 		local heartcount = 0
@@ -657,8 +659,7 @@ function Deathmatch_Manager:DoPickUpSpawn()
 	if not self.enablepickups then return end
 	local items_to_spawn = self:GetPickUpItemList()
 	for i, v in ipairs(items_to_spawn) do
-		--local pos = (arena_configs[self.arena].custom_spawnpoint ~= nil and arena_configs[self.arena.custom_spawnpoint()) or self.inst.centerpoint:GetPosition()
-		local pos = self.inst.centerpoint:GetPosition()
+		local pos = (arena_configs[self.arena].custom_spawnpoint ~= nil and arena_configs[self.arena].custom_spawnpoint()) or self.inst.centerpoint:GetPosition()
 		local offset = nil
 		while (offset == nil) do
 			local min_dist = arena_configs[self.arena].min_pickup_dist or 1
