@@ -115,7 +115,7 @@ AddComponentPostInit("combat", function(self, inst)
 		
 		local validt_old = self.IsValidTarget
 		self.IsValidTarget = function(self, target)
-			if target and not inst:HasTag("player") and target:HasTag("player") and target.numattackers >= 2 then
+			if target and not inst:HasTag("player") and target:HasTag("player") and target.numattackers >= 2 and not inst:HasTag("tentacle") then
 				--print("player has too many attackers")
 				return false
 			end

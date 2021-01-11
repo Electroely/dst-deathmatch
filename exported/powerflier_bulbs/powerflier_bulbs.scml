@@ -2,18 +2,73 @@
 <spriter_data scml_version="1.0" generator="BrashMonkey Spriter" generator_version="r11">
     <folder id="0" name="damagebulb">
         <file id="0" name="damagebulb/damagebulb-0.png" width="111" height="108" pivot_x="0.495270" pivot_y="0.512153"/>
+        <file id="1" name="damagebulb/damagebulb-1.png" width="111" height="108" pivot_x="0.495270" pivot_y="0.512153"/>
+        <file id="2" name="damagebulb/damagebulb-2.png" width="111" height="108" pivot_x="0.495270" pivot_y="0.512153"/>
+        <file id="3" name="damagebulb/damagebulb-3.png" width="111" height="108" pivot_x="0.495270" pivot_y="0.512153"/>
+        <file id="4" name="damagebulb/damagebulb-4.png" width="111" height="108" pivot_x="0.495270" pivot_y="0.512153"/>
+        <file id="5" name="damagebulb/damagebulb-5.png" width="111" height="108" pivot_x="0.495270" pivot_y="0.512153"/>
+        <file id="6" name="damagebulb/damagebulb-6.png" width="111" height="108" pivot_x="0.495270" pivot_y="0.512153"/>
+        <file id="7" name="damagebulb/damagebulb-7.png" width="111" height="108" pivot_x="0.495270" pivot_y="0.512153"/>
+        <file id="8" name="damagebulb/damagebulb-8.png" width="111" height="108" pivot_x="0.495270" pivot_y="0.512153"/>
+        <file id="9" name="damagebulb/damagebulb-9.png" width="111" height="108" pivot_x="0.495270" pivot_y="0.512153"/>
+        <file id="10" name="damagebulb/damagebulb-10.png" width="111" height="108" pivot_x="0.495270" pivot_y="0.512153"/>
+        <file id="11" name="damagebulb/damagebulb-11.png" width="111" height="108" pivot_x="0.495270" pivot_y="0.512153"/>
     </folder>
     <folder id="1" name="cooldownbulb">
         <file id="0" name="cooldownbulb/cooldownbulb-0.png" width="111" height="108" pivot_x="0.495270" pivot_y="0.512153"/>
+        <file id="1" name="cooldownbulb/cooldownbulb-1.png" width="111" height="108" pivot_x="0.495270" pivot_y="0.512153"/>
+        <file id="2" name="cooldownbulb/cooldownbulb-2.png" width="111" height="108" pivot_x="0.495270" pivot_y="0.512153"/>
+        <file id="3" name="cooldownbulb/cooldownbulb-3.png" width="111" height="108" pivot_x="0.495270" pivot_y="0.512153"/>
+        <file id="4" name="cooldownbulb/cooldownbulb-4.png" width="111" height="108" pivot_x="0.495270" pivot_y="0.512153"/>
+        <file id="5" name="cooldownbulb/cooldownbulb-5.png" width="111" height="108" pivot_x="0.495270" pivot_y="0.512153"/>
+        <file id="6" name="cooldownbulb/cooldownbulb-6.png" width="111" height="108" pivot_x="0.495270" pivot_y="0.512153"/>
+        <file id="7" name="cooldownbulb/cooldownbulb-7.png" width="111" height="108" pivot_x="0.495270" pivot_y="0.512153"/>
+        <file id="8" name="cooldownbulb/cooldownbulb-8.png" width="111" height="108" pivot_x="0.495270" pivot_y="0.512153"/>
+        <file id="9" name="cooldownbulb/cooldownbulb-9.png" width="111" height="108" pivot_x="0.495270" pivot_y="0.512153"/>
+        <file id="10" name="cooldownbulb/cooldownbulb-10.png" width="111" height="108" pivot_x="0.495270" pivot_y="0.512153"/>
+        <file id="11" name="cooldownbulb/cooldownbulb-11.png" width="111" height="108" pivot_x="0.495270" pivot_y="0.512153"/>
     </folder>
     <folder id="2" name="healbulb">
         <file id="0" name="healbulb/healbulb-0.png" width="111" height="108" pivot_x="0.495270" pivot_y="0.512153"/>
+        <file id="1" name="healbulb/healbulb-1.png" width="111" height="108" pivot_x="0.495270" pivot_y="0.512153"/>
+        <file id="2" name="healbulb/healbulb-2.png" width="111" height="108" pivot_x="0.495270" pivot_y="0.512153"/>
+        <file id="3" name="healbulb/healbulb-3.png" width="111" height="108" pivot_x="0.495270" pivot_y="0.512153"/>
+        <file id="4" name="healbulb/healbulb-4.png" width="111" height="108" pivot_x="0.495270" pivot_y="0.512153"/>
+        <file id="5" name="healbulb/healbulb-5.png" width="111" height="108" pivot_x="0.495270" pivot_y="0.512153"/>
+        <file id="6" name="healbulb/healbulb-6.png" width="111" height="108" pivot_x="0.495270" pivot_y="0.512153"/>
+        <file id="7" name="healbulb/healbulb-7.png" width="111" height="108" pivot_x="0.495270" pivot_y="0.512153"/>
+        <file id="8" name="healbulb/healbulb-8.png" width="111" height="108" pivot_x="0.495270" pivot_y="0.512153"/>
+        <file id="9" name="healbulb/healbulb-9.png" width="111" height="108" pivot_x="0.495270" pivot_y="0.512153"/>
+        <file id="10" name="healbulb/healbulb-10.png" width="111" height="108" pivot_x="0.495270" pivot_y="0.512153"/>
+        <file id="11" name="healbulb/healbulb-11.png" width="111" height="108" pivot_x="0.495270" pivot_y="0.512153"/>
     </folder>
     <folder id="3" name="speedbulb">
         <file id="0" name="speedbulb/speedbulb-0.png" width="111" height="108" pivot_x="0.495270" pivot_y="0.512153"/>
+        <file id="1" name="speedbulb/speedbulb-1.png" width="111" height="108" pivot_x="0.495270" pivot_y="0.512153"/>
+        <file id="2" name="speedbulb/speedbulb-2.png" width="111" height="108" pivot_x="0.495270" pivot_y="0.512153"/>
+        <file id="3" name="speedbulb/speedbulb-3.png" width="111" height="108" pivot_x="0.495270" pivot_y="0.512153"/>
+        <file id="4" name="speedbulb/speedbulb-4.png" width="111" height="108" pivot_x="0.495270" pivot_y="0.512153"/>
+        <file id="5" name="speedbulb/speedbulb-5.png" width="111" height="108" pivot_x="0.495270" pivot_y="0.512153"/>
+        <file id="6" name="speedbulb/speedbulb-6.png" width="111" height="108" pivot_x="0.495270" pivot_y="0.512153"/>
+        <file id="7" name="speedbulb/speedbulb-7.png" width="111" height="108" pivot_x="0.495270" pivot_y="0.512153"/>
+        <file id="8" name="speedbulb/speedbulb-8.png" width="111" height="108" pivot_x="0.495270" pivot_y="0.512153"/>
+        <file id="9" name="speedbulb/speedbulb-9.png" width="111" height="108" pivot_x="0.495270" pivot_y="0.512153"/>
+        <file id="10" name="speedbulb/speedbulb-10.png" width="111" height="108" pivot_x="0.495270" pivot_y="0.512153"/>
+        <file id="11" name="speedbulb/speedbulb-11.png" width="111" height="108" pivot_x="0.495270" pivot_y="0.512153"/>
     </folder>
     <folder id="4" name="defensebulb">
         <file id="0" name="defensebulb/defensebulb-0.png" width="111" height="108" pivot_x="0.495270" pivot_y="0.512153"/>
+        <file id="1" name="defensebulb/defensebulb-1.png" width="111" height="108" pivot_x="0.495270" pivot_y="0.512153"/>
+        <file id="2" name="defensebulb/defensebulb-2.png" width="111" height="108" pivot_x="0.495270" pivot_y="0.512153"/>
+        <file id="3" name="defensebulb/defensebulb-3.png" width="111" height="108" pivot_x="0.495270" pivot_y="0.512153"/>
+        <file id="4" name="defensebulb/defensebulb-4.png" width="111" height="108" pivot_x="0.495270" pivot_y="0.512153"/>
+        <file id="5" name="defensebulb/defensebulb-5.png" width="111" height="108" pivot_x="0.495270" pivot_y="0.512153"/>
+        <file id="6" name="defensebulb/defensebulb-6.png" width="111" height="108" pivot_x="0.495270" pivot_y="0.512153"/>
+        <file id="7" name="defensebulb/defensebulb-7.png" width="111" height="108" pivot_x="0.495270" pivot_y="0.512153"/>
+        <file id="8" name="defensebulb/defensebulb-8.png" width="111" height="108" pivot_x="0.495270" pivot_y="0.512153"/>
+        <file id="9" name="defensebulb/defensebulb-9.png" width="111" height="108" pivot_x="0.495270" pivot_y="0.512153"/>
+        <file id="10" name="defensebulb/defensebulb-10.png" width="111" height="108" pivot_x="0.495270" pivot_y="0.512153"/>
+        <file id="11" name="defensebulb/defensebulb-11.png" width="111" height="108" pivot_x="0.495270" pivot_y="0.512153"/>
     </folder>
     <entity id="0" name="powerflier">
         <animation id="0" name="anim" length="34" interval="100">

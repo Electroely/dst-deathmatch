@@ -31,14 +31,6 @@ local buffs = {
 	["cooldown"] = "pickup_cooldown",
 }
 
-AddPrefabPostInit("stalker_forest", function(inst)
-	if G.TheWorld.ismastersim then
-		return
-	end
-	inst:RemoveComponent("lootdropper")
-	inst:AddComponent("lootdropper")
-end)
-
 for k, v in pairs({"stalker_bulb", "stalker_bulb_double"}) do
 	AddPrefabPostInit(v, function(inst)
 		if G.TheWorld.ismastersim and G.TheNet:GetServerGameMode() == "deathmatch" then
