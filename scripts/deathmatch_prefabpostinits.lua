@@ -5,6 +5,55 @@ local UpValues = require("deathmatch_upvaluehacker")
 local GetUpValue = UpValues.Get
 local ReplaceUpValue = UpValues.Replace
 
+local function getPlayerCount(onlyalive)
+	local count = 0
+	for k, v in pairs(G.AllPlayers) do
+		if not v:HasTag("spectator") and (not onlyalive or not v.components.health:IsDead()) then
+			count = count + 1
+		end
+	end
+	return count
+end
+
+local STALKERBLOOM_TAGS = { "stalkerbloom" }
+local function DoPlantBloom(inst)  --replacing, awesome
+	local count = getPlayerCount(true)
+    local x, y, z = inst.Transform:GetWorldPosition()
+    local map = G.TheWorld.Map
+    local offset = G.FindValidPositionByFan(
+        math.random() * 2 * G.PI,
+        math.random() * 3,
+        8,
+        function(offset)
+            local x1 = x + offset.x
+            local z1 = z + offset.z
+            return map:IsPassableAtPoint(x1, 0, z1)
+                and map:IsDeployPointClear(G.Vector3(x1, 0, z1), nil, 1)
+                and #G.TheSim:FindEntities(x1, 0, z1, 2.5, STALKERBLOOM_TAGS) < 4
+        end
+    )
+	
+	local BLOOM_CHOICES =
+	{
+		["stalker_bulb"] = .3 + (.05 * count),
+		["stalker_bulb_double"] = .3 + (.05 * count),
+		["stalker_berry"] = 1,
+		["stalker_fern"] = 8,
+	}
+
+    if offset ~= nil then
+        G.SpawnPrefab(G.weighted_random_choice(BLOOM_CHOICES)).Transform:SetPosition(x + offset.x, 0, z + offset.z)
+    end
+end
+
+AddPrefabPostInit("stalker_forest", function(inst)
+	if G.TheWorld.ismastersim then
+		inst:DoTaskInTime(1/30, function()
+			inst._bloomtask = inst:DoPeriodicTask(3 * G.FRAMES, DoPlantBloom, 2 * G.FRAMES)
+		end)
+	end
+end)
+
 for k, v in pairs({"stalker_fern", "stalker_berry"}) do --crashes if we remove pickable so.
 	AddPrefabPostInit(v, function(inst)
 		if G.TheNet:GetServerGameMode() == "deathmatch" then
@@ -33,6 +82,10 @@ local buffs = {
 
 for k, v in pairs({"stalker_bulb", "stalker_bulb_double"}) do
 	AddPrefabPostInit(v, function(inst)
+		function inst:GetBasicDisplayName() --i cant just set inst.name so woo yeah hack time
+			return "Power Flower"
+		end	
+
 		if G.TheWorld.ismastersim and G.TheNet:GetServerGameMode() == "deathmatch" then
 			inst.powerup = G.GetRandomItem(powerups)
 			inst.AnimState:OverrideSymbol("bulb", "powerflier_bulbs", inst.powerup.."bulb")

@@ -199,15 +199,17 @@ AddComponentPostInit("playercontroller", function(self)
 	function self:GetActionButtonAction(force_target, ...)
 		if force_target == nil then
 			local x,y,z = self.inst.Transform:GetWorldPosition()
-			local ents = G.TheSim:FindEntities(x,y,z,8, nil, {"INLIMBO","NOCLICK"}, {"_inventoryitem","corpse"})
+			local ents = G.TheSim:FindEntities(x,y,z,8, nil, {"INLIMBO","NOCLICK"}, {"_inventoryitem","corpse", "stalkerbloom"})
 			local backup_target = nil
 			for k, v in pairs(ents) do
 				if priority_prefabs[v.prefab] and self.inst:IsNear(v, 1) then
 					force_target = v
 				end
 				if backup_target == nil and ((v:HasTag("_inventoryitem") and v.replica.inventoryitem:CanBePickedUp() and not v:HasTag("catchable"))
-					or (v:HasTag("corpse") and self.inst.components.teamer:IsTeamedWith(v))) then
+					or (v:HasTag("corpse") and self.inst.components.teamer:IsTeamedWith(v))) 
+					or (v:HasTag("stalkerbloom") and v:HasTag("pickable")) then
 					backup_target = v
+					break
 				end
 			end
 			if force_target == nil then
