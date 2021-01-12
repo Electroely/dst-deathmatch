@@ -128,6 +128,8 @@ ReplaceUpValue(OnRespawnFromPlayerCorpse_old, "DoActualRezFromCorpse", function(
 	end
 end)
 ---------------------------------------------------------------
+
+---------------------------------------------------------------
 local function fn(inst, prefab)
 	
 	if not TheWorld.ismastersim then
@@ -194,6 +196,15 @@ local function fn(inst, prefab)
 			end) 
 		end
 		inst.components.inventory:DropEverythingWithTag("deathmatch_pickup")
+	end)
+	
+	local RESPAWN_INVINCIBILITY_TIME = 1
+	inst:ListenForEvent("ms_respawnedfromghost", function(inst)
+		--do respawn invincibility
+		inst.components.combat.externaldamagetakenmultipliers:SetModifier("respawn", 0)
+		inst:DoTaskInTime(RESPAWN_INVINCIBILITY_TIME, function(inst)
+			inst.components.combat.externaldamagetakenmultipliers:SetModifier("respawn", 1)
+		end)
 	end)
 	
 	inst:AddTag("stronggrip")

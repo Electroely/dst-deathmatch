@@ -120,8 +120,8 @@ local function onlanded(inst, thrower)
 	end
 	if target ~= nil then
 		local revivepct = 0.5 / math.pow(2, TheWorld.components.deathmatch_manager.revivals)
-		target:PushEvent("respawnfromcorpse", {health=revivepct, user=thrower})
-		TheWorld.components.deathmatch_manager:OnPlayerRevived(target, thrower)
+		target:PushEvent("respawnfromcorpse", {health=revivepct, source=thrower, user=thrower})
+		--TheWorld.components.deathmatch_manager:OnPlayerRevived(target, thrower)
 		inst:Remove()
 	else
 		inst:RemoveTag("NOCLICK")

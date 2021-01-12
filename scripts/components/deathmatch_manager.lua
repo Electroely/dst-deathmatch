@@ -193,15 +193,17 @@ end
 
 local function OnPlayerJoined(inst, player)
 	player:PushEvent("respawnfromcorpse",{quick=true})
+	player:ApplyLobbyInvincibility(true)
 	local self = inst.components.deathmatch_manager
 	if self.doingreset then
 		TheNet:Announce(self.announcestrings.LATEJOIN)
-		player.components.combat.externaldamagetakenmultipliers:SetModifier("deathmatchinvincibility", 0)
+		--player.components.combat.externaldamagetakenmultipliers:SetModifier("deathmatchinvincibility", 0)
 		self:ResetDeathmatch()
 	else
-		player.components.combat.externaldamagetakenmultipliers:SetModifier("deathmatchinvincibility", 0)
-		local pos = self.inst.lobbypoint:GetPosition()
-		player.Transform:SetPosition(pos:Get())
+		--player.components.combat.externaldamagetakenmultipliers:SetModifier("deathmatchinvincibility", 0)
+		--local pos = self.inst.lobbypoint:GetPosition()
+		--player.Transform:SetPosition(pos:Get())
+		player:DoDeathmatchTeleport(self.inst.lobbypoint:GetPosition())
 		if self.matchinprogress or self.matchstarting then
 			player:DoTaskInTime(1, function()
 				TheNet:SystemMessage(DEATHMATCH_STRINGS.CHATMESSAGES.JOIN_MIDMATCH)
@@ -221,7 +223,8 @@ local function OnPlayerJoined(inst, player)
 end
 
 local function MakeSpectator(player, bool)
-	player.components.combat.externaldamagetakenmultipliers:SetModifier("deathmatchinvincibility", 0)
+	--player.components.combat.externaldamagetakenmultipliers:SetModifier("deathmatchinvincibility", 0)
+	player:ApplyLobbyInvincibility(true)
 	player:ClearBufferedAction()
 	if bool then
 		player.AnimState:SetMultColour(0.1,0.1,0.1,0.1)
@@ -404,7 +407,8 @@ function Deathmatch_Manager:ReleasePlayers()
 			--v.components.locomotor:RemoveExternalSpeedMultiplier(self.inst, "deathmatch_speedmult")
 			v:DoTaskInTime(7, function(v)
 				v.components.locomotor:SetExternalSpeedMultiplier(self.inst, "deathmatch_speedmult", 1)
-				v.components.combat.externaldamagetakenmultipliers:SetModifier("deathmatchinvincibility", 1)
+				--v.components.combat.externaldamagetakenmultipliers:SetModifier("deathmatchinvincibility", 1)
+				v:ApplyLobbyInvincibility(false)
 				print("Releasing "..v:GetDisplayName().."...")
 			end)
 		end
@@ -494,12 +498,13 @@ function Deathmatch_Manager:StartDeathmatch()
 				if offset ~= nil then
 					offset.x = offset.x + pos.x
 					offset.z = offset.z + pos.z
-					v.Transform:SetPosition(offset.x, 0, offset.z)
-					v:SnapCamera()
-					if DM_FADE then
-						v:ScreenFade(false)
-						v:ScreenFade(true, 1)
-					end
+					v:DoDeathmatchTeleport(offset)
+					--v.Transform:SetPosition(offset.x, 0, offset.z)
+					--v:SnapCamera()
+					--if DM_FADE then
+					--	v:ScreenFade(false)
+					--	v:ScreenFade(true, 1)
+					--end
 				end
 			end
 			table.insert(self.players_in_match, v)
@@ -507,12 +512,13 @@ function Deathmatch_Manager:StartDeathmatch()
 		end
 		for k, v in pairs(spectators) do
 			--MakeSpectator(v, true)
-			v.Transform:SetPosition(self.inst.centerpoint:GetPosition():Get())
-			v:SnapCamera()
-			if DM_FADE then
-				v:ScreenFade(false)
-				v:ScreenFade(true, 1)
-			end
+			--v.Transform:SetPosition(self.inst.centerpoint:GetPosition():Get())
+			v:DoDeathmatchTeleport(self.inst.centerpoint:GetPosition())
+			--v:SnapCamera()
+			--if DM_FADE then
+			--	v:ScreenFade(false)
+			--	v:ScreenFade(true, 1)
+			--end
 		end
 		if arena_configs[self.arena] and arena_configs[self.arena].matchstartfn then
 			arena_configs[self.arena].matchstartfn()
@@ -573,15 +579,17 @@ function Deathmatch_Manager:StopDeathmatch()
 			if offset ~= nil then
 				offset.x = offset.x + pos.x
 				offset.z = offset.z + pos.z
-				v.Transform:SetPosition(offset.x, 0, offset.z)
-				v:SnapCamera()
-				if DM_FADE then
-					v:ScreenFade(false)
-					v:ScreenFade(true, 1)
-				end
+				--v.Transform:SetPosition(offset.x, 0, offset.z)
+				--v:SnapCamera()
+				--if DM_FADE then
+				--	v:ScreenFade(false)
+				--	v:ScreenFade(true, 1)
+				--end
+				v:DoDeathmatchTeleport(offset)
 				GiveLobbyInventory(v)
 			end
-			v.components.combat.externaldamagetakenmultipliers:SetModifier("deathmatchinvincibility", 0)
+			--v.components.combat.externaldamagetakenmultipliers:SetModifier("deathmatchinvincibility", 0)
+			v:ApplyLobbyInvincibility(true)
 			if self.gamemode == 2 then
 				v.components.teamer:SetTeam(v.teamchoice)
 			else
@@ -939,7 +947,8 @@ function Deathmatch_Manager:ToggleSpectator(player)
 		player:RemoveTag("spectator")
 		MakeSpectator(player, false)
 		if self.matchstarting or self.matchinprogress then
-			player.Transform:SetPosition(self.inst.lobbypoint:GetPosition():Get())
+			--player.Transform:SetPosition(self.inst.lobbypoint:GetPosition():Get())
+			player:DoDeathmatchTeleport(self.inst.lobbypoint:GetPosition())
 		end
 		GiveLobbyInventory(player)
 		player:PushEvent("ms_exitspectator")
@@ -959,7 +968,8 @@ function Deathmatch_Manager:ToggleSpectator(player)
 			v:Remove()
 		end
 		if self.matchstarting or self.matchinprogress then
-			player.Transform:SetPosition(self.inst.centerpoint:GetPosition():Get())
+			--player.Transform:SetPosition(self.inst.centerpoint:GetPosition():Get())
+			player:DoDeathmatchTeleport(self.inst.centerpoint:GetPosition())
 		end
 		if not self.doingreset and not self.matchstarting then
 			player.components.teamer:SetTeam(0)
@@ -978,6 +988,9 @@ end
 
 function Deathmatch_Manager:OnPlayerRevived(player, source)
 	self.revivals = self.revivals + 1
+	if player ~= nil then
+		player.revivals = (player.revivals or 0) + 1
+	end
 end
 
 function Deathmatch_Manager:GetPlayerRevivalTimeMult(reviver)
@@ -994,10 +1007,8 @@ function Deathmatch_Manager:GetPlayerRevivalHealthPct(reviver)
 	if reviver and reviver:HasTag("player") then
 		local item = reviver.components.inventory:GetEquippedItem(EQUIPSLOTS.HANDS)
 		if item and item.prefab == "deathmatch_reviverheart" then
-			print("player has heart")
 			return 0.5 / math.pow(2, self.revivals-1)
 		end
-		print("player doesnt have heart")
 	end
 	return 0.25
 end

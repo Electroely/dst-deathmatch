@@ -212,9 +212,7 @@ AddPlayerPostInit(function(inst)
 			end
 			inst.components.revivablecorpse:SetReviveHealthPercent(1)
 			function inst.components.corpsereviver:GetAdditionalReviveHealthPercent()
-				local val = G.TheWorld.components.deathmatch_manager:GetPlayerRevivalHealthPct(self.inst)-1
-				print(val)
-				return G.TheWorld.components.deathmatch_manager:GetPlayerRevivalHealthPct(self.inst)-1
+				return 0--G.TheWorld.components.deathmatch_manager:GetPlayerRevivalHealthPct(self.inst)-1
 			end
 			inst:ListenForEvent("respawnfromcorpse", function(inst, data)
 				if data and data.source then
@@ -231,7 +229,8 @@ AddPlayerPostInit(function(inst)
 				end
 			end)
 		end
-		---------- character perks
+		---------- extra code
+		G.require("deathmatch_player_functions")(inst)
 		G.require("player_postinits_deathmatch")(inst, inst.prefab)
 		inst.starting_inventory = {}
 		---------- debug
