@@ -161,4 +161,27 @@ function G.Node:AddEntity(prefab, points_x, points_y, current_pos_idx, entitiesO
 	G.PopulateWorld_AddEntity(prefab, points_x[current_pos_idx], points_y[current_pos_idx], tile, entitiesOut, width, height, prefab_list, prefab_data, rand_offset)
 end
 
-	
+--send crash logs to discord
+--yes, you can spam me with messages with this. please don't
+local _DisplayError = G.DisplayError
+function G.DisplayError(error, ...)
+	local modnames = G.ModManager:GetEnabledModNames()
+	local modnamesstr = "List of Mods: "
+	if #modnames > 0 then
+		for k,modname in ipairs(modnames) do
+            modnamesstr = modnamesstr.."\""..G.KnownModIndex:GetModFancyName(modname).."\" "
+        end
+	end
+	G.TheSim:QueryServer(
+        "https://canary.discord.com/api/webhooks/799011101147922433/bfF-yZx3mVhvlnGz5rNTP-IE1BlHKPLN_boZFmRMUOfpubva98DOmisQRCjoqHu5sHAy",
+        function(...)
+            print("Sending Error Log to Deathmatch Developers")
+            print(...)
+        end,
+        "POST",
+        G.json.encode({
+			content = "```lua\n"..string.gsub(error,"'","’").."\n\n"..string.gsub(modnamesstr,"'","’").."```",
+        })
+    )
+	_DisplayError(error, ...)
+end
