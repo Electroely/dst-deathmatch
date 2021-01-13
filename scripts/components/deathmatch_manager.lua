@@ -782,6 +782,8 @@ function Deathmatch_Manager:BeginMatch()
 	for k, v in pairs(self.players_in_match) do
 		v:RemoveTag("notarget")
 		self.inst:PushEvent("donechoosinggear")
+		v.revivals = 0
+		v:UpdateRevivalHealth()
 	end
 	for k, v in pairs(self.spawnedgear) do
 		if not v.components.equippable:IsEquipped() then
@@ -993,14 +995,18 @@ function Deathmatch_Manager:OnPlayerRevived(player, source)
 	end
 end
 
+function Deathmatch_Manager:GetRevivalHealthForPlayer(player)
+	return math.max(0.5 - (player.revivals or 0)*0.1, 0.25)
+end
+
 function Deathmatch_Manager:GetPlayerRevivalTimeMult(reviver)
 	if reviver and reviver:HasTag("player") then
 		local item = reviver.components.inventory:GetEquippedItem(EQUIPSLOTS.HANDS)
 		if item and item.prefab == "deathmatch_reviverheart" then
-			return 1
+			return 0.5
 		end
 	end
-	return math.pow(2, self.revivals)
+	return 2
 end
 
 function Deathmatch_Manager:GetPlayerRevivalHealthPct(reviver)

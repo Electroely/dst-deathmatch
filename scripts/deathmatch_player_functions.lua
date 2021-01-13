@@ -21,9 +21,16 @@ local function DoDeathmatchTeleport(inst, pos)
 	end
 end
 
+local function UpdateRevivalHealth(inst)
+	inst.revivals = inst.revivals or 0
+	local pct = TheWorld.components.deathmatch_manager:GetRevivalHealthForPlayer(inst)
+	inst.components.revivablecorpse:SetReviveHealthPercent(pct)
+end
+
 local function postinit_fn(inst)
 	inst.ApplyLobbyInvincibility = ApplyLobbyInvincibility
 	inst.DoDeathmatchTeleport = DoDeathmatchTeleport
+	inst.UpdateRevivalHealth = UpdateRevivalHealth
 end
 
 return postinit_fn
