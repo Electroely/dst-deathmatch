@@ -198,13 +198,9 @@ local function fn(inst, prefab)
 		inst.components.inventory:DropEverythingWithTag("deathmatch_pickup")
 	end)
 	
-	local RESPAWN_INVINCIBILITY_TIME = 1
 	inst:ListenForEvent("ms_respawnedfromghost", function(inst)
-		--do respawn invincibility
-		inst.components.combat.externaldamagetakenmultipliers:SetModifier("respawn", 0)
-		inst:DoTaskInTime(RESPAWN_INVINCIBILITY_TIME, function(inst)
-			inst.components.combat.externaldamagetakenmultipliers:SetModifier("respawn", 1)
-		end)
+		--update revival health
+		inst:UpdateRevivalHealth()
 	end)
 	
 	inst:AddTag("stronggrip")

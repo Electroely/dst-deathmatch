@@ -104,3 +104,12 @@ v20.01 (hotfix)
 - Fixed crash
 
 - Wardrobe can now be used by multiple people at once
+
+v20.1
+- Revival health will now depend on the revivee's death count
+- Players are given 2 seconds of invincibility after respawning
+- Revival speed no longer changes as the match goes on (4 sec without heart, 1 sec with heart)
+- Wigfrid no longer gains health from attacking other players
+- Woby can no longer be opened
+- Woby will always spawn beside Walter when a match starts or when going back to the lobby
+- Added a new arena (not votable yet)

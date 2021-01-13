@@ -147,7 +147,10 @@ AddPlayerPostInit(function(inst)
 		end)
 	end
 	if G.TheNet:GetServerGameMode() == "deathmatch" then
-		
+		---------- extra code
+		G.require("deathmatch_player_functions")(inst)
+		G.require("player_postinits_deathmatch")(inst, inst.prefab)
+		---------------------
 		inst:AddTag("soulless")
 		
 		inst.components.playervision.SetGhostVision = function() end
@@ -228,10 +231,9 @@ AddPlayerPostInit(function(inst)
 					end
 				end
 			end)
+			inst:UpdateRevivalHealth()
 		end
-		---------- extra code
-		G.require("deathmatch_player_functions")(inst)
-		G.require("player_postinits_deathmatch")(inst, inst.prefab)
+		
 		inst.starting_inventory = {}
 		---------- debug
 		function inst:Respawn()
@@ -440,6 +442,17 @@ for k, v in pairs({ "wilson", "wilson_client" }) do
 		local deststate_makeballoon_old = self.actionhandlers[G.ACTIONS.MAKEBALLOON].deststate
 		self.actionhandlers[G.ACTIONS.MAKEBALLOON].deststate = function(inst, act)
 			return "doshortaction"
+		end
+		
+		local RESPAWN_INVINCIBILITY_TIME = 2
+		local corpse_rebirth_onexit = self.states.corpse_rebirth.onexit
+		self.states.corpse_rebirth.onexit = function(inst, ...)
+			--do respawn invincibility
+			inst.components.combat.externaldamagetakenmultipliers:SetModifier("respawn", 0)
+			inst:DoTaskInTime(RESPAWN_INVINCIBILITY_TIME, function(inst)
+				inst.components.combat.externaldamagetakenmultipliers:SetModifier("respawn", 1)
+			end)
+			return corpse_rebirth_onexit(inst, ...)
 		end
 	end)
 end
