@@ -54,7 +54,23 @@ AddPrefabPostInit("stalker_forest", function(inst)
 	end
 end)
 
-for k, v in pairs({"stalker_fern", "stalker_berry"}) do --crashes if we remove pickable so.
+for k, v in pairs({"stalker_bulb", "stalker_bulb_double"}) do
+	AddPrefabPostInit(v, function(inst)
+		if G.TheNet:GetServerGameMode() == "deathmatch" then
+			inst:ListenForEvent("animover", function()
+				if inst._killtask ~= nil then
+					local _fn = inst._killtask.fn
+					inst._killtask.fn = function(inst, ...)
+						_fn(inst, ...)
+						inst.components.pickable.caninteractwith = true
+					end
+				end
+			end)
+		end
+	end)
+end
+
+for k, v in pairs({"stalker_fern", "stalker_berry"}) do
 	AddPrefabPostInit(v, function(inst)
 		if G.TheNet:GetServerGameMode() == "deathmatch" then
 			inst:ListenForEvent("animover", function()
