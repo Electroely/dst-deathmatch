@@ -231,8 +231,9 @@ AddPlayerPostInit(function(inst)
 					end
 				end
 			end)
+			inst:UpdateRevivalHealth()
 		end
-		inst:UpdateRevivalHealth()
+		
 		inst.starting_inventory = {}
 		---------- debug
 		function inst:Respawn()
