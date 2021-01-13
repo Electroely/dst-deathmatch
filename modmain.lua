@@ -445,14 +445,16 @@ for k, v in pairs({ "wilson", "wilson_client" }) do
 		end
 		
 		local RESPAWN_INVINCIBILITY_TIME = 2
-		local corpse_rebirth_onexit = self.states.corpse_rebirth.onexit
-		self.states.corpse_rebirth.onexit = function(inst, ...)
-			--do respawn invincibility
-			inst.components.combat.externaldamagetakenmultipliers:SetModifier("respawn", 0)
-			inst:DoTaskInTime(RESPAWN_INVINCIBILITY_TIME, function(inst)
-				inst.components.combat.externaldamagetakenmultipliers:SetModifier("respawn", 1)
-			end)
-			return corpse_rebirth_onexit(inst, ...)
+		if v == "wilson" then 
+			local corpse_rebirth_onexit = self.states.corpse_rebirth.onexit
+			self.states.corpse_rebirth.onexit = function(inst, ...)
+				--do respawn invincibility
+				inst.components.combat.externaldamagetakenmultipliers:SetModifier("respawn", 0)
+				inst:DoTaskInTime(RESPAWN_INVINCIBILITY_TIME, function(inst)
+					inst.components.combat.externaldamagetakenmultipliers:SetModifier("respawn", 1)
+				end)
+				return corpse_rebirth_onexit(inst, ...)
+			end
 		end
 	end)
 end
