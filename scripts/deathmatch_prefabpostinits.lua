@@ -5,6 +5,10 @@ local UpValues = require("deathmatch_upvaluehacker")
 local GetUpValue = UpValues.Get
 local ReplaceUpValue = UpValues.Replace
 
+AddPrefabPostInit("malbatross_feather", function(inst)
+	inst:AddTag("malbatross_feather")
+end)
+
 local function getPlayerCount(onlyalive)
 	local count = 0
 	for k, v in pairs(G.AllPlayers) do

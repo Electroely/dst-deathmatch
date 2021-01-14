@@ -127,6 +127,17 @@ ReplaceUpValue(OnRespawnFromPlayerCorpse_old, "DoActualRezFromCorpse", function(
 		inst.rezhealth = nil
 	end
 end)
+--------------------------------------------------------------
+local function UpdateMalbatrossFeatherStats(inst)
+	local _, feathers = inst.components.inventory:HasItemWithTag("malbatross_feather", 0)
+	if feathers > 0 then
+		inst.components.locomotor:SetExternalSpeedMultiplier(inst, "malbatross_speed", 1 + (0.01 * feathers))
+		inst.components.combat.externaldamagetakenmultipliers:SetModifier("malbatrossdefense", feathers * 0.01, "malbatross_defense")
+	else
+		inst.components.locomotor:RemoveExternalSpeedMultiplier(inst, "malbatross_speed")
+		inst.components.combat.externaldamagetakenmultipliers:RemoveModifier("malbatrossdefense", "malbatross_defense")
+	end
+end
 ---------------------------------------------------------------
 
 ---------------------------------------------------------------
@@ -153,13 +164,22 @@ local function fn(inst, prefab)
 	end
 	
 	inst:ListenForEvent("attacked", function(inst, data)
-		if data and data.stimuli and data.stimuli == "kb" then
-			inst:DoTaskInTime(0, function()
-				local knocker = data.weapon and data.weapon:IsValid() and data.weapon or data.attacker or inst
-				inst:PushEvent("knockback", {knocker = knocker or data.attacker or inst, radius = 1, strengthmult = 1})
-			end)
+		if data then
+			local _, feathers = inst.components.inventory:HasItemWithTag("malbatross_feather", 0)
+			if feathers > 0 then
+				inst.components.inventory:ConsumeByName("malbatross_feather", 1)
+			end
+			if data.stimuli and data.stimuli == "kb" then
+				inst:DoTaskInTime(0, function()
+					local knocker = data.weapon and data.weapon:IsValid() and data.weapon or data.attacker or inst
+					inst:PushEvent("knockback", {knocker = knocker or data.attacker or inst, radius = 1, strengthmult = 1})
+				end)
+			end
 		end
 	end)
+	
+	inst:ListenForEvent("itemget", UpdateMalbatrossFeatherStats)
+	inst:ListenForEvent("itemlose", UpdateMalbatrossFeatherStats)
 	
 	local powerups = {
 		["damage"] = "pickup_lightdamaging",
