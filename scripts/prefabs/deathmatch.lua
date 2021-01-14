@@ -204,8 +204,95 @@ local function PushConfig(name)
 		TheWorld.Map:SetUndergroundFadeHeight(data.fadeheight)
 	end
 end
+-----------------------------------------
+local function GetWaveBearing(ex, ey, ez, lines)
+	local offs =
+	{
+		{-2,-2}, {-1,-2}, {0,-2}, {1,-2}, {2,-2},
+		{-2,-1}, {-1,-1}, {0,-1}, {1,-1}, {2,-1},
+		{-2, 0}, {-1, 0},		  {1, 0}, {2, 0},
+		{-2, 1}, {-1, 1}, {0, 1}, {1, 1}, {2, 1},
+		{-2, 2}, {-1, 2}, {0, 2}, {1, 2}, {2, 2}
+	}
 
+	local map = TheWorld.Map
+	local width, height = map:GetSize()
+	local halfw, halfh = 0.5 * width, 0.5 * height
+	local x, y = map:GetTileXYAtPoint(ex, ey, ez)
+	local xtotal, ztotal, n = 0, 0, 0
+	for i = 1, #offs, 1 do
+		local ground = map:GetTile( x + offs[i][1], y + offs[i][2] )
+		if IsLandTile(ground) then
+			xtotal = xtotal + ((x + offs[i][1] - halfw) * TILE_SCALE)
+			ztotal = ztotal + ((y + offs[i][2] - halfh) * TILE_SCALE)
+			n = n + 1
+		end
+	end
 
+	local bearing = nil
+	if n > 0 then
+		local a = math.atan2(ztotal/n - ez, xtotal/n - ex)
+		bearing = -a/DEGREES - 90
+	end
+
+	return bearing
+end
+
+local function SpawnWaveShore(inst, x, y, z)
+	local bearing = GetWaveBearing(x, y, z)
+	if bearing then
+		local wave = SpawnPrefab("wave_shore")
+		wave.Transform:SetPosition( x, y, z )
+		wave.Transform:SetRotation(bearing)
+		wave:SetAnim()
+	end
+end
+
+local function SpawnWaveShimmerMedium(inst, x, y, z)
+	local is_surrounded_by_water = TheWorld.Map:IsSurroundedByWater(x, y, z, 4.5)
+
+	if is_surrounded_by_water then
+		local wave = SpawnPrefab( "wave_shimmer_med" )
+		wave.Transform:SetPosition( x, y, z )
+	else
+		local is_nearby_ground = not TheWorld.Map:IsSurroundedByWater(x, y, z, 3.5)
+		if is_nearby_ground then
+			local is_nearby_surrounded_by_water = TheWorld.Map:IsSurroundedByWater(x, y, z, 2.5)
+			if is_nearby_surrounded_by_water then
+				SpawnWaveShore(inst, x,y,z)
+			end
+		end
+	end
+end
+
+local function SpawnWaveShimmerDeep(inst, x, y, z)
+	local is_surrounded_by_water = TheWorld.Map:IsSurroundedByWater(x, y, z, 4.5)
+
+	if is_surrounded_by_water then
+		local wave = SpawnPrefab( "wave_shimmer_deep" )
+		wave.Transform:SetPosition( x, y, z )
+	else
+		local is_nearby_ground = not TheWorld.Map:IsSurroundedByWater(x, y, z, 3.5)
+		if is_nearby_ground then
+			local is_nearby_surrounded_by_water = TheWorld.Map:IsSurroundedByWater(x, y, z, 2.5)
+			if is_nearby_surrounded_by_water then
+				SpawnWaveShore(inst, x,y,z)
+			end
+		end
+	end
+end
+
+local function checkground(inst, map, x, y, z, ground)
+	local is_ground = map:GetTileAtPoint( x, y, z ) == ground
+	if not is_ground then return false end
+
+	local radius = 2
+	return map:IsValidTileAtPoint( x - radius, y, z ) 
+			and map:IsValidTileAtPoint( x + radius, y, z )
+			and map:IsValidTileAtPoint( x, y, z - radius )
+			and map:IsValidTileAtPoint( x, y, z + radius )
+end
+------------------------------------------------------
 local function common_postinit(inst)
     --Add waves
     inst.entity:AddWaveComponent() --klei hasn't removed this...? --Hornet: Their is still waves in the world, the dark ones the waterfalls go into in RoT
@@ -228,6 +315,11 @@ local function common_postinit(inst)
 		inst:ListenForEvent("applyarenaeffects", function(inst, fxname)
 			PushConfig(fxname)
 		end)
+		
+		inst:AddComponent("wavemanager")
+		inst.components.wavemanager.shimmer[GROUND.OCEAN_SWELL] = {per_sec = 80, spawn_rate = 0, checkfn = checkground, spawnfn = SpawnWaveShimmerMedium}
+		inst.components.wavemanager.shimmer[GROUND.OCEAN_ROUGH] = {per_sec = 80, spawn_rate = 0, checkfn = checkground, spawnfn = SpawnWaveShimmerDeep}
+		inst.components.wavemanager.shimmer[GROUND.OCEAN_HAZARDOUS] = {per_sec = 80, spawn_rate = 0, checkfn = checkground, spawnfn = SpawnWaveShimmerDeep}
 		
 		--inst.Map:SetTransparentOcean(true)
 
