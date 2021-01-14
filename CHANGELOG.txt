@@ -113,3 +113,7 @@ v20.1
 - Woby can no longer be opened
 - Woby will always spawn beside Walter when a match starts or when going back to the lobby
 - Added a new arena (not votable yet)
+
+v20.14
+- Fixed bug that occured when spectating as a dead player
+- Added Pick-up filters [client] and Health Bar and Buff - Client to auto-disable list
