@@ -56,6 +56,8 @@ local mods_blacklist = {
 	["workshop-836583293"]=true,
 	["workshop-1901927445"]=true,
 	["workshop-2049203096"]=true,
+	["workshop-2316507379"]=true,
+	["workshop-1603516353"]=true,
 }
 local IsModCompatibleWithMode_old = G.KnownModIndex.IsModCompatibleWithMode 
 G.KnownModIndex.IsModCompatibleWithMode = function(self, modname, dlc)

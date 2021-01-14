@@ -106,10 +106,10 @@ exts.OnRespawnFromPlayerCorpse = function(inst, data)
 	if inst:HasTag("corpse") then
 		inst.rezhealth = data and data.health
 	end
-	if data and data.instant and inst.components.health and inst.components.health:IsDead() then
+	if data and data.instant and inst:HasTag("corpse") then
 		doRez(inst, data)
 		inst.sg:GoToState("idle")
-	elseif data and data.quick and inst.components.health and inst.components.health:IsDead() then
+	elseif data and data.quick and inst:HasTag("corpse") then
 		local delay = data.delay or 0
 		inst:DoTaskInTime(delay, function(inst) 
 			inst.sg:GoToState("quickrevive_deathmatch") 
