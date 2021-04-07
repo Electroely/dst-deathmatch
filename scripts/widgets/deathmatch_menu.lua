@@ -1,152 +1,134 @@
-local Image = require "widgets/image"
-local ImageButton = require "widgets/imagebutton"
+local HeaderTabs = require "widgets/redux/headertabs"
+local PopupDialogScreen = require "screens/redux/popupdialog"
+local Screen = require "widgets/screen"
+local ServerSettingsTab = require "widgets/redux/serversettingstab"
+local SnapshotTab = require "widgets/redux/snapshottab"
+local Subscreener = require "screens/redux/subscreener"
+local TEMPLATES = require "widgets/redux/templates"
+local TextListPopup = require "screens/redux/textlistpopup"
 local Widget = require "widgets/widget"
 local Text = require "widgets/text"
-local Grid = require "widgets/grid"
-local Spinner = require "widgets/spinner"
 
-local TEMPLATES = require "widgets/redux/templates"
+local Image = require "widgets/image"
+local ImageButton = require "widgets/imagebutton"
 
-local RecipeBookWidget = require "widgets/redux/quagmire_recipebook"
-local AchievementsPanel = require "widgets/redux/achievementspanel"
+local Deathmatch_Menu = Class(Screen, function(self)
+    Screen._ctor(self, "Deathmatch_Menu")
 
-require("util")
+    self.root = self:AddChild(TEMPLATES.ScreenRoot())
 
--------------------------------------------------------------------------------------------------------
-local DeathmatchMenu = Class(Widget, function(self, parent)
-    Widget._ctor(self, "DeathmatchMenu")
+    self.detail_panel_frame = self.root:AddChild(TEMPLATES.RectangleWindow(500, 1000))
+    local r,g,b = unpack(UICOLOURS.BROWN_DARK)
+    self.detail_panel_frame:SetBackgroundTint(r,g,b,0.6)
+    self.detail_panel_frame.top:Hide()
+    
+	self.tip_list = self.root:AddChild(self:BuildTipsMenu())
+	self.tip_list:SetPosition(-110, 0)
+	
+	local tip_grid_data = {}
 
-    self.root = self:AddChild(Widget("root"))
-
-	local tab_root = self.root:AddChild(Widget("tab_root"))
-
-	local backdrop = self.root:AddChild((TEMPLATES.RectangleWindow(800, 500)))
-    self.backdrop:SetPosition(0, -10)
-	self.backdrop.top:Hide()
-
-	--[[local achievement_overrides = {}
-	achievement_overrides.offset_y = -5
-	achievement_overrides.divider_atlas = "images/quagmire_recipebook.xml"
-	achievement_overrides.divider_tex = "quagmire_recipe_line_break2.tex"
-	achievement_overrides.divider_h = 12
-	achievement_overrides.quagmire_gridframe = true
-	achievement_overrides.no_title = true
-	achievement_overrides.primary_font_colour = UICOLOURS.BROWN_DARK
-	achievement_overrides.scrollbar_offset = -8]]
-
-	local base_size = .7
-
-	--[[local button_data = {
-		{text = STRINGS.UI.RECIPE_BOOK.TITLE, build_panel_fn = function() return RecipeBookWidget(parent, season) end },
-		{text = STRINGS.UI.ACHIEVEMENTS.SCREENTITLE, build_panel_fn = function() return AchievementsPanel(FESTIVAL_EVENTS.QUAGMIRE, season, achievement_overrides) end}
-	}
-
-	local function MakeTab(data, index)
-		local tab = ImageButton("images/quagmire_recipebook.xml", "quagmire_recipe_tab_inactive.tex", nil, nil, nil, "quagmire_recipe_tab_active.tex")
-		--tab:SetPosition(-260 + 240*(i-1), 285)
-		tab:SetFocusScale(base_size, base_size)
-		tab:SetNormalScale(base_size, base_size)
-		tab:SetText(data.text)
-		tab:SetTextSize(22)
-		tab:SetFont(HEADERFONT)
-		tab:SetTextColour(UICOLOURS.GOLD)
-		tab:SetTextFocusColour(UICOLOURS.GOLD)
-		tab:SetTextSelectedColour(UICOLOURS.GOLD)
-		tab.text:SetPosition(0, -2)
-		tab.clickoffset = Vector3(0,5,0)
-		tab:SetOnClick(function()
-	        self.last_selected:Unselect()
-	        self.last_selected = tab
-			tab:Select()
-			tab:MoveToFront()
-			if self.panel ~= nil then 
-				self.panel:Kill()
-			end
-			self.panel = self.root:AddChild(data.build_panel_fn())
-			if parent ~= nil then
-				if TheWorld ~= nil then
-					parent.default_focus = self.panel.parent_default_focus
-				else
-					self:_DoFocusHookups(parent, secondary_left_menu)
-				end
-			end
-			self.panel.parent_default_focus:SetFocus()
-		end)
-		tab._tabindex = index - 1
-
-		return tab
+	for k, v in pairs(DEATHMATCH_STRINGS.POPUPS) do
+		table.insert(tip_grid_data, {title = v.TITLE, body = v.BODY})
 	end
 	
-	self.tabs = {}
-
-	table.insert(self.tabs, tab_root:AddChild(MakeTab(button_data[1], 1)))
-	self.tabs[#self.tabs]:SetPosition(-260, 285)
-	table.insert(self.tabs, tab_root:AddChild(MakeTab(button_data[2], 2)))
-	self.tabs[#self.tabs]:SetPosition(-260 + 240, 285)
-
-	-----
-	self.last_selected = self.tabs[1]
-	self.last_selected:Select()	
-	self.last_selected:MoveToFront()
-	self.panel = self.root:AddChild(RecipeBookWidget(parent, season))
-	if TheWorld ~= nil then
-		parent.default_focus = self.panel.parent_default_focus
-	else
-        if parent ~= nil then
-		    self:_DoFocusHookups(parent, secondary_left_menu)
-        end
-	end]]
+	self.tip_list:SetItemsData(tip_grid_data)
 end)
 
-function DeathmatchMenu:_DoFocusHookups(menu, secondary_left_menu)
-	menu:ClearFocusDirs()
-	menu:SetFocusChangeDir(MOVE_RIGHT, self.panel.parent_default_focus)
-	self.panel.parent_default_focus:SetFocusChangeDir(MOVE_LEFT, menu)
+function Deathmatch_Menu:BuildTipsMenu()
+    local base_size = 128
+    local cell_size = 73
+    local row_w = cell_size
+    local row_h = cell_size;
+    local reward_width = 80
+    local row_spacing = 5
+	
+	local font = HEADERFONT
+	local title_font_size = 16
 
-	if secondary_left_menu ~= nil then
-		secondary_left_menu:ClearFocusDirs()
+    local function ScrollWidgetsCtor(context, index)
+        local w = Widget("tip-cell-".. index)
+        print("Test Test")
+		----------------
+		w.cell_root = w:AddChild(ImageButton("images/frontend_redux.xml", "achievement_backing_selected.tex", "achievement_backing_selected.tex"))
+		w.cell_root:SetFocusScale(0.3 + .005, 1 + .05)
+		w.cell_root:SetNormalScale(1, 1)
+		
+		w.tip_title = w.cell_root:AddChild(Text(font, title_font_size))
+		
+		w.focus_forward = w.cell_root
 
-		menu:SetFocusChangeDir(MOVE_UP, secondary_left_menu)
-		secondary_left_menu:SetFocusChangeDir(MOVE_DOWN, menu)
-		secondary_left_menu:SetFocusChangeDir(MOVE_RIGHT, self.panel.parent_default_focus)
-	end
+        w.cell_root.ongainfocusfn = function()  end
 
-	for i, v in ipairs(self.tabs) do
-		v:ClearFocusDirs()
-		v:SetFocusChangeDir(MOVE_LEFT, self.panel.parent_default_focus)
-		v:SetFocusChangeDir(MOVE_RIGHT, self.panel.parent_default_focus)
-		v:SetFocusChangeDir(MOVE_UP, self.panel.parent_default_focus)
-		v:SetFocusChangeDir(MOVE_DOWN, self.panel.parent_default_focus)
-	end
+		w.cell_root:SetOnClick(function()
+	
+		end)
+		
+		return w
 
-	if self.panel.spinners ~= nil then
-		for i, v in ipairs(self.panel.spinners) do
-			v:SetFocusChangeDir(MOVE_LEFT, menu)
+    end
+
+    local function ScrollWidgetApply(context, widget, data, index)
+		widget.data = data
+		--print(data)
+		if data ~= nil then
+			widget.cell_root:Show()
+			widget:Enable()
+			
+			print("Test")
+			
+			widget.tip_title:SetString(data.title)
+		else
+			widget:Disable()
+			widget.cell_root:Hide()
 		end
-	end
+    end
+
+    local grid = TEMPLATES.ScrollingGrid(
+        {},
+        {
+            context = {},
+            widget_width  = 500,
+            widget_height = 100,
+            num_visible_rows = 6,
+            num_columns      = 1,
+            item_ctor_fn = ScrollWidgetsCtor,
+            apply_fn     = ScrollWidgetApply,
+            scrollbar_offset = -80,
+            scrollbar_height_offset = 0,
+        })
+
+	grid.up_button:SetTextures("images/quagmire_recipebook.xml", "quagmire_recipe_scroll_arrow_hover.tex")
+    grid.up_button:SetScale(0.5)
+
+	grid.down_button:SetTextures("images/quagmire_recipebook.xml", "quagmire_recipe_scroll_arrow_hover.tex")
+    grid.down_button:SetScale(-0.5)
+
+	grid.scroll_bar_line:SetTexture("images/quagmire_recipebook.xml", "quagmire_recipe_scroll_bar.tex")
+	grid.scroll_bar_line:SetScale(.8)
+
+	grid.position_marker:SetTextures("images/quagmire_recipebook.xml", "quagmire_recipe_scroll_handle.tex")
+	grid.position_marker.image:SetTexture("images/quagmire_recipebook.xml", "quagmire_recipe_scroll_handle.tex")
+    grid.position_marker:SetScale(.6)
+
+    return grid
 end
 
-function DeathmatchMenu:OnControlTabs(control, down)
-	if control == CONTROL_OPEN_CRAFTING then
-		local tab = self.tabs[((self.last_selected._tabindex - 1) % #self.tabs) + 1]
-		if not down then
-			tab.onclick()
-			return true
-		end
-	elseif control == CONTROL_OPEN_INVENTORY then
-		local tab = self.tabs[((self.last_selected._tabindex + 1) % #self.tabs) + 1]
-		if not down then
-			tab.onclick()
-			return true
-		end
-	end
-
+function Deathmatch_Menu:GetContentHeight()
+    return dialog_size_y
 end
 
-function DeathmatchMenu:OnControl(control, down)
-    if DeathmatchMenu._base.OnControl(self, control, down) then return true end
-
-	return self:OnControlTabs(control, down)
+function Deathmatch_Menu:OnBecomeActive()
+    Deathmatch_Menu._base.OnBecomeActive(self)
+    self:Enable()
+    if self.last_focus then self.last_focus:SetFocus() end
 end
 
-return DeathmatchMenu
+function Deathmatch_Menu:OnBecomeInactive()
+    Deathmatch_Menu._base.OnBecomeInactive(self)
+end
+
+function Deathmatch_Menu:OnDestroy()
+    self._base.OnDestroy(self)
+end
+
+return Deathmatch_Menu

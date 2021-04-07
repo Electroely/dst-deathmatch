@@ -244,8 +244,12 @@ end)
 
 ---------------------------------------------------------------------
 local Text = G.require("widgets/text")
+local ImageButton = require "widgets/imagebutton"
+local UIAnimButton = require "widgets/uianimbutton"
 local Deathmatch_LobbyTimer = G.require("widgets/deathmatch_lobbytimer")
 local Deathmatch_InfoPopup = G.require("widgets/deathmatch_infopopup")
+local Deathmatch_Menu = require("screens/deathmatch_menuscreen")
+local DeathmatchMenu = require "widgets/deathmatch_menu"
 
 AddClassPostConstruct("widgets/controls", function(self, owner)
 	if G.TheNet:GetServerGameMode() == "deathmatch" then
@@ -299,6 +303,47 @@ AddClassPostConstruct("widgets/controls", function(self, owner)
 			end
 		end)
 	end
+end)
+
+local function OnStartDM()
+	SendModRPCToServer(GetModRPC(modname, "deathmatch_startorstop"))
+end
+
+local function OnDespawnDM()
+	local status = G.TheWorld.net.deathmatch_netvars.globalvars.matchstatus:value()
+	if status ~= nil then
+		if status == 1 then
+			G.Networking_SystemMessage(DEATHMATCH_STRINGS.CHATMESSAGES.DESPAWN_MIDMATCH)
+		elseif status == 2 then
+			G.Networking_SystemMessage(DEATHMATCH_STRINGS.CHATMESSAGES.DESPAWN_STARTING)
+		end
+	end
+	
+	SendModRPCToServer(GetModRPC(modname, "deathmatch_despawn"))
+end	
+
+local function OnInfoScreen()
+	if G.TheFrontEnd:GetActiveScreen() == "Deathmatch_Menu" then
+		G.TheFrontEnd:PopScreen()
+	else
+		G.TheFrontEnd:PushScreen(DeathmatchMenu(self))
+	end
+end
+
+AddClassPostConstruct("widgets/mapcontrols", function(self)
+	self.startDMBtn = self:AddChild(ImageButton(GLOBAL.HUD_ATLAS, "tab_fight.tex", nil, nil, nil, nil, {1,1}, {0,0}))
+    self.startDMBtn:SetOnClick(OnStartDM)
+	self.startDMBtn:SetPosition(-10, 20)
+	self.startDMBtn:SetScale(0.8)
+	
+	self.changeTeam = self:AddChild(ImageButton("images/button_icons.xml", "clan.tex", nil, nil, nil, nil, {1,1}, {0,0}))
+	self.changeTeam:SetScale(0.15)
+	self.changeTeam:SetPosition(-40, 80)
+	
+	self.infoScreen = self:AddChild(ImageButton("images/button_icons.xml", "clan.tex", nil, nil, nil, nil, {1,1}, {0,0})) --Change icon to question mark
+	self.infoScreen:SetOnClick(OnStartDM)
+	self.infoScreen:SetScale(0.15)
+	self.infoScreen:SetPosition(0, 80)
 end)
 
 AddClassPostConstruct("screens/redux/lobbyscreen", function(self)
@@ -517,6 +562,28 @@ AddModRPCHandler(modname, "locationrequest", function(inst, x, z)
 	end
 	local pos = G.Vector3(x, 0, z)
 	inst._spintargetpos = pos
+end)
+
+AddModRPCHandler(modname, "deathmatch_startorstop", function(inst)
+	local dm = G.TheWorld.components.deathmatch_manager
+	if G.TheWorld.net.components.worldvoter:IsVoteActive() then
+		G.TheNet:Announce(DEATHMATCH_STRINGS.CHATMESSAGES.STARTMATCH_VOTEACTIVE)
+	elseif not (dm.doingreset or dm.matchinprogress or dm.matchstarting) then
+		dm:ResetDeathmatch()
+	end
+	
+	if dm.allow_endmatch_user and dm.matchinprogress then
+		dm:Vote("endmatch", inst)
+	end
+end)
+
+AddModRPCHandler(modname, "deathmatch_despawn", function(inst)
+	local dm = G.TheWorld.components.deathmatch_manager
+	if not (inst and inst.IsValid and inst:IsValid()) or dm.doingreset or dm:IsPlayerInMatch(inst) then
+		return
+	end
+	G.TheWorld.despawnplayerdata[inst.userid] = inst.SaveForReroll ~= nil and inst:SaveForReroll() or nil
+	G.TheWorld:PushEvent("ms_playerdespawnanddelete", inst)
 end)
 
 G.TheInput:AddKeyDownHandler(G.KEY_R, function()
