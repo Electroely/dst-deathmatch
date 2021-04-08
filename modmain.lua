@@ -340,10 +340,15 @@ AddClassPostConstruct("widgets/mapcontrols", function(self)
 	self.changeTeam:SetScale(0.15)
 	self.changeTeam:SetPosition(-40, 80)
 	
-	self.infoScreen = self:AddChild(ImageButton("images/button_icons.xml", "clan.tex", nil, nil, nil, nil, {1,1}, {0,0})) --Change icon to question mark
-	self.infoScreen:SetOnClick(OnStartDM)
+	self.infoScreen = self:AddChild(ImageButton("images/button_icons.xml", "info.tex", nil, nil, nil, nil, {1,1}, {0,0})) --Change icon to question mark
+	self.infoScreen:SetOnClick(OnInfoScreen)
 	self.infoScreen:SetScale(0.15)
-	self.infoScreen:SetPosition(0, 80)
+	self.infoScreen:SetPosition(0, 83)
+	
+	self.despawnBtn = self:AddChild(ImageButton("minimap/minimap_data.xml", "portal_dst.png", nil, nil, nil, nil, {1,1}, {0,0}))
+	self.despawnBtn:SetOnClick(OnDespawnDM)
+	self.despawnBtn:SetScale(0.5)
+	self.despawnBtn:SetPosition(40, 82)
 end)
 
 AddClassPostConstruct("screens/redux/lobbyscreen", function(self)
