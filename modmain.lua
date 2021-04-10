@@ -82,6 +82,12 @@ PrefabFiles = {
 Assets = {
 	Asset("ANIM", "anim/hat_snortoise.zip"),
 	Asset("ANIM", "anim/partyhealth_extras.zip"),
+	
+	Asset("IMAGE", "images/changeTeamPole.tex"),
+	Asset("ATLAS", "images/changeTeamPole.xml"),
+	
+	Asset("IMAGE", "images/changeTeamFlag.tex"),
+	Asset("ATLAS", "images/changeTeamFlag.xml"),
 }
 local function UserOnline(clienttable, userid)
 	local found = false
@@ -244,6 +250,7 @@ end)
 
 ---------------------------------------------------------------------
 local Text = G.require("widgets/text")
+local Image = require "widgets/image"
 local ImageButton = require "widgets/imagebutton"
 local UIAnimButton = require "widgets/uianimbutton"
 local Deathmatch_LobbyTimer = G.require("widgets/deathmatch_lobbytimer")
@@ -336,11 +343,31 @@ AddClassPostConstruct("widgets/mapcontrols", function(self)
 	self.startDMBtn:SetPosition(-10, 20)
 	self.startDMBtn:SetScale(0.8)
 	
-	self.changeTeam = self:AddChild(ImageButton("images/button_icons.xml", "clan.tex", nil, nil, nil, nil, {1,1}, {0,0}))
+	self.changeTeam = self:AddChild(ImageButton("images/changeTeamFlag.xml", "changeTeamFlag.tex", nil, nil, nil, nil, {1,1}, {0,0}))
 	self.changeTeam:SetScale(0.15)
 	self.changeTeam:SetPosition(-40, 80)
 	
-	self.infoScreen = self:AddChild(ImageButton("images/button_icons.xml", "info.tex", nil, nil, nil, nil, {1,1}, {0,0})) --Change icon to question mark
+	self.changeTeam.changeTeamPole = self.changeTeam:AddChild(Image("images/changeTeamPole.xml", "changeTeamPole.tex"))
+	
+	local _OnGainFocus = self.changeTeam.OnGainFocus
+	function self.changeTeam:OnGainFocus(...)
+		_OnGainFocus(self, ...)
+		
+		if self.image_focus == self.image_normal and self.scale_on_focus and self.focus_scale and self.changeTeamPole ~= nil then
+			self.changeTeamPole:SetScale(self.focus_scale[1], self.focus_scale[2], self.focus_scale[3])
+		end
+	end
+	
+	local _OnLoseFocus = self.changeTeam.OnLoseFocus
+	function self.changeTeam:OnLoseFocus(...)
+		_OnLoseFocus(self, ...)
+		
+		if self.image_focus == self.image_normal and self.scale_on_focus and self.normal_scale and self.changeTeamPole ~= nil then
+			self.changeTeamPole:SetScale(self.normal_scale[1], self.normal_scale[2], self.normal_scale[3])
+		end
+	end
+	
+	self.infoScreen = self:AddChild(ImageButton("images/button_icons.xml", "info.tex", nil, nil, nil, nil, {1,1}, {0,0}))
 	self.infoScreen:SetOnClick(OnInfoScreen)
 	self.infoScreen:SetScale(0.15)
 	self.infoScreen:SetPosition(0, 83)

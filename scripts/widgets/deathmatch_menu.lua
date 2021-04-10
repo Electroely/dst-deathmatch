@@ -118,7 +118,6 @@ function Deathmatch_Menu:BuildTipsMenu()
         w.cell_root.ongainfocusfn = function()  end
 		
 		return w
-
     end
 
     local function ScrollWidgetApply(context, widget, data, index)
