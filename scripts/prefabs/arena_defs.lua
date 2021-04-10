@@ -169,6 +169,30 @@ local ARENA_DEFS = {
 		spawnradius = 16,
 		min_pickup_dist = 0,
 		max_pickup_dist = 3.5,
+		matchstartfn = function()
+			local boat = SpawnPrefab("boat")
+			boat.Transform:SetPosition(TheWorld.centerpoint.Transform:GetWorldPosition())
+
+			TheWorld:DoTaskInTime(5 + math.random() * 0.75, function()
+				local malbatross = SpawnPrefab("malbatross")
+				malbatross.Transform:SetPosition(TheWorld.centerpoint.Transform:GetWorldPosition())
+				malbatross.sg:GoToState("arrive")
+			end)
+		end,
+		matchendfn = function()
+			for k, v in pairs(Ents) do
+				if v.prefab == "malbatross" then
+					v.components.health:Kill()
+				end
+			end
+			TheWorld:DoTaskInTime(5, function()
+				for k, v in pairs(Ents) do
+					if v.prefab == "malbatross_feather" or v.prefab == "boat" then
+						v:Remove()
+					end
+				end
+			end)
+		end,
 		--
 		CONFIGS = {
 			lighting = {200 / 255, 200 / 255, 200 / 255},

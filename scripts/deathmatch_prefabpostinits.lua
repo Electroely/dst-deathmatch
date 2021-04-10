@@ -5,6 +5,79 @@ local UpValues = require("deathmatch_upvaluehacker")
 local GetUpValue = UpValues.Get
 local ReplaceUpValue = UpValues.Replace
 
+local function GetPositions(inst)
+    local pt = G.Vector3(G.TheWorld.centerpoint.Transform:GetWorldPosition())
+    local theta = inst.theta
+    local radius = 20
+    local steps = 30
+	local offset = G.Vector3(radius * math.cos(theta), 0, -radius * math.sin(theta))
+	
+	return pt + offset
+end
+
+local function CircleShoal(inst)
+    if (inst.brain and not inst.brain.stopped) and (inst.sg and not inst.sg:HasStateTag("swoop")) then
+		local targetpos = GetPositions(inst)
+        local x, y, z = inst.Transform:GetWorldPosition()
+        local dist = G.VecUtil_Length(targetpos.x - x, targetpos.z - z)
+
+        inst:FacePoint(targetpos.x, 0, targetpos.z)
+        inst.components.locomotor:WalkForward(true)
+		
+		inst.theta = inst.theta + (0.1)
+    end
+end
+
+AddBrainPostInit("malbatrossbrain", function(self)
+	local root = G.PriorityNode(
+    {
+        G.WhileNode(function() return not self.inst.sg:HasStateTag("swoop") and not self.inst.circle_task end, "not swooping",
+            G.PriorityNode({
+                --[[GLOBAL.RunAway(self.inst, function() return CheckForFleeAndDive(self.inst) end, RUN_AWAY_DIST, STOP_RUN_AWAY_DIST),
+
+                GLOBAL.FaceEntity(self.inst, GetCombatFaceTargetFn, KeepCombatFaceTargetFn),                        
+
+                GLOBAL.ChaseAndAttack(self.inst, CHASE_TIME, CHASE_DIST),
+                GLOBAL.DoAction(self.inst, GetEatAction, "Dive For Fish"),
+                GLOBAL.Wander(self.inst, GetWanderPos, 30, {minwaittime = 6}),]]
+            }, 1)),
+    }, 1)
+    
+    self.bt = G.BT(self.inst, root)
+end)
+
+local function Swoop(inst, data)
+	local timer_name = data and data.name or nil
+	if timer_name == "deathmatch_swoop" then
+		local centerpoint = G.TheWorld.centerpoint
+		if centerpoint then
+			inst.sg:GoToState("swoop_pre", centerpoint)
+		end
+		inst.components.timer:StartTimer("deathmatch_swoop", math.random(25, 30))
+	end
+end
+
+AddPrefabPostInit("malbatross", function(inst)
+	inst.Physics:ClearCollisionMask()
+    inst.Physics:CollidesWith(G.COLLISION.GROUND)
+
+	if not G.TheWorld.ismastersim then
+		return
+	end
+	
+	inst:RemoveComponent("lootdropper")
+	inst:AddComponent("lootdropper")
+	
+	inst.components.timer:StartTimer("deathmatch_swoop", math.random(10, 15))
+	inst.components.health:SetAbsorptionAmount(1)
+	
+	inst.theta = math.random() * 2 * G.PI
+	
+	inst.circle_task = inst:DoPeriodicTask(15 * G.FRAMES, CircleShoal)
+	
+	inst:ListenForEvent("timerdone", Swoop)
+end)
+
 AddPrefabPostInit("malbatross_feather", function(inst)
 	inst:AddTag("malbatross_feather")
 end)
