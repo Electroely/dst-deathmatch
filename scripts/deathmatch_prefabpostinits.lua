@@ -16,7 +16,7 @@ local function GetPositions(inst)
 end
 
 local function CircleShoal(inst)
-    if (inst.brain and not inst.brain.stopped) and (inst.sg and not inst.sg:HasStateTag("swoop")) then
+    if (inst.brain and not inst.brain.stopped) and (inst.sg and not inst.sg:HasStateTag("swoop")) and (inst.components.health and not inst.components.health:IsDead()) then
 		local targetpos = GetPositions(inst)
         local x, y, z = inst.Transform:GetWorldPosition()
         local dist = G.VecUtil_Length(targetpos.x - x, targetpos.z - z)
@@ -48,7 +48,7 @@ end)
 
 local function Swoop(inst, data)
 	local timer_name = data and data.name or nil
-	if timer_name == "deathmatch_swoop" then
+	if timer_name == "deathmatch_swoop" and (inst.components.health and not inst.components.health:IsDead()) then
 		local centerpoint = G.TheWorld.centerpoint
 		if centerpoint then
 			inst.sg:GoToState("swoop_pre", centerpoint)
