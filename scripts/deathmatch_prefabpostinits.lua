@@ -21,7 +21,7 @@ local function CircleShoal(inst)
         local x, y, z = inst.Transform:GetWorldPosition()
         local dist = G.VecUtil_Length(targetpos.x - x, targetpos.z - z)
 
-        inst:FacePoint(targetpos.x, 0, targetpos.z)
+        inst:ForceFacePoint(targetpos.x, 0, targetpos.z)
         inst.components.locomotor:WalkForward(true)
 		
 		inst.theta = inst.theta + (0.1)
@@ -34,9 +34,34 @@ local function Swoop(inst, data)
 		local centerpoint = G.TheWorld.centerpoint
 		if centerpoint then
 			inst.sg:GoToState("swoop_pre", centerpoint)
+			inst.drop_feathers_during_swoop = inst:DoPeriodicTask(12 * G.FRAMES, function()
+				if inst.sg and inst.sg.currentstate and inst.sg.currentstate.name == "swoop_pst" then
+					inst.drop_feathers_during_swoop:Cancel()
+					inst.drop_feathers_during_swoop = nil
+					return
+				end
+				if inst.sg and inst.sg:HasStateTag("swoop") then
+					for i=1,3 do
+						if math.random() <= 0.7 then
+							inst.spawnfeather(inst,0.4)
+						end
+					end
+				else
+					inst.drop_feathers_during_swoop:Cancel()
+					inst.drop_feathers_during_swoop = nil
+				end
+			end)
 		end
 		inst.components.timer:StartTimer("deathmatch_swoop", math.random(25, 30))
 	end
+end
+
+local function OnAttacked(inst, data)
+    for i=1,6 do
+        if math.random() < 0.20 then
+            inst.spawnfeather(inst,0.4)
+        end
+    end
 end
 
 AddPrefabPostInit("malbatross", function(inst)
@@ -60,6 +85,7 @@ AddPrefabPostInit("malbatross", function(inst)
 	inst.circle_task = inst:DoPeriodicTask(15 * G.FRAMES, CircleShoal)
 	
 	inst:ListenForEvent("timerdone", Swoop)
+	inst:ListenForEvent("attacked", OnAttacked)
 end)
 
 AddPrefabPostInit("malbatross_feather", function(inst)

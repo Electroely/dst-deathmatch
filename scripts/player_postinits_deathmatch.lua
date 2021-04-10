@@ -130,9 +130,10 @@ end)
 --------------------------------------------------------------
 local function UpdateMalbatrossFeatherStats(inst)
 	local _, feathers = inst.components.inventory:HasItemWithTag("malbatross_feather", 0)
+	feathers = math.min(15, feathers)
 	if feathers > 0 then
 		inst.components.locomotor:SetExternalSpeedMultiplier(inst, "malbatross_speed", 1 + (0.01 * feathers))
-		inst.components.combat.externaldamagetakenmultipliers:SetModifier("malbatrossdefense", feathers * 0.01, "malbatross_defense")
+		inst.components.combat.externaldamagetakenmultipliers:SetModifier("malbatrossdefense", 1 - feathers * 0.05, "malbatross_defense")
 	else
 		inst.components.locomotor:RemoveExternalSpeedMultiplier(inst, "malbatross_speed")
 		inst.components.combat.externaldamagetakenmultipliers:RemoveModifier("malbatrossdefense", "malbatross_defense")
