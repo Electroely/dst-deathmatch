@@ -39,16 +39,16 @@ local Deathmatch_SpectatorSpinner = Class(Widget, function(self, owner)
 	
 	if not initlisteners then
 		TheWorld:ListenForEvent("playerexited", function(player)
-			local self = ThePlayer and ThePlayer.HUD.controls.deathmatch_spectatorspinner or nil
-			if self and self.shown then
-				self.spinner:SetOptions(GetOptionsList())
+			local spinner = ThePlayer and ThePlayer.HUD.controls.deathmatch_spectatorspinner or nil
+			if spinner and spinner.inst:IsValid() and spinner.shown then
+				spinner.spinner:SetOptions(GetOptionsList())
 			end
 		end)
 		
 		TheWorld:ListenForEvent("playerentered", function(player)
-			local self = ThePlayer and ThePlayer.HUD.controls.deathmatch_spectatorspinner or nil
-			if self and self.shown then
-				self.spinner:SetOptions(GetOptionsList())
+			local spinner = ThePlayer and ThePlayer.HUD.controls.deathmatch_spectatorspinner or nil
+			if spinner and spinner.inst:IsValid() and spinner.shown then
+				spinner.spinner:SetOptions(GetOptionsList())
 			end
 		end)
 		initlisteners = true
