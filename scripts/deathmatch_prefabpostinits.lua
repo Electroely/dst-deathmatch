@@ -16,6 +16,10 @@ local function GetPositions(inst)
 end
 
 local function CircleShoal(inst)
+	if inst.sg and inst.sg.currentstate and inst.sg.currentstate.name == "taunt" then
+		return
+	end
+
     if (inst.brain and not inst.brain.stopped) and (inst.sg and not inst.sg:HasStateTag("swoop")) and (inst.components.health and not inst.components.health:IsDead()) then
 		local targetpos = GetPositions(inst)
         local x, y, z = inst.Transform:GetWorldPosition()
@@ -90,6 +94,14 @@ end)
 
 AddPrefabPostInit("malbatross_feather", function(inst)
 	inst:AddTag("malbatross_feather")
+	
+	if not G.TheWorld.ismastersim then
+		return
+	end
+	
+	if inst.components.stackable then
+		inst.components.stackable.maxsize = G.TUNING.STACK_SIZE_MEDITEM
+	end
 end)
 
 local function getPlayerCount(onlyalive)

@@ -11,7 +11,6 @@ local arena_idx = {
 	["stalker"] = 7
 }
 
-
 local function GetValidPoint(position, start_angle, radius, attempts)
 	return FindValidPositionByFan(start_angle, radius, attempts,
             function(offset)
@@ -603,7 +602,7 @@ end
 
 function Deathmatch_Manager:ResetDeathmatch()
 	if self.upcoming_arena == "random" then
-		self.arena = GetRandomItem({"atrium", "desert", "pigvillage"})
+		self.arena = GetRandomItem({"atrium", "desert", "pigvillage", "stalker", "malbatross"})
 	else
 		self.arena = self.upcoming_arena
 	end

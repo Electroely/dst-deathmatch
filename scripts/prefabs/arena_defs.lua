@@ -173,21 +173,16 @@ local ARENA_DEFS = {
 			local boat = SpawnPrefab("boat")
 			boat.Transform:SetPosition(TheWorld.centerpoint.Transform:GetWorldPosition())
 
-			TheWorld:DoTaskInTime(5 + math.random() * 0.75, function()
+			TheWorld:DoTaskInTime(6 + math.random() * 0.75, function()
 				local malbatross = SpawnPrefab("malbatross")
 				malbatross.Transform:SetPosition(TheWorld.centerpoint.Transform:GetWorldPosition())
 				malbatross.sg:GoToState("arrive")
 			end)
 		end,
 		matchendfn = function()
-			for k, v in pairs(Ents) do
-				if v.prefab == "malbatross" then
-					v.components.health:Kill()
-				end
-			end
-			TheWorld:DoTaskInTime(5, function()
+			TheWorld:DoTaskInTime(5, function() --TODO, Hornet: we should just make a "delete_prefabs" table for arenas thats used in the manager component
 				for k, v in pairs(Ents) do
-					if v.prefab == "malbatross_feather" or v.prefab == "boat" then
+					if v.prefab == "malbatross_feather" or v.prefab == "boat" or v.prefab == "malbatross" then
 						v:Remove()
 					end
 				end
@@ -268,7 +263,7 @@ local ARENA_DEFS = {
 		--
 		CONFIGS = {
 			lighting = {0, 0, 0},
-			colourcube = "night03_cc", --lunacy_regular_cc
+			colourcube = "night03_cc",
 			music = "dontstarve/music/music_epicfight",
 		}
 	}
