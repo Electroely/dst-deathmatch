@@ -234,11 +234,11 @@ local function MakeSpectator(player, bool)
 		phys:SetCollisionGroup(COLLISION.CHARACTERS)
 		phys:ClearCollisionMask()
 		phys:CollidesWith(COLLISION.WORLD)
-		player:PushEvent("respawnfromcorpse",{quick=true})
+		--player:PushEvent("respawnfromcorpse",{quick=true})
 		--phys:SetCapsule(0, 0)
 		if player.components.health:IsDead() then
-			player:PushEvent("respawnfromcorpse",{quick=true})
-			player:DoTaskInTime(90*FRAMES, function(player)
+			player:PushEvent("respawnfromcorpse",{instant=true})
+			player:DoTaskInTime(2*FRAMES, function(player)
 				player.sg.statemem.physicsrestored = true
 				phys:SetCollisionGroup(COLLISION.CHARACTERS)
 				phys:ClearCollisionMask()
@@ -259,7 +259,7 @@ local function MakeSpectator(player, bool)
 		phys:CollidesWith(COLLISION.CHARACTERS)
 		phys:CollidesWith(COLLISION.GIANTS)
 		if player.components.health:IsDead() then
-			player:PushEvent("respawnfromcorpse",{quick=true})
+			player:PushEvent("respawnfromcorpse",{instant=true})
 		end
 		--phys:SetCapsule(0.5, 1)
 	end

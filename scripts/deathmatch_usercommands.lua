@@ -237,7 +237,7 @@ AddUserCommand("setarena", {
     votecanstartfn = VoteUtil.DefaultCanStartVote,
     voteresultfn = VoteUtil.DefaultMajorityVote,
     serverfn = function(params, caller)
-		local arenas = { [1]="atrium", [2]="desert", [3]="pigvillage", [4]="stalker", [5] = "malbatross" [6]="random", atrium="atrium", desert="desert", pigvillage="pigvillage", spring="spring", malbatross = "malbatross", grotto = "grotto", stalker = "stalker", random="random" }
+		local arenas = { [1]="atrium", [2]="desert", [3]="pigvillage", [4]="stalker", [5] = "malbatross", [6]="random", atrium="atrium", desert="desert", pigvillage="pigvillage", spring="spring", malbatross = "malbatross", grotto = "grotto", stalker = "stalker", random="random" }
 		local dm = G.TheWorld.components.deathmatch_manager
 		local mode = params.arena
 		if mode ~= nil and arenas[mode] ~= nil then
