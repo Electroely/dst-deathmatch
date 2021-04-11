@@ -223,8 +223,6 @@ end
 
 local function MakeSpectator(player, bool)
 	--player.components.combat.externaldamagetakenmultipliers:SetModifier("deathmatchinvincibility", 0)
-	player:ApplyLobbyInvincibility(true)
-	player:ClearBufferedAction()
 	if bool then
 		player.AnimState:SetMultColour(0.1,0.1,0.1,0.1)
 		player.DynamicShadow:SetSize(0,0)
@@ -263,6 +261,8 @@ local function MakeSpectator(player, bool)
 		end
 		--phys:SetCapsule(0.5, 1)
 	end
+	player:ApplyLobbyInvincibility(true)
+	player:ClearBufferedAction()
 end
 
 dm = nil -- gotta remove later
