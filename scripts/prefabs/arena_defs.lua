@@ -172,11 +172,13 @@ local ARENA_DEFS = {
 		matchstartfn = function()
 			local boat = SpawnPrefab("boat")
 			boat.Transform:SetPosition(TheWorld.centerpoint.Transform:GetWorldPosition())
+			boat.persists = false
 
 			TheWorld:DoTaskInTime(6 + math.random() * 0.75, function()
 				local malbatross = SpawnPrefab("malbatross")
 				malbatross.Transform:SetPosition(TheWorld.centerpoint.Transform:GetWorldPosition())
 				malbatross.sg:GoToState("arrive")
+				malbatross.persists = false
 			end)
 		end,
 		matchendfn = function()
@@ -239,11 +241,13 @@ local ARENA_DEFS = {
 				stalker.Transform:SetPosition(x, y, z)
 				stalker.Transform:SetRotation(rot)
 				stalker.sg:GoToState("resurrect")
+				stalker.persists = false
 			end
 			local fossil = SpawnPrefab("fossil_stalker")
 			fossil.Transform:SetPosition(TheWorld.centerpoint.Transform:GetWorldPosition())
 			fossil.AnimState:PlayAnimation("1_8")
 			fossil:DoTaskInTime(15 + math.random() * 0.75, SpawnStalker)
+			fossil.persists = false
 		end,
 		matchendfn = function()
 			TheWorld.state.isnight = false

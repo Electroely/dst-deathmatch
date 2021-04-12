@@ -42,7 +42,7 @@ local Deathmatch_SpectatorSpinner = Class(Widget, function(self, owner)
 	end)
 	
 	self.spectatebutton = self:AddChild(TextButton())
-	self.spectatebutton:SetPosition(0, 50)
+	self.spectatebutton:SetPosition(0, 60)
 	self.spectatebutton:SetTextSize(40)
 	self.spectatebutton:SetText("󰀉")
 	self.spectatebutton:SetOnClick(function()

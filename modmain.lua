@@ -6,6 +6,8 @@ G.DEATHMATCH_STRINGS = G.require("deathmatch_strings")
 local DEATHMATCH_STRINGS = G.DEATHMATCH_STRINGS
 local DEATHMATCH_POPUPS = DEATHMATCH_STRINGS.POPUPS
 
+local UserCommands = require("usercommands")
+
 --mod import extra files
 modimport("scripts/deathmatch_teamchat")
 modimport("scripts/deathmatch_componentpostinits")
@@ -313,20 +315,18 @@ AddClassPostConstruct("widgets/controls", function(self, owner)
 end)
 
 local function OnStartDM()
-	SendModRPCToServer(GetModRPC(modname, "deathmatch_startorstop"))
-end
-
-local function OnDespawnDM()
 	local status = G.TheWorld.net.deathmatch_netvars.globalvars.matchstatus:value()
 	if status ~= nil then
 		if status == 1 then
-			G.Networking_SystemMessage(DEATHMATCH_STRINGS.CHATMESSAGES.DESPAWN_MIDMATCH)
-		elseif status == 2 then
-			G.Networking_SystemMessage(DEATHMATCH_STRINGS.CHATMESSAGES.DESPAWN_STARTING)
+			UserCommands.RunTextUserCommand("dm stop", G.ThePlayer, false)
+		else
+			UserCommands.RunTextUserCommand("dm start", G.ThePlayer, false)
 		end
 	end
-	
-	SendModRPCToServer(GetModRPC(modname, "deathmatch_despawn"))
+end
+
+local function OnDespawnDM()
+	UserCommands.RunTextUserCommand("despawn", G.ThePlayer, false)
 end	
 
 local function OnInfoScreen()
@@ -594,28 +594,6 @@ AddModRPCHandler(modname, "locationrequest", function(inst, x, z)
 	end
 	local pos = G.Vector3(x, 0, z)
 	inst._spintargetpos = pos
-end)
-
-AddModRPCHandler(modname, "deathmatch_startorstop", function(inst)
-	local dm = G.TheWorld.components.deathmatch_manager
-	if G.TheWorld.net.components.worldvoter:IsVoteActive() then
-		G.TheNet:Announce(DEATHMATCH_STRINGS.CHATMESSAGES.STARTMATCH_VOTEACTIVE)
-	elseif not (dm.doingreset or dm.matchinprogress or dm.matchstarting) then
-		dm:ResetDeathmatch()
-	end
-	
-	if dm.allow_endmatch_user and dm.matchinprogress then
-		dm:Vote("endmatch", inst)
-	end
-end)
-
-AddModRPCHandler(modname, "deathmatch_despawn", function(inst)
-	local dm = G.TheWorld.components.deathmatch_manager
-	if not (inst and inst.IsValid and inst:IsValid()) or dm.doingreset or dm:IsPlayerInMatch(inst) then
-		return
-	end
-	G.TheWorld.despawnplayerdata[inst.userid] = inst.SaveForReroll ~= nil and inst:SaveForReroll() or nil
-	G.TheWorld:PushEvent("ms_playerdespawnanddelete", inst)
 end)
 
 G.TheInput:AddKeyDownHandler(G.KEY_R, function()
