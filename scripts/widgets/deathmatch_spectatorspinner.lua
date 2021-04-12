@@ -1,6 +1,10 @@
 local Widget = require("widgets/widget")
 local Text = require("widgets/text")
+local TextButton = require("widgets/textbutton")
 local Spinner = require("widgets/spinner")
+
+local UserCommands = require("usercommands")
+
 --options, width, height, textinfo, editable, atlas, textures, lean, textwidth, textheight
 local function GetOptionsList()
 	local options = {}
@@ -35,6 +39,14 @@ local Deathmatch_SpectatorSpinner = Class(Widget, function(self, owner)
 				sc_dm:SetTarget(ThePlayer)
 			end
 		end
+	end)
+	
+	self.spectatebutton = self:AddChild(TextButton())
+	self.spectatebutton:SetPosition(0, 50)
+	self.spectatebutton:SetTextSize(40)
+	self.spectatebutton:SetString("󰀉")
+	self.spectatebutton:SetOnClick(function()
+		UserCommands.RunTextUserCommand("spectate", ThePlayer, false)
 	end)
 	
 	if not initlisteners then
