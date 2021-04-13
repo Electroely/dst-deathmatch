@@ -17,6 +17,11 @@ AddComponentPostInit("inventory", function(self)
 					return
 				end
 			end
+			for i = 1, self.maxslots do
+				if inst ~= nil and self.itemslots[i] ~= nil and self.itemslots[i].components.stackable ~= nil and inst.components.stackable ~= nil and self.itemslots[i].prefab == inst.prefab and not self.itemslots[i].components.stackable:IsFull() then
+					return GiveItem_old(self, inst, slot, src_pos, ...)
+				end
+			end
 			local dm = G.TheWorld.components.deathmatch_manager
 			if slot == nil and 
 				(inst.prevslot == nil or self.itemslots[inst.prevslot] ~= nil) and
