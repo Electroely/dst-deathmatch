@@ -1,38 +1,38 @@
 return {
-  version = "1.1",
+  version = "1.5",
   luaversion = "5.1",
+  tiledversion = "1.5.0",
   orientation = "orthogonal",
+  renderorder = "right-down",
   width = 90,
   height = 90,
   tilewidth = 64,
   tileheight = 64,
+  nextlayerid = 3,
+  nextobjectid = 393,
   properties = {},
   tilesets = {
     {
       name = "ground",
       firstgid = 1,
-      filename = "../../../static_layout/dont_starve/ground_deathmatch.tsx",
-      tilewidth = 64,
-      tileheight = 64,
-      spacing = 0,
-      margin = 0,
-      image = "../../../static_layout/tiles_deathmatch.png",
-      imagewidth = 512,
-      imageheight = 384,
-      properties = {},
-      tiles = {}
+      filename = "../../../static_layout/dont_starve/ground_deathmatch.tsx"
     }
   },
   layers = {
     {
       type = "tilelayer",
-      name = "BG_TILES",
       x = 0,
       y = 0,
       width = 90,
       height = 90,
+      id = 1,
+      name = "BG_TILES",
       visible = true,
       opacity = 1,
+      offsetx = 0,
+      offsety = 0,
+      parallaxx = 1,
+      parallaxy = 1,
       properties = {},
       encoding = "lua",
       data = {
@@ -130,12 +130,19 @@ return {
     },
     {
       type = "objectgroup",
+      draworder = "topdown",
+      id = 2,
       name = "FG_OBJECTS",
       visible = true,
       opacity = 1,
+      offsetx = 0,
+      offsety = 0,
+      parallaxx = 1,
+      parallaxy = 1,
       properties = {},
       objects = {
         {
+          id = 1,
           name = "",
           type = "multiplayer_portal",
           shape = "rectangle",
@@ -143,10 +150,12 @@ return {
           y = 1024,
           width = 0,
           height = 0,
+          rotation = 0,
           visible = true,
           properties = {}
         },
         {
+          id = 2,
           name = "",
           type = "dummytarget",
           shape = "rectangle",
@@ -154,10 +163,12 @@ return {
           y = 768,
           width = 0,
           height = 0,
+          rotation = 0,
           visible = true,
           properties = {}
         },
         {
+          id = 3,
           name = "",
           type = "researchlab",
           shape = "rectangle",
@@ -165,10 +176,12 @@ return {
           y = 1024,
           width = 0,
           height = 0,
+          rotation = 0,
           visible = true,
           properties = {}
         },
         {
+          id = 4,
           name = "",
           type = "spawnpoint_master",
           shape = "rectangle",
@@ -176,10 +189,12 @@ return {
           y = 1024,
           width = 0,
           height = 0,
+          rotation = 0,
           visible = true,
           properties = {}
         },
         {
+          id = 5,
           name = "",
           type = "atrium_gate",
           shape = "rectangle",
@@ -187,10 +202,12 @@ return {
           y = 800,
           width = 0,
           height = 0,
+          rotation = 0,
           visible = true,
           properties = {}
         },
         {
+          id = 6,
           name = "",
           type = "atrium_fence",
           shape = "rectangle",
@@ -198,10 +215,12 @@ return {
           y = 616,
           width = 12,
           height = 12,
+          rotation = 0,
           visible = true,
           properties = {}
         },
         {
+          id = 7,
           name = "",
           type = "atrium_fence",
           shape = "rectangle",
@@ -209,10 +228,12 @@ return {
           y = 624,
           width = 12,
           height = 12,
+          rotation = 0,
           visible = true,
           properties = {}
         },
         {
+          id = 8,
           name = "",
           type = "atrium_fence",
           shape = "rectangle",
@@ -220,10 +241,12 @@ return {
           y = 608,
           width = 12,
           height = 12,
+          rotation = 0,
           visible = true,
           properties = {}
         },
         {
+          id = 9,
           name = "",
           type = "atrium_fence",
           shape = "rectangle",
@@ -231,10 +254,12 @@ return {
           y = 632,
           width = 12,
           height = 12,
+          rotation = 0,
           visible = true,
           properties = {}
         },
         {
+          id = 10,
           name = "",
           type = "atrium_fence",
           shape = "rectangle",
@@ -242,10 +267,12 @@ return {
           y = 600,
           width = 12,
           height = 12,
+          rotation = 0,
           visible = true,
           properties = {}
         },
         {
+          id = 11,
           name = "",
           type = "atrium_fence",
           shape = "rectangle",
@@ -253,10 +280,12 @@ return {
           y = 568,
           width = 12,
           height = 12,
+          rotation = 0,
           visible = true,
           properties = {}
         },
         {
+          id = 12,
           name = "",
           type = "atrium_fence",
           shape = "rectangle",
@@ -264,10 +293,12 @@ return {
           y = 592,
           width = 12,
           height = 12,
+          rotation = 0,
           visible = true,
           properties = {}
         },
         {
+          id = 13,
           name = "",
           type = "atrium_fence",
           shape = "rectangle",
@@ -275,10 +306,12 @@ return {
           y = 584,
           width = 12,
           height = 12,
+          rotation = 0,
           visible = true,
           properties = {}
         },
         {
+          id = 14,
           name = "",
           type = "atrium_fence",
           shape = "rectangle",
@@ -286,10 +319,12 @@ return {
           y = 576,
           width = 12,
           height = 12,
+          rotation = 0,
           visible = true,
           properties = {}
         },
         {
+          id = 15,
           name = "",
           type = "atrium_fence",
           shape = "rectangle",
@@ -297,10 +332,12 @@ return {
           y = 568,
           width = 12,
           height = 12,
+          rotation = 0,
           visible = true,
           properties = {}
         },
         {
+          id = 16,
           name = "",
           type = "atrium_fence",
           shape = "rectangle",
@@ -308,10 +345,12 @@ return {
           y = 616,
           width = 12,
           height = 12,
+          rotation = 0,
           visible = true,
           properties = {}
         },
         {
+          id = 17,
           name = "",
           type = "atrium_fence",
           shape = "rectangle",
@@ -319,10 +358,12 @@ return {
           y = 584,
           width = 12,
           height = 12,
+          rotation = 0,
           visible = true,
           properties = {}
         },
         {
+          id = 18,
           name = "",
           type = "atrium_fence",
           shape = "rectangle",
@@ -330,10 +371,12 @@ return {
           y = 768,
           width = 12,
           height = 12,
+          rotation = 0,
           visible = true,
           properties = {}
         },
         {
+          id = 19,
           name = "",
           type = "atrium_fence",
           shape = "rectangle",
@@ -341,10 +384,12 @@ return {
           y = 776,
           width = 12,
           height = 12,
+          rotation = 0,
           visible = true,
           properties = {}
         },
         {
+          id = 20,
           name = "",
           type = "atrium_fence",
           shape = "rectangle",
@@ -352,10 +397,12 @@ return {
           y = 792,
           width = 12,
           height = 12,
+          rotation = 0,
           visible = true,
           properties = {}
         },
         {
+          id = 21,
           name = "",
           type = "atrium_fence",
           shape = "rectangle",
@@ -363,10 +410,12 @@ return {
           y = 808,
           width = 12,
           height = 12,
+          rotation = 0,
           visible = true,
           properties = {}
         },
         {
+          id = 22,
           name = "",
           type = "atrium_fence",
           shape = "rectangle",
@@ -374,10 +423,12 @@ return {
           y = 816,
           width = 12,
           height = 12,
+          rotation = 0,
           visible = true,
           properties = {}
         },
         {
+          id = 23,
           name = "",
           type = "atrium_fence",
           shape = "rectangle",
@@ -385,10 +436,12 @@ return {
           y = 792,
           width = 12,
           height = 12,
+          rotation = 0,
           visible = true,
           properties = {}
         },
         {
+          id = 24,
           name = "",
           type = "atrium_fence",
           shape = "rectangle",
@@ -396,10 +449,12 @@ return {
           y = 768,
           width = 12,
           height = 12,
+          rotation = 0,
           visible = true,
           properties = {}
         },
         {
+          id = 25,
           name = "",
           type = "atrium_fence",
           shape = "rectangle",
@@ -407,10 +462,12 @@ return {
           y = 808,
           width = 12,
           height = 12,
+          rotation = 0,
           visible = true,
           properties = {}
         },
         {
+          id = 26,
           name = "",
           type = "atrium_fence",
           shape = "rectangle",
@@ -418,10 +475,12 @@ return {
           y = 824,
           width = 12,
           height = 12,
+          rotation = 0,
           visible = true,
           properties = {}
         },
         {
+          id = 27,
           name = "",
           type = "atrium_fence",
           shape = "rectangle",
@@ -429,10 +488,12 @@ return {
           y = 984,
           width = 12,
           height = 12,
+          rotation = 0,
           visible = true,
           properties = {}
         },
         {
+          id = 28,
           name = "",
           type = "atrium_fence",
           shape = "rectangle",
@@ -440,10 +501,12 @@ return {
           y = 976,
           width = 12,
           height = 12,
+          rotation = 0,
           visible = true,
           properties = {}
         },
         {
+          id = 29,
           name = "",
           type = "atrium_fence",
           shape = "rectangle",
@@ -451,10 +514,12 @@ return {
           y = 984,
           width = 12,
           height = 12,
+          rotation = 0,
           visible = true,
           properties = {}
         },
         {
+          id = 30,
           name = "",
           type = "atrium_fence",
           shape = "rectangle",
@@ -462,10 +527,12 @@ return {
           y = 1000,
           width = 12,
           height = 12,
+          rotation = 0,
           visible = true,
           properties = {}
         },
         {
+          id = 31,
           name = "",
           type = "atrium_fence",
           shape = "rectangle",
@@ -473,10 +540,12 @@ return {
           y = 968,
           width = 12,
           height = 12,
+          rotation = 0,
           visible = true,
           properties = {}
         },
         {
+          id = 32,
           name = "",
           type = "atrium_fence",
           shape = "rectangle",
@@ -484,10 +553,12 @@ return {
           y = 1000,
           width = 12,
           height = 12,
+          rotation = 0,
           visible = true,
           properties = {}
         },
         {
+          id = 33,
           name = "",
           type = "atrium_fence",
           shape = "rectangle",
@@ -495,10 +566,12 @@ return {
           y = 1000,
           width = 12,
           height = 12,
+          rotation = 0,
           visible = true,
           properties = {}
         },
         {
+          id = 34,
           name = "",
           type = "atrium_fence",
           shape = "rectangle",
@@ -506,10 +579,12 @@ return {
           y = 960,
           width = 12,
           height = 12,
+          rotation = 0,
           visible = true,
           properties = {}
         },
         {
+          id = 35,
           name = "",
           type = "atrium_fence",
           shape = "rectangle",
@@ -517,10 +592,12 @@ return {
           y = 960,
           width = 12,
           height = 12,
+          rotation = 0,
           visible = true,
           properties = {}
         },
         {
+          id = 36,
           name = "",
           type = "atrium_fence",
           shape = "rectangle",
@@ -528,10 +605,12 @@ return {
           y = 1008,
           width = 12,
           height = 12,
+          rotation = 0,
           visible = true,
           properties = {}
         },
         {
+          id = 37,
           name = "",
           type = "atrium_fence",
           shape = "rectangle",
@@ -539,10 +618,12 @@ return {
           y = 768,
           width = 12,
           height = 12,
+          rotation = 0,
           visible = true,
           properties = {}
         },
         {
+          id = 38,
           name = "",
           type = "atrium_fence",
           shape = "rectangle",
@@ -550,10 +631,12 @@ return {
           y = 776,
           width = 12,
           height = 12,
+          rotation = 0,
           visible = true,
           properties = {}
         },
         {
+          id = 39,
           name = "",
           type = "atrium_fence",
           shape = "rectangle",
@@ -561,10 +644,12 @@ return {
           y = 792,
           width = 12,
           height = 12,
+          rotation = 0,
           visible = true,
           properties = {}
         },
         {
+          id = 40,
           name = "",
           type = "atrium_fence",
           shape = "rectangle",
@@ -572,10 +657,12 @@ return {
           y = 800,
           width = 12,
           height = 12,
+          rotation = 0,
           visible = true,
           properties = {}
         },
         {
+          id = 41,
           name = "",
           type = "atrium_fence",
           shape = "rectangle",
@@ -583,10 +670,12 @@ return {
           y = 824,
           width = 12,
           height = 12,
+          rotation = 0,
           visible = true,
           properties = {}
         },
         {
+          id = 42,
           name = "",
           type = "atrium_fence",
           shape = "rectangle",
@@ -594,10 +683,12 @@ return {
           y = 784,
           width = 12,
           height = 12,
+          rotation = 0,
           visible = true,
           properties = {}
         },
         {
+          id = 43,
           name = "",
           type = "atrium_fence",
           shape = "rectangle",
@@ -605,10 +696,12 @@ return {
           y = 808,
           width = 12,
           height = 12,
+          rotation = 0,
           visible = true,
           properties = {}
         },
         {
+          id = 44,
           name = "",
           type = "atrium_fence",
           shape = "rectangle",
@@ -616,10 +709,12 @@ return {
           y = 784,
           width = 12,
           height = 12,
+          rotation = 0,
           visible = true,
           properties = {}
         },
         {
+          id = 45,
           name = "",
           type = "atrium_fence",
           shape = "rectangle",
@@ -627,10 +722,12 @@ return {
           y = 808,
           width = 12,
           height = 12,
+          rotation = 0,
           visible = true,
           properties = {}
         },
         {
+          id = 46,
           name = "",
           type = "atrium_fence",
           shape = "rectangle",
@@ -638,10 +735,12 @@ return {
           y = 824,
           width = 12,
           height = 12,
+          rotation = 0,
           visible = true,
           properties = {}
         },
         {
+          id = 47,
           name = "",
           type = "atrium_fence",
           shape = "rectangle",
@@ -649,10 +748,12 @@ return {
           y = 800,
           width = 12,
           height = 12,
+          rotation = 0,
           visible = true,
           properties = {}
         },
         {
+          id = 48,
           name = "",
           type = "atrium_light",
           shape = "rectangle",
@@ -660,10 +761,12 @@ return {
           y = 832,
           width = 0,
           height = 0,
+          rotation = 0,
           visible = true,
           properties = {}
         },
         {
+          id = 49,
           name = "",
           type = "atrium_light",
           shape = "rectangle",
@@ -671,10 +774,12 @@ return {
           y = 768,
           width = 0,
           height = 0,
+          rotation = 0,
           visible = true,
           properties = {}
         },
         {
+          id = 50,
           name = "",
           type = "atrium_light",
           shape = "rectangle",
@@ -682,10 +787,12 @@ return {
           y = 608,
           width = 0,
           height = 0,
+          rotation = 0,
           visible = true,
           properties = {}
         },
         {
+          id = 51,
           name = "",
           type = "atrium_light",
           shape = "rectangle",
@@ -693,10 +800,12 @@ return {
           y = 608,
           width = 0,
           height = 0,
+          rotation = 0,
           visible = true,
           properties = {}
         },
         {
+          id = 52,
           name = "",
           type = "atrium_light",
           shape = "rectangle",
@@ -704,10 +813,12 @@ return {
           y = 768,
           width = 0,
           height = 0,
+          rotation = 0,
           visible = true,
           properties = {}
         },
         {
+          id = 53,
           name = "",
           type = "atrium_light",
           shape = "rectangle",
@@ -715,10 +826,12 @@ return {
           y = 832,
           width = 0,
           height = 0,
+          rotation = 0,
           visible = true,
           properties = {}
         },
         {
+          id = 54,
           name = "",
           type = "atrium_fence",
           shape = "rectangle",
@@ -726,10 +839,12 @@ return {
           y = 768,
           width = 12,
           height = 12,
+          rotation = 0,
           visible = true,
           properties = {}
         },
         {
+          id = 55,
           name = "",
           type = "atrium_fence",
           shape = "rectangle",
@@ -737,10 +852,12 @@ return {
           y = 776,
           width = 12,
           height = 12,
+          rotation = 0,
           visible = true,
           properties = {}
         },
         {
+          id = 56,
           name = "",
           type = "atrium_light",
           shape = "rectangle",
@@ -748,10 +865,12 @@ return {
           y = 992,
           width = 0,
           height = 0,
+          rotation = 0,
           visible = true,
           properties = {}
         },
         {
+          id = 57,
           name = "",
           type = "atrium_light",
           shape = "rectangle",
@@ -759,10 +878,12 @@ return {
           y = 992,
           width = 0,
           height = 0,
+          rotation = 0,
           visible = true,
           properties = {}
         },
         {
+          id = 58,
           name = "",
           type = "atrium_fence",
           shape = "rectangle",
@@ -770,10 +891,12 @@ return {
           y = 1016,
           width = 12,
           height = 12,
+          rotation = 0,
           visible = true,
           properties = {}
         },
         {
+          id = 59,
           name = "",
           type = "atrium_fence",
           shape = "rectangle",
@@ -781,10 +904,12 @@ return {
           y = 1008,
           width = 12,
           height = 12,
+          rotation = 0,
           visible = true,
           properties = {}
         },
         {
+          id = 60,
           name = "",
           type = "atrium_fence",
           shape = "rectangle",
@@ -792,10 +917,12 @@ return {
           y = 784,
           width = 12,
           height = 12,
+          rotation = 0,
           visible = true,
           properties = {}
         },
         {
+          id = 61,
           name = "",
           type = "atrium_fence",
           shape = "rectangle",
@@ -803,10 +930,12 @@ return {
           y = 776,
           width = 12,
           height = 12,
+          rotation = 0,
           visible = true,
           properties = {}
         },
         {
+          id = 62,
           name = "",
           type = "atrium_fence",
           shape = "rectangle",
@@ -814,10 +943,12 @@ return {
           y = 800,
           width = 12,
           height = 12,
+          rotation = 0,
           visible = true,
           properties = {}
         },
         {
+          id = 63,
           name = "",
           type = "atrium_fence",
           shape = "rectangle",
@@ -825,10 +956,12 @@ return {
           y = 632,
           width = 12,
           height = 12,
+          rotation = 0,
           visible = true,
           properties = {}
         },
         {
+          id = 64,
           name = "",
           type = "atrium_fence",
           shape = "rectangle",
@@ -836,10 +969,12 @@ return {
           y = 584,
           width = 12,
           height = 12,
+          rotation = 0,
           visible = true,
           properties = {}
         },
         {
+          id = 65,
           name = "",
           type = "atrium_fence",
           shape = "rectangle",
@@ -847,10 +982,12 @@ return {
           y = 568,
           width = 12,
           height = 12,
+          rotation = 0,
           visible = true,
           properties = {}
         },
         {
+          id = 66,
           name = "",
           type = "atrium_fence",
           shape = "rectangle",
@@ -858,10 +995,12 @@ return {
           y = 792,
           width = 12,
           height = 12,
+          rotation = 0,
           visible = true,
           properties = {}
         },
         {
+          id = 67,
           name = "",
           type = "atrium_fence",
           shape = "rectangle",
@@ -869,10 +1008,12 @@ return {
           y = 808,
           width = 12,
           height = 12,
+          rotation = 0,
           visible = true,
           properties = {}
         },
         {
+          id = 68,
           name = "",
           type = "wardrobe",
           shape = "rectangle",
@@ -880,10 +1021,12 @@ return {
           y = 1024,
           width = 0,
           height = 0,
+          rotation = 0,
           visible = true,
           properties = {}
         },
         {
+          id = 69,
           name = "",
           type = "ruinsrelic_table",
           shape = "rectangle",
@@ -891,10 +1034,12 @@ return {
           y = 1280,
           width = 0,
           height = 0,
+          rotation = 0,
           visible = true,
           properties = {}
         },
         {
+          id = 70,
           name = "",
           type = "ruinsrelic_chair",
           shape = "rectangle",
@@ -902,10 +1047,12 @@ return {
           y = 1280,
           width = 0,
           height = 0,
+          rotation = 0,
           visible = true,
           properties = {}
         },
         {
+          id = 71,
           name = "",
           type = "ruinsrelic_chair",
           shape = "rectangle",
@@ -913,10 +1060,12 @@ return {
           y = 1280,
           width = 0,
           height = 0,
+          rotation = 0,
           visible = true,
           properties = {}
         },
         {
+          id = 72,
           name = "",
           type = "berrybush",
           shape = "rectangle",
@@ -924,10 +1073,12 @@ return {
           y = 824,
           width = 0,
           height = 0,
+          rotation = 0,
           visible = true,
           properties = {}
         },
         {
+          id = 73,
           name = "",
           type = "berrybush",
           shape = "rectangle",
@@ -935,10 +1086,12 @@ return {
           y = 808,
           width = 0,
           height = 0,
+          rotation = 0,
           visible = true,
           properties = {}
         },
         {
+          id = 74,
           name = "",
           type = "berrybush",
           shape = "rectangle",
@@ -946,10 +1099,12 @@ return {
           y = 872,
           width = 0,
           height = 0,
+          rotation = 0,
           visible = true,
           properties = {}
         },
         {
+          id = 75,
           name = "",
           type = "berrybush",
           shape = "rectangle",
@@ -957,10 +1112,12 @@ return {
           y = 792,
           width = 0,
           height = 0,
+          rotation = 0,
           visible = true,
           properties = {}
         },
         {
+          id = 76,
           name = "",
           type = "berrybush",
           shape = "rectangle",
@@ -968,10 +1125,12 @@ return {
           y = 784,
           width = 0,
           height = 0,
+          rotation = 0,
           visible = true,
           properties = {}
         },
         {
+          id = 77,
           name = "",
           type = "berrybush",
           shape = "rectangle",
@@ -979,10 +1138,12 @@ return {
           y = 864,
           width = 0,
           height = 0,
+          rotation = 0,
           visible = true,
           properties = {}
         },
         {
+          id = 78,
           name = "",
           type = "berrybush",
           shape = "rectangle",
@@ -990,10 +1151,12 @@ return {
           y = 920,
           width = 0,
           height = 0,
+          rotation = 0,
           visible = true,
           properties = {}
         },
         {
+          id = 79,
           name = "",
           type = "berrybush",
           shape = "rectangle",
@@ -1001,10 +1164,12 @@ return {
           y = 1136,
           width = 0,
           height = 0,
+          rotation = 0,
           visible = true,
           properties = {}
         },
         {
+          id = 80,
           name = "",
           type = "berrybush",
           shape = "rectangle",
@@ -1012,10 +1177,12 @@ return {
           y = 1168,
           width = 0,
           height = 0,
+          rotation = 0,
           visible = true,
           properties = {}
         },
         {
+          id = 81,
           name = "",
           type = "berrybush",
           shape = "rectangle",
@@ -1023,10 +1190,12 @@ return {
           y = 1200,
           width = 0,
           height = 0,
+          rotation = 0,
           visible = true,
           properties = {}
         },
         {
+          id = 82,
           name = "",
           type = "berrybush",
           shape = "rectangle",
@@ -1034,10 +1203,12 @@ return {
           y = 1232,
           width = 0,
           height = 0,
+          rotation = 0,
           visible = true,
           properties = {}
         },
         {
+          id = 83,
           name = "",
           type = "berrybush",
           shape = "rectangle",
@@ -1045,10 +1216,12 @@ return {
           y = 1120,
           width = 0,
           height = 0,
+          rotation = 0,
           visible = true,
           properties = {}
         },
         {
+          id = 84,
           name = "",
           type = "berrybush",
           shape = "rectangle",
@@ -1056,10 +1229,12 @@ return {
           y = 1192,
           width = 0,
           height = 0,
+          rotation = 0,
           visible = true,
           properties = {}
         },
         {
+          id = 85,
           name = "",
           type = "berrybush",
           shape = "rectangle",
@@ -1067,10 +1242,12 @@ return {
           y = 1256,
           width = 0,
           height = 0,
+          rotation = 0,
           visible = true,
           properties = {}
         },
         {
+          id = 86,
           name = "",
           type = "berrybush",
           shape = "rectangle",
@@ -1078,10 +1255,12 @@ return {
           y = 1224,
           width = 0,
           height = 0,
+          rotation = 0,
           visible = true,
           properties = {}
         },
         {
+          id = 87,
           name = "",
           type = "evergreen",
           shape = "rectangle",
@@ -1089,10 +1268,12 @@ return {
           y = 808,
           width = 0,
           height = 0,
+          rotation = 0,
           visible = true,
           properties = {}
         },
         {
+          id = 88,
           name = "",
           type = "evergreen",
           shape = "rectangle",
@@ -1100,10 +1281,12 @@ return {
           y = 872,
           width = 0,
           height = 0,
+          rotation = 0,
           visible = true,
           properties = {}
         },
         {
+          id = 89,
           name = "",
           type = "evergreen",
           shape = "rectangle",
@@ -1111,10 +1294,12 @@ return {
           y = 896,
           width = 0,
           height = 0,
+          rotation = 0,
           visible = true,
           properties = {}
         },
         {
+          id = 90,
           name = "",
           type = "evergreen",
           shape = "rectangle",
@@ -1122,10 +1307,12 @@ return {
           y = 816,
           width = 0,
           height = 0,
+          rotation = 0,
           visible = true,
           properties = {}
         },
         {
+          id = 91,
           name = "",
           type = "evergreen",
           shape = "rectangle",
@@ -1133,10 +1320,12 @@ return {
           y = 928,
           width = 0,
           height = 0,
+          rotation = 0,
           visible = true,
           properties = {}
         },
         {
+          id = 92,
           name = "",
           type = "evergreen",
           shape = "rectangle",
@@ -1144,10 +1333,12 @@ return {
           y = 1144,
           width = 0,
           height = 0,
+          rotation = 0,
           visible = true,
           properties = {}
         },
         {
+          id = 93,
           name = "",
           type = "evergreen",
           shape = "rectangle",
@@ -1155,10 +1346,12 @@ return {
           y = 1168,
           width = 0,
           height = 0,
+          rotation = 0,
           visible = true,
           properties = {}
         },
         {
+          id = 94,
           name = "",
           type = "evergreen",
           shape = "rectangle",
@@ -1166,10 +1359,12 @@ return {
           y = 1200,
           width = 0,
           height = 0,
+          rotation = 0,
           visible = true,
           properties = {}
         },
         {
+          id = 95,
           name = "",
           type = "evergreen",
           shape = "rectangle",
@@ -1177,10 +1372,12 @@ return {
           y = 1240,
           width = 0,
           height = 0,
+          rotation = 0,
           visible = true,
           properties = {}
         },
         {
+          id = 96,
           name = "",
           type = "evergreen",
           shape = "rectangle",
@@ -1188,10 +1385,12 @@ return {
           y = 1240,
           width = 0,
           height = 0,
+          rotation = 0,
           visible = true,
           properties = {}
         },
         {
+          id = 97,
           name = "",
           type = "flower",
           shape = "rectangle",
@@ -1199,10 +1398,12 @@ return {
           y = 928,
           width = 8,
           height = 8,
+          rotation = 0,
           visible = true,
           properties = {}
         },
         {
+          id = 98,
           name = "",
           type = "flower",
           shape = "rectangle",
@@ -1210,10 +1411,12 @@ return {
           y = 880,
           width = 8,
           height = 8,
+          rotation = 0,
           visible = true,
           properties = {}
         },
         {
+          id = 99,
           name = "",
           type = "flower",
           shape = "rectangle",
@@ -1221,10 +1424,12 @@ return {
           y = 832,
           width = 8,
           height = 8,
+          rotation = 0,
           visible = true,
           properties = {}
         },
         {
+          id = 100,
           name = "",
           type = "flower",
           shape = "rectangle",
@@ -1232,10 +1437,12 @@ return {
           y = 824,
           width = 8,
           height = 8,
+          rotation = 0,
           visible = true,
           properties = {}
         },
         {
+          id = 101,
           name = "",
           type = "flower",
           shape = "rectangle",
@@ -1243,10 +1450,12 @@ return {
           y = 792,
           width = 8,
           height = 8,
+          rotation = 0,
           visible = true,
           properties = {}
         },
         {
+          id = 102,
           name = "",
           type = "flower",
           shape = "rectangle",
@@ -1254,10 +1463,12 @@ return {
           y = 824,
           width = 8,
           height = 8,
+          rotation = 0,
           visible = true,
           properties = {}
         },
         {
+          id = 103,
           name = "",
           type = "flower",
           shape = "rectangle",
@@ -1265,10 +1476,12 @@ return {
           y = 784,
           width = 8,
           height = 8,
+          rotation = 0,
           visible = true,
           properties = {}
         },
         {
+          id = 104,
           name = "",
           type = "flower",
           shape = "rectangle",
@@ -1276,10 +1489,12 @@ return {
           y = 888,
           width = 8,
           height = 8,
+          rotation = 0,
           visible = true,
           properties = {}
         },
         {
+          id = 105,
           name = "",
           type = "flower",
           shape = "rectangle",
@@ -1287,10 +1502,12 @@ return {
           y = 1176,
           width = 8,
           height = 8,
+          rotation = 0,
           visible = true,
           properties = {}
         },
         {
+          id = 106,
           name = "",
           type = "flower",
           shape = "rectangle",
@@ -1298,10 +1515,12 @@ return {
           y = 1136,
           width = 8,
           height = 8,
+          rotation = 0,
           visible = true,
           properties = {}
         },
         {
+          id = 107,
           name = "",
           type = "flower",
           shape = "rectangle",
@@ -1309,10 +1528,12 @@ return {
           y = 1152,
           width = 8,
           height = 8,
+          rotation = 0,
           visible = true,
           properties = {}
         },
         {
+          id = 108,
           name = "",
           type = "flower",
           shape = "rectangle",
@@ -1320,10 +1541,12 @@ return {
           y = 1200,
           width = 8,
           height = 8,
+          rotation = 0,
           visible = true,
           properties = {}
         },
         {
+          id = 109,
           name = "",
           type = "flower",
           shape = "rectangle",
@@ -1331,10 +1554,12 @@ return {
           y = 1176,
           width = 8,
           height = 8,
+          rotation = 0,
           visible = true,
           properties = {}
         },
         {
+          id = 110,
           name = "",
           type = "flower",
           shape = "rectangle",
@@ -1342,10 +1567,12 @@ return {
           y = 1224,
           width = 8,
           height = 8,
+          rotation = 0,
           visible = true,
           properties = {}
         },
         {
+          id = 111,
           name = "",
           type = "flower",
           shape = "rectangle",
@@ -1353,10 +1580,12 @@ return {
           y = 1248,
           width = 8,
           height = 8,
+          rotation = 0,
           visible = true,
           properties = {}
         },
         {
+          id = 112,
           name = "",
           type = "flower",
           shape = "rectangle",
@@ -1364,10 +1593,12 @@ return {
           y = 1256,
           width = 8,
           height = 8,
+          rotation = 0,
           visible = true,
           properties = {}
         },
         {
+          id = 113,
           name = "",
           type = "flower",
           shape = "rectangle",
@@ -1375,10 +1606,12 @@ return {
           y = 832,
           width = 8,
           height = 8,
+          rotation = 0,
           visible = true,
           properties = {}
         },
         {
+          id = 114,
           name = "",
           type = "flower",
           shape = "rectangle",
@@ -1386,10 +1619,12 @@ return {
           y = 872,
           width = 8,
           height = 8,
+          rotation = 0,
           visible = true,
           properties = {}
         },
         {
+          id = 115,
           name = "",
           type = "flower",
           shape = "rectangle",
@@ -1397,10 +1632,12 @@ return {
           y = 1176,
           width = 8,
           height = 8,
+          rotation = 0,
           visible = true,
           properties = {}
         },
         {
+          id = 116,
           name = "",
           type = "flower",
           shape = "rectangle",
@@ -1408,10 +1645,12 @@ return {
           y = 1200,
           width = 8,
           height = 8,
+          rotation = 0,
           visible = true,
           properties = {}
         },
         {
+          id = 117,
           name = "",
           type = "arena_centerpoint_atrium",
           shape = "rectangle",
@@ -1419,10 +1658,12 @@ return {
           y = 796,
           width = 8,
           height = 8,
+          rotation = 0,
           visible = true,
           properties = {}
         },
         {
+          id = 118,
           name = "",
           type = "arena_centerpoint_lobby",
           shape = "rectangle",
@@ -1430,10 +1671,12 @@ return {
           y = 1020,
           width = 8,
           height = 8,
+          rotation = 0,
           visible = true,
           properties = {}
         },
         {
+          id = 119,
           name = "",
           type = "Cactus",
           shape = "rectangle",
@@ -1441,10 +1684,12 @@ return {
           y = 2400,
           width = 0,
           height = 0,
+          rotation = 0,
           visible = true,
           properties = {}
         },
         {
+          id = 120,
           name = "",
           type = "Cactus",
           shape = "rectangle",
@@ -1452,10 +1697,12 @@ return {
           y = 2208,
           width = 0,
           height = 0,
+          rotation = 0,
           visible = true,
           properties = {}
         },
         {
+          id = 121,
           name = "",
           type = "Cactus",
           shape = "rectangle",
@@ -1463,10 +1710,12 @@ return {
           y = 2568,
           width = 0,
           height = 0,
+          rotation = 0,
           visible = true,
           properties = {}
         },
         {
+          id = 122,
           name = "",
           type = "Cactus",
           shape = "rectangle",
@@ -1474,10 +1723,12 @@ return {
           y = 2304,
           width = 0,
           height = 0,
+          rotation = 0,
           visible = true,
           properties = {}
         },
         {
+          id = 123,
           name = "",
           type = "Cactus",
           shape = "rectangle",
@@ -1485,10 +1736,12 @@ return {
           y = 2688,
           width = 0,
           height = 0,
+          rotation = 0,
           visible = true,
           properties = {}
         },
         {
+          id = 124,
           name = "",
           type = "Cactus",
           shape = "rectangle",
@@ -1496,10 +1749,12 @@ return {
           y = 2336,
           width = 0,
           height = 0,
+          rotation = 0,
           visible = true,
           properties = {}
         },
         {
+          id = 125,
           name = "",
           type = "Cactus",
           shape = "rectangle",
@@ -1507,10 +1762,12 @@ return {
           y = 2560,
           width = 0,
           height = 0,
+          rotation = 0,
           visible = true,
           properties = {}
         },
         {
+          id = 126,
           name = "",
           type = "marsh_bush",
           shape = "rectangle",
@@ -1518,10 +1775,12 @@ return {
           y = 2280,
           width = 0,
           height = 0,
+          rotation = 0,
           visible = true,
           properties = {}
         },
         {
+          id = 127,
           name = "",
           type = "marsh_bush",
           shape = "rectangle",
@@ -1529,10 +1788,12 @@ return {
           y = 2320,
           width = 0,
           height = 0,
+          rotation = 0,
           visible = true,
           properties = {}
         },
         {
+          id = 128,
           name = "",
           type = "marsh_bush",
           shape = "rectangle",
@@ -1540,10 +1801,12 @@ return {
           y = 2376,
           width = 0,
           height = 0,
+          rotation = 0,
           visible = true,
           properties = {}
         },
         {
+          id = 129,
           name = "",
           type = "marsh_bush",
           shape = "rectangle",
@@ -1551,10 +1814,12 @@ return {
           y = 2584,
           width = 0,
           height = 0,
+          rotation = 0,
           visible = true,
           properties = {}
         },
         {
+          id = 130,
           name = "",
           type = "arena_centerpoint_desert",
           shape = "rectangle",
@@ -1562,10 +1827,12 @@ return {
           y = 2456,
           width = 0,
           height = 0,
+          rotation = 0,
           visible = true,
           properties = {}
         },
         {
+          id = 131,
           name = "",
           type = "marsh_bush",
           shape = "rectangle",
@@ -1573,10 +1840,12 @@ return {
           y = 2520,
           width = 0,
           height = 0,
+          rotation = 0,
           visible = true,
           properties = {}
         },
         {
+          id = 132,
           name = "",
           type = "marsh_bush",
           shape = "rectangle",
@@ -1584,10 +1853,12 @@ return {
           y = 2640,
           width = 0,
           height = 0,
+          rotation = 0,
           visible = true,
           properties = {}
         },
         {
+          id = 133,
           name = "",
           type = "berrybush",
           shape = "rectangle",
@@ -1595,10 +1866,12 @@ return {
           y = 864,
           width = 0,
           height = 0,
+          rotation = 0,
           visible = true,
           properties = {}
         },
         {
+          id = 134,
           name = "",
           type = "berrybush",
           shape = "rectangle",
@@ -1606,10 +1879,12 @@ return {
           y = 912,
           width = 0,
           height = 0,
+          rotation = 0,
           visible = true,
           properties = {}
         },
         {
+          id = 135,
           name = "",
           type = "deathmatch_infosign",
           shape = "rectangle",
@@ -1617,10 +1892,12 @@ return {
           y = 1216,
           width = 0,
           height = 0,
+          rotation = 0,
           visible = true,
           properties = {}
         },
         {
+          id = 136,
           name = "",
           type = "pigking",
           shape = "rectangle",
@@ -1628,10 +1905,12 @@ return {
           y = 704,
           width = 0,
           height = 0,
+          rotation = 0,
           visible = true,
           properties = {}
         },
         {
+          id = 137,
           name = "",
           type = "pighouse",
           shape = "rectangle",
@@ -1639,10 +1918,12 @@ return {
           y = 864,
           width = 0,
           height = 0,
+          rotation = 0,
           visible = true,
           properties = {}
         },
         {
+          id = 138,
           name = "",
           type = "pighouse",
           shape = "rectangle",
@@ -1650,10 +1931,12 @@ return {
           y = 544,
           width = 0,
           height = 0,
+          rotation = 0,
           visible = true,
           properties = {}
         },
         {
+          id = 139,
           name = "",
           type = "pighouse",
           shape = "rectangle",
@@ -1661,10 +1944,12 @@ return {
           y = 544,
           width = 0,
           height = 0,
+          rotation = 0,
           visible = true,
           properties = {}
         },
         {
+          id = 140,
           name = "",
           type = "pighouse",
           shape = "rectangle",
@@ -1672,10 +1957,12 @@ return {
           y = 864,
           width = 0,
           height = 0,
+          rotation = 0,
           visible = true,
           properties = {}
         },
         {
+          id = 141,
           name = "",
           type = "tentacle",
           shape = "rectangle",
@@ -1683,10 +1970,12 @@ return {
           y = 2664,
           width = 0,
           height = 0,
+          rotation = 0,
           visible = true,
           properties = {}
         },
         {
+          id = 142,
           name = "",
           type = "tentacle",
           shape = "rectangle",
@@ -1694,10 +1983,12 @@ return {
           y = 2784,
           width = 0,
           height = 0,
+          rotation = 0,
           visible = true,
           properties = {}
         },
         {
+          id = 143,
           name = "",
           type = "tentacle",
           shape = "rectangle",
@@ -1705,10 +1996,12 @@ return {
           y = 2704,
           width = 0,
           height = 0,
+          rotation = 0,
           visible = true,
           properties = {}
         },
         {
+          id = 144,
           name = "",
           type = "tentacle",
           shape = "rectangle",
@@ -1716,10 +2009,12 @@ return {
           y = 2768,
           width = 0,
           height = 0,
+          rotation = 0,
           visible = true,
           properties = {}
         },
         {
+          id = 145,
           name = "",
           type = "tentacle",
           shape = "rectangle",
@@ -1727,10 +2022,12 @@ return {
           y = 2520,
           width = 0,
           height = 0,
+          rotation = 0,
           visible = true,
           properties = {}
         },
         {
+          id = 146,
           name = "",
           type = "tentacle",
           shape = "rectangle",
@@ -1738,10 +2035,12 @@ return {
           y = 2904,
           width = 0,
           height = 0,
+          rotation = 0,
           visible = true,
           properties = {}
         },
         {
+          id = 147,
           name = "",
           type = "tentacle",
           shape = "rectangle",
@@ -1749,10 +2048,12 @@ return {
           y = 2976,
           width = 0,
           height = 0,
+          rotation = 0,
           visible = true,
           properties = {}
         },
         {
+          id = 148,
           name = "",
           type = "tentacle",
           shape = "rectangle",
@@ -1760,10 +2061,12 @@ return {
           y = 3032,
           width = 0,
           height = 0,
+          rotation = 0,
           visible = true,
           properties = {}
         },
         {
+          id = 149,
           name = "",
           type = "tentacle",
           shape = "rectangle",
@@ -1771,10 +2074,12 @@ return {
           y = 2640,
           width = 0,
           height = 0,
+          rotation = 0,
           visible = true,
           properties = {}
         },
         {
+          id = 150,
           name = "",
           type = "tentacle",
           shape = "rectangle",
@@ -1782,10 +2087,12 @@ return {
           y = 2568,
           width = 0,
           height = 0,
+          rotation = 0,
           visible = true,
           properties = {}
         },
         {
+          id = 151,
           name = "",
           type = "tentacle",
           shape = "rectangle",
@@ -1793,10 +2100,12 @@ return {
           y = 2856,
           width = 0,
           height = 0,
+          rotation = 0,
           visible = true,
           properties = {}
         },
         {
+          id = 152,
           name = "",
           type = "flower",
           shape = "rectangle",
@@ -1804,10 +2113,12 @@ return {
           y = 3048,
           width = 8,
           height = 8,
+          rotation = 0,
           visible = true,
           properties = {}
         },
         {
+          id = 153,
           name = "",
           type = "flower",
           shape = "rectangle",
@@ -1815,10 +2126,12 @@ return {
           y = 2944,
           width = 8,
           height = 8,
+          rotation = 0,
           visible = true,
           properties = {}
         },
         {
+          id = 154,
           name = "",
           type = "flower",
           shape = "rectangle",
@@ -1826,10 +2139,12 @@ return {
           y = 2912,
           width = 8,
           height = 8,
+          rotation = 0,
           visible = true,
           properties = {}
         },
         {
+          id = 155,
           name = "",
           type = "flower",
           shape = "rectangle",
@@ -1837,10 +2152,12 @@ return {
           y = 2840,
           width = 8,
           height = 8,
+          rotation = 0,
           visible = true,
           properties = {}
         },
         {
+          id = 156,
           name = "",
           type = "flower",
           shape = "rectangle",
@@ -1848,10 +2165,12 @@ return {
           y = 2744,
           width = 8,
           height = 8,
+          rotation = 0,
           visible = true,
           properties = {}
         },
         {
+          id = 157,
           name = "",
           type = "flower",
           shape = "rectangle",
@@ -1859,10 +2178,12 @@ return {
           y = 2576,
           width = 8,
           height = 8,
+          rotation = 0,
           visible = true,
           properties = {}
         },
         {
+          id = 158,
           name = "",
           type = "flower",
           shape = "rectangle",
@@ -1870,10 +2191,12 @@ return {
           y = 2696,
           width = 8,
           height = 8,
+          rotation = 0,
           visible = true,
           properties = {}
         },
         {
+          id = 159,
           name = "",
           type = "flower",
           shape = "rectangle",
@@ -1881,10 +2204,12 @@ return {
           y = 2496,
           width = 8,
           height = 8,
+          rotation = 0,
           visible = true,
           properties = {}
         },
         {
+          id = 160,
           name = "",
           type = "berrybush",
           shape = "rectangle",
@@ -1892,10 +2217,12 @@ return {
           y = 2760,
           width = 0,
           height = 0,
+          rotation = 0,
           visible = true,
           properties = {}
         },
         {
+          id = 161,
           name = "",
           type = "berrybush",
           shape = "rectangle",
@@ -1903,10 +2230,12 @@ return {
           y = 2960,
           width = 0,
           height = 0,
+          rotation = 0,
           visible = true,
           properties = {}
         },
         {
+          id = 162,
           name = "",
           type = "berrybush",
           shape = "rectangle",
@@ -1914,10 +2243,12 @@ return {
           y = 2648,
           width = 0,
           height = 0,
+          rotation = 0,
           visible = true,
           properties = {}
         },
         {
+          id = 163,
           name = "",
           type = "marsh_bush",
           shape = "rectangle",
@@ -1925,10 +2256,12 @@ return {
           y = 2696,
           width = 0,
           height = 0,
+          rotation = 0,
           visible = true,
           properties = {}
         },
         {
+          id = 164,
           name = "",
           type = "marsh_bush",
           shape = "rectangle",
@@ -1936,10 +2269,12 @@ return {
           y = 2816,
           width = 0,
           height = 0,
+          rotation = 0,
           visible = true,
           properties = {}
         },
         {
+          id = 165,
           name = "",
           type = "marsh_bush",
           shape = "rectangle",
@@ -1947,10 +2282,12 @@ return {
           y = 2696,
           width = 0,
           height = 0,
+          rotation = 0,
           visible = true,
           properties = {}
         },
         {
+          id = 166,
           name = "",
           type = "marsh_bush",
           shape = "rectangle",
@@ -1958,10 +2295,12 @@ return {
           y = 2584,
           width = 0,
           height = 0,
+          rotation = 0,
           visible = true,
           properties = {}
         },
         {
+          id = 167,
           name = "",
           type = "marsh_bush",
           shape = "rectangle",
@@ -1969,10 +2308,12 @@ return {
           y = 2984,
           width = 0,
           height = 0,
+          rotation = 0,
           visible = true,
           properties = {}
         },
         {
+          id = 168,
           name = "",
           type = "marsh_bush",
           shape = "rectangle",
@@ -1980,10 +2321,12 @@ return {
           y = 3080,
           width = 0,
           height = 0,
+          rotation = 0,
           visible = true,
           properties = {}
         },
         {
+          id = 169,
           name = "",
           type = "marsh_bush",
           shape = "rectangle",
@@ -1991,10 +2334,12 @@ return {
           y = 2920,
           width = 0,
           height = 0,
+          rotation = 0,
           visible = true,
           properties = {}
         },
         {
+          id = 170,
           name = "",
           type = "marsh_bush",
           shape = "rectangle",
@@ -2002,10 +2347,12 @@ return {
           y = 2776,
           width = 0,
           height = 0,
+          rotation = 0,
           visible = true,
           properties = {}
         },
         {
+          id = 171,
           name = "",
           type = "marsh_bush",
           shape = "rectangle",
@@ -2013,10 +2360,12 @@ return {
           y = 2504,
           width = 0,
           height = 0,
+          rotation = 0,
           visible = true,
           properties = {}
         },
         {
+          id = 172,
           name = "",
           type = "flower",
           shape = "rectangle",
@@ -2024,10 +2373,12 @@ return {
           y = 568,
           width = 8,
           height = 8,
+          rotation = 0,
           visible = true,
           properties = {}
         },
         {
+          id = 173,
           name = "",
           type = "flower",
           shape = "rectangle",
@@ -2035,10 +2386,12 @@ return {
           y = 504,
           width = 8,
           height = 8,
+          rotation = 0,
           visible = true,
           properties = {}
         },
         {
+          id = 174,
           name = "",
           type = "flower",
           shape = "rectangle",
@@ -2046,10 +2399,12 @@ return {
           y = 440,
           width = 8,
           height = 8,
+          rotation = 0,
           visible = true,
           properties = {}
         },
         {
+          id = 175,
           name = "",
           type = "flower",
           shape = "rectangle",
@@ -2057,10 +2412,12 @@ return {
           y = 384,
           width = 8,
           height = 8,
+          rotation = 0,
           visible = true,
           properties = {}
         },
         {
+          id = 176,
           name = "",
           type = "flower",
           shape = "rectangle",
@@ -2068,10 +2425,12 @@ return {
           y = 440,
           width = 8,
           height = 8,
+          rotation = 0,
           visible = true,
           properties = {}
         },
         {
+          id = 177,
           name = "",
           type = "flower",
           shape = "rectangle",
@@ -2079,10 +2438,12 @@ return {
           y = 488,
           width = 8,
           height = 8,
+          rotation = 0,
           visible = true,
           properties = {}
         },
         {
+          id = 178,
           name = "",
           type = "flower",
           shape = "rectangle",
@@ -2090,10 +2451,12 @@ return {
           y = 616,
           width = 8,
           height = 8,
+          rotation = 0,
           visible = true,
           properties = {}
         },
         {
+          id = 179,
           name = "",
           type = "flower",
           shape = "rectangle",
@@ -2101,10 +2464,12 @@ return {
           y = 720,
           width = 8,
           height = 8,
+          rotation = 0,
           visible = true,
           properties = {}
         },
         {
+          id = 180,
           name = "",
           type = "flower",
           shape = "rectangle",
@@ -2112,10 +2477,12 @@ return {
           y = 824,
           width = 8,
           height = 8,
+          rotation = 0,
           visible = true,
           properties = {}
         },
         {
+          id = 181,
           name = "",
           type = "flower",
           shape = "rectangle",
@@ -2123,10 +2490,12 @@ return {
           y = 928,
           width = 8,
           height = 8,
+          rotation = 0,
           visible = true,
           properties = {}
         },
         {
+          id = 182,
           name = "",
           type = "flower",
           shape = "rectangle",
@@ -2134,10 +2503,12 @@ return {
           y = 976,
           width = 8,
           height = 8,
+          rotation = 0,
           visible = true,
           properties = {}
         },
         {
+          id = 183,
           name = "",
           type = "flower",
           shape = "rectangle",
@@ -2145,10 +2516,12 @@ return {
           y = 1032,
           width = 8,
           height = 8,
+          rotation = 0,
           visible = true,
           properties = {}
         },
         {
+          id = 184,
           name = "",
           type = "flower",
           shape = "rectangle",
@@ -2156,10 +2529,12 @@ return {
           y = 976,
           width = 8,
           height = 8,
+          rotation = 0,
           visible = true,
           properties = {}
         },
         {
+          id = 185,
           name = "",
           type = "flower",
           shape = "rectangle",
@@ -2167,10 +2542,12 @@ return {
           y = 960,
           width = 8,
           height = 8,
+          rotation = 0,
           visible = true,
           properties = {}
         },
         {
+          id = 186,
           name = "",
           type = "flower",
           shape = "rectangle",
@@ -2178,10 +2555,12 @@ return {
           y = 856,
           width = 8,
           height = 8,
+          rotation = 0,
           visible = true,
           properties = {}
         },
         {
+          id = 187,
           name = "",
           type = "flower",
           shape = "rectangle",
@@ -2189,10 +2568,12 @@ return {
           y = 776,
           width = 8,
           height = 8,
+          rotation = 0,
           visible = true,
           properties = {}
         },
         {
+          id = 188,
           name = "",
           type = "flower",
           shape = "rectangle",
@@ -2200,10 +2581,12 @@ return {
           y = 696,
           width = 8,
           height = 8,
+          rotation = 0,
           visible = true,
           properties = {}
         },
         {
+          id = 189,
           name = "",
           type = "flower",
           shape = "rectangle",
@@ -2211,10 +2594,12 @@ return {
           y = 624,
           width = 8,
           height = 8,
+          rotation = 0,
           visible = true,
           properties = {}
         },
         {
+          id = 190,
           name = "",
           type = "berrybush",
           shape = "rectangle",
@@ -2222,10 +2607,12 @@ return {
           y = 472,
           width = 0,
           height = 0,
+          rotation = 0,
           visible = true,
           properties = {}
         },
         {
+          id = 191,
           name = "",
           type = "berrybush",
           shape = "rectangle",
@@ -2233,10 +2620,12 @@ return {
           y = 472,
           width = 0,
           height = 0,
+          rotation = 0,
           visible = true,
           properties = {}
         },
         {
+          id = 192,
           name = "",
           type = "berrybush",
           shape = "rectangle",
@@ -2244,10 +2633,12 @@ return {
           y = 512,
           width = 0,
           height = 0,
+          rotation = 0,
           visible = true,
           properties = {}
         },
         {
+          id = 193,
           name = "",
           type = "berrybush",
           shape = "rectangle",
@@ -2255,10 +2646,12 @@ return {
           y = 936,
           width = 0,
           height = 0,
+          rotation = 0,
           visible = true,
           properties = {}
         },
         {
+          id = 194,
           name = "",
           type = "berrybush",
           shape = "rectangle",
@@ -2266,10 +2659,12 @@ return {
           y = 896,
           width = 0,
           height = 0,
+          rotation = 0,
           visible = true,
           properties = {}
         },
         {
+          id = 195,
           name = "",
           type = "berrybush",
           shape = "rectangle",
@@ -2277,10 +2672,12 @@ return {
           y = 936,
           width = 0,
           height = 0,
+          rotation = 0,
           visible = true,
           properties = {}
         },
         {
+          id = 196,
           name = "",
           type = "berrybush",
           shape = "rectangle",
@@ -2288,10 +2685,12 @@ return {
           y = 936,
           width = 0,
           height = 0,
+          rotation = 0,
           visible = true,
           properties = {}
         },
         {
+          id = 197,
           name = "",
           type = "berrybush",
           shape = "rectangle",
@@ -2299,10 +2698,12 @@ return {
           y = 896,
           width = 0,
           height = 0,
+          rotation = 0,
           visible = true,
           properties = {}
         },
         {
+          id = 198,
           name = "",
           type = "berrybush",
           shape = "rectangle",
@@ -2310,10 +2711,12 @@ return {
           y = 936,
           width = 0,
           height = 0,
+          rotation = 0,
           visible = true,
           properties = {}
         },
         {
+          id = 199,
           name = "",
           type = "berrybush",
           shape = "rectangle",
@@ -2321,10 +2724,12 @@ return {
           y = 472,
           width = 0,
           height = 0,
+          rotation = 0,
           visible = true,
           properties = {}
         },
         {
+          id = 200,
           name = "",
           type = "berrybush",
           shape = "rectangle",
@@ -2332,10 +2737,12 @@ return {
           y = 472,
           width = 0,
           height = 0,
+          rotation = 0,
           visible = true,
           properties = {}
         },
         {
+          id = 201,
           name = "",
           type = "berrybush",
           shape = "rectangle",
@@ -2343,10 +2750,12 @@ return {
           y = 512,
           width = 0,
           height = 0,
+          rotation = 0,
           visible = true,
           properties = {}
         },
         {
+          id = 202,
           name = "",
           type = "pighouse",
           shape = "rectangle",
@@ -2354,10 +2763,12 @@ return {
           y = 672,
           width = 0,
           height = 0,
+          rotation = 0,
           visible = true,
           properties = {}
         },
         {
+          id = 203,
           name = "",
           type = "pighouse",
           shape = "rectangle",
@@ -2365,10 +2776,12 @@ return {
           y = 416,
           width = 0,
           height = 0,
+          rotation = 0,
           visible = true,
           properties = {}
         },
         {
+          id = 204,
           name = "",
           type = "pighouse",
           shape = "rectangle",
@@ -2376,10 +2789,12 @@ return {
           y = 736,
           width = 0,
           height = 0,
+          rotation = 0,
           visible = true,
           properties = {}
         },
         {
+          id = 205,
           name = "",
           type = "pighouse",
           shape = "rectangle",
@@ -2387,10 +2802,12 @@ return {
           y = 992,
           width = 0,
           height = 0,
+          rotation = 0,
           visible = true,
           properties = {}
         },
         {
+          id = 206,
           name = "",
           type = "beehive",
           shape = "rectangle",
@@ -2398,10 +2815,12 @@ return {
           y = 2632,
           width = 0,
           height = 0,
+          rotation = 0,
           visible = true,
           properties = {}
         },
         {
+          id = 207,
           name = "",
           type = "beehive",
           shape = "rectangle",
@@ -2409,10 +2828,12 @@ return {
           y = 2832,
           width = 0,
           height = 0,
+          rotation = 0,
           visible = true,
           properties = {}
         },
         {
+          id = 208,
           name = "",
           type = "beehive",
           shape = "rectangle",
@@ -2420,10 +2841,12 @@ return {
           y = 2912,
           width = 0,
           height = 0,
+          rotation = 0,
           visible = true,
           properties = {}
         },
         {
+          id = 209,
           name = "",
           type = "beehive",
           shape = "rectangle",
@@ -2431,10 +2854,12 @@ return {
           y = 2520,
           width = 0,
           height = 0,
+          rotation = 0,
           visible = true,
           properties = {}
         },
         {
+          id = 210,
           name = "",
           type = "beehive",
           shape = "rectangle",
@@ -2442,10 +2867,12 @@ return {
           y = 3056,
           width = 0,
           height = 0,
+          rotation = 0,
           visible = true,
           properties = {}
         },
         {
+          id = 211,
           name = "",
           type = "arena_centerpoint_spring",
           shape = "rectangle",
@@ -2453,10 +2880,12 @@ return {
           y = 2768,
           width = 0,
           height = 0,
+          rotation = 0,
           visible = true,
           properties = {}
         },
         {
+          id = 212,
           name = "",
           type = "arena_centerpoint_pigvillage",
           shape = "rectangle",
@@ -2464,10 +2893,12 @@ return {
           y = 704,
           width = 0,
           height = 0,
+          rotation = 0,
           visible = true,
           properties = {}
         },
         {
+          id = 213,
           name = "",
           type = "arena_centerpoint_malbatross",
           shape = "rectangle",
@@ -2475,10 +2906,12 @@ return {
           y = 2592,
           width = 0,
           height = 0,
+          rotation = 0,
           visible = true,
           properties = {}
         },
         {
+          id = 215,
           name = "",
           type = "oceanfish_shoalspawner",
           shape = "rectangle",
@@ -2486,43 +2919,51 @@ return {
           y = 2592,
           width = 0,
           height = 0,
+          rotation = 0,
           visible = true,
           properties = {}
         },
         {
+          id = 216,
           name = "",
           type = "arena_centerpoint_grotto",
           shape = "rectangle",
-          x = 0,
-          y = 0,
+          x = 1058.67,
+          y = 4639.82,
           width = 0,
           height = 0,
+          rotation = 0,
           visible = true,
           properties = {}
         },
         {
+          id = 219,
           name = "",
           type = "mushtree_moon",
           shape = "rectangle",
-          x = 0,
+          x = 744.667,
           y = 4306,
           width = 0,
           height = 0,
+          rotation = 0,
           visible = true,
           properties = {}
         },
         {
+          id = 222,
           name = "",
           type = "grotto_pool_small",
           shape = "rectangle",
-          x = 0,
-          y = 0,
+          x = 870.667,
+          y = 4278.67,
           width = 0,
           height = 0,
+          rotation = 0,
           visible = true,
           properties = {}
         },
         {
+          id = 223,
           name = "",
           type = "mushtree_moon",
           shape = "rectangle",
@@ -2530,21 +2971,25 @@ return {
           y = 4450,
           width = 0,
           height = 0,
+          rotation = 0,
           visible = true,
           properties = {}
         },
         {
+          id = 225,
           name = "",
           type = "grotto_pool_small",
           shape = "rectangle",
           x = 1298,
-          y = 0,
+          y = 4635.33,
           width = 0,
           height = 0,
+          rotation = 0,
           visible = true,
           properties = {}
         },
         {
+          id = 226,
           name = "",
           type = "mushtree_moon",
           shape = "rectangle",
@@ -2552,10 +2997,12 @@ return {
           y = 4464,
           width = 0,
           height = 0,
+          rotation = 0,
           visible = true,
           properties = {}
         },
         {
+          id = 227,
           name = "",
           type = "mushtree_moon",
           shape = "rectangle",
@@ -2563,10 +3010,12 @@ return {
           y = 4616,
           width = 0,
           height = 0,
+          rotation = 0,
           visible = true,
           properties = {}
         },
         {
+          id = 228,
           name = "",
           type = "grotto_pool_small",
           shape = "rectangle",
@@ -2574,10 +3023,12 @@ return {
           y = 4552,
           width = 0,
           height = 0,
+          rotation = 0,
           visible = true,
           properties = {}
         },
         {
+          id = 229,
           name = "",
           type = "mushtree_moon",
           shape = "rectangle",
@@ -2585,10 +3036,12 @@ return {
           y = 4584,
           width = 0,
           height = 0,
+          rotation = 0,
           visible = true,
           properties = {}
         },
         {
+          id = 230,
           name = "",
           type = "mushtree_moon",
           shape = "rectangle",
@@ -2596,10 +3049,12 @@ return {
           y = 4584,
           width = 0,
           height = 0,
+          rotation = 0,
           visible = true,
           properties = {}
         },
         {
+          id = 231,
           name = "",
           type = "mushtree_moon",
           shape = "rectangle",
@@ -2607,10 +3062,12 @@ return {
           y = 4466,
           width = 0,
           height = 0,
+          rotation = 0,
           visible = true,
           properties = {}
         },
         {
+          id = 232,
           name = "",
           type = "mushtree_moon",
           shape = "rectangle",
@@ -2618,21 +3075,25 @@ return {
           y = 4556,
           width = 0,
           height = 0,
+          rotation = 0,
           visible = true,
           properties = {}
         },
         {
+          id = 234,
           name = "",
           type = "mushtree_moon",
           shape = "rectangle",
-          x = 0,
+          x = 1063.33,
           y = 4296,
           width = 0,
           height = 0,
+          rotation = 0,
           visible = true,
           properties = {}
         },
         {
+          id = 235,
           name = "",
           type = "mushtree_moon",
           shape = "rectangle",
@@ -2640,131 +3101,155 @@ return {
           y = 4466,
           width = 0,
           height = 0,
+          rotation = 0,
           visible = true,
           properties = {}
         },
         {
+          id = 237,
           name = "",
           type = "mushtree_moon",
           shape = "rectangle",
-          x = 0,
-          y = 0,
+          x = 1099.7,
+          y = 4210.54,
           width = 0,
           height = 0,
+          rotation = 0,
           visible = true,
           properties = {}
         },
         {
+          id = 238,
           name = "",
           type = "grotto_pool_small",
           shape = "rectangle",
-          x = 0,
-          y = 0,
+          x = 1519.71,
+          y = 4551.11,
           width = 0,
           height = 0,
+          rotation = 0,
           visible = true,
           properties = {}
         },
         {
+          id = 240,
           name = "",
           type = "grotto_pool_small",
           shape = "rectangle",
-          x = 0,
-          y = 0,
+          x = 1358.11,
+          y = 4362.22,
           width = 0,
           height = 0,
+          rotation = 0,
           visible = true,
           properties = {}
         },
         {
+          id = 241,
           name = "",
           type = "mushtree_moon",
           shape = "rectangle",
-          x = 0,
-          y = 0,
+          x = 1458.76,
+          y = 4323.45,
           width = 0,
           height = 0,
+          rotation = 0,
           visible = true,
           properties = {}
         },
         {
+          id = 245,
           name = "",
           type = "mushtree_moon",
           shape = "rectangle",
-          x = 0,
-          y = 0,
+          x = 1192.41,
+          y = 4320.58,
           width = 0,
           height = 0,
+          rotation = 0,
           visible = true,
           properties = {}
         },
         {
+          id = 247,
           name = "",
           type = "mushtree_moon",
           shape = "rectangle",
-          x = 0,
-          y = 0,
+          x = 1430.87,
+          y = 4427.65,
           width = 0,
           height = 0,
+          rotation = 0,
           visible = true,
           properties = {}
         },
         {
+          id = 248,
           name = "",
           type = "mushtree_moon",
           shape = "rectangle",
-          x = 0,
-          y = 0,
+          x = 1263.63,
+          y = 4380.42,
           width = 0,
           height = 0,
+          rotation = 0,
           visible = true,
           properties = {}
         },
         {
+          id = 249,
           name = "",
           type = "mushtree_moon",
           shape = "rectangle",
-          x = 0,
-          y = 0,
+          x = 1372.87,
+          y = 4558.09,
           width = 0,
           height = 0,
+          rotation = 0,
           visible = true,
           properties = {}
         },
         {
+          id = 251,
           name = "",
           type = "mushtree_moon",
           shape = "rectangle",
-          x = 0,
-          y = 0,
+          x = 1401.17,
+          y = 4675.91,
           width = 0,
           height = 0,
+          rotation = 0,
           visible = true,
           properties = {}
         },
         {
+          id = 254,
           name = "",
           type = "mushtree_moon",
           shape = "rectangle",
-          x = 0,
-          y = 0,
+          x = 1520.65,
+          y = 4463.78,
           width = 0,
           height = 0,
+          rotation = 0,
           visible = true,
           properties = {}
         },
         {
+          id = 257,
           name = "",
           type = "mushtree_moon",
           shape = "rectangle",
-          x = 0,
+          x = 1212.66,
           y = 4920,
           width = 0,
           height = 0,
+          rotation = 0,
           visible = true,
           properties = {}
         },
         {
+          id = 258,
           name = "",
           type = "mushtree_moon",
           shape = "rectangle",
@@ -2772,10 +3257,12 @@ return {
           y = 4842,
           width = 0,
           height = 0,
+          rotation = 0,
           visible = true,
           properties = {}
         },
         {
+          id = 260,
           name = "",
           type = "mushtree_moon",
           shape = "rectangle",
@@ -2783,10 +3270,12 @@ return {
           y = 4862,
           width = 0,
           height = 0,
+          rotation = 0,
           visible = true,
           properties = {}
         },
         {
+          id = 261,
           name = "",
           type = "mushtree_moon",
           shape = "rectangle",
@@ -2794,10 +3283,12 @@ return {
           y = 4984,
           width = 0,
           height = 0,
+          rotation = 0,
           visible = true,
           properties = {}
         },
         {
+          id = 262,
           name = "",
           type = "mushtree_moon",
           shape = "rectangle",
@@ -2805,10 +3296,12 @@ return {
           y = 5014,
           width = 0,
           height = 0,
+          rotation = 0,
           visible = true,
           properties = {}
         },
         {
+          id = 263,
           name = "",
           type = "grotto_pool_small",
           shape = "rectangle",
@@ -2816,10 +3309,12 @@ return {
           y = 5074,
           width = 0,
           height = 0,
+          rotation = 0,
           visible = true,
           properties = {}
         },
         {
+          id = 264,
           name = "",
           type = "mushtree_moon",
           shape = "rectangle",
@@ -2827,10 +3322,12 @@ return {
           y = 5050,
           width = 0,
           height = 0,
+          rotation = 0,
           visible = true,
           properties = {}
         },
         {
+          id = 265,
           name = "",
           type = "mushtree_moon",
           shape = "rectangle",
@@ -2838,10 +3335,12 @@ return {
           y = 5190,
           width = 0,
           height = 0,
+          rotation = 0,
           visible = true,
           properties = {}
         },
         {
+          id = 267,
           name = "",
           type = "mushtree_moon",
           shape = "rectangle",
@@ -2849,21 +3348,25 @@ return {
           y = 5178,
           width = 0,
           height = 0,
+          rotation = 0,
           visible = true,
           properties = {}
         },
         {
+          id = 269,
           name = "",
           type = "grotto_pool_small",
           shape = "rectangle",
           x = 1210,
-          y = 0,
+          y = 5020.67,
           width = 0,
           height = 0,
+          rotation = 0,
           visible = true,
           properties = {}
         },
         {
+          id = 270,
           name = "",
           type = "mushtree_moon",
           shape = "rectangle",
@@ -2871,10 +3374,12 @@ return {
           y = 5182,
           width = 0,
           height = 0,
+          rotation = 0,
           visible = true,
           properties = {}
         },
         {
+          id = 273,
           name = "",
           type = "mushtree_moon",
           shape = "rectangle",
@@ -2882,10 +3387,12 @@ return {
           y = 5068,
           width = 0,
           height = 0,
+          rotation = 0,
           visible = true,
           properties = {}
         },
         {
+          id = 274,
           name = "",
           type = "mushtree_moon",
           shape = "rectangle",
@@ -2893,10 +3400,12 @@ return {
           y = 4658,
           width = 0,
           height = 0,
+          rotation = 0,
           visible = true,
           properties = {}
         },
         {
+          id = 278,
           name = "",
           type = "mushtree_moon",
           shape = "rectangle",
@@ -2904,10 +3413,12 @@ return {
           y = 4716,
           width = 0,
           height = 0,
+          rotation = 0,
           visible = true,
           properties = {}
         },
         {
+          id = 279,
           name = "",
           type = "mushtree_moon",
           shape = "rectangle",
@@ -2915,21 +3426,25 @@ return {
           y = 4790,
           width = 0,
           height = 0,
+          rotation = 0,
           visible = true,
           properties = {}
         },
         {
+          id = 280,
           name = "",
           type = "grotto_pool_small",
           shape = "rectangle",
-          x = 0,
-          y = 0,
+          x = 662.667,
+          y = 4747.33,
           width = 0,
           height = 0,
+          rotation = 0,
           visible = true,
           properties = {}
         },
         {
+          id = 284,
           name = "",
           type = "mushtree_moon",
           shape = "rectangle",
@@ -2937,10 +3452,12 @@ return {
           y = 4940,
           width = 0,
           height = 0,
+          rotation = 0,
           visible = true,
           properties = {}
         },
         {
+          id = 287,
           name = "",
           type = "mushtree_moon",
           shape = "rectangle",
@@ -2948,21 +3465,25 @@ return {
           y = 4724,
           width = 0,
           height = 0,
+          rotation = 0,
           visible = true,
           properties = {}
         },
         {
+          id = 290,
           name = "",
           type = "mushtree_moon",
           shape = "rectangle",
-          x = 0,
-          y = 0,
+          x = 1524.67,
+          y = 4688.67,
           width = 0,
           height = 0,
+          rotation = 0,
           visible = true,
           properties = {}
         },
         {
+          id = 291,
           name = "",
           type = "mushtree_moon",
           shape = "rectangle",
@@ -2970,10 +3491,12 @@ return {
           y = 4780,
           width = 0,
           height = 0,
+          rotation = 0,
           visible = true,
           properties = {}
         },
         {
+          id = 292,
           name = "",
           type = "mushtree_moon",
           shape = "rectangle",
@@ -2981,10 +3504,12 @@ return {
           y = 4824,
           width = 0,
           height = 0,
+          rotation = 0,
           visible = true,
           properties = {}
         },
         {
+          id = 293,
           name = "",
           type = "mushtree_moon",
           shape = "rectangle",
@@ -2992,10 +3517,12 @@ return {
           y = 4854,
           width = 0,
           height = 0,
+          rotation = 0,
           visible = true,
           properties = {}
         },
         {
+          id = 294,
           name = "",
           type = "grotto_pool_small",
           shape = "rectangle",
@@ -3003,10 +3530,12 @@ return {
           y = 4900,
           width = 0,
           height = 0,
+          rotation = 0,
           visible = true,
           properties = {}
         },
         {
+          id = 300,
           name = "",
           type = "mushtree_moon",
           shape = "rectangle",
@@ -3014,10 +3543,12 @@ return {
           y = 4980,
           width = 0,
           height = 0,
+          rotation = 0,
           visible = true,
           properties = {}
         },
         {
+          id = 301,
           name = "",
           type = "mushtree_moon",
           shape = "rectangle",
@@ -3025,10 +3556,12 @@ return {
           y = 5068,
           width = 0,
           height = 0,
+          rotation = 0,
           visible = true,
           properties = {}
         },
         {
+          id = 302,
           name = "",
           type = "mushtree_moon",
           shape = "rectangle",
@@ -3036,10 +3569,12 @@ return {
           y = 5060,
           width = 0,
           height = 0,
+          rotation = 0,
           visible = true,
           properties = {}
         },
         {
+          id = 303,
           name = "",
           type = "mushtree_moon",
           shape = "rectangle",
@@ -3047,32 +3582,38 @@ return {
           y = 4914,
           width = 0,
           height = 0,
+          rotation = 0,
           visible = true,
           properties = {}
         },
         {
+          id = 307,
           name = "",
           type = "mushtree_moon",
           shape = "rectangle",
-          x = 0,
-          y = 0,
+          x = 731.334,
+          y = 4786.67,
           width = 0,
           height = 0,
+          rotation = 0,
           visible = true,
           properties = {}
         },
         {
+          id = 309,
           name = "",
           type = "powerup_flower",
           shape = "rectangle",
           x = 912,
-          y = 0,
+          y = 4694.67,
           width = 0,
           height = 0,
+          rotation = 0,
           visible = true,
           properties = {}
         },
         {
+          id = 310,
           name = "",
           type = "powerup_flower",
           shape = "rectangle",
@@ -3080,54 +3621,64 @@ return {
           y = 4755,
           width = 0,
           height = 0,
+          rotation = 0,
           visible = true,
           properties = {}
         },
         {
+          id = 311,
           name = "",
           type = "powerup_flower",
           shape = "rectangle",
-          x = 0,
+          x = 1264.67,
           y = 4693,
           width = 0,
           height = 0,
+          rotation = 0,
           visible = true,
           properties = {}
         },
         {
+          id = 312,
           name = "",
           type = "powerup_flower",
           shape = "rectangle",
           x = 884,
-          y = 0,
+          y = 4821.33,
           width = 0,
           height = 0,
+          rotation = 0,
           visible = true,
           properties = {}
         },
         {
+          id = 313,
           name = "",
           type = "powerup_flower",
           shape = "rectangle",
           x = 984,
-          y = 0,
+          y = 4877.33,
           width = 0,
           height = 0,
+          rotation = 0,
           visible = true,
           properties = {}
         },
         {
+          id = 314,
           name = "",
           type = "powerup_flower",
           shape = "rectangle",
-          x = 0,
-          y = 0,
+          x = 1041.67,
+          y = 4832.67,
           width = 0,
           height = 0,
+          rotation = 0,
           visible = true,
           properties = {}
         },
         {
+          id = 315,
           name = "",
           type = "powerup_flower",
           shape = "rectangle",
@@ -3135,131 +3686,155 @@ return {
           y = 4916,
           width = 0,
           height = 0,
+          rotation = 0,
           visible = true,
           properties = {}
         },
         {
+          id = 316,
           name = "",
           type = "powerup_flower",
           shape = "rectangle",
           x = 1164,
-          y = 0,
+          y = 4763.67,
           width = 0,
           height = 0,
+          rotation = 0,
           visible = true,
           properties = {}
         },
         {
+          id = 317,
           name = "",
           type = "powerup_flower",
           shape = "rectangle",
-          x = 0,
-          y = 0,
+          x = 1247.33,
+          y = 4768.33,
           width = 0,
           height = 0,
+          rotation = 0,
           visible = true,
           properties = {}
         },
         {
+          id = 318,
           name = "",
           type = "powerup_flower",
           shape = "rectangle",
-          x = 0,
-          y = 0,
+          x = 1154.67,
+          y = 4833.33,
           width = 0,
           height = 0,
+          rotation = 0,
           visible = true,
           properties = {}
         },
         {
+          id = 319,
           name = "",
           type = "powerup_flower",
           shape = "rectangle",
-          x = 0,
+          x = 850.667,
           y = 4744,
           width = 0,
           height = 0,
+          rotation = 0,
           visible = true,
           properties = {}
         },
         {
+          id = 320,
           name = "",
           type = "powerup_flower",
           shape = "rectangle",
-          x = 0,
+          x = 938.667,
           y = 4768,
           width = 0,
           height = 0,
+          rotation = 0,
           visible = true,
           properties = {}
         },
         {
+          id = 321,
           name = "",
           type = "powerup_flower",
           shape = "rectangle",
-          x = 0,
-          y = 0,
+          x = 1190.33,
+          y = 4643.33,
           width = 0,
           height = 0,
+          rotation = 0,
           visible = true,
           properties = {}
         },
         {
+          id = 322,
           name = "",
           type = "powerup_flower",
           shape = "rectangle",
           x = 696,
-          y = 0,
+          y = 4886.67,
           width = 0,
           height = 0,
+          rotation = 0,
           visible = true,
           properties = {}
         },
         {
+          id = 323,
           name = "",
           type = "powerup_flower",
           shape = "rectangle",
           x = 608,
-          y = 0,
+          y = 4830.67,
           width = 0,
           height = 0,
+          rotation = 0,
           visible = true,
           properties = {}
         },
         {
+          id = 324,
           name = "",
           type = "powerup_flower",
           shape = "rectangle",
-          x = 0,
+          x = 699.333,
           y = 4670,
           width = 0,
           height = 0,
+          rotation = 0,
           visible = true,
           properties = {}
         },
         {
+          id = 325,
           name = "",
           type = "powerup_flower",
           shape = "rectangle",
-          x = 0,
-          y = 0,
+          x = 582.667,
+          y = 4529.33,
           width = 0,
           height = 0,
+          rotation = 0,
           visible = true,
           properties = {}
         },
         {
+          id = 326,
           name = "",
           type = "powerup_flower",
           shape = "rectangle",
           x = 660,
-          y = 0,
+          y = 4338.67,
           width = 0,
           height = 0,
+          rotation = 0,
           visible = true,
           properties = {}
         },
         {
+          id = 327,
           name = "",
           type = "powerup_flower",
           shape = "rectangle",
@@ -3267,10 +3842,12 @@ return {
           y = 4458,
           width = 0,
           height = 0,
+          rotation = 0,
           visible = true,
           properties = {}
         },
         {
+          id = 328,
           name = "",
           type = "powerup_flower",
           shape = "rectangle",
@@ -3278,21 +3855,25 @@ return {
           y = 4220,
           width = 0,
           height = 0,
+          rotation = 0,
           visible = true,
           properties = {}
         },
         {
+          id = 329,
           name = "",
           type = "powerup_flower",
           shape = "rectangle",
           x = 800,
-          y = 0,
+          y = 4369.33,
           width = 0,
           height = 0,
+          rotation = 0,
           visible = true,
           properties = {}
         },
         {
+          id = 330,
           name = "",
           type = "powerup_flower",
           shape = "rectangle",
@@ -3300,32 +3881,38 @@ return {
           y = 4404,
           width = 0,
           height = 0,
+          rotation = 0,
           visible = true,
           properties = {}
         },
         {
+          id = 331,
           name = "",
           type = "powerup_flower",
           shape = "rectangle",
-          x = 0,
+          x = 1220.66,
           y = 4220,
           width = 0,
           height = 0,
+          rotation = 0,
           visible = true,
           properties = {}
         },
         {
+          id = 332,
           name = "",
           type = "powerup_flower",
           shape = "rectangle",
-          x = 0,
-          y = 0,
+          x = 954.667,
+          y = 4314.67,
           width = 0,
           height = 0,
+          rotation = 0,
           visible = true,
           properties = {}
         },
         {
+          id = 333,
           name = "",
           type = "powerup_flower",
           shape = "rectangle",
@@ -3333,76 +3920,90 @@ return {
           y = 4416,
           width = 0,
           height = 0,
+          rotation = 0,
           visible = true,
           properties = {}
         },
         {
+          id = 334,
           name = "",
           type = "powerup_flower",
           shape = "rectangle",
-          x = 0,
-          y = 0,
+          x = 1305.33,
+          y = 4274.66,
           width = 0,
           height = 0,
+          rotation = 0,
           visible = true,
           properties = {}
         },
         {
+          id = 335,
           name = "",
           type = "powerup_flower",
           shape = "rectangle",
-          x = 0,
+          x = 1341.67,
           y = 4411,
           width = 0,
           height = 0,
+          rotation = 0,
           visible = true,
           properties = {}
         },
         {
+          id = 336,
           name = "",
           type = "powerup_flower",
           shape = "rectangle",
           x = 1532,
-          y = 0,
+          y = 4393.33,
           width = 0,
           height = 0,
+          rotation = 0,
           visible = true,
           properties = {}
         },
         {
+          id = 337,
           name = "",
           type = "powerup_flower",
           shape = "rectangle",
           x = 1441,
-          y = 0,
+          y = 4501.33,
           width = 0,
           height = 0,
+          rotation = 0,
           visible = true,
           properties = {}
         },
         {
+          id = 338,
           name = "",
           type = "powerup_flower",
           shape = "rectangle",
-          x = 0,
-          y = 0,
+          x = 1469.34,
+          y = 4606.67,
           width = 0,
           height = 0,
+          rotation = 0,
           visible = true,
           properties = {}
         },
         {
+          id = 339,
           name = "",
           type = "powerup_flower",
           shape = "rectangle",
-          x = 0,
+          x = 1578.67,
           y = 4516,
           width = 0,
           height = 0,
+          rotation = 0,
           visible = true,
           properties = {}
         },
         {
+          id = 340,
           name = "",
           type = "powerup_flower",
           shape = "rectangle",
@@ -3410,65 +4011,77 @@ return {
           y = 4628,
           width = 0,
           height = 0,
+          rotation = 0,
           visible = true,
           properties = {}
         },
         {
+          id = 341,
           name = "",
           type = "powerup_flower",
           shape = "rectangle",
-          x = 0,
-          y = 0,
+          x = 1474.67,
+          y = 4926.67,
           width = 0,
           height = 0,
+          rotation = 0,
           visible = true,
           properties = {}
         },
         {
+          id = 342,
           name = "",
           type = "powerup_flower",
           shape = "rectangle",
-          x = 0,
-          y = 0,
+          x = 1384.67,
+          y = 4765.33,
           width = 0,
           height = 0,
+          rotation = 0,
           visible = true,
           properties = {}
         },
         {
+          id = 343,
           name = "",
           type = "powerup_flower",
           shape = "rectangle",
-          x = 0,
-          y = 0,
+          x = 1305.33,
+          y = 4948.66,
           width = 0,
           height = 0,
+          rotation = 0,
           visible = true,
           properties = {}
         },
         {
+          id = 344,
           name = "",
           type = "powerup_flower",
           shape = "rectangle",
-          x = 0,
-          y = 0,
+          x = 1372.67,
+          y = 5018.67,
           width = 0,
           height = 0,
+          rotation = 0,
           visible = true,
           properties = {}
         },
         {
+          id = 345,
           name = "",
           type = "powerup_flower",
           shape = "rectangle",
-          x = 0,
+          x = 1192.67,
           y = 5114,
           width = 0,
           height = 0,
+          rotation = 0,
           visible = true,
           properties = {}
         },
         {
+          id = 346,
           name = "",
           type = "powerup_flower",
           shape = "rectangle",
@@ -3476,175 +4089,207 @@ return {
           y = 4974,
           width = 0,
           height = 0,
+          rotation = 0,
           visible = true,
           properties = {}
         },
         {
+          id = 347,
           name = "",
           type = "powerup_flower",
           shape = "rectangle",
-          x = 0,
-          y = 0,
+          x = 1089.33,
+          y = 5090.67,
           width = 0,
           height = 0,
+          rotation = 0,
           visible = true,
           properties = {}
         },
         {
+          id = 348,
           name = "",
           type = "powerup_flower",
           shape = "rectangle",
-          x = 0,
-          y = 0,
+          x = 930.667,
+          y = 4898.67,
           width = 0,
           height = 0,
+          rotation = 0,
           visible = true,
           properties = {}
         },
         {
+          id = 349,
           name = "",
           type = "powerup_flower",
           shape = "rectangle",
-          x = 0,
-          y = 0,
+          x = 838.667,
+          y = 5146.67,
           width = 0,
           height = 0,
+          rotation = 0,
           visible = true,
           properties = {}
         },
         {
+          id = 351,
           name = "",
           type = "powerup_flower",
           shape = "rectangle",
           x = 1006,
-          y = 0,
+          y = 4526.67,
           width = 0,
           height = 0,
+          rotation = 0,
           visible = true,
           properties = {}
         },
         {
+          id = 352,
           name = "",
           type = "powerup_flower",
           shape = "rectangle",
-          x = 0,
+          x = 1119.33,
           y = 4426,
           width = 0,
           height = 0,
+          rotation = 0,
           visible = true,
           properties = {}
         },
         {
+          id = 353,
           name = "",
           type = "powerup_flower",
           shape = "rectangle",
-          x = 0,
-          y = 0,
+          x = 1142.33,
+          y = 4519.33,
           width = 0,
           height = 0,
+          rotation = 0,
           visible = true,
           properties = {}
         },
         {
+          id = 354,
           name = "",
           type = "powerup_flower",
           shape = "rectangle",
           x = 1199,
-          y = 0,
+          y = 4466.67,
           width = 0,
           height = 0,
+          rotation = 0,
           visible = true,
           properties = {}
         },
         {
+          id = 355,
           name = "",
           type = "powerup_flower",
           shape = "rectangle",
-          x = 0,
-          y = 0,
+          x = 1226.67,
+          y = 4580.67,
           width = 0,
           height = 0,
+          rotation = 0,
           visible = true,
           properties = {}
         },
         {
+          id = 356,
           name = "",
           type = "powerup_flower",
           shape = "rectangle",
           x = 1024,
-          y = 0,
+          y = 4449.33,
           width = 0,
           height = 0,
+          rotation = 0,
           visible = true,
           properties = {}
         },
         {
+          id = 357,
           name = "",
           type = "powerup_flower",
           shape = "rectangle",
-          x = 0,
-          y = 0,
+          x = 1087.67,
+          y = 4474.33,
           width = 0,
           height = 0,
+          rotation = 0,
           visible = true,
           properties = {}
         },
         {
+          id = 358,
           name = "",
           type = "powerup_flower",
           shape = "rectangle",
           x = 1271,
-          y = 0,
+          y = 4523.33,
           width = 0,
           height = 0,
+          rotation = 0,
           visible = true,
           properties = {}
         },
         {
+          id = 359,
           name = "",
           type = "powerup_flower",
           shape = "rectangle",
-          x = 0,
+          x = 882.667,
           y = 4618,
           width = 0,
           height = 0,
+          rotation = 0,
           visible = true,
           properties = {}
         },
         {
+          id = 360,
           name = "",
           type = "powerup_flower",
           shape = "rectangle",
           x = 992,
-          y = 0,
+          y = 4590.67,
           width = 0,
           height = 0,
+          rotation = 0,
           visible = true,
           properties = {}
         },
         {
+          id = 361,
           name = "",
           type = "powerup_flower",
           shape = "rectangle",
-          x = 0,
-          y = 0,
+          x = 981.333,
+          y = 4665.33,
           width = 0,
           height = 0,
+          rotation = 0,
           visible = true,
           properties = {}
         },
         {
+          id = 362,
           name = "",
           type = "powerup_flower",
           shape = "rectangle",
-          x = 0,
-          y = 0,
+          x = 1074.67,
+          y = 4541.33,
           width = 0,
           height = 0,
+          rotation = 0,
           visible = true,
           properties = {}
         },
         {
+          id = 363,
           name = "",
           type = "powerup_flower",
           shape = "rectangle",
@@ -3652,208 +4297,246 @@ return {
           y = 4608,
           width = 0,
           height = 0,
+          rotation = 0,
           visible = true,
           properties = {}
         },
         {
+          id = 364,
           name = "",
           type = "powerup_flower",
           shape = "rectangle",
-          x = 0,
-          y = 0,
+          x = 1082.67,
+          y = 4750.67,
           width = 0,
           height = 0,
+          rotation = 0,
           visible = true,
           properties = {}
         },
         {
+          id = 365,
           name = "",
           type = "powerup_flower",
           shape = "rectangle",
-          x = 0,
+          x = 1118.67,
           y = 4664,
           width = 0,
           height = 0,
+          rotation = 0,
           visible = true,
           properties = {}
         },
         {
+          id = 366,
           name = "",
           type = "powerup_flower",
           shape = "rectangle",
-          x = 0,
-          y = 0,
+          x = 1045.33,
+          y = 4693.33,
           width = 0,
           height = 0,
+          rotation = 0,
           visible = true,
           properties = {}
         },
         {
+          id = 367,
           name = "",
           type = "arena_centerpoint_stalker",
           shape = "rectangle",
-          x = 0,
+          x = 3031.33,
           y = 4520,
           width = 0,
           height = 0,
+          rotation = 0,
           visible = true,
           properties = {}
         },
         {
+          id = 369,
           name = "",
           type = "evergreen",
           shape = "rectangle",
-          x = 0,
-          y = 0,
-          width = 0,
-          height = 0,
+          x = 2726.67,
+          y = 4402.67,
+          width = 25.3333,
+          height = 26.6667,
+          rotation = 0,
           visible = true,
           properties = {}
         },
         {
+          id = 370,
           name = "",
           type = "evergreen",
           shape = "rectangle",
-          x = 0,
-          y = 0,
-          width = 0,
-          height = 0,
+          x = 2968.67,
+          y = 4270.67,
+          width = 25.3333,
+          height = 26.6667,
+          rotation = 0,
           visible = true,
           properties = {}
         },
         {
+          id = 371,
           name = "",
           type = "evergreen",
           shape = "rectangle",
           x = 3278,
-          y = 0,
-          width = 0,
-          height = 0,
+          y = 4545.33,
+          width = 25.3333,
+          height = 26.6667,
+          rotation = 0,
           visible = true,
           properties = {}
         },
         {
+          id = 372,
           name = "",
           type = "evergreen",
           shape = "rectangle",
-          x = 0,
-          y = 0,
-          width = 0,
-          height = 0,
+          x = 3079.33,
+          y = 4253.33,
+          width = 25.3333,
+          height = 26.6667,
+          rotation = 0,
           visible = true,
           properties = {}
         },
         {
+          id = 373,
           name = "",
           type = "evergreen",
           shape = "rectangle",
-          x = 0,
-          y = 0,
-          width = 0,
-          height = 0,
+          x = 3311.33,
+          y = 4425.33,
+          width = 25.3333,
+          height = 26.6667,
+          rotation = 0,
           visible = true,
           properties = {}
         },
         {
+          id = 374,
           name = "",
           type = "evergreen",
           shape = "rectangle",
           x = 2958,
-          y = 0,
-          width = 0,
-          height = 0,
+          y = 4794.67,
+          width = 25.3333,
+          height = 26.6667,
+          rotation = 0,
           visible = true,
           properties = {}
         },
         {
+          id = 375,
           name = "",
           type = "evergreen",
           shape = "rectangle",
           x = 2846,
           y = 4692,
-          width = 0,
-          height = 0,
+          width = 25.3333,
+          height = 26.6667,
+          rotation = 0,
           visible = true,
           properties = {}
         },
         {
+          id = 376,
           name = "",
           type = "evergreen",
           shape = "rectangle",
           x = 2874,
           y = 4336,
-          width = 0,
-          height = 0,
+          width = 25.3333,
+          height = 26.6667,
+          rotation = 0,
           visible = true,
           properties = {}
         },
         {
+          id = 377,
           name = "",
           type = "evergreen",
           shape = "rectangle",
-          x = 0,
-          y = 0,
-          width = 0,
-          height = 0,
+          x = 3108.67,
+          y = 4638.67,
+          width = 25.3333,
+          height = 26.6667,
+          rotation = 0,
           visible = true,
           properties = {}
         },
         {
+          id = 379,
           name = "",
           type = "evergreen",
           shape = "rectangle",
           x = 3250,
-          y = 0,
-          width = 0,
-          height = 0,
+          y = 4322.67,
+          width = 25.3333,
+          height = 26.6667,
+          rotation = 0,
           visible = true,
           properties = {}
         },
         {
+          id = 380,
           name = "",
           type = "evergreen",
           shape = "rectangle",
-          x = 0,
-          y = 0,
-          width = 0,
-          height = 0,
+          x = 2768.67,
+          y = 4585.33,
+          width = 25.3333,
+          height = 26.6667,
+          rotation = 0,
           visible = true,
           properties = {}
         },
         {
+          id = 381,
           name = "",
           type = "evergreen",
           shape = "rectangle",
-          x = 0,
-          y = 0,
-          width = 0,
-          height = 0,
+          x = 3236.67,
+          y = 4729.33,
+          width = 25.3333,
+          height = 26.6667,
+          rotation = 0,
           visible = true,
           properties = {}
         },
         {
+          id = 383,
           name = "",
           type = "evergreen",
           shape = "rectangle",
           x = 2870,
-          y = 0,
-          width = 0,
-          height = 0,
+          y = 4490.67,
+          width = 25.3333,
+          height = 26.6667,
+          rotation = 0,
           visible = true,
           properties = {}
         },
         {
+          id = 384,
           name = "",
           type = "evergreen",
           shape = "rectangle",
           x = 3154,
-          y = 0,
-          width = 0,
-          height = 0,
+          y = 4402.67,
+          width = 25.3333,
+          height = 26.6667,
+          rotation = 0,
           visible = true,
           properties = {}
         },
         {
+          id = 385,
           name = "",
           type = "maxwelllight",
           shape = "rectangle",
@@ -3861,10 +4544,12 @@ return {
           y = 4416,
           width = 0,
           height = 0,
+          rotation = 0,
           visible = true,
           properties = {}
         },
         {
+          id = 386,
           name = "",
           type = "maxwelllight",
           shape = "rectangle",
@@ -3872,10 +4557,12 @@ return {
           y = 4736,
           width = 0,
           height = 0,
+          rotation = 0,
           visible = true,
           properties = {}
         },
         {
+          id = 387,
           name = "",
           type = "maxwelllight",
           shape = "rectangle",
@@ -3883,10 +4570,12 @@ return {
           y = 4416,
           width = 0,
           height = 0,
+          rotation = 0,
           visible = true,
           properties = {}
         },
         {
+          id = 388,
           name = "",
           type = "maxwelllight",
           shape = "rectangle",
@@ -3894,10 +4583,12 @@ return {
           y = 4736,
           width = 0,
           height = 0,
+          rotation = 0,
           visible = true,
           properties = {}
         },
         {
+          id = 389,
           name = "",
           type = "marblepillar",
           shape = "rectangle",
@@ -3905,10 +4596,12 @@ return {
           y = 4608,
           width = 0,
           height = 0,
+          rotation = 0,
           visible = true,
           properties = {}
         },
         {
+          id = 390,
           name = "",
           type = "marblepillar",
           shape = "rectangle",
@@ -3916,10 +4609,12 @@ return {
           y = 4608,
           width = 0,
           height = 0,
+          rotation = 0,
           visible = true,
           properties = {}
         },
         {
+          id = 391,
           name = "",
           type = "marblepillar",
           shape = "rectangle",
@@ -3927,10 +4622,12 @@ return {
           y = 4736,
           width = 0,
           height = 0,
+          rotation = 0,
           visible = true,
           properties = {}
         },
         {
+          id = 392,
           name = "",
           type = "marblepillar",
           shape = "rectangle",
@@ -3938,6 +4635,7 @@ return {
           y = 4736,
           width = 0,
           height = 0,
+          rotation = 0,
           visible = true,
           properties = {}
         }
