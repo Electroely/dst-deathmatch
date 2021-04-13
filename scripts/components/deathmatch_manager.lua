@@ -669,22 +669,22 @@ function Deathmatch_Manager:DoPickUpSpawn()
 	for i, v in ipairs(items_to_spawn) do
 		local pos = custompos or self.inst.centerpoint:GetPosition()
 		local offset = nil
-		while (offset == nil) do
-			local min_dist = arena_configs[self.arena].min_pickup_dist or 1
-			local max_dist = arena_configs[self.arena].max_pickup_dist or 6
-			local dist = min_dist + math.random()*(max_dist-min_dist)
-			offset = FindValidPositionByFan(math.random()*2*PI, dist, 10,
-				function(offset)
-					return TheWorld.Map:IsPassableAtPoint((pos+offset):Get())
-			end)
-		end
-		local item = SpawnPrefab(v)
-		local fx = SpawnPrefab("small_puff")
-		item.Transform:SetPosition((pos+offset):Get())
-		fx.Transform:SetPosition((pos+offset):Get())
-		table.insert(self.spawnedpickups, item)
-		if item.Fade ~= nil then
-			item:DoTaskInTime(15, item.Fade)
+		local min_dist = arena_configs[self.arena].min_pickup_dist or 1
+		local max_dist = arena_configs[self.arena].max_pickup_dist or 6
+		local dist = min_dist + math.random()*(max_dist-min_dist)
+		offset = FindValidPositionByFan(math.random()*2*PI, dist, 10,
+			function(offset)
+				return TheWorld.Map:IsPassableAtPoint((pos+offset):Get())
+		end)
+		if offset ~= nil then
+			local item = SpawnPrefab(v)
+			local fx = SpawnPrefab("small_puff")
+			item.Transform:SetPosition((pos+offset):Get())
+			fx.Transform:SetPosition((pos+offset):Get())
+			table.insert(self.spawnedpickups, item)
+			if item.Fade ~= nil then
+				item:DoTaskInTime(15, item.Fade)
+			end
 		end
 	end
 end
