@@ -5,7 +5,7 @@ local function ReattachToPlayer()
 	end
 	if ThePlayer ~= nil then
 		TheFocalPoint.entity:SetParent(ThePlayer.entity)
-		if ThePlayer.HUD and ThePlayer.HUD.controls.deathmatch_spectatorspinner then
+		if ThePlayer.HUD and ThePlayer.HUD.controls.deathmatch_spectatorspinner and ThePlayer.HUD.controls.deathmatch_spectatorspinner.inst:IsValid() then
 			ThePlayer.HUD.controls.deathmatch_spectatorspinner.spinner:SetSelected(ThePlayer)
 		end
 	else
