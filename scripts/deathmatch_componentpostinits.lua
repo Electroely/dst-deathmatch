@@ -22,7 +22,7 @@ AddComponentPostInit("inventory", function(self)
 				(inst.prevslot == nil or self.itemslots[inst.prevslot] ~= nil) and
 				dm and dm.matchinprogress then
 				for i = 5, self.maxslots, 1 do
-					if self.itemslots[i] == nil then
+					if (inst.components.stackable == nil and self.itemslots[i] == nil) or (inst.components.stackable ~= nil and not inst.components.stackable:IsFull()) then
 						slot = i
 						break
 					end
