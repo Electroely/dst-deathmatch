@@ -5,6 +5,12 @@ local UpValues = require("deathmatch_upvaluehacker")
 local GetUpValue = UpValues.Get
 local ReplaceUpValue = UpValues.Replace
 
+AddPrefabPostInit("dead_sea_bones", function(inst)
+	if inst.Physics ~= nil then
+		inst.Physics:SetActive(false)
+	end
+end)
+
 local function GetPositions(inst)
     local pt = G.Vector3(G.TheWorld.centerpoint.Transform:GetWorldPosition())
     local theta = inst.theta

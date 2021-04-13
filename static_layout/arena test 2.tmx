@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.5" tiledversion="1.5.0" orientation="orthogonal" renderorder="right-down" compressionlevel="0" width="90" height="90" tilewidth="64" tileheight="64" infinite="0" nextlayerid="3" nextobjectid="393">
+<map version="1.5" tiledversion="1.5.0" orientation="orthogonal" renderorder="right-down" compressionlevel="0" width="90" height="90" tilewidth="64" tileheight="64" infinite="0" nextlayerid="3" nextobjectid="417">
  <tileset firstgid="1" source="dont_starve/ground_deathmatch.tsx"/>
  <layer id="1" name="BG_TILES" width="90" height="90">
   <data encoding="csv">
@@ -442,5 +442,28 @@
   <object id="390" type="marblepillar" x="4992" y="4608"/>
   <object id="391" type="marblepillar" x="4864" y="4736"/>
   <object id="392" type="marblepillar" x="4992" y="4736"/>
+  <object id="393" type="trap_starfish" x="4788.67" y="2469.33"/>
+  <object id="395" type="trap_starfish" x="4938" y="2480.67"/>
+  <object id="396" type="trap_starfish" x="4984.67" y="2274.67"/>
+  <object id="397" type="trap_starfish" x="4883.33" y="2610"/>
+  <object id="398" type="trap_starfish" x="4776" y="2701.33"/>
+  <object id="399" type="trap_starfish" x="4854.67" y="2788"/>
+  <object id="400" type="trap_starfish" x="5226" y="2734"/>
+  <object id="401" type="trap_starfish" x="5382.67" y="2706.67"/>
+  <object id="402" type="trap_starfish" x="5288" y="2602"/>
+  <object id="403" type="trap_starfish" x="5248" y="2432"/>
+  <object id="404" type="trap_starfish" x="5008" y="2915.33"/>
+  <object id="405" type="trap_starfish" x="5062.67" y="2786"/>
+  <object id="406" type="trap_starfish" x="5204" y="2904.67"/>
+  <object id="407" type="trap_starfish" x="5194" y="2270.67"/>
+  <object id="408" type="trap_starfish" x="5042" y="2394"/>
+  <object id="409" type="trap_starfish" x="5412" y="2462.67"/>
+  <object id="410" type="dead_sea_bones" x="4896" y="2372"/>
+  <object id="411" type="dead_sea_bones" x="4795" y="2601"/>
+  <object id="412" type="dead_sea_bones" x="4933" y="2753"/>
+  <object id="413" type="dead_sea_bones" x="5172" y="2835"/>
+  <object id="414" type="dead_sea_bones" x="5352" y="2546"/>
+  <object id="415" type="dead_sea_bones" x="5179" y="2324"/>
+  <object id="416" type="dead_sea_bones" x="5029" y="2285"/>
  </objectgroup>
 </map>
