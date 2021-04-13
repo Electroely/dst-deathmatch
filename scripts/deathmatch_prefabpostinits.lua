@@ -67,16 +67,23 @@ local function Swoop(inst, data)
 end
 
 local function OnAttacked(inst, data)
-    for i=1,6 do
-        if math.random() < 0.20 then
-            inst.spawnfeather(inst,0.4)
-        end
-    end
+	if data ~= nil then
+		local damage = data.damage
+		if damage ~= nil and damage > 0 then
+			for i=1,math.floor(damage/25) do
+				if math.random() < 0.20 then
+					inst.spawnfeather(inst,0.4)
+				end
+			end
+		end
+	end
 end
 
 AddPrefabPostInit("malbatross", function(inst)
 	inst.Physics:ClearCollisionMask()
     inst.Physics:CollidesWith(G.COLLISION.GROUND)
+	
+	inst:AddTag("notarget")
 
 	if not G.TheWorld.ismastersim then
 		return
