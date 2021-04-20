@@ -417,6 +417,8 @@ _name.DEATHMATCH_REVIVERHEART = "Telltale Heart"
 
 local _tuning = GLOBAL.TUNING
 _tuning.REVIVE_CORPSE_ACTION_TIME = 2 --in deathmatch, revivals start out fast but get slower
+
+_tuning.STARFISH_TRAP_NOTDAY_RESET.BASE = 15
 ----------------------------------------------------------------------
 
 AddAction("MAKEEXPLOSIVEBALLOON", "Inflate", function(act)

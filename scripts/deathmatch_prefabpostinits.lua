@@ -107,6 +107,7 @@ end)
 
 AddPrefabPostInit("malbatross_feather", function(inst)
 	inst:AddTag("malbatross_feather")
+	inst:AddTag("deathmatch_pickup")
 	
 	if not G.TheWorld.ismastersim then
 		return
