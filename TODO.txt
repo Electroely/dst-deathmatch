@@ -1,3 +1,38 @@
+- FINISH THE BUTTON CONTROLS
+	- Add hover text
+	- Update tips screen
+		- The entries in the list need to generally take up less vertical space
+		- The text for the tips themselves doesn't properly fill the screen
+		- There might be a need for images within the tips screen
+		- tip icons?
+	- Make the change team button work
+		- Clicking the button opens a wheel showing every selectable team?
+			- Other players are shown instead of teams in 2-player teams
+			- Button can also be used to accept/reject "team up with" requests
+			- Clicking the original "change team" button clears team preference	(separate option in the wheel might be better?)
+	- Add weapon choice button?
+		- Instead of players scrambling to equip their favorites every match, they can set them with a menu button
+		- We can get a lot of mileage out of the option wheel idea
+
+- PHASE OUT THE SERVER COMMANDS MENU
+	- It's unintuitive - it might be better to make it an on screen button. Maybe in the top right?
+
+- UPDATE INFO WIDGET
+	- A bunch of text ain't doin' it
+	- We still need a good indicator on which players are alive 
+
+- UPDATE PLAYER LIST
+	- It's outdated, jank and all-around difficult to work with
+	- It displays information that could be displayed elsewhere
+	- Maybe it can be replaced with a set (grid?) of health badges
+	- Use skin silhouettes to make figuring out which player is which easier
+	- Color the red part of the badge with team color for team battles?
+		- High risk of ugly UI, scrapping is an option
+
+
+
+================================================== OLD TODO'S =======================================================
+
 - Telltale heart rework: make them a complexprojectile you throw at your teammates to revive them. Same hp revival mechanics as current, but the heart spawns get rarer as more people are revived.
 
 - Lunar Grotto Map
