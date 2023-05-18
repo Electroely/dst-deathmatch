@@ -90,9 +90,6 @@ Assets = {
 	
 	Asset("IMAGE", "images/changeTeamFlag.tex"),
 	Asset("ATLAS", "images/changeTeamFlag.xml"),
-	
-	Asset("IMAGE", "images/optionwheelcircle.tex"),
-	Asset("ATLAS", "images/optionwheelcircle.xml"),
 }
 local function UserOnline(clienttable, userid)
 	local found = false
@@ -376,7 +373,6 @@ AddClassPostConstruct("widgets/mapcontrols", function(self)
 	self.infoScreen:SetPosition(0, 83)
 	
 	self.despawnBtn = self:AddChild(ImageButton("minimap/minimap_data.xml", "portal_dst.png", nil, nil, nil, nil, {1,1}, {0,0}))
-	self.despawnBtn:SetHoverText("Change Character")
 	self.despawnBtn:SetOnClick(OnDespawnDM)
 	self.despawnBtn:SetScale(0.5)
 	self.despawnBtn:SetPosition(40, 82)

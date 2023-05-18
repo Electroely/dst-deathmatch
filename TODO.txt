@@ -1,8 +1,3 @@
-*create new "deathmatch_optionwheel" widget
-	*widget uses smaller widgets (buttons?) as icons for each option in the wheel
-	*options are displayed in a ring around the position of the widget itself
-	*hovertext capability that doesn't go off the edge of the screen?
-
 - FINISH THE BUTTON CONTROLS
 	- Add hover text
 	- Update tips screen
@@ -34,24 +29,7 @@
 	- Color the red part of the badge with team color for team battles?
 		- High risk of ugly UI, scrapping is an option
 
-- ANTI-CAMPING
-	- Problem: players aren't getting punished for waiting until everyone else dies
-	- Solution: reward players that participate in fights by giving them a higher chance of winning
-		- One or more possible buffs for doing damage? chosen by player
-			- Courage: Deal increased damage when someone dies based on how much damage you dealt to them
-			- Vigor: Heal a portion of the damage dealt to someone when they die
-	- Potential downside: reduction in comeback potential
-	- How does this play out?
-		- Courage gives players an advantage over others in terms of damage dealt
-		- Vigor heals back a portion of the damage taken
-		- Camper would likely still have an advantage either way
-		- Maybe add new pickup buffs mentioned way back?
-		- Still wouldn't fix the problem, though. What else to do?
-		- Gear upgrades based on contribution to match progress?
-			- Hammer could gain a slow or stun area where the slam is cast before jumping
-			- Spear could have a shocking/knockback attack when the player jumps up into the air
-			- Pike could leave a trail of fire
-			- Even less comeback potential, but it'd sure take care of those campers
+
 
 ================================================== OLD TODO'S =======================================================
 
