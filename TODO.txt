@@ -14,6 +14,13 @@
 		- Instead of players scrambling to equip their favorites every match, they can set them with a menu button
 		- We can get a lot of mileage out of the option wheel idea
 
+- INVENTORY REWORK
+	- The vanilla inventory doesn't really fit very well
+	- Instead of 15 slots with 3 equip slots, there would be 4 slots for weapons and 5 slots for extras (like hearts and firebombs)
+	- Technical side: We still keep a large inventory, we just have slots dedicated to the equippable weapons
+	- For useable hats & armors, we create new dummy hand-equippable items that make the player look as if they aren't holding anything
+	  Said items would carry out the actual weapon effect (interacting with the hat/armor anim entities accordingly)
+
 - PHASE OUT THE SERVER COMMANDS MENU
 	- It's unintuitive - it might be better to make it an on screen button. Maybe in the top right?
 
