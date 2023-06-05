@@ -177,32 +177,36 @@ local function PushConfig(name)
 	end
 	
 	--apply oceancolor
-	if data.oceancolor then
-		TheWorld.Map:SetClearColor(data.oceancolor[1], data.oceancolor[2], data.oceancolor[3], data.oceancolor[4])    
-	else
-		TheWorld.Map:SetClearColor(0,0,0,1)
-	end
+	-- if data.oceancolor then
+		-- TheWorld.Map:SetClearColor(data.oceancolor[1], data.oceancolor[2], data.oceancolor[3], data.oceancolor[4])    
+	-- else
+		-- TheWorld.Map:SetClearColor(0,0,0,1)
+	-- end
 	
 	--apply waves
 	if data.waves then
-		TheWorld.WaveComponent:SetWaveSize(80, 3.5)
-		TheWorld.WaveComponent:Init(0,0)
+		TheWorld:DoTaskInTime(0, function(wrld)
+			wrld.WaveComponent:SetWaveSize(80, 3.5)
+			wrld.WaveComponent:Init(0,0)
+		end)
 	elseif data.waves == false then --waves = nil means don't change current
-		TheWorld.WaveComponent:SetWaveSize(0,0)
-		TheWorld.WaveComponent:Init(0,0)
+		TheWorld:DoTaskInTime(0, function(wrld)
+			wrld.WaveComponent:SetWaveSize(0, 0)
+			wrld.WaveComponent:Init(0,0)
+		end)
 	end
 	
-	if data.has_ocean then
-		TheWorld.Map:SetTransparentOcean(true)
-		TheWorld.Map:SetUndergroundFadeHeight(5)
-	else
-		TheWorld.Map:SetTransparentOcean(false)
-		TheWorld.Map:SetUndergroundFadeHeight(0)
-	end
+	-- if data.has_ocean then
+		-- TheWorld.Map:SetTransparentOcean(true)
+		-- TheWorld.Map:SetUndergroundFadeHeight(5)
+	-- else
+		-- TheWorld.Map:SetTransparentOcean(false)
+		-- TheWorld.Map:SetUndergroundFadeHeight(0)
+	-- end
 	
-	if data.fadeheight ~= nil then
-		TheWorld.Map:SetUndergroundFadeHeight(data.fadeheight)
-	end
+	-- if data.fadeheight ~= nil then
+		-- TheWorld.Map:SetUndergroundFadeHeight(data.fadeheight)
+	-- end
 end
 -----------------------------------------
 local function GetWaveBearing(ex, ey, ez, lines)
@@ -316,10 +320,10 @@ local function common_postinit(inst)
 			PushConfig(fxname)
 		end)
 		
-		inst:AddComponent("wavemanager")
-		inst.components.wavemanager.shimmer[GROUND.OCEAN_SWELL] = {per_sec = 80, spawn_rate = 0, checkfn = checkground, spawnfn = SpawnWaveShimmerMedium}
-		inst.components.wavemanager.shimmer[GROUND.OCEAN_ROUGH] = {per_sec = 80, spawn_rate = 0, checkfn = checkground, spawnfn = SpawnWaveShimmerDeep}
-		inst.components.wavemanager.shimmer[GROUND.OCEAN_HAZARDOUS] = {per_sec = 80, spawn_rate = 0, checkfn = checkground, spawnfn = SpawnWaveShimmerDeep}
+		-- inst:AddComponent("wavemanager")
+		-- inst.components.wavemanager.shimmer[GROUND.OCEAN_SWELL] = {per_sec = 80, spawn_rate = 0, checkfn = checkground, spawnfn = SpawnWaveShimmerMedium}
+		-- inst.components.wavemanager.shimmer[GROUND.OCEAN_ROUGH] = {per_sec = 80, spawn_rate = 0, checkfn = checkground, spawnfn = SpawnWaveShimmerDeep}
+		-- inst.components.wavemanager.shimmer[GROUND.OCEAN_HAZARDOUS] = {per_sec = 80, spawn_rate = 0, checkfn = checkground, spawnfn = SpawnWaveShimmerDeep}
 		
 		--inst.Map:SetTransparentOcean(true)
 
@@ -334,45 +338,47 @@ local function common_postinit(inst)
 		inst.state.isautumn = true
 	end)
 	
-	local _Finalize = getmetatable(inst.Map).__index["Finalize"]
-	getmetatable(inst.Map).__index["Finalize"] = function(self, number)
-		if self == inst.Map then
-			--inst.has_ocean = true
+	inst.Map:SetUndergroundFadeHeight(5)
+	
+	-- local _Finalize = getmetatable(inst.Map).__index["Finalize"]
+	-- getmetatable(inst.Map).__index["Finalize"] = function(self, number)
+		-- if self == inst.Map then
+			-- --inst.has_ocean = true
 			
-			local tuning = TUNING.OCEAN_SHADER
-            self:SetOceanEnabled(inst.has_ocean or false)
-			self:SetOceanTextureBlurParameters(tuning.TEXTURE_BLUR_PASS_SIZE, tuning.TEXTURE_BLUR_PASS_COUNT)
-            self:SetOceanNoiseParameters0(tuning.NOISE[1].ANGLE, tuning.NOISE[1].SPEED, tuning.NOISE[1].SCALE, tuning.NOISE[1].FREQUENCY)
-            self:SetOceanNoiseParameters1(tuning.NOISE[2].ANGLE, tuning.NOISE[2].SPEED, tuning.NOISE[2].SCALE, tuning.NOISE[2].FREQUENCY)
-            self:SetOceanNoiseParameters2(tuning.NOISE[3].ANGLE, tuning.NOISE[3].SPEED, tuning.NOISE[3].SCALE, tuning.NOISE[3].FREQUENCY)
+			-- local tuning = TUNING.OCEAN_SHADER
+            -- self:SetOceanEnabled(inst.has_ocean or false)
+			-- self:SetOceanTextureBlurParameters(tuning.TEXTURE_BLUR_PASS_SIZE, tuning.TEXTURE_BLUR_PASS_COUNT)
+            -- self:SetOceanNoiseParameters0(tuning.NOISE[1].ANGLE, tuning.NOISE[1].SPEED, tuning.NOISE[1].SCALE, tuning.NOISE[1].FREQUENCY)
+            -- self:SetOceanNoiseParameters1(tuning.NOISE[2].ANGLE, tuning.NOISE[2].SPEED, tuning.NOISE[2].SCALE, tuning.NOISE[2].FREQUENCY)
+            -- self:SetOceanNoiseParameters2(tuning.NOISE[3].ANGLE, tuning.NOISE[3].SPEED, tuning.NOISE[3].SCALE, tuning.NOISE[3].FREQUENCY)
 
-			local waterfall_tuning = TUNING.WATERFALL_SHADER.NOISE
+			-- local waterfall_tuning = TUNING.WATERFALL_SHADER.NOISE
 
-			self:SetWaterfallFadeParameters(TUNING.WATERFALL_SHADER.FADE_COLOR[1] / 255, TUNING.WATERFALL_SHADER.FADE_COLOR[2] / 255, TUNING.WATERFALL_SHADER.FADE_COLOR[3] / 255, TUNING.WATERFALL_SHADER.FADE_START)
-			self:SetWaterfallNoiseParameters0(waterfall_tuning[1].SCALE, waterfall_tuning[1].SPEED, waterfall_tuning[1].OPACITY, waterfall_tuning[1].FADE_START)
-			self:SetWaterfallNoiseParameters1(waterfall_tuning[2].SCALE, waterfall_tuning[2].SPEED, waterfall_tuning[2].OPACITY, waterfall_tuning[2].FADE_START)
+			-- self:SetWaterfallFadeParameters(TUNING.WATERFALL_SHADER.FADE_COLOR[1] / 255, TUNING.WATERFALL_SHADER.FADE_COLOR[2] / 255, TUNING.WATERFALL_SHADER.FADE_COLOR[3] / 255, TUNING.WATERFALL_SHADER.FADE_START)
+			-- self:SetWaterfallNoiseParameters0(waterfall_tuning[1].SCALE, waterfall_tuning[1].SPEED, waterfall_tuning[1].OPACITY, waterfall_tuning[1].FADE_START)
+			-- self:SetWaterfallNoiseParameters1(waterfall_tuning[2].SCALE, waterfall_tuning[2].SPEED, waterfall_tuning[2].OPACITY, waterfall_tuning[2].FADE_START)
 
-			local minimap_ocean_tuning = TUNING.OCEAN_MINIMAP_SHADER
+			-- local minimap_ocean_tuning = TUNING.OCEAN_MINIMAP_SHADER
 
-			self:SetMinimapOceanEdgeColor0(minimap_ocean_tuning.EDGE_COLOR0[1] / 255, minimap_ocean_tuning.EDGE_COLOR0[2] / 255, minimap_ocean_tuning.EDGE_COLOR0[3] / 255)
-			self:SetMinimapOceanEdgeParams0(minimap_ocean_tuning.EDGE_PARAMS0.THRESHOLD, minimap_ocean_tuning.EDGE_PARAMS0.HALF_THRESHOLD_RANGE)
+			-- self:SetMinimapOceanEdgeColor0(minimap_ocean_tuning.EDGE_COLOR0[1] / 255, minimap_ocean_tuning.EDGE_COLOR0[2] / 255, minimap_ocean_tuning.EDGE_COLOR0[3] / 255)
+			-- self:SetMinimapOceanEdgeParams0(minimap_ocean_tuning.EDGE_PARAMS0.THRESHOLD, minimap_ocean_tuning.EDGE_PARAMS0.HALF_THRESHOLD_RANGE)
 
-			self:SetMinimapOceanEdgeColor1(minimap_ocean_tuning.EDGE_COLOR1[1] / 255, minimap_ocean_tuning.EDGE_COLOR1[2] / 255, minimap_ocean_tuning.EDGE_COLOR1[3] / 255)
-			self:SetMinimapOceanEdgeParams1(minimap_ocean_tuning.EDGE_PARAMS1.THRESHOLD, minimap_ocean_tuning.EDGE_PARAMS1.HALF_THRESHOLD_RANGE)
+			-- self:SetMinimapOceanEdgeColor1(minimap_ocean_tuning.EDGE_COLOR1[1] / 255, minimap_ocean_tuning.EDGE_COLOR1[2] / 255, minimap_ocean_tuning.EDGE_COLOR1[3] / 255)
+			-- self:SetMinimapOceanEdgeParams1(minimap_ocean_tuning.EDGE_PARAMS1.THRESHOLD, minimap_ocean_tuning.EDGE_PARAMS1.HALF_THRESHOLD_RANGE)
 
-			self:SetMinimapOceanEdgeShadowColor(minimap_ocean_tuning.EDGE_SHADOW_COLOR[1] / 255, minimap_ocean_tuning.EDGE_SHADOW_COLOR[2] / 255, minimap_ocean_tuning.EDGE_SHADOW_COLOR[3] / 255)
-			self:SetMinimapOceanEdgeShadowParams(minimap_ocean_tuning.EDGE_SHADOW_PARAMS.THRESHOLD, minimap_ocean_tuning.EDGE_SHADOW_PARAMS.HALF_THRESHOLD_RANGE, minimap_ocean_tuning.EDGE_SHADOW_PARAMS.UV_OFFSET_X, minimap_ocean_tuning.EDGE_SHADOW_PARAMS.UV_OFFSET_Y)
+			-- self:SetMinimapOceanEdgeShadowColor(minimap_ocean_tuning.EDGE_SHADOW_COLOR[1] / 255, minimap_ocean_tuning.EDGE_SHADOW_COLOR[2] / 255, minimap_ocean_tuning.EDGE_SHADOW_COLOR[3] / 255)
+			-- self:SetMinimapOceanEdgeShadowParams(minimap_ocean_tuning.EDGE_SHADOW_PARAMS.THRESHOLD, minimap_ocean_tuning.EDGE_SHADOW_PARAMS.HALF_THRESHOLD_RANGE, minimap_ocean_tuning.EDGE_SHADOW_PARAMS.UV_OFFSET_X, minimap_ocean_tuning.EDGE_SHADOW_PARAMS.UV_OFFSET_Y)
 
-			self:SetMinimapOceanEdgeFadeParams(minimap_ocean_tuning.EDGE_FADE_PARAMS.THRESHOLD, minimap_ocean_tuning.EDGE_FADE_PARAMS.HALF_THRESHOLD_RANGE, minimap_ocean_tuning.EDGE_FADE_PARAMS.MASK_INSET)
+			-- self:SetMinimapOceanEdgeFadeParams(minimap_ocean_tuning.EDGE_FADE_PARAMS.THRESHOLD, minimap_ocean_tuning.EDGE_FADE_PARAMS.HALF_THRESHOLD_RANGE, minimap_ocean_tuning.EDGE_FADE_PARAMS.MASK_INSET)
 
-			self:SetMinimapOceanEdgeNoiseParams(minimap_ocean_tuning.EDGE_NOISE_PARAMS.UV_SCALE)
+			-- self:SetMinimapOceanEdgeNoiseParams(minimap_ocean_tuning.EDGE_NOISE_PARAMS.UV_SCALE)
 		
-			self:SetMinimapOceanTextureBlurParameters(minimap_ocean_tuning.TEXTURE_BLUR_SIZE, minimap_ocean_tuning.TEXTURE_BLUR_PASS_COUNT, minimap_ocean_tuning.TEXTURE_ALPHA_BLUR_SIZE, minimap_ocean_tuning.TEXTURE_ALPHA_BLUR_PASS_COUNT)
-			self:SetMinimapOceanMaskBlurParameters(minimap_ocean_tuning.MASK_BLUR_SIZE, minimap_ocean_tuning.MASK_BLUR_PASS_COUNT)
-		end
+			-- self:SetMinimapOceanTextureBlurParameters(minimap_ocean_tuning.TEXTURE_BLUR_SIZE, minimap_ocean_tuning.TEXTURE_BLUR_PASS_COUNT, minimap_ocean_tuning.TEXTURE_ALPHA_BLUR_SIZE, minimap_ocean_tuning.TEXTURE_ALPHA_BLUR_PASS_COUNT)
+			-- self:SetMinimapOceanMaskBlurParameters(minimap_ocean_tuning.MASK_BLUR_SIZE, minimap_ocean_tuning.MASK_BLUR_PASS_COUNT)
+		-- end
 		
-		_Finalize(self, number)
-	end
+		-- _Finalize(self, number)
+	-- end
 end
 
 local function OnSave(inst, data)
