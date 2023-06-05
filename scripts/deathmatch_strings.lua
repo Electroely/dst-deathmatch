@@ -2,6 +2,23 @@
 --putting all the strings here would make it more organized and allow for
 --easier translation in case that becomes a thing
 return {
+
+	STARTMATCH = "Start Deathmatch",
+	TEAMSELECT = "Team Select",
+	TEAMMODE = "Game Mode",
+	ARENAS = "Arena Select",
+	
+	TEAMMODE_FFA = "Free For All",
+	TEAMMODE_RVB = "Red vs. Blue",
+	TEAMMODE_2PT = "2-Player Teams",
+	
+	ARENA_ATRIUM = "The Atrium",
+	ARENA_DESERT = "The Badlands",
+	ARENA_PIGVILLAGE = "Pig King's Village",
+	ARENA_RANDOM = "Random",
+	
+	GOBACK = "Go Back",
+	
 	CHATMESSAGES = {
 		DESPAWN_MIDMATCH = "Can't despawn during a match!",
 		DESPAWN_STARTING = "Can't despawn during match startup!",

@@ -90,6 +90,9 @@ Assets = {
 	
 	Asset("IMAGE", "images/changeTeamFlag.tex"),
 	Asset("ATLAS", "images/changeTeamFlag.xml"),
+	
+	Asset("IMAGE", "images/matchcontrolsframe.tex"),
+	Asset("ATLAS", "images/matchcontrolsframe.xml"),
 }
 local function UserOnline(clienttable, userid)
 	local found = false
