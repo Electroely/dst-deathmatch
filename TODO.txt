@@ -1,3 +1,36 @@
+- BUTTON CONTROLS WIDGET
+	- Main button with 4 sub-menu buttons
+	- Main button starts match, or acts as "go back" if a submenu is open
+	- Change Team button lets user select a team to be on
+		- Button greyed out in FFA
+		- Red vs Blue lets players pick a side
+		- 2PT shows player icons instead (team up request)
+	- Change Team Mode allows players to vote on a mode
+		- Starts a yes/no vote for the corresponding mode
+	- Change Map allows players to vote on a map
+		- Each player has their own preference. 
+			- "anything works" reference lets other players decide
+			- All anything works = random
+			- Map choice is randomized between the players that have selected a map
+			- Random can also be picked, which will subsequently pick a random map
+	- Info button opens an info widget. Maybe we can replace it with a scrapbook repurposed for the mode?
+
+- TOP BANNER WIDGET
+	- Text widget in the top-center of the screen that describes the current state of the server.
+	- Local to each player
+	- "Waiting for more players" when only one person is in the server
+	- Not presenting during match for players in the match
+	- "Match currently in progress. Spectate using the [ghost] button." for players not in match during match
+	- "You're dead. Wait for the match to end." for dead players (FFA) or dead teams
+	- "You're dead. Wait for a teammate to resurrect you" for dead players with living teammates
+
+- TEAM HEALTH BADGES
+	- Instead of listing all the names in the top left, player health badges should be to the left of the inventory widget with no name or kills counter.
+	- Health badges for teammates can be listed on the right instead for visibility
+	- Some indication of team affiliation? Decide specifics before implementing
+
+================================================== OLD TODO'S =======================================================
+
 - FINISH THE BUTTON CONTROLS
 	- Add hover text
 	- Update tips screen
@@ -14,13 +47,6 @@
 		- Instead of players scrambling to equip their favorites every match, they can set them with a menu button
 		- We can get a lot of mileage out of the option wheel idea
 
-- INVENTORY REWORK
-	- The vanilla inventory doesn't really fit very well
-	- Instead of 15 slots with 3 equip slots, there would be 4 slots for weapons and 5 slots for extras (like hearts and firebombs)
-	- Technical side: We still keep a large inventory, we just have slots dedicated to the equippable weapons
-	- For useable hats & armors, we create new dummy hand-equippable items that make the player look as if they aren't holding anything
-	  Said items would carry out the actual weapon effect (interacting with the hat/armor anim entities accordingly)
-
 - PHASE OUT THE SERVER COMMANDS MENU
 	- It's unintuitive - it might be better to make it an on screen button. Maybe in the top right?
 
@@ -36,9 +62,6 @@
 	- Color the red part of the badge with team color for team battles?
 		- High risk of ugly UI, scrapping is an option
 
-
-
-================================================== OLD TODO'S =======================================================
 
 - Telltale heart rework: make them a complexprojectile you throw at your teammates to revive them. Same hp revival mechanics as current, but the heart spawns get rarer as more people are revived.
 
