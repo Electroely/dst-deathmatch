@@ -77,6 +77,7 @@ PrefabFiles = {
 	"powerflier",
 	"powerup_flower",
 	"shadowweapons",
+	"invslotdummy",
 	
 	"maxwelllight",
 	"maxwelllight_flame",
@@ -93,6 +94,9 @@ Assets = {
 	
 	Asset("IMAGE", "images/matchcontrolsframe.tex"),
 	Asset("ATLAS", "images/matchcontrolsframe.xml"),
+	
+	Asset("IMAGE", "images/deathmatch_inventorybar.tex"),
+	Asset("ATLAS", "images/deathmatch_inventorybar.xml"),
 }
 local function UserOnline(clienttable, userid)
 	local found = false
@@ -262,6 +266,9 @@ local Deathmatch_LobbyTimer = G.require("widgets/deathmatch_lobbytimer")
 local Deathmatch_InfoPopup = G.require("widgets/deathmatch_infopopup")
 local Deathmatch_Menu = require("screens/deathmatch_menuscreen")
 local DeathmatchMenu = require "widgets/deathmatch_menu"
+local StatusDisplays = require "widgets/statusdisplays"
+
+local Deathmatch_Inventory = require("widgets/deathmatch_inventorybar")
 
 AddClassPostConstruct("widgets/controls", function(self, owner)
 	if G.TheNet:GetServerGameMode() == "deathmatch" then
@@ -291,10 +298,19 @@ AddClassPostConstruct("widgets/controls", function(self, owner)
 		
 		self.clock:Hide()
 		
+		self.inv:Kill()
+		self.inv = self.bottom_root:AddChild(Deathmatch_Inventory(self.owner))
+		self.inv.autoanchor = self.worldresettimer
+		
+		self.status:Kill()
+		self.status = self.bottom_root:AddChild(StatusDisplays(self.owner))
+		self.status:SetPosition(175,50)
+		self.status:SetScale(1.3,1.3,1.3)
+		
 		self.status.stomach:Hide()
 		self.status.stomach.Show = function() end
 		self.status.brain:Hide()
-		self.status.brain.Show = function() end -- im gay
+		self.status.brain.Show = function() end
 		
 		if self.status.inspirationbadge ~= nil then
 			self.status.inspirationbadge:Hide()

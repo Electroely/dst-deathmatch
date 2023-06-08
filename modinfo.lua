@@ -54,7 +54,7 @@ game_modes = {
 			reset_time = nil,
 			invalid_recipes = nil,
 			--
-			--override_item_slots = 0,
+			override_item_slots = 9,
 			no_air_attack = true,
 			no_crafting = true,
 			no_minimap = true,

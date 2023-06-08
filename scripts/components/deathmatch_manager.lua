@@ -71,13 +71,10 @@ local lobbyitems = {
 	"hammer_mjolnir",
 	"lavaarena_heavyblade",
 	"lavaarena_firebomb",
-	"lavaarena_armorheavy",
 	"lavaarena_armormediumdamager",
+	"lavaarena_lightdamagerhat",
 	"lavaarena_armormediumrecharger",
 	"lavaarena_rechargerhat",
-	"lavaarena_lightdamagerhat",
-	"teleporterhat_instant",
-	"reskin_tool",
 }
 local function GiveLobbyInventory(player)
 	local inv = player.components.inventory
@@ -285,7 +282,6 @@ local Deathmatch_Manager = Class(function(self, inst)
 	self.choicegear = {
 	"lavaarena_armormediumdamager",
 	"lavaarena_armormediumrecharger",
-	"lavaarena_armorheavy",
 	"lavaarena_lightdamagerhat",
 	"lavaarena_rechargerhat",
 	}

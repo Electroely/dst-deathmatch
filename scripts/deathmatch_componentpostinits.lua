@@ -4,6 +4,9 @@ local UpValues = require("deathmatch_upvaluehacker")
 local GetUpValue = UpValues.Get
 local ReplaceUpValue = UpValues.Replace
 
+AddClassPostConstruct("components/equippable_replica", function(self)
+	self.prevslot = GLOBAL.net_smallbyte(self.inst.GUID, "deathmatch.equippable_prevslot")
+end)
 AddComponentPostInit("inventory", function(self)
 	--make it so that items picked up mid-match can't go into the
 	--first 4 slots
@@ -35,16 +38,68 @@ AddComponentPostInit("inventory", function(self)
 			end
 			return GiveItem_old(self, inst, slot, src_pos, ...)
 		end
+		local DropItem_old = self.DropItem
+		function self:DropItem(item, ...)
+			if item and item:HasTag("invslotdummy") then
+				local rtn = {DropItem_old(self, item, ...)}
+				local equipitem = self:GetEquippedItem(GLOBAL.EQUIPSLOTS.HANDS)
+				if equipitem ~= nil then
+					self:Unequip(GLOBAL.EQUIPSLOTS.HANDS)
+					equipitem.components.equippable:ToPocket()
+					self.silentfull = true
+					self:GiveItem(equipitem)
+					self.silentfull = false
+				end
+				return GLOBAL.unpack(rtn)
+			end
+			return DropItem_old(self, item, ...)
+		end
+		local SetActiveItem_old = self.SetActiveItem
+		function self:SetActiveItem(item, ...)
+			if item and item:HasTag("invslotdummy") then
+				local rtn = {SetActiveItem_old(self, item, ...)}
+				local equipitem = self:GetEquippedItem(GLOBAL.EQUIPSLOTS.HANDS)
+				if equipitem ~= nil then
+					self:Unequip(GLOBAL.EQUIPSLOTS.HANDS)
+					equipitem.components.equippable:ToPocket()
+					self.silentfull = true
+					self:GiveItem(equipitem)
+					self.silentfull = false
+				end
+				return GLOBAL.unpack(rtn)
+			end
+			return SetActiveItem_old(self, item, ...)
+		end
 		local Equip_old = self.Equip
 		function self:Equip(inst, ...)
-			if inst.itemcountlimit then
+			if inst and inst.itemcountlimit then
 				local count = self:GetTotalItemCount(inst.prefab) - (self:IsHolding(inst) and 1 or 0)
 				if count >= inst.itemcountlimit then
 					self:DropItem(inst, true, true)
 					return
 				end
 			end
+			if inst and inst.components.equippable and inst.components.equippable.equipslot == GLOBAL.EQUIPSLOTS.HANDS then
+				local oldslot = self:GetItemSlot(inst) or 9
+				local dummy = GLOBAL.SpawnPrefab("invslotdummy")
+				if self.itemslots[oldslot] ~= nil and self.itemslots[oldslot] ~= inst then
+					self:DropItem(self.itemslots[oldslot], true, true)
+				end
+				local rtn = {Equip_old(self, inst, ...)}
+				self:GiveItem(dummy, oldslot)
+				return GLOBAL.unpack(rtn)
+			end
 			return Equip_old(self, inst, ...)
+		end
+		local Unequip_old = self.Unequip
+		function self:Unequip(equipslot, ...)
+			if equipslot == GLOBAL.EQUIPSLOTS.HANDS then
+				local items = self:GetItemsWithTag("invslotdummy")
+				for k, v in pairs(items) do
+					v:Remove()
+				end
+			end
+			return Unequip_old(self, equipslot, ...)
 		end
 	end
 	
