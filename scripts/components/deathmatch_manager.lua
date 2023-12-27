@@ -1,15 +1,9 @@
-local ARENA_DEFS = require("prefabs/arena_defs")
+local arenas = require("prefabs/arena_defs")
+
+local ARENA_DEFS = arenas.CONFIGS
 local arena_configs = ARENA_DEFS
-local arena_idx = {
-	["random"] = 0,
-	["atrium"] = 1,
-	["desert"] = 2,
-	["pigvillage"] = 3,
-	["spring"] = 4,
-	["malbatross"] = 5,
-	["grotto"] = 6,
-	["stalker"] = 7
-}
+local arena_idx = arenas.IDX_LOOKUP
+local random_arena_select = arenas.VALID_ARENAS
 
 local function GetValidPoint(position, start_angle, radius, attempts)
 	return FindValidPositionByFan(start_angle, radius, attempts,
@@ -86,7 +80,7 @@ local function GiveLobbyInventory(player)
 	for k, v in pairs(inv.equipslots) do
 		if TableContains(lobbyitems, v.prefab) then
 			neededitems[v.prefab] = false
-		else
+		elseif not v.prefab == "invslotdummy" then
 			v:Remove()
 		end
 	end
@@ -432,7 +426,7 @@ function Deathmatch_Manager:StartDeathmatch()
 			local to_remove = {}
 			local numremove = 0
 			for k, v in pairs(Ents) do 
-				if v.prefab == "balloon" or v.components.inventoryitem then
+				if (v.prefab == "balloon" or v.components.inventoryitem) and (not v.prefab == "invslotdummy") then
 					numremove = numremove + 1
 					to_remove[numremove] = v
 				end
@@ -598,7 +592,7 @@ end
 
 function Deathmatch_Manager:ResetDeathmatch()
 	if self.upcoming_arena == "random" then
-		self.arena = GetRandomItem({"atrium", "desert", "pigvillage", "stalker", "malbatross"})
+		self.arena = GetRandomItem(random_arena_select)
 	else
 		self.arena = self.upcoming_arena
 	end

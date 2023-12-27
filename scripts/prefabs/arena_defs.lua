@@ -274,14 +274,42 @@ local ARENA_DEFS = {
 }
 
 local ARENA_IDX = {
-	["random"] = 0,
-	["atrium"] = 1,
-	["desert"] = 2,
-	["pigvillage"] = 3,
-	["spring"] = 4,
+	"atrium",
+	"desert",
+	"pigvillage",
+	"spring",
+	"malbatross",
+	"grotto",
+	"stalker"
 }
 
-return ARENA_DEFS
+ARENA_IDX[0] = "random"
+
+local ARENA_IDX_LOOKUP = {}
+
+for k, v in pairs(ARENA_IDX) do
+	ARENA_IDX_LOOKUP[v] = k
+end
+
+local VALID_ARENA_LIST = {
+	"atrium",
+	"desert",
+	"pigvillage",
+}
+
+local VALID_ARENA_LOOKUP = {}
+
+for k, v in pairs(VALID_ARENA_LIST) do
+	VALID_ARENA_LOOKUP[ARENA_IDX_LOOKUP[v]] = true
+end
+
+return {
+	CONFIGS = ARENA_DEFS,
+	IDX = ARENA_IDX,
+	IDX_LOOKUP = ARENA_IDX_LOOKUP,
+	VALID_ARENAS = VALID_ARENA_LIST,
+	VALID_ARENA_LOOKUP = VALID_ARENA_LOOKUP,
+}
 
 	--[[when adding new arenas, make sure to update:
 	this file

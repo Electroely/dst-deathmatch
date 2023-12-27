@@ -1884,19 +1884,6 @@ return {
           properties = {}
         },
         {
-          id = 135,
-          name = "",
-          type = "deathmatch_infosign",
-          shape = "rectangle",
-          x = 832,
-          y = 1216,
-          width = 0,
-          height = 0,
-          rotation = 0,
-          visible = true,
-          properties = {}
-        },
-        {
           id = 136,
           name = "",
           type = "pigking",

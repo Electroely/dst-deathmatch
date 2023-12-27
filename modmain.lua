@@ -6,7 +6,10 @@ G.DEATHMATCH_STRINGS = G.require("deathmatch_strings")
 local DEATHMATCH_STRINGS = G.DEATHMATCH_STRINGS
 local DEATHMATCH_POPUPS = DEATHMATCH_STRINGS.POPUPS
 
+local arenas = require("prefabs/arena_defs")
+
 local UserCommands = require("usercommands")
+
 
 --mod import extra files
 modimport("scripts/deathmatch_teamchat")
@@ -21,6 +24,7 @@ AddPrefabPostInit("player_classified", function(inst)
 		G.TheWorld:PushEvent("applyarenaeffects", inst._arenaeffects:value())
 	end)
 	inst._choosinggear = G.net_bool(inst.GUID, "deathmatch.choosinggear", "choosinggearchanged")
+	inst._arenachoice = G.net_smallbyte(inst.GUID, "deathmatch.arenachoice", "arenachoicedirty")
 	if not G.TheWorld.ismastersim then
 		inst:ListenForEvent("choosinggearchanged", function(inst, data)
 			if inst._parent.HUD and inst._choosinggear:value() then
@@ -29,7 +33,12 @@ AddPrefabPostInit("player_classified", function(inst)
 				inst._parent.HUD.controls.deathmatch_chooseyourgear:Hide()
 			end
 		end)
+		inst:ListenForEvent("arenachoicedirty", function(inst, data)
+			inst._parent.arenachoice = arenas.IDX[inst._arenachoice:value()]
+			inst._parent:PushEvent("arenachoicedirty", inst._arenachoice:value())
+		end)
 	end
+	
 	G.TheWorld:ListenForEvent("startchoosinggear", function() inst._choosinggear:set(true) end)
 	G.TheWorld:ListenForEvent("donechoosinggear", function() inst._choosinggear:set(false) end)
 end)
@@ -95,8 +104,31 @@ Assets = {
 	Asset("IMAGE", "images/matchcontrolsframe.tex"),
 	Asset("ATLAS", "images/matchcontrolsframe.xml"),
 	
+	Asset("IMAGE", "images/map_icon_atrium.tex"),
+	Asset("ATLAS", "images/map_icon_atrium.xml"),
+	Asset("IMAGE", "images/map_icon_desert.tex"),
+	Asset("ATLAS", "images/map_icon_desert.xml"),
+	Asset("IMAGE", "images/map_icon_pigvillage.tex"),
+	Asset("ATLAS", "images/map_icon_pigvillage.xml"),
+	Asset("IMAGE", "images/map_icon_random.tex"),
+	Asset("ATLAS", "images/map_icon_random.xml"),
+	
+	Asset("IMAGE", "images/modeselect_ffa.tex"),
+	Asset("ATLAS", "images/modeselect_ffa.xml"),
+	Asset("IMAGE", "images/modeselect_rvb.tex"),
+	Asset("ATLAS", "images/modeselect_rvb.xml"),
+	Asset("IMAGE", "images/modeselect_2pt.tex"),
+	Asset("ATLAS", "images/modeselect_2pt.xml"),
+	
+	Asset("IMAGE", "images/teamselect_pole.tex"),
+	Asset("ATLAS", "images/teamselect_pole.xml"),
+	Asset("IMAGE", "images/teamselect_flag.tex"),
+	Asset("ATLAS", "images/teamselect_flag.xml"),
+	
 	Asset("IMAGE", "images/deathmatch_inventorybar.tex"),
 	Asset("ATLAS", "images/deathmatch_inventorybar.xml"),
+	
+	Asset("SHADER", "shaders/characterhead.ksh"),
 }
 local function UserOnline(clienttable, userid)
 	local found = false
@@ -159,6 +191,9 @@ AddPlayerPostInit(function(inst)
 				local x, y, z = (G.TheInput:GetWorldPosition() - inst:GetPosition()):Get()
 				SendModRPCToServer(GetModRPC(modname, "locationrequest"), x, z)
 			end
+		end)
+		inst:ListenForEvent("changearenachoice", function(inst, data)
+			SendModRPCToServer(GetModRPC(modname, "deathmatch_arenachoice"), data)
 		end)
 	end
 	if G.TheNet:GetServerGameMode() == "deathmatch" then
@@ -589,6 +624,18 @@ G.ACTIONS.LOOKAT.fn = function(act, ...)
 	end
 	return worked
 end
+
+-----------------------------------------------------------------------------
+
+local function checkarenaid(v)
+	return type(v) == "number" and (v == 0 or arenas.VALID_ARENA_LOOKUP[v])
+end
+AddModRPCHandler(modname, "deathmatch_arenachoice", function(inst, arenaid)
+	print("got arena choice",inst,arenaid,checkarenaid(arenaid))
+	if (inst == nil or not checkarenaid(arenaid)) then return end
+	inst.player_classified._arenachoice:set(arenaid)
+	inst.arenachoice = arenas.IDX[arenaid]
+end)
 
 -----------------------------------------------------------------------------
 local function checknumber(v)

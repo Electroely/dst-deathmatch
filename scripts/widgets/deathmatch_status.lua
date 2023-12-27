@@ -6,14 +6,14 @@ local function SecondsToTimer(secs)
 	end 
 	return "00:00" 
 end 
-local DEATHMATCH_GAMEMODES = {
+local DEATHMATCH_GAMEMODES = { --TODO
 	{name="Free For All"},
 	{name="Red vs. Blue"},
 	{name="2-Player Teams"},
 	{name="Custom Teams"}
 }
 
-local ARENAS = {
+local ARENAS = { --TODO
 	"Random",
 	"Atrium",
 	"Desert",

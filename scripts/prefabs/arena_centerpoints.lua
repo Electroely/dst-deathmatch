@@ -1,4 +1,4 @@
-local ARENA_DEFS = require("prefabs/arena_defs")
+local ARENA_DEFS = require("prefabs/arena_defs").CONFIGS
 
 local prefabs = {}
 

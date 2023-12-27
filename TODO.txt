@@ -15,6 +15,13 @@
 			- Random can also be picked, which will subsequently pick a random map
 	- Info button opens an info widget. Maybe we can replace it with a scrapbook repurposed for the mode?
 
+- MAP CHOICE
+	- Each player chooses their own preferred map
+	- Map choice is picked randomly from all the players' choices
+	- netvar controlled by RPC?
+	- 
+
+
 - TOP BANNER WIDGET
 	- Text widget in the top-center of the screen that describes the current state of the server.
 	- Local to each player
