@@ -54,7 +54,44 @@ function TeammateHealthBadge:_SetupHeads()
 	self.OnUpdate = UpdateShaderParams
 	self:StartUpdating()
 end
-
+local function GetPlayerBadgeData_Override(character, ghost, state_1, state_2, state_3, ...)
+	--fix player head sizes
+	local rtn = { GetPlayerBadgeData(character, ghost, state_1, state_2, state_3, ...) }
+	-- bank, animation, skin_mode, scale, y_offset, [x_offset]
+	-- default y_offset: -50
+	-- default scale: .23
+	if character == "willow" then
+		rtn[4] = .25
+		rtn[5] = -47
+	elseif character == "wolfgang" then
+		rtn[4] = .27
+	elseif character == "wendy" then
+		rtn[4] = .25
+		rtn[5] = -47
+	elseif character == "wx78" then
+		rtn[4] = .27
+	elseif character == "wickerbottom" then
+		rtn[4] = .25
+	elseif character == "woodie" then
+		rtn[4] = .26
+	elseif character == "wes" then
+		rtn[4] = .26
+		rtn[6] = -3
+	elseif character == "waxwell" then
+		rtn[4] = .26
+		rtn[5] = -46
+	elseif character == "wathgrithr" then
+		rtn[4] = .25
+		rtn[5] = -45
+	elseif character == "webber" then
+		rtn[4] = .25
+		rtn[5] = -45
+	elseif character == "winona" then
+		rtn[4] = .22
+		rtn[5] = -47
+	end
+	return unpack(rtn)
+end
 function TeammateHealthBadge:SetHead(prefab, colour, ishost, userflags, base_skin)
     local dirty = false
 
@@ -94,7 +131,8 @@ function TeammateHealthBadge:SetHead(prefab, colour, ishost, userflags, base_ski
 		local character_state_1 = checkbit(userflags, USERFLAGS.CHARACTER_STATE_1)
 		local character_state_2 = checkbit(userflags, USERFLAGS.CHARACTER_STATE_2)
 		local character_state_3 = checkbit(userflags, USERFLAGS.CHARACTER_STATE_3)
-		local bank, animation, skin_mode, scale, y_offset = GetPlayerBadgeData( prefab, false, character_state_1, character_state_2, character_state_3)
+		local bank, animation, skin_mode, scale, y_offset, x_offset = GetPlayerBadgeData_Override( prefab, false, character_state_1, character_state_2, character_state_3)
+		x_offset = x_offset or 0
 
 		self.head_animstate:SetBank(bank)
 		self.head_animstate:PlayAnimation(animation, true)
@@ -103,7 +141,7 @@ function TeammateHealthBadge:SetHead(prefab, colour, ishost, userflags, base_ski
 		self.head_animstate:Pause()
 		
 		self.head_anim:SetScale(scale*0.7)
-		self.head_anim:SetPosition(1,y_offset+11, 0)
+		self.head_anim:SetPosition(1+x_offset,y_offset+11, 0)
 
 		local skindata = GetSkinData(base_skin or self.prefabname.."_none")
 		local base_build = self.prefabname
