@@ -4,6 +4,7 @@ local Widget = require("widgets/widget")
 local TeammateHealthBadge = require("widgets/deathmatch_teammatehealthbadge")
 
 local SPACING = 80
+local Y_OFFSET = 70
 
 local Deathmatch_EnemyList = Class(Widget, function(self, owner)
 	Widget._ctor(self, "Deathmatch_EnemyList")
@@ -31,6 +32,23 @@ function Deathmatch_EnemyList:GetPlayerTable()
     return ClientObjs
 end
 
+local function CreateDummyData(character)
+	return {
+		prefab = character,
+		userid = character,
+		base_skin = character.."_none",
+		userflags = 0,
+	}
+end
+
+local function CreateDummyTable()
+	local data = {}
+	for k, character in pairs(DST_CHARACTERLIST) do
+		table.insert(data, CreateDummyData(character))
+	end
+	return data
+end
+
 function Deathmatch_EnemyList:MakeWidgetForPlayer(data)
 	local badge = self:AddChild(TeammateHealthBadge(ThePlayer))
 	self:SetWidgetToPlayer(badge, data)
@@ -38,13 +56,13 @@ function Deathmatch_EnemyList:MakeWidgetForPlayer(data)
 end
 
 function Deathmatch_EnemyList:SetWidgetToPlayer(badge, data)
-	badge:SetPlayer(UserToPlayer(data.userid))
-	badge:SetHead(data.prefab, data.colour, data.ishost, data.userflags, data.base_skin)
+	badge:SetPlayer(data.userid)
 end
 
 function Deathmatch_EnemyList:RefreshWidgets()
-	local players = self:GetPlayerTable()
-
+	--local players = self:GetPlayerTable()
+	local players = CreateDummyTable()
+	
 	for i = 1, math.max(#players, #self.widgets) do
 		if self.widgets[i] ~= nil then
 			if players[i] ~= nil then
@@ -60,7 +78,11 @@ function Deathmatch_EnemyList:RefreshWidgets()
 	
 	--TODO: calculate spacing depending on number of widgets & screen size
 	for i, widget in ipairs(self.widgets) do
-		widget:SetPosition(-(i-1)*SPACING, 0)
+		if i%2 == 1 then
+			widget:SetPosition(-(math.ceil(i/2)-1)*SPACING, 0)
+		else
+			widget:SetPosition(-((i/2)-1)*SPACING - SPACING*0.5, Y_OFFSET)
+		end
 	end
 end
 
