@@ -38,6 +38,7 @@ local function CreateDummyData(character)
 		userid = character,
 		base_skin = character.."_none",
 		userflags = 0,
+		name = STRINGS.NAMES[character]
 	}
 end
 
@@ -60,8 +61,8 @@ function Deathmatch_EnemyList:SetWidgetToPlayer(badge, data)
 end
 
 function Deathmatch_EnemyList:RefreshWidgets()
-	--local players = self:GetPlayerTable()
-	local players = CreateDummyTable()
+	local players = self:GetPlayerTable()
+	--local players = CreateDummyTable()
 	
 	for i = 1, math.max(#players, #self.widgets) do
 		if self.widgets[i] ~= nil then

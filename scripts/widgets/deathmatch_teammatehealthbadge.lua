@@ -4,6 +4,12 @@ local Text = require "widgets/text"
 local Image = require "widgets/image"
 local Widget = require "widgets/widget"
 
+local function UpdateShaderParams(self)
+	local pos = self:GetWorldPosition()
+	local scale = self:GetScale().x
+	self.head_animstate:SetUILightParams(pos.x, pos.y, 24.0, scale)
+end
+
 local TeammateHealthBadge = Class(Badge, function(self, owner)
     Badge._ctor(self, "lavaarena_partyhealth", owner, nil, nil, nil, nil, true)
 	self.anim:GetAnimState():Hide("stick")
@@ -15,21 +21,32 @@ local TeammateHealthBadge = Class(Badge, function(self, owner)
     self.arrow:GetAnimState():PlayAnimation("neutral")
 	self.arrow:GetAnimState():AnimateWhilePaused(false)
 	self.arrow:SetScale(0.85)
+	
+	self.name = self:AddChild(Text(NEWFONT_OUTLINE_SMALL, 20, ""))
+	self.name:SetPosition(0, 50)
+	self.name:Hide()
 
-	self._onclienthealthdirty = function(src, data) self:SetPercent(data.percent) end
-	--self._onclienthealthstatusdirty = function() self:RefreshStatus() end
+	self.userid = nil
+	self.inst:ListenForEvent("deathmatch_playerhealthdirty", function(src)
+		local health = src:GetPlayerHealth(self.userid)
+		if health then
+			self:SetPercent(health)
+		end
+	end, TheWorld.net)
 	
 	self:_SetupHeads()
+	self:StartUpdating()
 end)
 
-local function SetPlayerName(self, player)
-
-end
-
-local function UpdateShaderParams(self)
-	local pos = self:GetWorldPosition()
-	local scale = self:GetScale().x
-	self.head_animstate:SetUILightParams(pos.x, pos.y, 24.0, scale)
+function TeammateHealthBadge:OnUpdate(dt)
+	UpdateShaderParams(self)
+	local mousepos = TheInput:GetScreenPosition()
+	local isnear = mousepos:DistSq(self:GetWorldPosition()) < 900*self:GetScale().x
+	if isnear then
+		self.name:Show()
+	else
+		self.name:Hide()
+	end
 end
 
 function TeammateHealthBadge:_SetupHeads()
@@ -49,8 +66,6 @@ function TeammateHealthBadge:_SetupHeads()
 	
 	self.head_animstate:SetDefaultEffectHandle(resolvefilepath("shaders/characterhead.ksh"))
 	self.head_animstate:UseColourCube(true)
-	self.OnUpdate = UpdateShaderParams
-	self:StartUpdating()
 end
 local function GetPlayerBadgeData_Override(character, ghost, state_1, state_2, state_3, ...)
 	--fix player head sizes
@@ -161,34 +176,28 @@ local function CreateDummyData(character)
 		userid = character,
 		base_skin = character.."_none",
 		userflags = 0,
+		name = STRINGS.NAMES[character]
 	}
 end
 
 function TeammateHealthBadge:SetPlayer(player)
 	local data = TheNet:GetClientTableForUser(player) or CreateDummyData(player)
 	
-	-- if self.player ~= nil and self.player ~= player then
-		-- self.inst:RemoveEventCallback("clienthealthdirty", self._onclienthealthdirty, self.player)
-		-- self.inst:RemoveEventCallback("clienthealthstatusdirty", self._onclienthealthstatusdirty, self.player)
-	-- end
-
-	--self.player = player
 	self.userid = player
-    -- self.inst:ListenForEvent("clienthealthdirty", self._onclienthealthdirty, player)
-	-- self.inst:ListenForEvent("clienthealthstatusdirty", self._onclienthealthstatusdirty, player)
 
 	self.arrowdir = 0
 
-    SetPlayerName(self, data.name)
+	self.name:SetString(data.name)
 
     self.anim:GetAnimState():HideSymbol("character_wilson")
 	self:SetHead(data.prefab, data.colour, data.ishost, data.userflags, data.base_skin)
-	self:SetPercent(1)
-
-	-- if player.components.healthsyncer ~= nil then
-		-- self.percent = player.components.healthsyncer:GetPercent()
-	    -- self:SetPercent(self.percent)
-	-- end
+	
+	local health = TheWorld.net:GetPlayerHealth(self.userid)
+	if health then
+		self:SetPercent(health)
+	else
+		self:SetPercent(1)
+	end
 	
 end
 
@@ -207,30 +216,6 @@ function TeammateHealthBadge:SetPercent(val)
 
     Badge.SetPercent(self, val)
 
-	--self:RefreshStatus()
 end
-
--- function TeammateHealthBadge:RefreshStatus()
-    -- local arrowdir = self.player.components.healthsyncer ~= nil and self.player.components.healthsyncer:GetOverTime() or 0
-
-    -- if self.arrowdir ~= arrowdir then
-        -- self.arrowdir = arrowdir
-
-        -- self.arrow:GetAnimState():PlayAnimation((arrowdir > 1 and "arrow_loop_increase_most") or
-													-- (arrowdir < 0 and "arrow_loop_decrease_most") or
-													-- "neutral", true)
-    -- end
-
-	-- local warning = (arrowdir > 1 and {0,1,0,1}) or
-					-- ((arrowdir < 0 or (self.percent <= .33 and self.percent > 0)) and {1,0,0,1}) or
-					-- nil
-
-	-- if warning ~= nil then
-		-- self:StartWarning(unpack(warning))
-	-- else
-		-- self:StopWarning()
-	-- end
-
--- end
 
 return TeammateHealthBadge

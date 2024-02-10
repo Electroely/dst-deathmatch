@@ -164,6 +164,16 @@ local function fn(inst, prefab)
 		inst.fake_body:Remove()
 	end
 	
+	inst:ListenForEvent("healthdelta", function(inst, data)
+		local newhealth = data and data.newpercent
+		if newhealth then
+			local datatable = GetNetDMDataTable(inst.userid)
+			if datatable then
+				datatable.health:set( math.ceil(newhealth*255) )
+			end
+		end
+	end)
+	
 	inst:ListenForEvent("attacked", function(inst, data)
 		if data then
 			local _, feathers = inst.components.inventory:HasItemWithTag("malbatross_feather", 0)

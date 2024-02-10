@@ -159,7 +159,8 @@ local function fn()
 		inst.deathmatch_netvars[i] = {
 			kills=net_ushortint(inst.GUID, "deathmatch.netkills"..tostring(i), "deathmatch_killsdirty"),
 			team=net_byte(inst.GUID, "deathmatch_netteam"..tostring(i), "deathmatch_teamdirty"),
-			userid=net_string(inst.GUID, "deathmatch_netuserid"..tostring(i), "deathmatchdatadirty")
+			userid=net_string(inst.GUID, "deathmatch_netuserid"..tostring(i), "deathmatchdatadirty"),
+			health=net_byte(inst.GUID, "deathmatch_nethealth"..tostring(i), "deathmatch_playerhealthdirty"),
 		}
 	end
 	inst.deathmatch_netvars.globalvars = {
@@ -181,6 +182,13 @@ local function fn()
 				end
 			end
 		end
+	end
+	function inst.GetPlayerHealth(inst,userid)
+		local datatable = GetNetDMDataTable(userid)
+		if datatable == nil then
+			return 1
+		end
+		return datatable.health:value()/255
 	end
 	function inst.AddKill(inst,userid)
 		local datatable = GetNetDMDataTable(userid)
