@@ -10,6 +10,7 @@ local arenas = require("prefabs/arena_defs")
 
 local UserCommands = require("usercommands")
 
+require("deathmatch_debug")
 
 --mod import extra files
 modimport("scripts/deathmatch_teamchat")
