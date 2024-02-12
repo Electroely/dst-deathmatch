@@ -28,8 +28,8 @@ local fn = function()
 	end
 	
 	inst:RemoveTag("rechargeable")
-	local old = inst.components.aoespell.aoe_cast
-	inst.components.aoespell:SetAOESpell(function(...)
+	local old = inst.components.aoespell.spellfn
+	inst.components.aoespell:SetSpellFn(function(...)
 		old(...)
 		inst:Remove()
 	end)

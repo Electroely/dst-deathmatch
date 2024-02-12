@@ -25,7 +25,7 @@ AddComponentPostInit("inventory", function(self)
 	--make it so that items picked up mid-match can't go into the
 	--first 4 slots
 	if self.inst:HasTag("player") then
-		local GiveItem_old = self.GiveItem
+		--[[local GiveItem_old = self.GiveItem
 		function self:GiveItem(inst, slot, src_pos, ...)
 			if inst.itemcountlimit then
 				local count = self:GetTotalItemCount(inst.prefab) - (self:IsHolding(inst) and 1 or 0)
@@ -51,7 +51,7 @@ AddComponentPostInit("inventory", function(self)
 				end
 			end
 			return GiveItem_old(self, inst, slot, src_pos, ...)
-		end
+		end]]
 		local DropItem_old = self.DropItem
 		function self:DropItem(item, ...)
 			if item and item:HasTag("invslotdummy") then

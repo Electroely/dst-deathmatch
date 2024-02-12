@@ -4,6 +4,7 @@
 return {
 
 	STARTMATCH = "Start Deathmatch",
+	STOPMATCH = "Stop Deathmatch",
 	TEAMSELECT = "Team Select",
 	TEAMMODE = "Game Mode",
 	ARENAS = "Arena Select",

@@ -102,8 +102,10 @@ Assets = {
 	Asset("IMAGE", "images/changeTeamFlag.tex"),
 	Asset("ATLAS", "images/changeTeamFlag.xml"),
 	
-	Asset("IMAGE", "images/matchcontrolsframe.tex"),
-	Asset("ATLAS", "images/matchcontrolsframe.xml"),
+	Asset("IMAGE", "images/matchcontrolsbutton_bg.tex"),
+	Asset("ATLAS", "images/matchcontrolsbutton_bg.xml"),
+	Asset("IMAGE", "images/matchcontrolsbutton_frame.tex"),
+	Asset("ATLAS", "images/matchcontrolsbutton_frame.xml"),
 	
 	Asset("IMAGE", "images/map_icon_atrium.tex"),
 	Asset("ATLAS", "images/map_icon_atrium.xml"),

@@ -157,7 +157,7 @@ return {
         {
           id = 2,
           name = "",
-          type = "dummytarget",
+          type = "punchingbag",
           shape = "rectangle",
           x = 832,
           y = 768,

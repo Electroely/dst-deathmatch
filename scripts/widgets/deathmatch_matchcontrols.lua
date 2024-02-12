@@ -4,6 +4,8 @@ local ImageButton = require("widgets/imagebutton")
 
 local arenas = require("prefabs/arena_defs")
 
+local UserCommands = require("usercommands")
+
 local MAINBUTTON_SCALE = {0.7,0.7,0.7}
 local MAINBUTTON_SCALE_FOCUS = {0.8,0.8,0.8}
 
@@ -14,8 +16,12 @@ local SUBBUTTON_STARTANGLE = 210*DEGREES
 local SUBBUTTON_ENDANGLE = 330*DEGREES
 local SUBBUTTON_RADIUS = 80
 
-local BUTTON_ATLAS = "images/matchcontrolsframe.xml"
-local BUTTON_IMAGE = "matchcontrolsframe.tex"
+local BUTTON_ATLAS = "images/matchcontrolsbutton_bg.xml"
+local BUTTON_IMAGE = "matchcontrolsbutton_bg.tex"
+
+local FRAME_ATLAS = "images/matchcontrolsbutton_frame.xml"
+local FRAME_IMAGE = "matchcontrolsbutton_frame.tex"
+
 
 --submenus:
 --[[
@@ -30,6 +36,9 @@ local BUTTON_IMAGE = "matchcontrolsframe.tex"
 
 local function GetTeamMode()
 	return TheWorld.net.deathmatch_netvars.globalvars.matchmode:value()
+end
+local function GetMatchStatus()
+	return TheWorld.net.deathmatch_netvars.globalvars.matchstatus:value()
 end
 local modes = {
 	"ffa",
@@ -136,8 +145,17 @@ local Deathmatch_MatchControls = Class(Widget, function(self, owner)
 	self.subwidgets = {}
 	
 	self.mainbutton_def = {
-		str = DEATHMATCH_STRINGS.STARTMATCH
+		onclickfn = function()
+			local status = GetMatchStatus()
+			if status == 1 then
+				UserCommands.RunTextUserCommand("dm stop", ThePlayer, false)
+			else
+				UserCommands.RunTextUserCommand("dm start", ThePlayer, false)
+			end
+		end
 	}
+
+	self:BuildWidgets()
 	
 end)
 
@@ -155,7 +173,8 @@ function Deathmatch_MatchControls:BuildWidgets()
 	self.mainwidget.focus_scale = MAINBUTTON_SCALE_FOCUS
 	self.mainwidget.normal_scale = MAINBUTTON_SCALE
 	self.mainwidget.imagedisabledcolour = {0.2, 0.2, 0.2, 1}
-	self.mainwidget:SetHoverText(self.submenu ~= nil and DEATHMATCH_STRINGS.GOBACK or self.mainbutton_def.str)
+	self.mainwidget.frame = self.mainwidget.image:AddChild(Image(FRAME_ATLAS, FRAME_IMAGE))
+	self.mainwidget:SetHoverText(self.submenu ~= nil and DEATHMATCH_STRINGS.GOBACK or (GetMatchStatus() == 1 and DEATHMATCH_STRINGS.STOPMATCH or DEATHMATCH_STRINGS.STARTMATCH))
 	if self.submenu == nil and self.mainbutton_def.validfn and not self.mainbutton_def.validfn() then
 		self.mainwidget:Disable()
 	end
@@ -164,6 +183,8 @@ function Deathmatch_MatchControls:BuildWidgets()
 		if self.submenu ~= nil then
 			self.submenu = nil
 			self:BuildWidgets()
+		elseif (self.mainbutton_def.validfn == nil or self.mainbutton_def.validfn()) and self.mainbutton_def.onclickfn then
+			self.mainbutton_def.onclickfn()
 		end
 	end
 	
@@ -188,6 +209,7 @@ function Deathmatch_MatchControls:BuildWidgets()
 		if v.imgfn then
 			w.extraimage = w.image:AddChild(v.imgfn(w))
 		end
+		w.frame = w.image:AddChild(Image(FRAME_ATLAS, FRAME_IMAGE))
 		if v.validfn and not v.validfn() then
 			w:Disable()
 		end
