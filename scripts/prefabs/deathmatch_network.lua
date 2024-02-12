@@ -218,6 +218,13 @@ local function fn()
 		end
 		inst.deathmatch[userid].team_local = team
 	end
+	function inst.GetPlayerTeam(inst,userid)
+		local datatable = GetNetDMDataTable(userid)
+		if datatable == nil then
+			return 0
+		end
+		return datatable.team:value()
+	end
 	inst:ListenForEvent("deathmatch_kill", function(inst, data)
 		if data ~= nil then
 			if data.inst.userid and data.inst.userid ~= "" and inst.deathmatch[data.inst.userid] == nil then

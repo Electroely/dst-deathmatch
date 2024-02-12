@@ -44,6 +44,7 @@ function TeammateHealthBadge:OnUpdate(dt)
 	local isnear = mousepos:DistSq(self:GetWorldPosition()) < 900*self:GetScale().x
 	if isnear then
 		self.name:Show()
+		self:MoveToFront()
 	else
 		self.name:Hide()
 	end
@@ -176,14 +177,16 @@ local function CreateDummyData(character)
 		userid = character,
 		base_skin = character.."_none",
 		userflags = 0,
-		name = STRINGS.NAMES[character]
+		name = STRINGS.NAMES[string.upper(character)],
+		team = math.random(1,8),
+		health = math.random(),
 	}
 end
 
-function TeammateHealthBadge:SetPlayer(player)
-	local data = TheNet:GetClientTableForUser(player) or CreateDummyData(player)
+function TeammateHealthBadge:SetPlayer(data)
+	--local data = TheNet:GetClientTableForUser(player) or CreateDummyData(player)
 	
-	self.userid = player
+	self.userid = data.userid
 
 	self.arrowdir = 0
 
@@ -192,11 +195,18 @@ function TeammateHealthBadge:SetPlayer(player)
     self.anim:GetAnimState():HideSymbol("character_wilson")
 	self:SetHead(data.prefab, data.colour, data.ishost, data.userflags, data.base_skin)
 	
-	local health = TheWorld.net:GetPlayerHealth(self.userid)
+	local health = data.health or TheWorld.net:GetPlayerHealth(self.userid)
 	if health then
 		self:SetPercent(health)
 	else
 		self:SetPercent(1)
+	end
+
+	local team = data.team or TheWorld.net:GetPlayerTeam(self.userid) or 0
+	if team == 0 then
+		self.name:SetColour(1,1,1,1)
+	else
+		self.name:SetColour(unpack(DEATHMATCH_TEAMS[team].colour))
 	end
 	
 end

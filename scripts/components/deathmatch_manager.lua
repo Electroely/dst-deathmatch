@@ -72,7 +72,7 @@ local lobbyitems = {
 }
 local function GiveLobbyInventory(player)
 	local inv = player.components.inventory
-	for k, v in pairs(inv.itemslots) do v:Remove() end
+	for k, v in pairs(inv.itemslots) do if v.prefab ~= "invslotdummy" then v:Remove() end end
 	local neededitems = {}
 	for k, v in pairs(lobbyitems) do
 		neededitems[v] = true
@@ -426,7 +426,7 @@ function Deathmatch_Manager:StartDeathmatch()
 			local to_remove = {}
 			local numremove = 0
 			for k, v in pairs(Ents) do 
-				if (v.prefab == "balloon" or v.components.inventoryitem) and (not v.prefab == "invslotdummy") then
+				if (v.prefab == "balloon" or v.components.inventoryitem) and not (v.prefab == "invslotdummy") then
 					numremove = numremove + 1
 					to_remove[numremove] = v
 				end
@@ -445,7 +445,7 @@ function Deathmatch_Manager:StartDeathmatch()
 				local item = SpawnPrefab(v2)
 				v.components.inventory:GiveItem(item)
 				--if k2 == "autoequip" then v.components.inventory:Equip(item) end
-				if item.components.rechargeable then item.components.rechargeable:StartRecharge() end
+				if item.components.rechargeable then item.components.rechargeable:Discharge(DEFAULT_COOLDOWN_TIME) end
 				if item.components.inventoryitem then table.insert(self.spawneditems, item) end
 			end
 			for k2, v2 in pairs(self.choicegear) do
@@ -462,7 +462,7 @@ function Deathmatch_Manager:StartDeathmatch()
 				for k2, v2 in pairs(arena_configs[self.arena].extraitems) do
 					local item = SpawnPrefab(v2)
 					v.components.inventory:GiveItem(item)
-					if item.components.rechargeable then item.components.rechargeable:StartRecharge() end
+					if item.components.rechargeable then item.components.rechargeable:Discharge(DEFAULT_COOLDOWN_TIME) end
 					if item.components.inventoryitem then table.insert(self.spawneditems, item) end
 				end
 			end]]

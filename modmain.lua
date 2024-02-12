@@ -492,16 +492,16 @@ AddComponentAction("INVENTORY", "explosiveballoonmaker", function(inst, doer, ac
 	end
 end)
 
-AddComponentAction("POINT", "aoespell", function(inst, doer, pos, actions, right) --Hornet: Can't use specials on boats, Lets fix that!
-	if right and
-		(   inst.components.aoetargeting == nil or inst.components.aoetargeting:IsEnabled()
-		) and
-		(   inst.components.aoetargeting ~= nil and inst.components.aoetargeting.alwaysvalid or
-			(G.TheWorld.Map:IsPassableAtPoint(pos.x, pos.y, pos.z, false, false) and not G.TheWorld.Map:IsGroundTargetBlocked(pos))
-		) then
-		table.insert(actions, G.ACTIONS.CASTAOE)
-	end
-end)
+-- AddComponentAction("POINT", "aoespell", function(inst, doer, pos, actions, right) --Hornet: Can't use specials on boats, Lets fix that!
+	-- if right and
+		-- (   inst.components.aoetargeting == nil or inst.components.aoetargeting:IsEnabled()
+		-- ) and
+		-- (   inst.components.aoetargeting ~= nil and inst.components.aoetargeting.alwaysvalid or
+			-- (G.TheWorld.Map:IsPassableAtPoint(pos.x, pos.y, pos.z, false, false) and not G.TheWorld.Map:IsGroundTargetBlocked(pos))
+		-- ) then
+		-- table.insert(actions, G.ACTIONS.CASTAOE)
+	-- end
+-- end)
 
 AddComponentAction("USEITEM", "complexprojectile", function(inst, doer, target, actions, right)
 	if target and target:HasTag("player") and target:HasTag("corpse") then
@@ -642,52 +642,52 @@ end)
 local function checknumber(v)
 	return type(v) == "number" and v < 60 and v > -60
 end
-AddModRPCHandler(modname, "deathmatch_currentreticule_change", function(inst, slot)
-	if inst == nil or slot == nil then return end
-	if inst.components.playercontroller then
-		local valid = false
-		for k, v in pairs(G.EQUIPSLOTS) do
-			if slot == v then
-				valid = true
-				break
-			end
-		end
-		if not valid then return end
-		inst.components.playercontroller.reticuleitemslot = slot
-	end
-end)
+-- AddModRPCHandler(modname, "deathmatch_currentreticule_change", function(inst, slot)
+	-- if inst == nil or slot == nil then return end
+	-- if inst.components.playercontroller then
+		-- local valid = false
+		-- for k, v in pairs(G.EQUIPSLOTS) do
+			-- if slot == v then
+				-- valid = true
+				-- break
+			-- end
+		-- end
+		-- if not valid then return end
+		-- inst.components.playercontroller.reticuleitemslot = slot
+	-- end
+-- end)
 
-AddModRPCHandler(modname, "locationrequest", function(inst, x, z)
-	if not (checknumber(x) and checknumber(z)) then
-		return
-	end
-	local pos = G.Vector3(x, 0, z)
-	inst._spintargetpos = pos
-end)
+-- AddModRPCHandler(modname, "locationrequest", function(inst, x, z)
+	-- if not (checknumber(x) and checknumber(z)) then
+		-- return
+	-- end
+	-- local pos = G.Vector3(x, 0, z)
+	-- inst._spintargetpos = pos
+-- end)
 
-G.TheInput:AddKeyDownHandler(G.KEY_R, function()
-	if G.TheFrontEnd and G.TheFrontEnd:GetActiveScreen().name == "HUD" then
-		if G.ThePlayer and G.ThePlayer.components.playercontroller then
-			if G.ThePlayer.components.playercontroller.reticule == nil then
-				G.ThePlayer.components.playercontroller:TryAOETargeting("head")
-			else
-				G.ThePlayer.components.playercontroller:CancelAOETargeting()
-			end
-		end
-	end
-end)
+-- G.TheInput:AddKeyDownHandler(G.KEY_R, function()
+	-- if G.TheFrontEnd and G.TheFrontEnd:GetActiveScreen().name == "HUD" then
+		-- if G.ThePlayer and G.ThePlayer.components.playercontroller then
+			-- if G.ThePlayer.components.playercontroller.reticule == nil then
+				-- G.ThePlayer.components.playercontroller:TryAOETargeting("head")
+			-- else
+				-- G.ThePlayer.components.playercontroller:CancelAOETargeting()
+			-- end
+		-- end
+	-- end
+-- end)
 
-G.TheInput:AddKeyDownHandler(G.KEY_Z, function()
-	if G.TheFrontEnd and G.TheFrontEnd:GetActiveScreen().name == "HUD" then
-		if G.ThePlayer and G.ThePlayer.components.playercontroller then
-			if G.ThePlayer.components.playercontroller.reticule == nil then
-				G.ThePlayer.components.playercontroller:TryAOETargeting("body")
-			else
-				G.ThePlayer.components.playercontroller:CancelAOETargeting()
-			end
-		end
-	end
-end)
+-- G.TheInput:AddKeyDownHandler(G.KEY_Z, function()
+	-- if G.TheFrontEnd and G.TheFrontEnd:GetActiveScreen().name == "HUD" then
+		-- if G.ThePlayer and G.ThePlayer.components.playercontroller then
+			-- if G.ThePlayer.components.playercontroller.reticule == nil then
+				-- G.ThePlayer.components.playercontroller:TryAOETargeting("body")
+			-- else
+				-- G.ThePlayer.components.playercontroller:CancelAOETargeting()
+			-- end
+		-- end
+	-- end
+-- end)
 
 --send crash logs to discord
 --yes, you can spam me with messages with this. please don't

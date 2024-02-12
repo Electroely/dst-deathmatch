@@ -7,6 +7,20 @@ local ReplaceUpValue = UpValues.Replace
 AddClassPostConstruct("components/equippable_replica", function(self)
 	self.prevslot = GLOBAL.net_smallbyte(self.inst.GUID, "deathmatch.equippable_prevslot")
 end)
+
+local function GetDummySlot(inv)
+	local empty = 9
+	for slot = 1, inv.maxslots do
+		local item = inv.itemslots[slot]
+		if item and item.prefab == "invslotdummy" then
+			return slot, true
+		end
+		if item == nil and slot < empty then
+			empty = slot
+		end
+	end
+	return empty
+end
 AddComponentPostInit("inventory", function(self)
 	--make it so that items picked up mid-match can't go into the
 	--first 4 slots
@@ -80,7 +94,7 @@ AddComponentPostInit("inventory", function(self)
 				end
 			end
 			if inst and inst.components.equippable and inst.components.equippable.equipslot == GLOBAL.EQUIPSLOTS.HANDS then
-				local oldslot = self:GetItemSlot(inst) or 9
+				local oldslot = self:GetItemSlot(inst) or GetDummySlot(self)
 				local dummy = GLOBAL.SpawnPrefab("invslotdummy")
 				if self.itemslots[oldslot] ~= nil and self.itemslots[oldslot] ~= inst then
 					self:DropItem(self.itemslots[oldslot], true, true)
@@ -94,9 +108,14 @@ AddComponentPostInit("inventory", function(self)
 		local Unequip_old = self.Unequip
 		function self:Unequip(equipslot, ...)
 			if equipslot == GLOBAL.EQUIPSLOTS.HANDS then
+				local slot, wasdummy = GetDummySlot(self)
 				local items = self:GetItemsWithTag("invslotdummy")
 				for k, v in pairs(items) do
 					v:Remove()
+				end
+				local item = self:GetEquippedItem(equipslot)
+				if wasdummy and item ~= nil then
+					item.prevslot = slot
 				end
 			end
 			return Unequip_old(self, equipslot, ...)
@@ -220,35 +239,35 @@ AddClassPostConstruct("components/combat_replica", function(self, inst)
 	end
 end)
 
-AddComponentPostInit("playeractionpicker", function(self)
-	local GetRightClickActions_Old = self.GetRightClickActions
-	self.GetRightClickActions = function(self, position, target)
-		local actions = {}
-		if self.inst.components.playercontroller and self.inst.components.playercontroller.reticule and
-			self.inst.components.playercontroller.reticule.inst and self.inst.components.playercontroller.reticule.reticule then
-			local equipitem = self.inst.components.playercontroller.reticule.inst
-			if equipitem ~= nil and equipitem:IsValid() then
-				actions = self:GetPointActions(position, equipitem, true)
+-- AddComponentPostInit("playeractionpicker", function(self)
+	-- local GetRightClickActions_Old = self.GetRightClickActions
+	-- self.GetRightClickActions = function(self, position, target)
+		-- local actions = {}
+		-- if self.inst.components.playercontroller and self.inst.components.playercontroller.reticule and
+			-- self.inst.components.playercontroller.reticule.inst and self.inst.components.playercontroller.reticule.reticule then
+			-- local equipitem = self.inst.components.playercontroller.reticule.inst
+			-- if equipitem ~= nil and equipitem:IsValid() then
+				-- actions = self:GetPointActions(position, equipitem, true)
 
-				if equipitem.components.aoetargeting ~= nil then
-					return (#actions <= 0 or actions[1].action == G.ACTIONS.CASTAOE) and actions or {}
-				end
-			end
-		elseif self.inst.components.playercontroller.reticuleitemslot ~= nil then
-			local equipitem = self.inst.replica.inventory:GetEquippedItem(self.inst.components.playercontroller.reticuleitemslot)
-			if equipitem ~= nil and equipitem:IsValid() then
-				actions = self:GetPointActions(position, equipitem, true)
+				-- if equipitem.components.aoetargeting ~= nil then
+					-- return (#actions <= 0 or actions[1].action == G.ACTIONS.CASTAOE) and actions or {}
+				-- end
+			-- end
+		-- elseif self.inst.components.playercontroller.reticuleitemslot ~= nil then
+			-- local equipitem = self.inst.replica.inventory:GetEquippedItem(self.inst.components.playercontroller.reticuleitemslot)
+			-- if equipitem ~= nil and equipitem:IsValid() then
+				-- actions = self:GetPointActions(position, equipitem, true)
 
-				if equipitem.components.aoetargeting ~= nil then
-					return (#actions <= 0 or actions[1].action == G.ACTIONS.CASTAOE) and actions or {}
-				end
-			end
-		else
-			actions = GetRightClickActions_Old(self, position, target)
-		end
-		return actions or {}
-	end
-end)
+				-- if equipitem.components.aoetargeting ~= nil then
+					-- return (#actions <= 0 or actions[1].action == G.ACTIONS.CASTAOE) and actions or {}
+				-- end
+			-- end
+		-- else
+			-- actions = GetRightClickActions_Old(self, position, target)
+		-- end
+		-- return actions or {}
+	-- end
+-- end)
 
 local priority_prefabs = {
 	pickup_lighthealing = true,
@@ -289,57 +308,57 @@ AddComponentPostInit("playercontroller", function(self)
 		return ValidateAttackTarget_old(combat, target, force_attack, x, z, has_weapon, reach, ...)
 	end)
 	-- aoetargeting compability for non-hand slot items
-	local HasAOETargeting_Old = self.HasAOETargeting
-	self.HasAOETargeting = function(self)
-		local test = HasAOETargeting_Old(self)
-		if not test then
-			local item = self.inst.replica.inventory:GetEquippedItem(G.EQUIPSLOTS.HEAD)
-			item = item or self.inst.replica.inventory:GetEquippedItem(G.EQUIPSLOTS.BODY)
-			return item ~= nil
-				and item.components.aoetargeting ~= nil
-				and item.components.aoetargeting:IsEnabled()
-				and not (self.inst.replica.rider ~= nil and self.inst.replica.rider:IsRiding())
-		end
-		return test
-	end
+	-- local HasAOETargeting_Old = self.HasAOETargeting
+	-- self.HasAOETargeting = function(self)
+		-- local test = HasAOETargeting_Old(self)
+		-- if not test then
+			-- local item = self.inst.replica.inventory:GetEquippedItem(G.EQUIPSLOTS.HEAD)
+			-- item = item or self.inst.replica.inventory:GetEquippedItem(G.EQUIPSLOTS.BODY)
+			-- return item ~= nil
+				-- and item.components.aoetargeting ~= nil
+				-- and item.components.aoetargeting:IsEnabled()
+				-- and not (self.inst.replica.rider ~= nil and self.inst.replica.rider:IsRiding())
+		-- end
+		-- return test
+	-- end
 	
-	local TryAOETargeting_Old = self.TryAOETargeting
-	self.TryAOETargeting = function(self, slot)
-		if slot == nil then
-			TryAOETargeting_Old(self)
-			SendModRPCToServer(GetModRPC(modname, "deathmatch_currentreticule_change"), G.EQUIPSLOTS.HANDS)
-			self.reticuleitemslot = G.EQUIPSLOTS.HANDS
-		else 
-			local item = self.inst.replica.inventory:GetEquippedItem(G.EQUIPSLOTS[string.upper(slot)])
-			if item ~= nil and
-				item.components.aoetargeting ~= nil and
-				item.components.aoetargeting:IsEnabled() and
-				not (self.inst.replica.rider ~= nil and self.inst.replica.rider:IsRiding()) then
-				SendModRPCToServer(GetModRPC(modname, "deathmatch_currentreticule_change"), G.EQUIPSLOTS[string.upper(slot)])
-				self.reticuleitemslot = G.EQUIPSLOTS[string.upper(slot)]
-				item.components.aoetargeting:StartTargeting()
-			end
-		end
-	end
+	-- local TryAOETargeting_Old = self.TryAOETargeting
+	-- self.TryAOETargeting = function(self, slot)
+		-- if slot == nil then
+			-- TryAOETargeting_Old(self)
+			-- SendModRPCToServer(GetModRPC(modname, "deathmatch_currentreticule_change"), G.EQUIPSLOTS.HANDS)
+			-- self.reticuleitemslot = G.EQUIPSLOTS.HANDS
+		-- else 
+			-- local item = self.inst.replica.inventory:GetEquippedItem(G.EQUIPSLOTS[string.upper(slot)])
+			-- if item ~= nil and
+				-- item.components.aoetargeting ~= nil and
+				-- item.components.aoetargeting:IsEnabled() and
+				-- not (self.inst.replica.rider ~= nil and self.inst.replica.rider:IsRiding()) then
+				-- SendModRPCToServer(GetModRPC(modname, "deathmatch_currentreticule_change"), G.EQUIPSLOTS[string.upper(slot)])
+				-- self.reticuleitemslot = G.EQUIPSLOTS[string.upper(slot)]
+				-- item.components.aoetargeting:StartTargeting()
+			-- end
+		-- end
+	-- end
 	
-	local RefreshReticule_Old = self.RefreshReticule
-	self.RefreshReticule = function(self)
-		RefreshReticule_Old(self)
-		if self.reticule == nil then
-			local item = self.inst.replica.inventory:GetEquippedItem(G.EQUIPSLOTS.HEAD)
-			if item and item.components.reticule ~= nil then
-				self.reticule = item.components.reticule
-			else
-				item = self.inst.replica.inventory:GetEquippedItem(G.EQUIPSLOTS.BODY)
-				if item and item.components.reticule ~= nil then
-					self.reticule = item.components.reticule
-				else
-					self.reticule = nil
-				end
-			end
-		end
-		if self.reticule ~= nil and self.reticule.reticule == nil and (self.reticule.mouseenabled or G.TheInput:ControllerAttached()) then
-			self.reticule:CreateReticule()
-		end
-	end
+	-- local RefreshReticule_Old = self.RefreshReticule
+	-- self.RefreshReticule = function(self)
+		-- RefreshReticule_Old(self)
+		-- if self.reticule == nil then
+			-- local item = self.inst.replica.inventory:GetEquippedItem(G.EQUIPSLOTS.HEAD)
+			-- if item and item.components.reticule ~= nil then
+				-- self.reticule = item.components.reticule
+			-- else
+				-- item = self.inst.replica.inventory:GetEquippedItem(G.EQUIPSLOTS.BODY)
+				-- if item and item.components.reticule ~= nil then
+					-- self.reticule = item.components.reticule
+				-- else
+					-- self.reticule = nil
+				-- end
+			-- end
+		-- end
+		-- if self.reticule ~= nil and self.reticule.reticule == nil and (self.reticule.mouseenabled or G.TheInput:ControllerAttached()) then
+			-- self.reticule:CreateReticule()
+		-- end
+	-- end
 end)
