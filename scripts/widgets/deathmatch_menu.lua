@@ -50,22 +50,22 @@ local Deathmatch_Menu = Class(Screen, function(self)
 	self.root = self:AddChild(TEMPLATES.ScreenRoot())
 	self.root:MoveToFront()
 
-    self.detail_panel_frame = self.root:AddChild(TEMPLATES.RectangleWindow(500, 500))
+    self.detail_panel_frame = self.root:AddChild(TEMPLATES.RectangleWindow(800, 500))
     local r,g,b = unpack(UICOLOURS.BROWN_DARK)
     self.detail_panel_frame:SetBackgroundTint(r,g,b,0.6)
     self.detail_panel_frame.top:Hide()
     
 	self.tip_list = self.root:AddChild(self:BuildTipsMenu())
-	self.tip_list:SetPosition(-170, 0)
+	self.tip_list:SetPosition(-320, 0)
 
 	self.title = self.root:AddChild(Text(UIFONT, 30))
-	self.title:SetPosition(110, 150)
+	self.title:SetPosition(110, 215)
 	self.title:SetRegionSize(225, 35)
 	
 	self.body = self.root:AddChild(Text(UIFONT, 25))
-	self.body:SetPosition(110, -40)
+	self.body:SetPosition(110, -80)
 	self.body:EnableWordWrap(true)
-	self.body:SetRegionSize(250, 300)
+	self.body:SetRegionSize(550, 250)
 	self.body:SetHAlign(ANCHOR_LEFT)
 	self.body:SetVAlign(ANCHOR_TOP)
 	
@@ -108,8 +108,8 @@ function Deathmatch_Menu:BuildTipsMenu()
         local w = Widget("tip-cell-"..index)
 		----------------
 		w.cell_root = w:AddChild(ImageButton("images/frontend_redux.xml", "listitem_thick_selected.tex", "listitem_thick_selected.tex"))
-		w.cell_root:SetFocusScale((1 + .05)/1.5, (1 + .05)/1.5)
-		w.cell_root:SetNormalScale(1/1.5, 1/1.5)
+		w.cell_root:SetFocusScale((1 + .05)/1.5, (1 + .05)/3)
+		w.cell_root:SetNormalScale(1/1.5, 1/3)
 		
 		w.tip_title = w.cell_root:AddChild(Text(font, title_font_size))
 		
@@ -145,8 +145,8 @@ function Deathmatch_Menu:BuildTipsMenu()
         {
             context = {},
             widget_width  = 300,
-            widget_height = 80,
-            num_visible_rows = 6,
+            widget_height = 30,
+            num_visible_rows = 16,
             num_columns      = 1,
             item_ctor_fn = ScrollWidgetsCtor,
             apply_fn     = ScrollWidgetApply,

@@ -1,0 +1,17 @@
+<Atlas>
+	<Texture filename="deathmatch_skilltree_icons.tex" />
+	<Elements>
+		<Element name="brawler_buff_on_hit.tex" u1="0.001953125" u2="0.248046875" v1="0.751953125" v2="0.998046875" />
+		<Element name="brawler_damage_1.tex" u1="0.251953125" u2="0.498046875" v1="0.751953125" v2="0.998046875" />
+		<Element name="brawler_damage_2.tex" u1="0.501953125" u2="0.748046875" v1="0.751953125" v2="0.998046875" />
+		<Element name="improviser_bouncing_bombs.tex" u1="0.751953125" u2="0.998046875" v1="0.751953125" v2="0.998046875" />
+		<Element name="improviser_burning_bombs.tex" u1="0.001953125" u2="0.248046875" v1="0.501953125" v2="0.748046875" />
+		<Element name="improviser_homing_bombs.tex" u1="0.251953125" u2="0.498046875" v1="0.501953125" v2="0.748046875" />
+		<Element name="improviser_passive_bombs.tex" u1="0.501953125" u2="0.748046875" v1="0.501953125" v2="0.748046875" />
+		<Element name="loadout_forge_mage.tex" u1="0.751953125" u2="0.998046875" v1="0.501953125" v2="0.748046875" />
+		<Element name="loadout_forge_melee.tex" u1="0.001953125" u2="0.248046875" v1="0.251953125" v2="0.498046875" />
+		<Element name="spellcaster_cooldown_1.tex" u1="0.251953125" u2="0.498046875" v1="0.251953125" v2="0.498046875" />
+		<Element name="spellcaster_cooldown_2.tex" u1="0.501953125" u2="0.748046875" v1="0.251953125" v2="0.498046875" />
+		<Element name="spellcaster_refresh_on_hit.tex" u1="0.751953125" u2="0.998046875" v1="0.251953125" v2="0.498046875" />
+	</Elements>
+</Atlas>

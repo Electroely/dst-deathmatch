@@ -17,6 +17,13 @@ local Deathmatch_EnemyList = Class(Widget, function(self, owner)
 	self.widgets_allies = {}
 	
 	self:RefreshWidgets()
+
+	local function refresh()
+		self:RefreshWidgets()
+	end
+	self.inst:ListenForEvent("deathmatchdatadirty", refresh, TheWorld.net)
+	self.inst:ListenForEvent("deathmatch_playerhealthdirty", refresh, TheWorld.net)
+	self.inst:ListenForEvent("deathmatch_teamdirty", refresh, TheWorld.net)
 end)
 
 function Deathmatch_EnemyList:GetPlayerTable()
@@ -46,7 +53,9 @@ function Deathmatch_EnemyList:GetPlayerTable()
 	local enemies = {}
 	local allyteam = self.owner.components.teamer:GetTeam()
 	for i, v in ipairs(ClientObjs) do
-		if v.team == allyteam then
+		if v.userid == self.owner.userid then
+			--don't insert
+		elseif v.team == allyteam then
 			table.insert(allies,v)
 		else
 			table.insert(enemies,v)
@@ -102,8 +111,8 @@ function Deathmatch_EnemyList:SetWidgetToPlayer(badge, data)
 end
 
 function Deathmatch_EnemyList:RefreshWidgets()
-	--local players, teammates = self:GetPlayerTable()
-	local players, teammates = CreateDummyTable()
+	local players, teammates = self:GetPlayerTable()
+	--local players, teammates = CreateDummyTable()
 	
 	for i = 1, math.max(#players, #self.widgets) do
 		if self.widgets[i] ~= nil then

@@ -22,6 +22,16 @@ local BUTTON_IMAGE = "matchcontrolsbutton_bg.tex"
 local FRAME_ATLAS = "images/matchcontrolsbutton_frame.xml"
 local FRAME_IMAGE = "matchcontrolsbutton_frame.tex"
 
+local STARTMATCH_ATLAS = "images/matchcontrolsbutton_startmatch.xml"
+local STARTMATCH_IMAGE = "matchcontrolsbutton_startmatch.tex"
+local GOBACK_ATLAS = "images/matchcontrolsbutton_goback.xml"
+local GOBACK_IMAGE = "matchcontrolsbutton_goback.tex"
+
+local arenalist = {}
+for k, v in pairs(arenas.VALID_ARENAS) do 
+	table.insert(arenalist, v)
+end
+table.insert(arenalist, 0, "random")
 
 --submenus:
 --[[
@@ -73,6 +83,19 @@ local submenu_defs = {
 						w2:SetTint(unpack(DEATHMATCH_TEAMS[1].colour))
 						w1:AddChild(w2)
 						return w1
+					end,
+					onclickfn = function()
+						UserCommands.RunTextUserCommand("setteam 1", ThePlayer, false)
+					end},
+					{str = DEATHMATCH_STRINGS.RANDOM,
+					imgfn = function() 
+						local w1 = Image("images/teamselect_pole.xml", "teamselect_pole.tex")
+						local w2 = Image("images/teamselect_flag.xml", "teamselect_flag.tex")
+						w1:AddChild(w2)
+						return w1
+					end,
+					onclickfn = function()
+						UserCommands.RunTextUserCommand("setteam 0", ThePlayer, false)
 					end},
 					{str = DEATHMATCH_TEAMS[2].name,
 					imgfn = function() 
@@ -81,6 +104,9 @@ local submenu_defs = {
 						w2:SetTint(unpack(DEATHMATCH_TEAMS[2].colour))
 						w1:AddChild(w2)
 						return w1
+					end,
+					onclickfn = function()
+						UserCommands.RunTextUserCommand("setteam 2", ThePlayer, false)
 					end},
 				}
 			end
@@ -97,28 +123,30 @@ local submenu_defs = {
 		end,
 		buttons = {
 			{ str = DEATHMATCH_STRINGS.TEAMMODE_FFA,
-			imgfn = function() return Image("images/modeselect_ffa.xml", "modeselect_ffa.tex") end },
+			imgfn = function() return Image("images/modeselect_ffa.xml", "modeselect_ffa.tex") end,
+			onclickfn = function() ThePlayer:PushEvent("changemodechoice", 1) end, },
 			{ str = DEATHMATCH_STRINGS.TEAMMODE_RVB,
-			imgfn = function() return Image("images/modeselect_rvb.xml", "modeselect_rvb.tex") end },
+			imgfn = function() return Image("images/modeselect_rvb.xml", "modeselect_rvb.tex") end,
+			onclickfn = function() ThePlayer:PushEvent("changemodechoice", 2) end, },
 			{ str = DEATHMATCH_STRINGS.TEAMMODE_2PT,
-			imgfn = function() return Image("images/modeselect_2pt.xml", "modeselect_2pt.tex") end },
+			imgfn = function() return Image("images/modeselect_2pt.xml", "modeselect_2pt.tex") end,
+			onclickfn = function() ThePlayer:PushEvent("changemodechoice", 3) end, },
 		}
 	},
 	{ name = "map",
 		str = DEATHMATCH_STRINGS.ARENAS,
+		imgfn = function() 
+			local map = ThePlayer.arenachoice or "random"
+			return Image("images/map_icon_"..map..".xml", "map_icon_"..map..".tex")
+		end,
 		buttons = {
 		}
 	},
 	{ name = "info",
 		str = "info",
+		imgfn = function() return Image("images/matchcontrols_infobutton.xml", "matchcontrols_infobutton.tex") end,
 	}
 }
-
-local arenalist = {}
-for k, v in pairs(arenas.VALID_ARENAS) do 
-	table.insert(arenalist, v)
-end
-table.insert(arenalist, "random")
 
 for k, v in pairs(arenalist) do
 	local buttondata = {
@@ -156,6 +184,15 @@ local Deathmatch_MatchControls = Class(Widget, function(self, owner)
 	}
 
 	self:BuildWidgets()
+
+	--rebuild events
+	local function rebuild()
+		self:BuildWidgets()
+	end
+	self.inst:ListenForEvent("arenachoicedirty", rebuild, owner)
+	self.inst:ListenForEvent("teamdirty", rebuild, owner)
+	self.inst:ListenForEvent("deathmatch_matchmodedirty", rebuild, TheWorld.net)
+	self.inst:ListenForEvent("deathmatch_matchstatusdirty", rebuild, TheWorld.net)
 	
 end)
 
@@ -174,7 +211,8 @@ function Deathmatch_MatchControls:BuildWidgets()
 	self.mainwidget.normal_scale = MAINBUTTON_SCALE
 	self.mainwidget.imagedisabledcolour = {0.2, 0.2, 0.2, 1}
 	self.mainwidget.frame = self.mainwidget.image:AddChild(Image(FRAME_ATLAS, FRAME_IMAGE))
-	self.mainwidget:SetHoverText(self.submenu ~= nil and DEATHMATCH_STRINGS.GOBACK or (GetMatchStatus() == 1 and DEATHMATCH_STRINGS.STOPMATCH or DEATHMATCH_STRINGS.STARTMATCH))
+	self.mainwidget.image:AddChild(self.submenu ~= nil and Image(GOBACK_ATLAS, GOBACK_IMAGE) or Image(STARTMATCH_ATLAS, STARTMATCH_IMAGE))
+	self.mainwidget:SetTooltip(self.submenu ~= nil and DEATHMATCH_STRINGS.GOBACK or (GetMatchStatus() == 1 and DEATHMATCH_STRINGS.STOPMATCH or DEATHMATCH_STRINGS.STARTMATCH))
 	if self.submenu == nil and self.mainbutton_def.validfn and not self.mainbutton_def.validfn() then
 		self.mainwidget:Disable()
 	end
@@ -192,17 +230,31 @@ function Deathmatch_MatchControls:BuildWidgets()
 	if type(buttons) == "function" then
 		buttons = buttons()
 	end
+	buttons = deepcopy(buttons)
+	local invalid = {}
+	for k, v in pairs(buttons) do
+		if v.validfn and not v.validfn() then
+			table.insert(invalid, k)
+		end
+	end
+	for k, v in pairs(invalid) do
+		buttons[v] = nil
+	end
 	
 	for k, v in pairs(buttons) do
 		local w = self:AddChild(ImageButton(BUTTON_ATLAS, BUTTON_IMAGE, nil, nil, nil, nil, SUBBUTTON_SCALE))
 		w.focus_scale = SUBBUTTON_SCALE_FOCUS
 		w.normal_scale = SUBBUTTON_SCALE
 		w.imagedisabledcolour = {0.2, 0.2, 0.2, 1}
-		w:SetHoverText(v.str)
+		w:SetTooltip(v.str)
 		w.onclick = function()
 		--TODO: no local references
 			if v.buttons and self.submenu == nil then
 				self.submenu = k
+				self:BuildWidgets()
+			elseif v.onclickfn ~= nil then
+				v.onclickfn()
+				self.submenu = nil
 				self:BuildWidgets()
 			end
 		end
@@ -210,9 +262,6 @@ function Deathmatch_MatchControls:BuildWidgets()
 			w.extraimage = w.image:AddChild(v.imgfn(w))
 		end
 		w.frame = w.image:AddChild(Image(FRAME_ATLAS, FRAME_IMAGE))
-		if v.validfn and not v.validfn() then
-			w:Disable()
-		end
 		table.insert(self.subwidgets, w)
 	end
 	

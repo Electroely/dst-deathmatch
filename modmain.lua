@@ -3,6 +3,7 @@ local tonumber = G.tonumber
 local debug = G.debug
 local gamemodename = "deathmatch" 
 G.DEATHMATCH_STRINGS = G.require("deathmatch_strings")
+G.DEATHMATCH_TUNING = require("deathmatch_tuning")
 local DEATHMATCH_STRINGS = G.DEATHMATCH_STRINGS
 local DEATHMATCH_POPUPS = DEATHMATCH_STRINGS.POPUPS
 
@@ -17,6 +18,7 @@ modimport("scripts/deathmatch_teamchat")
 modimport("scripts/deathmatch_componentpostinits")
 modimport("scripts/deathmatch_prefabpostinits")
 modimport("scripts/deathmatch_usercommands")
+modimport("scripts/deathmatch_skilltree")
 --modimport("scripts/deathmatch_tipsmanager")
 
 AddPrefabPostInit("player_classified", function(inst)
@@ -26,6 +28,8 @@ AddPrefabPostInit("player_classified", function(inst)
 	end)
 	inst._choosinggear = G.net_bool(inst.GUID, "deathmatch.choosinggear", "choosinggearchanged")
 	inst._arenachoice = G.net_smallbyte(inst.GUID, "deathmatch.arenachoice", "arenachoicedirty")
+	inst._modechoice = G.net_tinybyte(inst.GUID, "deathmatch.modechoice", "modechoicedirty")
+	inst._modechoice:set(1)
 	if not G.TheWorld.ismastersim then
 		inst:ListenForEvent("choosinggearchanged", function(inst, data)
 			if inst._parent.HUD and inst._choosinggear:value() then
@@ -37,6 +41,10 @@ AddPrefabPostInit("player_classified", function(inst)
 		inst:ListenForEvent("arenachoicedirty", function(inst, data)
 			inst._parent.arenachoice = arenas.IDX[inst._arenachoice:value()]
 			inst._parent:PushEvent("arenachoicedirty", inst._arenachoice:value())
+		end)
+		inst:ListenForEvent("modechoicedirty", function(inst, data)
+			inst._parent.modechoice = arenas.IDX[inst._modechoice:value()]
+			inst._parent:PushEvent("modechoicedirty", inst._modechoice:value())
 		end)
 	end
 	
@@ -102,11 +110,23 @@ Assets = {
 	Asset("IMAGE", "images/changeTeamFlag.tex"),
 	Asset("ATLAS", "images/changeTeamFlag.xml"),
 	
+	Asset("ATLAS", "images/deathmatch_skilltree_bg.xml"),
+	Asset("IMAGE", "images/deathmatch_skilltree_bg.tex"),
+	Asset("ATLAS", "images/deathmatch_skilltree_icons.xml"),
+	Asset("IMAGE", "images/deathmatch_skilltree_icons.tex"),
+	
 	Asset("IMAGE", "images/matchcontrolsbutton_bg.tex"),
 	Asset("ATLAS", "images/matchcontrolsbutton_bg.xml"),
 	Asset("IMAGE", "images/matchcontrolsbutton_frame.tex"),
 	Asset("ATLAS", "images/matchcontrolsbutton_frame.xml"),
-	
+
+	Asset("IMAGE", "images/matchcontrolsbutton_goback.tex"),
+	Asset("ATLAS", "images/matchcontrolsbutton_goback.xml"),
+	Asset("IMAGE", "images/matchcontrolsbutton_startmatch.tex"),
+	Asset("ATLAS", "images/matchcontrolsbutton_startmatch.xml"),
+	Asset("IMAGE", "images/matchcontrols_infobutton.tex"),
+	Asset("ATLAS", "images/matchcontrols_infobutton.xml"),
+
 	Asset("IMAGE", "images/map_icon_atrium.tex"),
 	Asset("ATLAS", "images/map_icon_atrium.xml"),
 	Asset("IMAGE", "images/map_icon_desert.tex"),
@@ -197,6 +217,9 @@ AddPlayerPostInit(function(inst)
 		end)
 		inst:ListenForEvent("changearenachoice", function(inst, data)
 			SendModRPCToServer(GetModRPC(modname, "deathmatch_arenachoice"), data)
+		end)
+		inst:ListenForEvent("changemodechoice", function(inst, data)
+			SendModRPCToServer(GetModRPC(modname, "deathmatch_modechoice"), data)
 		end)
 	end
 	if G.TheNet:GetServerGameMode() == "deathmatch" then
@@ -310,10 +333,8 @@ local Deathmatch_Inventory = require("widgets/deathmatch_inventorybar")
 
 AddClassPostConstruct("widgets/controls", function(self, owner)
 	if G.TheNet:GetServerGameMode() == "deathmatch" then
-		self.deathmatch_playerlist = self.topleft_root:AddChild(G.require("widgets/deathmatch_playerlist")(owner))
-		self.deathmatch_playerlist:SetPosition(150, 0-(G.RESOLUTION_Y/2)-25)
-		self.deathmatch_status = self.topright_root:AddChild(G.require("widgets/deathmatch_status")(owner))
-		self.deathmatch_status:SetPosition(-150,-20)
+		self.deathmatch_status = self.top_root:AddChild(G.require("widgets/deathmatch_status")(owner))
+		self.deathmatch_status:SetPosition(0,-20)
 		self.deathmatch_status.inst:DoPeriodicTask(3, function() self.deathmatch_status:Refresh() end)
 		
 		self.deathmatch_spectatorspinner = self.bottom_root:AddChild(G.require("widgets/deathmatch_spectatorspinner")(owner))
@@ -323,6 +344,9 @@ AddClassPostConstruct("widgets/controls", function(self, owner)
 		else
 			self.deathmatch_spectatorspinner:Hide()
 		end
+
+		self.deathmatch_matchcontrols = self.topright_root:AddChild(require("widgets/deathmatch_matchcontrols")(owner))
+		self.deathmatch_matchcontrols:SetPosition(-150, -70)
 		
 		self.deathmatch_chooseyourgear = self.bottom_root:AddChild(G.require("widgets/deathmatch_chooseyourgear")(owner))
 		self.deathmatch_chooseyourgear:SetPosition(0,300)
@@ -633,11 +657,22 @@ end
 local function checkarenaid(v)
 	return type(v) == "number" and (v == 0 or arenas.VALID_ARENA_LOOKUP[v])
 end
+local function checkmodeid(v)
+	return type(v) == "number" and (v > 0 and v <= 3)
+end
 AddModRPCHandler(modname, "deathmatch_arenachoice", function(inst, arenaid)
 	print("got arena choice",inst,arenaid,checkarenaid(arenaid))
 	if (inst == nil or not checkarenaid(arenaid)) then return end
 	inst.player_classified._arenachoice:set(arenaid)
 	inst.arenachoice = arenas.IDX[arenaid]
+	GLOBAL.TheWorld:PushEvent("ms_arenavote")
+end)
+AddModRPCHandler(modname, "deathmatch_modechoice", function(inst, modeid)
+	print("got mode choice",inst,modeid,checkmodeid(modeid))
+	if (inst == nil or not checkmodeid(modeid)) then return end
+	inst.player_classified._modechoice:set(modeid)
+	inst.modechoice = modeid
+	GLOBAL.TheWorld:PushEvent("ms_modevote")
 end)
 
 -----------------------------------------------------------------------------

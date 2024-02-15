@@ -295,9 +295,6 @@ local function fn()
 					end
 				end
 			end
-			if ThePlayer and ThePlayer.HUD and ThePlayer.HUD.controls.deathmatch_playerlist then
-				ThePlayer.HUD.controls.deathmatch_playerlist:Refresh()
-			end
 		end)
 	--end
 	

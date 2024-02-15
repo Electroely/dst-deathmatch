@@ -256,6 +256,19 @@ local function MakeSpectator(player, bool)
 	player:ClearBufferedAction()
 end
 
+local function OnArenaVote(inst)
+	local self = inst.components.deathmatch_manager
+	if self.allow_arena_vote then
+		self:SetVotedArena()
+	end
+end
+local function OnModeVote(inst)
+	local self = inst.components.deathmatch_manager
+	if self.allow_mode_vote and not (self.matchstarting or self.matchinprogress) then
+		self:SetVotedMode()
+	end
+end
+
 dm = nil -- gotta remove later
 local Deathmatch_Manager = Class(function(self, inst)
 
@@ -301,6 +314,8 @@ local Deathmatch_Manager = Class(function(self, inst)
 	self.enabledarts = true
 	self.allow_teamswitch_user = true
 	self.allow_endmatch_user = true
+	self.allow_arena_vote = true
+	self.allow_mode_vote = true
 	self.matchstarting = false
 	self.matchinprogress = false
 	self.doingreset = false
@@ -318,6 +333,8 @@ local Deathmatch_Manager = Class(function(self, inst)
 	inst:ListenForEvent("registerdamagedealt", RegisterDamageDealt)
 	inst:ListenForEvent("ms_playerjoined", OnPlayerJoined)
 	inst:ListenForEvent("ms_playerleft", OnPlayerLeft)
+	inst:ListenForEvent("ms_arenavote", OnArenaVote)
+	inst:ListenForEvent("ms_modevote", OnModeVote)
 	dm = self -- easier testing ingame
 end)
 
@@ -533,6 +550,9 @@ function Deathmatch_Manager:StopDeathmatch()
 	self.timer_current = 0
 	self.inst.net:PushEvent("deathmatch_timercurrentchange", 0)
 	self.inst.net:PushEvent("deathmatch_matchstatuschange", 0)
+	if self.allow_arena_vote then
+		self:SetVotedArena()
+	end
 	self.inst.net:PushEvent("deathmatch_arenachange", arena_idx[self.upcoming_arena])
 	if self.pickuptask ~= nil then
 		self.pickuptask:Cancel()
@@ -576,6 +596,9 @@ function Deathmatch_Manager:StopDeathmatch()
 				--end
 				v:DoDeathmatchTeleport(offset)
 				GiveLobbyInventory(v)
+			end
+			if self.allow_mode_vote then
+				self:SetVotedMode()
 			end
 			--v.components.combat.externaldamagetakenmultipliers:SetModifier("deathmatchinvincibility", 0)
 			v:ApplyLobbyInvincibility(true)
@@ -740,6 +763,61 @@ function Deathmatch_Manager:SetNextArena(arena)
 	self.upcoming_arena = (arena == "random" or arena_configs[arena] ~= nil) and arena or "random"
 	if not (self.matchinprogress or self.doingreset or self.matchstarting) then
 		self.inst.net:PushEvent("deathmatch_arenachange", arena_idx[self.upcoming_arena])
+	end
+end
+
+function Deathmatch_Manager:SetVotedArena()
+	local players = getPlayers(true)
+	local votes = {}
+	local highest = 0
+	for k, v in pairs(players) do
+		local choice = v.arenachoice or "random"
+		if votes[choice] == nil then
+			votes[choice] = 1
+		else
+			votes[choice] = votes[choice] + 1
+		end
+		if votes[choice] > highest then
+			highest = votes[choice]
+		end
+	end
+	local winners = {}
+	for arena, n in pairs(votes) do
+		if n == highest then
+			table.insert(winners, arena)
+		end
+	end
+	if #winners == 1 then
+		self:SetNextArena(winners[1])
+	end
+end
+
+function Deathmatch_Manager:SetVotedMode()
+	local players = getPlayers(true)
+	local votes = {}
+	local highest = 0
+	for k, v in pairs(players) do
+		local choice = v.modechoice or 1
+		if votes[choice] == nil then
+			votes[choice] = 1
+		else
+			votes[choice] = votes[choice] + 1
+		end
+		if votes[choice] > highest then
+			highest = votes[choice]
+		end
+	end
+	local winners = {}
+	for mode, n in pairs(votes) do
+		if n == highest then
+			table.insert(winners, mode)
+		end
+	end
+	if #winners == 1 then
+		local winner = winners[1]
+		if winner ~= self.gamemode then
+			self:SetGamemode(winners[1])
+		end
 	end
 end
 

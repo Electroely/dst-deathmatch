@@ -1,4 +1,6 @@
 require("reload")
+local DeathmatchMenu = require "widgets/deathmatch_menu"
+
 list = nil
 function CreatePlayerList()
 	if list ~= nil then
@@ -16,5 +18,14 @@ function CreateMenu()
 	end
 	DoReload()
 	menu = ThePlayer.HUD.controls.topright_root:AddChild(require("widgets/deathmatch_matchcontrols")(ThePlayer))
-	menu:SetPosition(-220, -70)
+	menu:SetPosition(-150, -70)
+end
+
+function OpenHelpMenu()
+	if TheFrontEnd:GetActiveScreen().name == "Deathmatch_Menu" then
+		TheFrontEnd:PopScreen()
+	end
+	
+	DoReload()
+	TheFrontEnd:PushScreen(DeathmatchMenu(ThePlayer.HUD.controls))
 end
