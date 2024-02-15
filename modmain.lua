@@ -96,6 +96,7 @@ PrefabFiles = {
 	"powerup_flower",
 	"shadowweapons",
 	"invslotdummy",
+	"firebomb_firecircle",
 	
 	"maxwelllight",
 	"maxwelllight_flame",

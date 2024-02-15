@@ -28,8 +28,8 @@ local SKILLTREESTRINGS = {
 	BRAWLER_BUFF_ON_HIT_DESC = "Regular attacks increase the power of your next special attack by %d%%, up to %d times.",
 	
 	IMPROVISER_BOUNCING_BOMBS_DESC = "Hearthsfire crystals will bounce in the air when landing after being thrown, causing them to explode again. Charging the crystals before throwing them causes them to bounce more times.",
-	IMPROVISER_PASSIVE_BOMBS_DESC = "Heartsfire crystals will charge when you land regular attacks. Getting hit causes one to explode, damaging nearby enemies.",
-	IMPROVISER_HOMING_BOMBS_DESC = "Thrown Hearthsfire crystals will slightly home in on nearby opponents.",
+	IMPROVISER_PASSIVE_BOMBS_DESC = "Heartsfire crystals will charge when you land regular attacks. Getting hit causes charged crystals to explode, damaging nearby enemies.",
+	IMPROVISER_HOMING_BOMBS_DESC = "Thrown Hearthsfire crystals will home in on nearby opponents. Crystals are thrown at a higher arc when this skill is active.",
 	IMPROVISER_BURNING_BOMBS_DESC = "Hearthsfire crystals will leave a sea of flame after exploding.",
 	
 	LOADOUT_FORGE_MELEE_DESC = "The Forge's warriors use many melee weapons specializing in different combat scenarios for highly effective close-range combat.",
@@ -215,16 +215,16 @@ local function BuildSkillsData(SkillTreeFns)
 		
        brawler_buff_on_hit = {
             title = SKILLTREESTRINGS.BRAWLER_BUFF_ON_HIT_TITLE,
-            desc = string.format(SKILLTREESTRINGS.BRAWLER_BUFF_ON_HIT_DESC, DEATHMATCH_TUNING.SKILLTREE_DAMAGE_BUFF_AMOUNT,DEATHMATCH_TUNING.SKILLTREE_DAMAGE_BUFF_STACKS),
+            desc = string.format(SKILLTREESTRINGS.BRAWLER_BUFF_ON_HIT_DESC, DEATHMATCH_TUNING.SKILLTREE_DAMAGE_BUFF_AMOUNT*100,DEATHMATCH_TUNING.SKILLTREE_DAMAGE_BUFF_STACKS),
             pos = {BRAWLER_COL, LEFT_ROWS[4]},
 
             group = "brawler",
             tags = {},
             onactivate = function(owner, from_load)
-                owner:AddTag("skilltreehaver2")
+                owner:AddTag("brawler_buff_on_hit")
             end,
             ondeactivate = function(owner, from_load)
-                owner:RemoveTag("skilltreehaver2")
+                owner:RemoveTag("brawler_buff_on_hit")
             end,
         },
 		--IMPROVISER (bombs)
@@ -255,10 +255,10 @@ local function BuildSkillsData(SkillTreeFns)
             group = "improviser",
             tags = {},
             onactivate = function(owner, from_load)
-                owner:AddTag("skilltreehaver2")
+                owner:AddTag("bouncing_bombs")
             end,
             ondeactivate = function(owner, from_load)
-                owner:RemoveTag("skilltreehaver2")
+                owner:RemoveTag("bouncing_bombs")
             end,
 		},
 		improviser_passive_bombs = {
@@ -268,10 +268,10 @@ local function BuildSkillsData(SkillTreeFns)
             group = "improviser",
             tags = {},
             onactivate = function(owner, from_load)
-                owner:AddTag("skilltreehaver2")
+                owner:AddTag("passive_bombs")
             end,
             ondeactivate = function(owner, from_load)
-                owner:RemoveTag("skilltreehaver2")
+                owner:RemoveTag("passive_bombs")
             end,
 		},
 		improviser_homing_bombs = {
@@ -281,10 +281,10 @@ local function BuildSkillsData(SkillTreeFns)
             group = "improviser",
             tags = {},
             onactivate = function(owner, from_load)
-                owner:AddTag("skilltreehaver2")
+                owner:AddTag("homing_bombs")
             end,
             ondeactivate = function(owner, from_load)
-                owner:RemoveTag("skilltreehaver2")
+                owner:RemoveTag("homing_bombs")
             end,
 		},
 		improviser_burning_bombs = {
@@ -294,10 +294,10 @@ local function BuildSkillsData(SkillTreeFns)
             group = "improviser",
             tags = {},
             onactivate = function(owner, from_load)
-                owner:AddTag("skilltreehaver2")
+                owner:AddTag("burning_bombs")
             end,
             ondeactivate = function(owner, from_load)
-                owner:RemoveTag("skilltreehaver2")
+                owner:RemoveTag("burning_bombs")
             end,
 		},
 		--LOADOUT SELECT
