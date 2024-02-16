@@ -28,7 +28,7 @@ local SKILLTREESTRINGS = {
 	BRAWLER_BUFF_ON_HIT_DESC = "Regular attacks increase the power of your next special attack by %d%%, up to %d times.",
 	
 	IMPROVISER_BOUNCING_BOMBS_DESC = "Hearthsfire crystals will bounce in the air when landing after being thrown, causing them to explode again. Charging the crystals before throwing them causes them to bounce more times.",
-	IMPROVISER_PASSIVE_BOMBS_DESC = "Heartsfire crystals will charge when you land regular attacks. Getting hit causes charged crystals to explode, damaging nearby enemies.",
+	IMPROVISER_PASSIVE_BOMBS_DESC = "Hearthsfire crystals will charge when you land regular attacks. Getting hit causes charged crystals to explode, damaging nearby enemies.",
 	IMPROVISER_HOMING_BOMBS_DESC = "Thrown Hearthsfire crystals will home in on nearby opponents. Crystals are thrown at a higher arc when this skill is active.",
 	IMPROVISER_BURNING_BOMBS_DESC = "Hearthsfire crystals will leave a sea of flame after exploding.",
 	

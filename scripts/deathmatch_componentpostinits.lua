@@ -4,10 +4,6 @@ local UpValues = require("deathmatch_upvaluehacker")
 local GetUpValue = UpValues.Get
 local ReplaceUpValue = UpValues.Replace
 
-AddClassPostConstruct("components/equippable_replica", function(self)
-	self.prevslot = GLOBAL.net_smallbyte(self.inst.GUID, "deathmatch.equippable_prevslot")
-end)
-
 local function GetDummySlot(inv)
 	local empty = 9
 	for slot = 1, inv.maxslots do
