@@ -352,7 +352,10 @@ AddClassPostConstruct("widgets/controls", function(self, owner)
 		self.deathmatch_chooseyourgear = self.bottom_root:AddChild(G.require("widgets/deathmatch_chooseyourgear")(owner))
 		self.deathmatch_chooseyourgear:SetPosition(0,300)
 		self.deathmatch_chooseyourgear:Hide()
-		
+
+		self.deathmatch_playerlist = self.bottom_root:AddChild(require("widgets/deathmatch_enemylist")(owner))
+		self.deathmatch_playerlist:SetPosition(-220, 70)
+
 		--self.deathmatch_infopopup = self.bottom_root:AddChild(Deathmatch_InfoPopup(owner))
 		--self.deathmatch_infopopup:SetPosition(0, 250)
 		--owner.ShowPopup = function()

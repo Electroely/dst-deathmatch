@@ -37,13 +37,13 @@ local pickup_data = {
 			if player and player.components.inventory then
 				for k, v in pairs(player.components.inventory.itemslots) do
 					if v and v.components.rechargeable then
-						v.components.rechargeable.current = 0
+						v.components.rechargeable:SetPercent(1)
 					end
 				end
 				for k, v in pairs(EQUIPSLOTS) do
 					local item = player.components.inventory:GetEquippedItem(v)
 					if item ~= nil and item.components.rechargeable then
-						item.components.rechargeable.current = 0
+						item.components.rechargeable:SetPercent(1)
 					end
 				end
 			end

@@ -38,11 +38,12 @@ function Deathmatch_EnemyList:GetPlayerTable()
     for i, v in ipairs(ClientObjs) do
         if v.performance ~= nil then
             table.remove(ClientObjs, i)
-		else
-			v.health = TheWorld.net:GetPlayerHealth(self.userid)
-			v.team = TheWorld.net:GetPlayerTeam(self.userid)
 		end
     end
+	for k, v in pairs(ClientObjs) do
+		v.health = TheWorld.net:GetPlayerHealth(v.userid) or 1
+		v.team = TheWorld.net:GetPlayerTeam(v.userid) or 0
+	end
 	table.sort(ClientObjs, function(a,b)
 		if a.team == b.team then
 			return a.health > b.health
@@ -55,7 +56,7 @@ function Deathmatch_EnemyList:GetPlayerTable()
 	for i, v in ipairs(ClientObjs) do
 		if v.userid == self.owner.userid then
 			--don't insert
-		elseif v.team == allyteam then
+		elseif allyteam ~= 0 and v.team == allyteam then
 			table.insert(allies,v)
 		else
 			table.insert(enemies,v)

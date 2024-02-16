@@ -66,6 +66,55 @@ local IMPROVISER_LOCK_POS = {1, 52}
 
 --------------------------------------------------------------------------------------------------
 
+local function onhit_charge_bomb(inst, data)
+	if data == nil or data.stimuli ~= nil then
+		return
+	end
+	local items = inst.components.inventory and inst.components.inventory.itemslots or nil
+	if items then
+		for i = 1, inst.components.inventory.maxslots do
+			local item = items[i]
+			if item and item.sparklevel ~= nil and item.sparklevel_max ~= nil and item.sparklevel < item.sparklevel_max then
+				item:SetSparkLevel(item.sparklevel+1)
+				return
+			end
+		end
+	end
+end
+local function onattacked_explode_bomb(inst, data)
+	local items = inst.components.inventory and inst.components.inventory.itemslots or nil
+	if items then
+		for i = 1, inst.components.inventory.maxslots do
+			local item = items[i]
+			if item and item.sparklevel ~= nil and item.sparklevel_max ~= nil and item.sparklevel >= item.sparklevel_max and item.DoExplosion then
+				item:DoExplosion(inst, inst:GetPosition(), true)
+				break
+			end
+		end
+	end
+end
+
+local ONHIT_REFRESH_AMOUNT = 0.1
+local function onhit_refresh_cooldowns(inst, data)
+	local items = inst.components.inventory and inst.components.inventory.itemslots or nil
+	local equips = inst.components.inventory and inst.components.inventory.equipslots or nil
+	if items then
+		for slot, item in pairs(items) do
+			if item and item.components.rechargeable and not item.components.rechargeable:IsCharged() then
+				item.components.rechargeable:SetPercent(math.min(item.components.rechargeable:GetPercent()+ONHIT_REFRESH_AMOUNT,1))
+			end
+		end
+	end
+	if equips then
+		for slot, item in pairs(equips) do
+			if item and item.components.rechargeable and not item.components.rechargeable:IsCharged() then
+				item.components.rechargeable:SetPercent(math.min(item.components.rechargeable:GetPercent()+ONHIT_REFRESH_AMOUNT,1))
+			end
+		end
+	end
+end
+--------------------------------------------------------------------------------------------------
+
 local ORDERS =
 {
     { "spellcaster",   { UI_LEFT, UI_TOP } },
@@ -156,10 +205,10 @@ local function BuildSkillsData(SkillTreeFns)
             group = "spellcaster",
             tags = {},
             onactivate = function(owner, from_load)
-                owner:AddTag("skilltreehaver2")
+                owner:ListenForEvent("onattackother",onhit_refresh_cooldowns)
             end,
             ondeactivate = function(owner, from_load)
-                owner:RemoveTag("skilltreehaver2")
+                owner:RemoveEventCallback("onattackother",onhit_refresh_cooldowns)
             end,
         },
 		
@@ -268,10 +317,12 @@ local function BuildSkillsData(SkillTreeFns)
             group = "improviser",
             tags = {},
             onactivate = function(owner, from_load)
-                owner:AddTag("passive_bombs")
+                owner:ListenForEvent("onattackother", onhit_charge_bomb)
+				owner:ListenForEvent("attacked", onattacked_explode_bomb)
             end,
             ondeactivate = function(owner, from_load)
-                owner:RemoveTag("passive_bombs")
+                owner:RemoveEventCallback("onattackother", onhit_charge_bomb)
+				owner:RemoveEventCallback("attacked", onattacked_explode_bomb)
             end,
 		},
 		improviser_homing_bombs = {

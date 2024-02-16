@@ -31,6 +31,7 @@ local assets =
     Asset("IMAGE", "levels/textures/snow.tex"),
     Asset("IMAGE", "levels/textures/mud.tex"),
     Asset("IMAGE", "images/wave.tex"),
+	Asset("IMAGE", "images/wave_empty.tex"),
 }
 
 local prefabs =
@@ -168,11 +169,11 @@ local function PushConfig(name)
 	--apply music
 	local music = data.music
 	if music ~= nil then --maps without music will have to input an empty string
-		local old_music = ThePlayer._currentarenamusic
+		local old_music = TheFocalPoint._currentarenamusic
 		if music ~= old_music then
-			ThePlayer.SoundEmitter:KillSound("bgm")
-			ThePlayer.SoundEmitter:PlaySound(music, "bgm")
-			ThePlayer._currentarenamusic = music
+			TheFocalPoint.SoundEmitter:KillSound("bgm")
+			TheFocalPoint.SoundEmitter:PlaySound(music, "bgm")
+			TheFocalPoint._currentarenamusic = music
 		end
 	end
 	
@@ -186,13 +187,15 @@ local function PushConfig(name)
 	--apply waves
 	if data.waves then
 		TheWorld:DoTaskInTime(0, function(wrld)
-			wrld.WaveComponent:SetWaveSize(80, 3.5)
-			wrld.WaveComponent:Init(0,0)
+			--wrld.WaveComponent:SetWaveSize(80, 3.5)
+			--wrld.WaveComponent:Init(0,0)
+			wrld.WaveComponent:SetWaveTexture("images/wave.tex")
 		end)
 	elseif data.waves == false then --waves = nil means don't change current
 		TheWorld:DoTaskInTime(0, function(wrld)
-			wrld.WaveComponent:SetWaveSize(0, 0)
-			wrld.WaveComponent:Init(0,0)
+			--wrld.WaveComponent:SetWaveSize(0, 0)
+			--wrld.WaveComponent:Init(0,0)
+			wrld.WaveComponent:SetWaveTexture(resolvefilepath("images/wave_empty.tex"))
 		end)
 	end
 	
