@@ -346,7 +346,7 @@ end)
 -----------------------------------------------------------------------------------------
 
 -- teamer entities
-for k, v in pairs({ "abigail", "balloon", "boaron" }) do
+for k, v in pairs({ "lavaarena_elemental", "abigail", "balloon", "boaron" }) do
 	AddPrefabPostInit(v, function(inst)
 		inst:AddComponent("teamer")
 	end)
@@ -456,7 +456,7 @@ AddPrefabPostInit("world", function(inst) --can't this just go into prefabs/deat
 	if inst.ismastersim and G.TheNet:GetServerGameMode() == "deathmatch" then
 		inst:AddComponent("deathmatch_manager")
 		inst:DoTaskInTime(0, function(inst)
-			inst.components.deathmatch_manager:SetGamemode(1)
+			inst.components.deathmatch_manager:SetGamemode(1, true)
 			inst.components.deathmatch_manager:SetNextArena("random")
 			G.print("remember to announce on steam group!") --TODO: remove
 		end)

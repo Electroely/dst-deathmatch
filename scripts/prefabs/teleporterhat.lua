@@ -12,7 +12,9 @@ local prefabs =
 	"lavaarena_portal_player_fx",
 }
 local function onequip(inst, owner)
-
+	if inst.components.rechargeable and inst.components.rechargeable:GetTimeToCharge() <= EQUIP_COOLDOWN_TIME then
+		inst.components.rechargeable:Discharge(EQUIP_COOLDOWN_TIME)
+	end
 end
 
 local function onunequip(inst, owner)
@@ -44,6 +46,9 @@ local function Teleport(inst, caster, pos)
 		inst:DoTaskInTime(6 * FRAMES, function(inst)
 			caster.Transform:SetPosition(pos:Get())
 		end)
+		if inst.components.rechargeable then
+			inst.components.rechargeable:Discharge(DEFAULT_COOLDOWN_TIME)
+		end
 	end
 end
 
@@ -91,6 +96,10 @@ local function fn()
 	
 	inst:AddComponent("aoespell")
 	inst.components.aoespell:SetSpellFn(Teleport)
+
+	inst:AddComponent("rechargeable")
+	inst.components.rechargeable:SetOnDischargedFn(function(inst) inst.components.aoetargeting:SetEnabled(false) end)
+	inst.components.rechargeable:SetOnChargedFn(function(inst) inst.components.aoetargeting:SetEnabled(true) end)
 	
 	return inst
 end

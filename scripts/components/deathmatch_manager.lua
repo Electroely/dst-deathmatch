@@ -173,7 +173,7 @@ local function OnPlayerJoined(inst, player)
 			self:GiveLobbyInventory(player)
 		end
 	end)
-	if #TheNet:GetClientTable() == 2 then
+	--[[if #TheNet:GetClientTable() == 2 then
 		player:DoTaskInTime(1, function()
 			TheNet:SystemMessage(DEATHMATCH_STRINGS.CHATMESSAGES.JOIN_ALONE)
 		end)
@@ -181,7 +181,7 @@ local function OnPlayerJoined(inst, player)
 		player:DoTaskInTime(1, function()
 			TheNet:SystemMessage(DEATHMATCH_STRINGS.CHATMESSAGES.JOIN_LOBBY)
 		end)
-	end
+	end]]
 end
 
 local function MakeSpectator(player, bool)
@@ -958,19 +958,23 @@ function Deathmatch_Manager:GroupTeams(mode)
 	end
 end
 
-function Deathmatch_Manager:SetGamemode(mode)
+function Deathmatch_Manager:SetGamemode(mode, onload)
 	self.gamemode = mode
 	if mode ~= 0 then
 		self.allow_teamswitch_user = false
-		if mode == 2 then
-			TheNet:Announce(string.format(DEATHMATCH_STRINGS.ANNOUNCE.SETTEAMMODE_RVB, self.gamemodes[mode].name))
-		else
-			TheNet:Announce(string.format(DEATHMATCH_STRINGS.ANNOUNCE.SETTEAMMODE, self.gamemodes[mode].name))
+		if not onload then
+			if mode == 2 then
+				TheNet:Announce(string.format(DEATHMATCH_STRINGS.ANNOUNCE.SETTEAMMODE_RVB, self.gamemodes[mode].name))
+			else
+				TheNet:Announce(string.format(DEATHMATCH_STRINGS.ANNOUNCE.SETTEAMMODE, self.gamemodes[mode].name))
+			end
 		end
 		self.inst.net:PushEvent("deathmatch_matchmodechange", mode)
 	else
 		self.allow_teamswitch_user = true
-		TheNet:Announce(DEATHMATCH_STRINGS.ANNOUNCE.SETTEAMMODE_CUSTOM)
+		if not onload then
+			TheNet:Announce(DEATHMATCH_STRINGS.ANNOUNCE.SETTEAMMODE_CUSTOM)
+		end
 		self.inst.net:PushEvent("deathmatch_matchmodechange", 4)
 	end
 	if self.matchstaring or self.matchinprogress then return end
