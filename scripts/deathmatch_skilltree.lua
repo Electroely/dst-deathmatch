@@ -8,7 +8,7 @@ GLOBAL.TUNING.SKILL_THRESHOLDS = {
 	1,1,1,1,1,1,1,1,
 }
 
-local available_skill_points = 5
+local available_skill_points = 6
 local SkillTreeData = require("skilltreedata")
 SkillTreeData:Save()
 

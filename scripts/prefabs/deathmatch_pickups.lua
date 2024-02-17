@@ -238,6 +238,7 @@ local function MakePickUp(name)
 	return Prefab("pickup_"..name, fn, assets, prefabs)
 end
 
+---------------------------------------------------------------------------
 local res = {}
 for k,v in pairs(pickup_data) do
 	table.insert(res, MakePickUp(k))
@@ -245,5 +246,25 @@ end
 for k,v in pairs(buff_prefabs) do
 	table.insert(res, v)
 end
+---------------------------------------------------------------------------
+
+--while we're here, let's just make the rest of the buffs the mod needs...
+local DAMAGESTACK_DURATION = DEATHMATCH_TUNING.SKILLTREE_DAMAGE_BUFF_DURATION
+local DAMAGESTACK_DAMAGE_PER_STACK = DEATHMATCH_TUNING.SKILLTREE_DAMAGE_BUFF_AMOUNT
+local DAMAGESTACK_MAX_STACKS = DEATHMATCH_TUNING.SKILLTREE_DAMAGE_BUFF_STACKS
+local function damagestack_OnAttach(inst, target)
+	inst.stacks = 1
+	target.components.combat.externaldamagemultipliers:SetModifier("deathmatch_damagestack", 1 + DAMAGESTACK_DAMAGE_PER_STACK*inst.stacks)
+end
+local function damagestack_OnExtend(inst, target)
+	if inst.stacks < DAMAGESTACK_MAX_STACKS then
+		inst.stacks = inst.stacks + 1
+	end
+	target.components.combat.externaldamagemultipliers:SetModifier("deathmatch_damagestack", 1 + DAMAGESTACK_DAMAGE_PER_STACK*inst.stacks)
+end
+local function damagestack_OnDetach(inst, target)
+	target.components.combat.externaldamagemultipliers:RemoveModifier("deathmatch_damagestack")
+end
+table.insert(res, MakeBuff("deathmatch_damagestack", damagestack_OnAttach, damagestack_OnExtend, damagestack_OnDetach, DAMAGESTACK_DURATION))
 
 return unpack(res)

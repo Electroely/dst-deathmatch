@@ -25,7 +25,7 @@ local SKILLTREESTRINGS = {
 	
 	BRAWLER_DAMAGE_ONE_DESC = "Increases all damage dealt by %d%%.",
 	BRAWLER_DAMAGE_TWO_DESC = "Increases all damage dealt by %d%%.",
-	BRAWLER_BUFF_ON_HIT_DESC = "Regular attacks increase the power of your next special attack by %d%%, up to %d times.",
+	BRAWLER_BUFF_ON_HIT_DESC = "Regular attacks temporarily increase your damage by %d%%, stacking up to %d times.",
 	
 	IMPROVISER_BOUNCING_BOMBS_DESC = "Hearthsfire crystals will bounce in the air when landing after being thrown, causing them to explode again. Charging the crystals before throwing them causes them to bounce more times.",
 	IMPROVISER_PASSIVE_BOMBS_DESC = "Hearthsfire crystals will charge when you land regular attacks. Getting hit causes charged crystals to explode, damaging nearby enemies.",
@@ -115,6 +115,15 @@ local function onhit_refresh_cooldowns(inst, data)
 			end
 		end
 	end
+end
+
+local function onhit_damagestack(inst, data)
+	if data == nil or data.stimuli ~= nil then
+		return
+	end
+	inst:DoTaskInTime(0, function(inst)
+		inst:AddDebuff("buff_deathmatch_damagestack", "buff_deathmatch_damagestack")
+	end)
 end
 --------------------------------------------------------------------------------------------------
 
@@ -273,10 +282,10 @@ local function BuildSkillsData(SkillTreeFns)
             group = "brawler",
             tags = {},
             onactivate = function(owner, from_load)
-                owner:AddTag("brawler_buff_on_hit")
+                owner:ListenForEvent("onattackother",onhit_damagestack)
             end,
             ondeactivate = function(owner, from_load)
-                owner:RemoveTag("brawler_buff_on_hit")
+                owner:RemoveEventCallback("onattackother",onhit_damagestack)
             end,
         },
 		--IMPROVISER (bombs)
