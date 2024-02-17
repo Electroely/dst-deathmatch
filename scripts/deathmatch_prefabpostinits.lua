@@ -274,19 +274,24 @@ AddPrefabPostInit("bee", beepostinit)
 AddPrefabPostInit("killerbee", beepostinit)
 AddPrefabPostInit("lavaarena_armormediumdamager", function(inst)
 	if G.TheWorld.ismastersim then
-		inst.components.equippable.damagemult = 1.25
+		inst.components.equippable.damagemult = nil
 		inst.components.armor:InitIndestructible(0.8)
 	end
 end)
-G.STRINGS.NAME_DETAIL_EXTENTION.LAVAARENA_ARMORMEDIUMDAMAGER = "80% Protection\n+25% Physical Damage"
+G.STRINGS.NAME_DETAIL_EXTENTION.LAVAARENA_ARMORMEDIUMDAMAGER = "80% Protection"
 AddPrefabPostInit("lavaarena_armormediumrecharger", function(inst)
 	if G.TheWorld.ismastersim then
-		inst.components.equippable.cooldownmultiplier = 0.25
+		inst.components.equippable.cooldownmultiplier = nil
 		inst.components.armor:InitIndestructible(0.8)
 	end
 end)
-G.STRINGS.NAME_DETAIL_EXTENTION.LAVAARENA_ARMORMEDIUMRECHARGER = "80% Protection\n+25% Faster Cooldown"
- 
+G.STRINGS.NAME_DETAIL_EXTENTION.LAVAARENA_ARMORMEDIUMRECHARGER = "80% Protection"
+AddPrefabPostInit("lavaarena_rechargerhat", function(inst)
+	if G.TheWorld.ismastersim then
+		inst.components.equippable.cooldownmultiplier = nil
+	end
+end)
+G.STRINGS.NAME_DETAIL_EXTENTION.LAVAARENA_RECHARGERHAT = nil
 AddPrefabPostInit("glommer", function(inst)
 	if not G.TheWorld.ismastersim then
 		return

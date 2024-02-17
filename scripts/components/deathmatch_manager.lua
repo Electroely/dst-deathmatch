@@ -59,39 +59,6 @@ local function TableContains(table, value)
 	return found, idx
 end
 
-local lobbyitems = {
-	"spear_gungnir",
-	"spear_lance",
-	"hammer_mjolnir",
-	"lavaarena_heavyblade",
-	"lavaarena_firebomb",
-	"lavaarena_armormediumdamager",
-	"lavaarena_lightdamagerhat",
-	"lavaarena_armormediumrecharger",
-	"lavaarena_rechargerhat",
-}
-local function GiveLobbyInventory(player)
-	local inv = player.components.inventory
-	for k, v in pairs(inv.itemslots) do if v.prefab ~= "invslotdummy" then v:Remove() end end
-	local neededitems = {}
-	for k, v in pairs(lobbyitems) do
-		neededitems[v] = true
-	end
-	for k, v in pairs(inv.equipslots) do
-		if TableContains(lobbyitems, v.prefab) then
-			neededitems[v.prefab] = false
-		elseif not v.prefab == "invslotdummy" then
-			v:Remove()
-		end
-	end
-	for k, v in pairs(lobbyitems) do
-		if neededitems[v] then
-			inv:GiveItem(SpawnPrefab(v), k)
-			neededitems[v] = false
-		end
-	end
-end
-
 local function AddTable(target, tabl)
 	if tabl ~= nil and type(tabl) == "table" then
 		for k, v in pairs(tabl) do
@@ -199,8 +166,13 @@ local function OnPlayerJoined(inst, player)
 				TheNet:SystemMessage(DEATHMATCH_STRINGS.CHATMESSAGES.JOIN_MIDMATCH)
 			end)
 		end
-		GiveLobbyInventory(player)
+		self:GiveLobbyInventory(player)
 	end
+	player:ListenForEvent("updateloadout", function(player)
+		if not (self.matchinprogress or self.matchstarting) then
+			self:GiveLobbyInventory(player)
+		end
+	end)
 	if #TheNet:GetClientTable() == 2 then
 		player:DoTaskInTime(1, function()
 			TheNet:SystemMessage(DEATHMATCH_STRINGS.CHATMESSAGES.JOIN_ALONE)
@@ -268,6 +240,33 @@ local function OnModeVote(inst)
 		self:SetVotedMode()
 	end
 end
+
+local DEFAULT_LOADOUT = "forge_melee"
+local LOADOUTS = {
+	forge_melee = {
+		weapons = {
+			"spear_gungnir",
+			"spear_lance",
+			"hammer_mjolnir",
+			"lavaarena_heavyblade",
+		},
+		equip = {
+			"lavaarena_armormediumdamager"
+		}
+	},
+	forge_mage = {
+		weapons = {
+			"fireballstaff",
+			"healingstaff",
+			"book_elemental",
+			"teleporterhat"
+		},
+		equip = {
+			"lavaarena_armormediumrecharger",
+			"lavaarena_rechargerhat",
+		}
+	}
+}
 
 dm = nil -- gotta remove later
 local Deathmatch_Manager = Class(function(self, inst)
@@ -338,6 +337,30 @@ local Deathmatch_Manager = Class(function(self, inst)
 	dm = self -- easier testing ingame
 end)
 
+function Deathmatch_Manager:GetLoadoutForPlayer(player)
+	for loadout, data in pairs(LOADOUTS) do
+		if player:HasTag("loadout_"..loadout) then
+			return data
+		end
+	end
+	return LOADOUTS[DEFAULT_LOADOUT]
+end
+
+function Deathmatch_Manager:GiveLobbyInventory(player)
+	local loadout_data = self:GetLoadoutForPlayer(player)
+	local lobbyitems = loadout_data.weapons
+	local inv = player.components.inventory
+	for k, v in pairs(inv.itemslots) do if v.prefab ~= "invslotdummy" then v:Remove() end end
+	for k, v in pairs(inv.equipslots) do v:Remove() end
+	for k, v in pairs(lobbyitems) do
+		inv:GiveItem(SpawnPrefab(v), k)
+	end
+	for k, v in pairs(loadout_data.equip) do
+		local item = SpawnPrefab(v)
+		inv:GiveItem(item)
+		inv:Equip(item)
+	end
+end
 
 function Deathmatch_Manager:AddItem(prefab)
 	table.insert(self.itemstable, prefab)
@@ -455,7 +478,8 @@ function Deathmatch_Manager:StartDeathmatch()
 		self.enablepickups = not arena_configs[self.arena].nopickups == true
 		local players, spectators = getPlayers()
 		for k, v in pairs(players) do 
-			local items = deepcopy(self.itemstable)
+			local loadout_data = self:GetLoadoutForPlayer(v)
+			local items = deepcopy(loadout_data.weapons)
 			AddTable(items, arena_configs[self.arena].extraitems)
 			AddTable(items, v.deathmatch_startitems)
 			for k2, v2 in pairs(items) do
@@ -465,13 +489,10 @@ function Deathmatch_Manager:StartDeathmatch()
 				if item.components.rechargeable then item.components.rechargeable:Discharge(DEFAULT_COOLDOWN_TIME) end
 				if item.components.inventoryitem then table.insert(self.spawneditems, item) end
 			end
-			for k2, v2 in pairs(self.choicegear) do
+			for k2, v2 in pairs(loadout_data.equip) do
 				local item = SpawnPrefab(v2)
 				v.components.inventory:GiveItem(item)
-				local slot = item.components.equippable.equipslot
-				if v.components.inventory:GetEquippedItem(slot) == nil then
-					v.components.inventory:Equip(item)
-				end
+				v.components.inventory:Equip(item)
 				
 				table.insert(self.spawnedgear, item)
 			end
@@ -595,7 +616,7 @@ function Deathmatch_Manager:StopDeathmatch()
 				--	v:ScreenFade(true, 1)
 				--end
 				v:DoDeathmatchTeleport(offset)
-				GiveLobbyInventory(v)
+				self:GiveLobbyInventory(v)
 			end
 			if self.allow_mode_vote then
 				self:SetVotedMode()
@@ -1019,7 +1040,7 @@ function Deathmatch_Manager:ToggleSpectator(player)
 			--player.Transform:SetPosition(self.inst.lobbypoint:GetPosition():Get())
 			player:DoDeathmatchTeleport(self.inst.lobbypoint:GetPosition())
 		end
-		GiveLobbyInventory(player)
+		self:GiveLobbyInventory(player)
 		player:PushEvent("ms_exitspectator")
 	else
 		player:AddTag("spectator")

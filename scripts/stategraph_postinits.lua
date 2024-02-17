@@ -20,10 +20,7 @@ local function GetState_focusattack(isclient)
         name = "focusattack",
         tags = { "doing", "busy", "nodangle" },
 
-        onenter = function(inst, timeout)
-			local timeout = timeout or 2
-            inst.sg:SetTimeout(timeout)
-			inst.sg.statemem.timeout = timeout
+        onenter = function(inst)
             inst.components.locomotor:Stop()
 	        if inst.components.playercontroller ~= nil then
                 inst.components.playercontroller:Enable(false)
@@ -43,15 +40,15 @@ local function GetState_focusattack(isclient)
             TimeEvent(4 * FRAMES, function(inst)
                 inst.sg:RemoveStateTag("busy")
             end),
-			
-			TimeEvent(1.5, function(inst)
+
+			TimeEvent(6 * FRAMES, function(inst)
 				inst:PerformBufferedAction()
 			end),
-        },
 
-        ontimeout = function(inst)
-            inst.AnimState:PlayAnimation("channel_pst")
-        end,
+			TimeEvent(12 * FRAMES, function(inst)
+				inst.sg:GoToState("idle")
+			end),
+        },
 
         events =
         {

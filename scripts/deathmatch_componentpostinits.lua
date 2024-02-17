@@ -170,29 +170,39 @@ AddComponentPostInit("healthsyncer", function(self, inst)
 	end
 end)
 
+local MAX_ATTACKERS = 1
 AddComponentPostInit("combat", function(self, inst)
 	if G.TheNet:GetServerGameMode() == "deathmatch" then
 		local engage_old = self.EngageTarget
 		self.EngageTarget = function(self, target)
-			if not inst:HasTag("player") and target and target:HasTag("player") then
-				target.numattackers = target.numattackers + 1
+			if not self.inst:HasTag("ignoreattackerlimit") and not self.inst:HasTag("player") and target and target:HasTag("player") and target.attackers then
+				target.attackers[self.inst] = true
 			end
 			return engage_old(self, target)
 		end
 		
 		local drop_old = self.DropTarget
 		self.DropTarget = function(self, hasnexttarget)
-			if not inst:HasTag("player") and self.target and self.target:HasTag("player") then
-				self.target.numattackers = self.target.numattackers - 1
+			if not self.inst:HasTag("ignoreattackerlimit") and not self.inst:HasTag("player") and self.target and self.target:HasTag("player") and self.target.attackers then
+				self.target.attackers[self.inst] = nil
 			end
 			return drop_old(self, hasnexttarget)
 		end
 		
 		local validt_old = self.IsValidTarget
 		self.IsValidTarget = function(self, target)
-			if target and not inst:HasTag("player") and target:HasTag("player") and target.numattackers >= 2 and not inst:HasTag("tentacle") then
-				--print("player has too many attackers")
-				return false
+			if not self.inst:HasTag("ignoreattackerlimit") and target ~= nil and not self.inst:HasTag("player") and target:HasTag("player") and target.attackers and not target.attackers[self.inst] then
+				local numattackers = 0
+				for attacker, v in pairs(target.attackers) do
+					if v and attacker:IsValid() then
+						numattackers = numattackers + 1
+						if numattackers > MAX_ATTACKERS then
+							return false
+						end
+					else
+						target.attackers[attacker] = nil
+					end
+				end
 			end
 			return validt_old(self, target)
 		end

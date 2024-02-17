@@ -12,13 +12,11 @@ local prefabs =
 	"lavaarena_portal_player_fx",
 }
 local function onequip(inst, owner)
-	owner.AnimState:OverrideSymbol("swap_hat", build, "swap_hat")
-	owner.AnimState:Show("hat")
+
 end
 
 local function onunequip(inst, owner)
-	owner.AnimState:ClearOverrideSymbol("swap_hat")
-	owner.AnimState:Hide("hat")
+
 end
 
 local function ReticuleTargetFn()
@@ -40,12 +38,10 @@ local function Teleport(inst, caster, pos)
 	if caster ~= nil then
 		local fire1 = SpawnPrefab("lavaarena_portal_player_fx")
 		local fire2 = SpawnPrefab("lavaarena_portal_player_fx")
-		local fire2_extra = SpawnPrefab("lavaarena_portal_player_fx") -- sandwich the player in between 2 fires to make them seem inside it?
 		local x, y, z = pos:Get()
 		fire1.Transform:SetPosition(caster:GetPosition():Get())
 		fire2.Transform:SetPosition(x+0.01,y,z+0.01)
-		fire2_extra.Transform:SetPosition(x-0.01,y,z-0.01)
-		inst:DoTaskInTime(0.2, function(inst)
+		inst:DoTaskInTime(6 * FRAMES, function(inst)
 			caster.Transform:SetPosition(pos:Get())
 		end)
 	end
@@ -64,7 +60,6 @@ local function fn()
 	inst.AnimState:SetBuild(build)
 	inst.AnimState:PlayAnimation("anim")
 
-	inst:AddTag("hat")
 	inst:AddTag("focusattack")
 	
     inst:AddComponent("aoetargeting")
@@ -77,7 +72,7 @@ local function fn()
     inst.components.aoetargeting.reticule.ease = true
     inst.components.aoetargeting.reticule.mouseenabled = true
 	
-	inst.name = "Crown of Teleportation\nPress R while equipped to use"
+	inst.name = "Crown of Teleportation"
 	inst.entity:SetPristine()
 
 	if not TheWorld.ismastersim then
@@ -87,15 +82,15 @@ local function fn()
 	inst:AddComponent("inspectable")
 	
 	inst:AddComponent("inventoryitem")
-	inst.components.inventoryitem:ChangeImageName("lavaarena_eyecirclethat")
+	inst.components.inventoryitem:ChangeImageName("lavaarena_rechargerhat")
 
 	inst:AddComponent("equippable")
 	inst.components.equippable:SetOnEquip(onequip)
 	inst.components.equippable:SetOnUnequip(onunequip)
-	inst.components.equippable.equipslot = EQUIPSLOTS.HEAD
+	inst.components.equippable.equipslot = EQUIPSLOTS.HANDS
 	
 	inst:AddComponent("aoespell")
-	inst.components.aoespell:SetAOESpell(Teleport)
+	inst.components.aoespell:SetSpellFn(Teleport)
 	
 	return inst
 end

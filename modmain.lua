@@ -208,7 +208,7 @@ G.require("player_postinits_deathmatch") --so... why did i separate this into it
 modimport("scripts/charperkremoval")
 AddPlayerPostInit(function(inst)
 	inst.requestmousepos = G.net_event(inst.GUID, "net_locationrequest")
-	inst.numattackers = 0
+	inst.attackers = {}
 	if not G.TheWorld.ismastersim then
 		inst:ListenForEvent("net_locationrequest", function(inst)
 			if inst == G.ThePlayer then

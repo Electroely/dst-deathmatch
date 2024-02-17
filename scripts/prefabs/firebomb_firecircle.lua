@@ -26,7 +26,7 @@ local function fx_fn()
 end
 
 local RANGE = 2
-local DAMAGE = 1
+local DAMAGE = DEATHMATCH_TUNING.SKILLTREE_FIREBOMB_FIRECIRCLE_DAMAGE_PER_LEVEL
 local DURATION = 5
 local function DamageNearbyEntities(inst)
 	if inst.caster == nil or not inst.caster:IsValid() then
@@ -37,7 +37,7 @@ local function DamageNearbyEntities(inst)
 	local ents = TheSim:FindEntities(x,y,z, RANGE, {"_combat"})
 	for k, v in pairs(ents) do
 		if v.components.health and inst.caster.components.combat:IsValidTarget(v) then
-			v.components.health:DoDelta(-DAMAGE)
+			v.components.health:DoDelta(-DAMAGE*inst.sparklevel)
 		end
 	end
 end
@@ -62,6 +62,8 @@ local function fn()
 	if not TheWorld.ismastersim then
 		return inst
 	end
+
+	inst.sparklevel = inst.sparklevel or 1
 	
 	--spawn fx
 	inst.fx = {}

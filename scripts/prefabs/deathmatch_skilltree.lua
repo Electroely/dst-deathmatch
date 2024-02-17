@@ -30,10 +30,10 @@ local SKILLTREESTRINGS = {
 	IMPROVISER_BOUNCING_BOMBS_DESC = "Hearthsfire crystals will bounce in the air when landing after being thrown, causing them to explode again. Charging the crystals before throwing them causes them to bounce more times.",
 	IMPROVISER_PASSIVE_BOMBS_DESC = "Hearthsfire crystals will charge when you land regular attacks. Getting hit causes charged crystals to explode, damaging nearby enemies.",
 	IMPROVISER_HOMING_BOMBS_DESC = "Thrown Hearthsfire crystals will home in on nearby opponents. Crystals are thrown at a higher arc when this skill is active.",
-	IMPROVISER_BURNING_BOMBS_DESC = "Hearthsfire crystals will leave a sea of flame after exploding.",
+	IMPROVISER_BURNING_BOMBS_DESC = "Hearthsfire crystals will leave a ring of fire after exploding, dealing piercing damage to players inside.",
 	
-	LOADOUT_FORGE_MELEE_DESC = "The Forge's warriors use many melee weapons specializing in different combat scenarios for highly effective close-range combat.",
-	LOADOUT_FORGE_MAGE_DESC = "The Forge's warlocks rely on powerful magic to fight from a safe distance.",
+	LOADOUT_FORGE_MELEE_DESC = "The Forge's warriors use many melee weapons specializing in different situations for highly effective close-range combat.",
+	LOADOUT_FORGE_MAGE_DESC = "The Forge's warlocks make up for their lack of defensive capabilities with long range and powerful magic attacks.",
 }
 
 local SPELLCASTER_COL = -207
@@ -65,9 +65,20 @@ local IMPROVISER_COLS = {
 local IMPROVISER_LOCK_POS = {1, 52}
 
 --------------------------------------------------------------------------------------------------
-
+local function onhit_regularattackcheck(data)
+	if data == nil then
+		return false
+	end
+	if data.stimuli ~= nil then
+		return false
+	end
+	if data.weapon and data.weapon.components.weapon.projectile ~= nil and data.projectile == nil then
+		return false
+	end
+	return true
+end
 local function onhit_charge_bomb(inst, data)
-	if data == nil or data.stimuli ~= nil then
+	if not onhit_regularattackcheck(data) then
 		return
 	end
 	local items = inst.components.inventory and inst.components.inventory.itemslots or nil
@@ -96,7 +107,7 @@ end
 
 local ONHIT_REFRESH_AMOUNT = 0.1
 local function onhit_refresh_cooldowns(inst, data)
-	if data == nil or data.stimuli ~= nil then
+	if not onhit_regularattackcheck(data) then
 		return
 	end
 	local items = inst.components.inventory and inst.components.inventory.itemslots or nil
@@ -118,7 +129,7 @@ local function onhit_refresh_cooldowns(inst, data)
 end
 
 local function onhit_damagestack(inst, data)
-	if data == nil or data.stimuli ~= nil then
+	if not onhit_regularattackcheck(data) then
 		return
 	end
 	inst:DoTaskInTime(0, function(inst)
@@ -389,9 +400,11 @@ local function BuildSkillsData(SkillTreeFns)
             tags = {"loadout", "forge_melee"},
             onactivate = function(owner, from_load)
                 owner:AddTag("loadout_forge_melee")
+				owner:PushEvent("updateloadout")
             end,
             ondeactivate = function(owner, from_load)
                 owner:RemoveTag("loadout_forge_melee")
+				owner:PushEvent("updateloadout")
             end,
         },
 
@@ -420,9 +433,11 @@ local function BuildSkillsData(SkillTreeFns)
             tags = {"loadout", "forge_mage"},
             onactivate = function(owner, from_load)
                 owner:AddTag("loadout_forge_mage")
+				owner:PushEvent("updateloadout")
             end,
             ondeactivate = function(owner, from_load)
                 owner:RemoveTag("loadout_forge_mage")
+				owner:PushEvent("updateloadout")
             end,
         },
 		
