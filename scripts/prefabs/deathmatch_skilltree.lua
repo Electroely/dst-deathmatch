@@ -96,6 +96,9 @@ end
 
 local ONHIT_REFRESH_AMOUNT = 0.1
 local function onhit_refresh_cooldowns(inst, data)
+	if data == nil or data.stimuli ~= nil then
+		return
+	end
 	local items = inst.components.inventory and inst.components.inventory.itemslots or nil
 	local equips = inst.components.inventory and inst.components.inventory.equipslots or nil
 	if items then

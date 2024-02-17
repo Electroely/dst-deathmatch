@@ -53,7 +53,114 @@ local pickup_data = {
 	}
 }
 
+-------------------------------------------------------------------------
+----------------------- Prefab building functions -----------------------
+-------------------------------------------------------------------------
 
+local function OnTimerDone(inst, data)
+    if data.name == "buffover" then
+        inst.components.debuff:Stop()
+    end
+end
+
+local function MakeBuff(name, onattachedfn, onextendedfn, ondetachedfn, duration)
+    local function OnAttached(inst, target)
+        inst.entity:SetParent(target.entity)
+        inst.Transform:SetPosition(0, 0, 0) --in case of loading
+        inst:ListenForEvent("death", function()
+            inst.components.debuff:Stop()
+        end, target)
+
+        if onattachedfn ~= nil then
+            onattachedfn(inst, target)
+        end
+    end
+
+    local function OnExtended(inst, target)
+        inst.components.timer:StopTimer("buffover")
+        inst.components.timer:StartTimer("buffover", duration)
+
+        if onextendedfn ~= nil then
+            onextendedfn(inst, target)
+        end
+    end
+
+    local function OnDetached(inst, target)
+        if ondetachedfn ~= nil then
+            ondetachedfn(inst, target)
+        end
+
+        inst:Remove()
+    end
+
+    local function fn()
+        local inst = CreateEntity()
+
+        if not TheWorld.ismastersim then
+            --Not meant for client!
+            inst:DoTaskInTime(0, inst.Remove)
+            return inst
+        end
+
+        inst.entity:AddTransform()
+
+        --[[Non-networked entity]]
+        --inst.entity:SetCanSleep(false)
+        inst.entity:Hide()
+        inst.persists = false
+
+        inst:AddTag("CLASSIFIED")
+
+        inst:AddComponent("debuff")
+        inst.components.debuff:SetAttachedFn(OnAttached)
+        inst.components.debuff:SetDetachedFn(OnDetached)
+        inst.components.debuff:SetExtendedFn(OnExtended)
+        inst.components.debuff.keepondespawn = true
+
+        inst:AddComponent("timer")
+        inst.components.timer:StartTimer("buffover", duration)
+        inst:ListenForEvent("timerdone", OnTimerDone)
+
+        return inst
+    end
+
+    return Prefab("buff_"..name, fn)
+end
+
+------------------------------------------------------------------------
+local buff_prefabs = {}
+for name, data in pairs(pickup_data) do
+	if data.buff then
+		local buff = data.buff
+		local function OnAttached(inst, target)
+			if buff.damage then
+				target.components.combat.externaldamagemultipliers:SetModifier("pickup_"..name, buff.damage)
+			end
+			if buff.defense then
+				target.components.combat.externaldamagetakenmultipliers:SetModifier("pickup_"..name, buff.defense)
+			end
+			if buff.speed then
+				target.components.locomotor:SetExternalSpeedMultiplier(target, "pickup_"..name, buff.speed)
+			end
+			inst:ListenForEvent("clearpickupbuffs", function() inst.components.debuff:Stop() end, inst)
+		end
+		local function OnExtended(inst, target)
+
+		end
+		local function OnDetached(inst, target)
+			if buff.damage then
+				target.components.combat.externaldamagemultipliers:RemoveModifier("pickup_"..name)
+			end
+			if buff.defense then
+				target.components.combat.externaldamagetakenmultipliers:RemoveModifier("pickup_"..name)
+			end
+			if buff.speed then
+				target.components.locomotor:RemoveExternalSpeedMultiplier(target, "pickup_"..name)
+			end
+		end
+		table.insert(buff_prefabs, MakeBuff("pickup_"..name, OnAttached, OnExtended, OnDetached, data.buff.duration))
+	end
+end
 
 
 local prefabs = {
@@ -99,45 +206,7 @@ local function MakePickUp(name)
 				data.customfn(inst, doer)
 			end
 			if data.buff ~= nil then
-				if data.buff.damage and doer.components.combat then
-					if doer.deathmatch_pickuptasks[name.."attack"] ~= nil then
-						doer.deathmatch_pickuptasks[name.."attack"]:Cancel()
-						doer.deathmatch_pickuptasks[name.."attack"] = nil
-					end
-					doer.components.combat.externaldamagemultipliers:SetModifier("pickup", data.buff.damage, name)
-					local function removebuff(doer)
-						doer.components.combat.externaldamagemultipliers:RemoveModifier("pickup", name) 
-						doer:RemoveEventCallback("clearpickupbuffs", removebuff)
-					end
-					doer:ListenForEvent("clearpickupbuffs", removebuff)
-					doer.deathmatch_pickuptasks[name.."attack"] = doer:DoTaskInTime(data.buff.duration, removebuff)
-				end
-				if data.buff.defense and doer.components.combat then
-					if doer.deathmatch_pickuptasks[name.."defense"] ~= nil then
-						doer.deathmatch_pickuptasks[name.."defense"]:Cancel()
-						doer.deathmatch_pickuptasks[name.."defense"] = nil
-					end
-					doer.components.combat.externaldamagetakenmultipliers:SetModifier("pickup", data.buff.defense, name)
-					local function removebuff(doer) 
-						doer.components.combat.externaldamagetakenmultipliers:RemoveModifier("pickup", name) 
-						doer:RemoveEventCallback("clearpickupbuffs", removebuff)
-					end
-					doer.deathmatch_pickuptasks[name.."defense"] = doer:ListenForEvent("clearpickupbuffs", removebuff)
-					doer:DoTaskInTime(data.buff.duration, removebuff)
-				end
-				if data.buff.speed and doer.components.locomotor then
-					if doer.deathmatch_pickuptasks[name.."speed"] ~= nil then
-						doer.deathmatch_pickuptasks[name.."speed"]:Cancel()
-						doer.deathmatch_pickuptasks[name.."speed"] = nil
-					end
-					doer.components.locomotor:SetExternalSpeedMultiplier(doer, name, data.buff.speed)
-					local function removebuff(doer) 
-						doer.components.locomotor:RemoveExternalSpeedMultiplier(doer, name) 
-						doer:RemoveEventCallback("clearpickupbuffs", removebuff)
-					end
-					doer:ListenForEvent("clearpickupbuffs", removebuff)
-					doer.deathmatch_pickuptasks[name.."speed"] = doer:DoTaskInTime(data.buff.duration, removebuff)
-				end
+				doer:AddDebuff("buff_pickup_"..name, "buff_pickup_"..name)
 			end
 			inst:DoTaskInTime(0, inst.Remove)
 			return true
@@ -146,7 +215,7 @@ local function MakePickUp(name)
 		inst.components.inventoryitem.OnPickup = function(self, pickupguy)
 			local puff = SpawnPrefab("small_puff")
 			puff.Transform:SetPosition(inst:GetPosition():Get())
-			oldpickupfn(self, pickupguy)
+			return oldpickupfn(self, pickupguy)
 		end
 		
 		inst.Fade = function(inst)
@@ -172,6 +241,9 @@ end
 local res = {}
 for k,v in pairs(pickup_data) do
 	table.insert(res, MakePickUp(k))
+end
+for k,v in pairs(buff_prefabs) do
+	table.insert(res, v)
 end
 
 return unpack(res)
