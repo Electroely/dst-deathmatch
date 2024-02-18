@@ -1,7 +1,7 @@
 local function GetUpValue(func, varname)
 	local i = 1
 	local n, v = debug.getupvalue(func, 1)
-	while v ~= nil do
+	while n ~= nil do
 		--print("UPVAL GET", varname ,n, v)
 		if n == varname then
 			return v
@@ -13,7 +13,7 @@ end
 local function ReplaceUpValue(func, varname, newvalue)
 	local i = 1
 	local n, v = debug.getupvalue(func, 1)
-	while v ~= nil do
+	while n ~= nil do
 		--print("UPVAL REPLACE",varname,n, v)
 		if n == varname then
 			debug.setupvalue(func, i, newvalue)
@@ -26,7 +26,7 @@ end
 local function PrintUpValues(func) --debug
 	local i = 1
 	local n, v = debug.getupvalue(func, 1)
-	while v ~= nil do
+	while n ~= nil do
 		print("UPVAL", n, v)
 		i = i + 1
 		n, v = debug.getupvalue(func, i)
