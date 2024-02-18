@@ -1,17 +1,113 @@
 local G = GLOBAL
 local require = G.require
+local unpack = G.unpack
+
+local EQUIPSLOTS = G.EQUIPSLOTS
 
 local UpValues = require("deathmatch_upvaluehacker")
 local GetUpValue = UpValues.Get
 local ReplaceUpValue = UpValues.Replace
 --here comes the worst hack i've ever had to do ever
+local custom_common_postinits = {
+	wolfgang = function(inst)
+		
+	end,
+	wendy = function(inst)
+		inst.AnimState:AddOverrideBuild("wendy_channel")
+		inst.AnimState:AddOverrideBuild("player_idles_wendy")
+	end,
+	woodie = function(inst)
+		inst.AnimState:OverrideSymbol("round_puff01", "round_puff_fx", "round_puff01")
+	end,
+	wathgrithr = function(inst)
+		inst.AnimState:AddOverrideBuild("wathgrithr_sing")
+		inst.customidleanim = "idle_wathgrithr"
+
+		inst.components.talker.mod_str_fn = G.Umlautify
+	end,
+	webber = function(inst)
+		inst.AnimState:AddOverrideBuild("player_idles_webber")
+		inst.AnimState:AddOverrideBuild("webber_spiderwhistle")
+		inst.AnimState:AddOverrideBuild("player_spider_repellent")
+	end,
+	wortox = function(inst)
+
+	end,
+	wanda = function(inst)
+		inst.AnimState:AddOverrideBuild("player_idles_wanda")
+		inst.AnimState:AddOverrideBuild("wanda_basics")
+		inst.AnimState:AddOverrideBuild("wanda_attack")
+	end,
+	wonkey = function(inst)
+
+	end,
+}
+local custom_master_postinits = {
+	wilson = nil,
+	willow = function(inst)
+		inst.customidleanim = function(inst)
+			local item = inst.components.inventory:GetEquippedItem(EQUIPSLOTS.HANDS)
+			return item ~= nil and item.prefab == "bernie_inactive" and "idle_willow" or nil
+		end
+	end,
+	wolfgang = function(inst)
+		inst.customidleanim = "idle_wolfgang"
+		inst.talksoundoverride = nil
+		inst.hurtsoundoverride = nil
+	end,
+	wendy = function(inst)
+		inst.customidleanim = "idle_wendy"
+	end,
+	wx78 = function(inst)
+		inst.customidlestate = "wx78_funnyidle"
+	end,
+	wickerbottom = function(inst)
+		inst.customidleanim = function(inst)
+			return inst.AnimState:CompareSymbolBuilds("hand", "hand_wickerbottom") and "idle_wickerbottom" or nil
+		end
+	end,
+	woodie = function(inst)
+		inst.customidleanim = function(inst)
+			local item = inst.components.inventory:GetEquippedItem(EQUIPSLOTS.HANDS)
+			return item ~= nil and item.prefab == "lucy" and "idle_woodie" or nil
+		end
+	end,
+	wes = function(inst)
+		inst.customidlestate = "wes_funnyidle"
+	end,
+	waxwell = function(inst)
+		inst.customidlestate = "waxwell_funnyidle"
+	end,
+	wathgrithr = function(inst)
+		inst.talker_path_override = "dontstarve_DLC001/characters/"
+	end,
+	webber = nil,
+	winona = nil,
+	warly = nil,
+	wortox = function(inst)
+		inst.customidleanim = "idle_wortox"
+	end,
+	wormwood = nil,
+	wurt = function(inst)
+
+	end,
+	walter = nil, --he gets to keep woby
+	wanda = function(inst)
+		inst.customidleanim = "idle_wanda"
+		inst.talker_path_override = "wanda2/characters/"
+	end,
+	wonkey = function(inst)
+		inst.customidleanim = "idle_wonkey"
+		inst.talker_path_override = "monkeyisland/characters/"
+	end,
+}
 local beardfns = {}
 function G.require(modulename, ...)
 	--using the local version of require since it isn't replaced
-	local val = require(modulename, ...) 
+	local val = {require(modulename, ...)}
 	if modulename == "prefabs/player_common" then
-		local val_old = val
-		function val(name, customprefabs, customassets, common_postinit, master_postinit, ...)
+		local val_old = val[1]
+		local function newval(name, customprefabs, customassets, common_postinit, master_postinit, ...)
 			if (name == "wilson" or name == "webber") and master_postinit ~= nil then
 				beardfns[name] = {
 					GetUpValue(master_postinit, "OnResetBeard"),
@@ -22,13 +118,31 @@ function G.require(modulename, ...)
 			end
 			return val_old(name, customprefabs, customassets, common_postinit, master_postinit, ...)
 		end
+		val[1] = newval
 	end
-	return val
+	return unpack(val)
 end
 require("prefabs/wormwood")
 require("prefabs/wilson")
 require("prefabs/webber")
 G.require = require --putting in back the original because i dont want to perma replace
+local MakePlayerCharacter_old = require("prefabs/player_common")
+local function MakePlayerCharacter(name, customprefabs, customassets, common_postinit, master_postinit, ...)
+	if custom_common_postinits[name] ~= nil then
+		print("loading custom common postinit for",name)
+		common_postinit = custom_common_postinits[name]
+	end
+	if custom_master_postinits[name] ~= nil then
+		print("loading custom master postinit for",name)
+		master_postinit = custom_master_postinits[name]
+	end
+	return MakePlayerCharacter_old(name, customprefabs, customassets, common_postinit, master_postinit, ...)
+end
+G.package.loaded["prefabs/player_common"] = MakePlayerCharacter
+for k, v in pairs(G.DST_CHARACTERLIST) do
+	G.package.loaded["prefabs/"..v] = nil
+	G.Prefabs[v] = require("prefabs/"..v)
+end
 
 local function CosmeticSaveData(inst)
 	if not G.TheWorld.ismastersim then return end
@@ -110,12 +224,6 @@ for k, v in pairs({"wilson", "webber"}) do
 	end)
 end
 
---wigfrid
-AddPrefabPostInit("wathgrithr", function(inst)
-	if not G.TheWorld.ismastersim then return end
-	inst.event_listeners.onattackother[inst][3] = function() end
-end)
-
 --wolfgang
 AddPrefabPostInit("wolfgang", function(inst)
 	inst.OnLoad = nil
@@ -128,15 +236,35 @@ AddPrefabPostInit("wolfgang", function(inst)
 		if num >= 1 and num <= 3 then
 			if num == 1 then
 				self.components.skinner:SetSkinMode("wimpy_skin", "wolfgang_skinny")
+				self.talksoundoverride = "dontstarve/characters/wolfgang/talk_small_LP"
+				self.hurtsoundoverride = "dontstarve/characters/wolfgang/hurt_small"
+				self.customidleanim = "idle_wolfgang_skinny"
 			elseif num == 2 then
 				self.components.skinner:SetSkinMode("normal_skin", "wolfgang")
+				self.talksoundoverride = nil
+				self.hurtsoundoverride = nil
+				self.customidleanim = "idle_wolfgang"
 			else
 				self.components.skinner:SetSkinMode("mighty_skin", "wolfgang_mighty")
+				self.talksoundoverride = "dontstarve/characters/wolfgang/talk_large_LP"
+				self.hurtsoundoverride = "dontstarve/characters/wolfgang/hurt_large"
+				self.customidleanim = "idle_wolfgang_mighty"
 			end
 			self.cosmeticstate = num
 		end
 	end
 	CosmeticSaveData(inst)
+end)
+
+AddPrefabPostInit("willow", function(inst)
+	inst:RemoveTag("heatresistant")
+end)
+
+AddPrefabPostInit("wx78", function(inst)
+	inst:RemoveTag("batteryuser")
+	inst:RemoveTag("electricdamageimmune")
+	inst:RemoveTag("HASHEATER")
+	inst:RemoveTag("upgrademoduleowner")
 end)
 
 --webber
@@ -174,12 +302,7 @@ AddPrefabPostInit("wurt", function(inst)
 	CosmeticSaveData(inst)
 end)
 
-AddPrefabPostInit("woodie", function(inst)
-	--this does nothing now
-	--if inst.components.beaverness then inst.components.beaverness:StopTimeEffect() end
-	
-	--i'll need to fix the weremeter showing up eventually so here's this
-end)
+
 -- wortox
 AddPrefabPostInit("wortox_soul_spawn", function(inst)
 	inst:DoTaskInTime(0, inst.Remove)

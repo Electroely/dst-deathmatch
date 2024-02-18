@@ -292,6 +292,17 @@ AddPrefabPostInit("lavaarena_rechargerhat", function(inst)
 	end
 end)
 G.STRINGS.NAME_DETAIL_EXTENTION.LAVAARENA_RECHARGERHAT = nil
+local range_postinits = {
+	fireballstaff = 24,
+	healingstaff = 24,
+}
+for prefab, range in pairs(range_postinits) do
+	AddPrefabPostInit(prefab, function(inst)
+		if inst.components.aoetargeting then
+			inst.components.aoetargeting:SetRange(range)
+		end
+	end)
+end
 AddPrefabPostInit("glommer", function(inst)
 	if not G.TheWorld.ismastersim then
 		return

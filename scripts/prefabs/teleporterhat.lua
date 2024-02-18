@@ -1,4 +1,4 @@
-local name = "eyecirclet"
+local name = "recharger"
 local build = "hat_"..name
 local symbol = name.."hat"
 
@@ -68,7 +68,7 @@ local function fn()
 	inst:AddTag("focusattack")
 	
     inst:AddComponent("aoetargeting")
-    inst.components.aoetargeting:SetRange(16)
+    inst.components.aoetargeting:SetRange(20)
     inst.components.aoetargeting.reticule.reticuleprefab = "reticule"
     inst.components.aoetargeting.reticule.pingprefab = nil
     inst.components.aoetargeting.reticule.targetfn = ReticuleTargetFn
@@ -87,7 +87,7 @@ local function fn()
 	inst:AddComponent("inspectable")
 	
 	inst:AddComponent("inventoryitem")
-	inst.components.inventoryitem:ChangeImageName("lavaarena_rechargerhat")
+	inst.components.inventoryitem.atlasname = "images/inventoryimages/teleporterhat.xml"
 
 	inst:AddComponent("equippable")
 	inst.components.equippable:SetOnEquip(onequip)

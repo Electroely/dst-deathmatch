@@ -97,6 +97,7 @@ PrefabFiles = {
 	"shadowweapons",
 	"invslotdummy",
 	"firebomb_firecircle",
+	"deathmatch_healingstaffbuff",
 	
 	"maxwelllight",
 	"maxwelllight_flame",
@@ -151,9 +152,15 @@ Assets = {
 	
 	Asset("IMAGE", "images/deathmatch_inventorybar.tex"),
 	Asset("ATLAS", "images/deathmatch_inventorybar.xml"),
+
+	Asset("ATLAS", "images/inventoryimages/teleporterhat.xml"),
+	Asset("IMAGE", "images/inventoryimages/teleporterhat.tex"),
 	
 	Asset("SHADER", "shaders/characterhead.ksh"),
 }
+
+RegisterInventoryItemAtlas("images/inventoryimages/teleporterhat.xml","teleporterhat")
+
 local function UserOnline(clienttable, userid)
 	local found = false
 	for k, v in pairs(clienttable) do
