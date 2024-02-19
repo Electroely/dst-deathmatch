@@ -1028,7 +1028,7 @@ return {
         {
           id = 69,
           name = "",
-          type = "ruinsrelic_table",
+          type = "wood_table_round",
           shape = "rectangle",
           x = 832,
           y = 1280,
@@ -1041,28 +1041,28 @@ return {
         {
           id = 70,
           name = "",
-          type = "ruinsrelic_chair",
+          type = "wood_stool",
           shape = "rectangle",
-          x = 808,
+          x = 800,
           y = 1280,
           width = 0,
           height = 0,
           rotation = 0,
           visible = true,
-          properties = {}
+          properties = {data={savedrotation={rotation=0}}}
         },
         {
           id = 71,
           name = "",
-          type = "ruinsrelic_chair",
+          type = "wood_stool",
           shape = "rectangle",
-          x = 856,
+          x = 864,
           y = 1280,
           width = 0,
           height = 0,
           rotation = 0,
           visible = true,
-          properties = {}
+          properties = {data={savedrotation={rotation=180}}}
         },
         {
           id = 72,

@@ -28,8 +28,9 @@ AddPrefabPostInit("player_classified", function(inst)
 	end)
 	inst._choosinggear = G.net_bool(inst.GUID, "deathmatch.choosinggear", "choosinggearchanged")
 	inst._arenachoice = G.net_smallbyte(inst.GUID, "deathmatch.arenachoice", "arenachoicedirty")
+	inst._arenachoice:set(1) --default atrium
 	inst._modechoice = G.net_tinybyte(inst.GUID, "deathmatch.modechoice", "modechoicedirty")
-	inst._modechoice:set(1)
+	inst._modechoice:set(1) --default ffa
 	if not G.TheWorld.ismastersim then
 		inst:ListenForEvent("choosinggearchanged", function(inst, data)
 			if inst._parent.HUD and inst._choosinggear:value() then

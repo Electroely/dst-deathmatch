@@ -32,6 +32,10 @@ if COMPONENT_ACTIONS and COMPONENT_ACTIONS.INVENTORY then
 		return unpack(rtn)
 	end
 end
+
+AddPrefabPostInit("punchingbag", function(inst)
+	inst:AddTag("deathmatch_punchingbag")
+end)
 AddPrefabPostInit("dead_sea_bones", function(inst)
 	if inst.Physics ~= nil then
 		inst.Physics:SetActive(false)
@@ -495,8 +499,7 @@ AddPrefabPostInit("world", function(inst) --can't this just go into prefabs/deat
 		inst:AddComponent("deathmatch_manager")
 		inst:DoTaskInTime(0, function(inst)
 			inst.components.deathmatch_manager:SetGamemode(1, true)
-			inst.components.deathmatch_manager:SetNextArena("random")
-			G.print("remember to announce on steam group!") --TODO: remove
+			inst.components.deathmatch_manager:SetNextArena("atrium")
 		end)
 		inst:ListenForEvent("wehaveawinner", function(world, winner)
 			if type(winner) == "number" then
