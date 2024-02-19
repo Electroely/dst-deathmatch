@@ -105,3 +105,22 @@ SkillTreeData.ValidateCharacterData = function(self, characterprefab, activateds
 	skillxp = available_skill_points
 	return ValidateCharacterData_old(self, characterprefab, activatedskills, skillxp, ...)
 end
+
+GLOBAL.RespecSkillsForPlayer = function(player)
+    local matchstatus = GLOBAL.TheWorld.net.deathmatch_netvars.globalvars.matchstatus:value()
+    if matchstatus == 1 or matchstatus == 2 then
+        return
+    end
+    if player and player.components.skilltreeupdater then
+        player.components.skilltreeupdater:SetSkipValidation(true)
+        local skills = player.components.skilltreeupdater:GetActivatedSkills()
+        if skills then
+            for skill, enabled in pairs(skills) do
+                if enabled then
+                    player.components.skilltreeupdater:DeactivateSkill(skill)
+                end
+            end
+        end
+        player.components.skilltreeupdater:SetSkipValidation(false)
+    end
+end

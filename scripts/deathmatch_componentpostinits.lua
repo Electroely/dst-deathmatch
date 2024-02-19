@@ -196,7 +196,7 @@ AddComponentPostInit("combat", function(self, inst)
 				for attacker, v in pairs(target.attackers) do
 					if v and attacker:IsValid() then
 						numattackers = numattackers + 1
-						if numattackers > MAX_ATTACKERS then
+						if numattackers >= MAX_ATTACKERS then
 							return false
 						end
 					else

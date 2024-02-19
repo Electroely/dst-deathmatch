@@ -190,6 +190,7 @@ AddPrefabPostInit("wormwood", function(inst)
 	end)
 	--new function for /setstate
 	inst.cosmeticstate = inst.cosmeticstate or 1
+	inst.maxcosmeticstate = 4
 	function inst:ChangeCosmeticState(num) --input: number 1-4
 		if not IsValidSkin(self) then return end
 		if num >= 1 and num <= 4 and self.components.bloomness then
@@ -206,6 +207,7 @@ for k, v in pairs({"wilson", "webber"}) do
 	AddPrefabPostInit(v, function(inst)
 		inst.beardfns = beardfns[v]
 		inst.cosmeticstate = inst.cosmeticstate or 1
+		inst.maxcosmeticstate = 4
 		function inst:ChangeCosmeticState(num)
 			if not IsValidSkin(self) then return end
 			if num >= 1 and num <= 4 and self.beardfns ~= nil then
@@ -231,6 +233,7 @@ AddPrefabPostInit("wolfgang", function(inst)
 	inst.OnPreLoad = nil
 	
 	inst.cosmeticstate = inst.cosmeticstate or 2
+	inst.maxcosmeticstate = 3
 	function inst:ChangeCosmeticState(num)--1-3: wimpy, normal, mighty
 		if not IsValidSkin(self) then return end
 		if num >= 1 and num <= 3 then
@@ -239,18 +242,46 @@ AddPrefabPostInit("wolfgang", function(inst)
 				self.talksoundoverride = "dontstarve/characters/wolfgang/talk_small_LP"
 				self.hurtsoundoverride = "dontstarve/characters/wolfgang/hurt_small"
 				self.customidleanim = "idle_wolfgang_skinny"
+				self.AnimState:SetScale(0.9, 0.9, 0.9)
 			elseif num == 2 then
 				self.components.skinner:SetSkinMode("normal_skin", "wolfgang")
 				self.talksoundoverride = nil
 				self.hurtsoundoverride = nil
 				self.customidleanim = "idle_wolfgang"
+				self.AnimState:SetScale(1,1,1)
 			else
 				self.components.skinner:SetSkinMode("mighty_skin", "wolfgang_mighty")
 				self.talksoundoverride = "dontstarve/characters/wolfgang/talk_large_LP"
 				self.hurtsoundoverride = "dontstarve/characters/wolfgang/hurt_large"
 				self.customidleanim = "idle_wolfgang_mighty"
+				self.AnimState:SetScale(1.2,1.2,1.2)
 			end
 			self.cosmeticstate = num
+		end
+	end
+	CosmeticSaveData(inst)
+end)
+
+AddPrefabPostInit("wanda", function(inst)
+	inst.cosmeticstate = 2
+	inst.maxcosmeticstate = 3
+	function inst:ChangeCosmeticState(num)--1-3: young, normal, old
+		if not IsValidSkin(self) then return end
+		if num >= 1 and num <= 3 then
+			if num == 1 then
+				inst.components.skinner:SetSkinMode("young_skin", "wilson")
+				inst.talksoundoverride = "wanda2/characters/wanda/talk_young_LP"
+				--inst.hurtsoundoverride = "dontstarve/characters/wolfgang/hurt_large"
+			elseif num == 2 then
+				inst.components.skinner:SetSkinMode("normal_skin", "wilson")
+				inst.talksoundoverride = nil
+				inst.hurtsoundoverride = nil
+			elseif num == 3 then
+				inst.components.skinner:SetSkinMode("old_skin", "wilson")
+				inst.talksoundoverride = "wanda2/characters/wanda/talk_old_LP"
+				--inst.hurtsoundoverride = "dontstarve/characters/wolfgang/hurt_small"
+			end
+			inst.cosmeticstate = num
 		end
 	end
 	CosmeticSaveData(inst)
@@ -275,7 +306,6 @@ end)
 --wortox
 AddPrefabPostInit("wortox", function(inst)
 	inst:RemoveTag("monster")
-	--souls should probably be removed here
 end)
 
 --wurt
@@ -283,14 +313,10 @@ AddPrefabPostInit("wurt", function(inst)
 	inst:RemoveTag("merm")
 	
 	inst.cosmeticstate = inst.cosmeticstate or 1
+	inst.maxcosmeticstate = 2
 	function inst:ChangeCosmeticState(num)
 		if not IsValidSkin(self) then return end
 		if num >= 1 and num <= 2 then
-			if num ~= self.cosmeticstate then
-				local fx = G.SpawnPrefab("small_puff") --fx because it looks awkward
-				fx.Transform:SetScale(1.5, 1.5, 1.5)
-				fx.Transform:SetPosition(self.Transform:GetWorldPosition())
-			end
 			if num == 1 then
 				self.components.skinner:SetSkinMode("normal_skin", "wurt")
 			else

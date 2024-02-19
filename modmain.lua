@@ -150,6 +150,9 @@ Assets = {
 	Asset("ATLAS", "images/teamselect_pole.xml"),
 	Asset("IMAGE", "images/teamselect_flag.tex"),
 	Asset("ATLAS", "images/teamselect_flag.xml"),
+
+	Asset("ATLAS", "images/respecbutton.xml"),
+	Asset("IMAGE", "images/respecbutton.tex"),
 	
 	Asset("IMAGE", "images/deathmatch_inventorybar.tex"),
 	Asset("ATLAS", "images/deathmatch_inventorybar.xml"),
@@ -430,68 +433,58 @@ local function OnInfoScreen()
 	end
 end
 
+local function OnRespecButton()
+	if G.ThePlayer then
+		G.RespecSkillsForPlayer(G.ThePlayer)
+		SendModRPCToServer(GetModRPC(modname, "deathmatch_respec"))
+	end
+end
+
+local function OnSetstateButton()
+	UserCommands.RunTextUserCommand("setstate 0", G.ThePlayer, false)
+end	
+
+local SETSTATE_VALID = {
+	wilson = true,
+	wolfgang = true,
+	webber = true,
+	wormwood = true,
+	wurt = true,
+	wanda = true,
+}
 AddClassPostConstruct("widgets/mapcontrols", function(self)
-	self.startDMBtn = self:AddChild(ImageButton(GLOBAL.HUD_ATLAS, "tab_fight.tex", nil, nil, nil, nil, {1,1}, {0,0}))
-    self.startDMBtn:SetOnClick(OnStartDM)
-	self.startDMBtn:SetPosition(-10, 20)
-	self.startDMBtn:SetScale(0.8)
+	--self.startDMBtn = self:AddChild(ImageButton(GLOBAL.HUD_ATLAS, "tab_fight.tex", nil, nil, nil, nil, {1,1}, {0,0}))
+    --self.startDMBtn:SetOnClick(OnStartDM)
+	--self.startDMBtn:SetPosition(-10, 20)
+	--self.startDMBtn:SetScale(0.8)
 	
-	self.changeTeam = self:AddChild(ImageButton("images/changeTeamFlag.xml", "changeTeamFlag.tex", nil, nil, nil, nil, {1,1}, {0,0}))
-	self.changeTeam:SetScale(0.15)
-	self.changeTeam:SetPosition(-40, 80)
+	self.respec_button = self:AddChild(ImageButton("images/respecbutton.xml", "respecbutton.tex", nil, nil, nil, nil, {1,1}, {0,0}))
+	self.respec_button:SetScale(0.15)
+	self.respec_button:SetPosition(-40, 10)
+	self.respec_button:SetTooltip(GLOBAL.DEATHMATCH_STRINGS.RESPEC)
+	self.respec_button:SetOnClick(OnRespecButton)
 	
-	self.changeTeam.changeTeamPole = self.changeTeam:AddChild(Image("images/changeTeamPole.xml", "changeTeamPole.tex"))
-	
-	local _OnGainFocus = self.changeTeam.OnGainFocus
-	function self.changeTeam:OnGainFocus(...)
-		_OnGainFocus(self, ...)
-		
-		if self.image_focus == self.image_normal and self.scale_on_focus and self.focus_scale and self.changeTeamPole ~= nil then
-			self.changeTeamPole:SetScale(self.focus_scale[1], self.focus_scale[2], self.focus_scale[3])
-		end
+	if G.ThePlayer and SETSTATE_VALID[G.ThePlayer.prefab] then
+		local imagename = G.ThePlayer.prefab
+		self.setstate_button = self:AddChild(ImageButton("images/crafting_menu_avatars.xml", "avatar_"..imagename..".tex", nil, nil, nil, nil, {1,1}, {0,0}))
+		self.setstate_button:SetOnClick(OnSetstateButton)
+		self.setstate_button:SetTooltip(GLOBAL.DEATHMATCH_STRINGS.SETSTATE)
+		self.setstate_button:SetScale(0.15)
+		self.setstate_button:SetPosition(0, 10)
 	end
-	
-	local _OnLoseFocus = self.changeTeam.OnLoseFocus
-	function self.changeTeam:OnLoseFocus(...)
-		_OnLoseFocus(self, ...)
-		
-		if self.image_focus == self.image_normal and self.scale_on_focus and self.normal_scale and self.changeTeamPole ~= nil then
-			self.changeTeamPole:SetScale(self.normal_scale[1], self.normal_scale[2], self.normal_scale[3])
-		end
-	end
-	
-	self.infoScreen = self:AddChild(ImageButton("images/button_icons.xml", "info.tex", nil, nil, nil, nil, {1,1}, {0,0}))
-	self.infoScreen:SetOnClick(OnInfoScreen)
-	self.infoScreen:SetScale(0.15)
-	self.infoScreen:SetPosition(0, 83)
 	
 	self.despawnBtn = self:AddChild(ImageButton("minimap/minimap_data.xml", "portal_dst.png", nil, nil, nil, nil, {1,1}, {0,0}))
+	self.despawnBtn:SetTooltip(GLOBAL.DEATHMATCH_STRINGS.DESPAWN)
 	self.despawnBtn:SetOnClick(OnDespawnDM)
 	self.despawnBtn:SetScale(0.5)
-	self.despawnBtn:SetPosition(40, 82)
+	self.despawnBtn:SetPosition(40, 10)
 end)
 
 AddClassPostConstruct("screens/redux/lobbyscreen", function(self)
 	self.deathmatch_timer = self.panel_root:AddChild(Deathmatch_LobbyTimer())
 	self.deathmatch_timer:SetPosition(-160, 340)
 end)
-local CHARACTERS_EXTRAS = {
-	warly = true,
-	walter = true,
-	wormwood = true,
-	wortox = true,
-	wurt = true,
-}
-AddClassPostConstruct("widgets/teammatehealthbadge", function(self)
-	local SetPlayer_old = self.SetPlayer
-	self.SetPlayer = function(self, player, ...)
-		local rtn = {SetPlayer_old(self, player, ...)}
-		if player and CHARACTERS_EXTRAS[player.prefab] then
-			self.anim:GetAnimState():OverrideSymbol("character_wilson", "partyhealth_extras", "character_"..player.prefab)
-		end
-		return G.unpack(rtn)
-	end
-end)
+
 ---------------------------------------------------------------------
 local _name = GLOBAL.STRINGS.NAMES
 
@@ -691,6 +684,11 @@ end)
 local function checknumber(v)
 	return type(v) == "number" and v < 60 and v > -60
 end
+
+AddModRPCHandler(modname, "deathmatch_respec", function(inst)
+	if inst == nil then return end
+	G.RespecSkillsForPlayer(inst)
+end)
 -- AddModRPCHandler(modname, "deathmatch_currentreticule_change", function(inst, slot)
 	-- if inst == nil or slot == nil then return end
 	-- if inst.components.playercontroller then

@@ -114,8 +114,15 @@ AddUserCommand("setstate", {
 	params = {"num"},
 	vote = false,
 	serverfn = function(params, caller)
-		if caller.ChangeCosmeticState and tonumber(params.num) then
-			caller:ChangeCosmeticState(math.floor(tonumber(params.num)))
+		local num = tonumber(params.num) or 0
+		if caller.ChangeCosmeticState then
+			if num == 0 then
+				num = caller.cosmeticstate + 1
+				if num > caller.maxcosmeticstate then
+					num = 1
+				end
+			end
+			caller:ChangeCosmeticState(math.floor(num))
 		end
 	end,
 })

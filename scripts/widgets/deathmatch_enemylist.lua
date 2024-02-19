@@ -29,10 +29,8 @@ end)
 function Deathmatch_EnemyList:GetPlayerTable()
     local ClientObjs = TheNet:GetClientTable()
     if ClientObjs == nil then
-        return {}
-    elseif TheNet:GetServerIsClientHosted() then
-        return ClientObjs
-    end
+        return {}, {}
+	end
 
     --remove dedicate host from player list and add team & hp data
     for i, v in ipairs(ClientObjs) do

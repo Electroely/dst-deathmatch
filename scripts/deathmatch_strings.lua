@@ -21,6 +21,11 @@ return {
 	ARENA_RANDOM = "Random",
 	
 	GOBACK = "Go Back",
+	DESPAWN = "Change Characters",
+	RESPEC = "Reset Insight",
+	SETSTATE = "Change Look",
+	TIPS_BUTTON = "Tips",
+	
 	
 	CHATMESSAGES = {
 		DESPAWN_MIDMATCH = "Can't despawn during a match!",
@@ -194,7 +199,7 @@ return {
 		INFERNALSTAFF = {
 			TITLE = "Infernal Staff",
 			BODY = [[
-				DAMAGE (REGULAR): 35 - DAMAGE (SPECIAL): 300 - COOLDOWN: 12*NEWLINE*NEWLINE
+				DAMAGE (REGULAR): 20 - DAMAGE (SPECIAL): 300 - COOLDOWN: 12*NEWLINE*NEWLINE
 				The Infernal Staff is a ranged weapon capable of calling a meteor that deals a massive amount of damage after a short delay.*NEWLINE*NEWLINE
 				The long time it takes to cast the meteor spell can make it difficult to land, but with its high casting range, thw whereabouts of the meteor 
 				can catch opponents off guard.
@@ -203,7 +208,7 @@ return {
 		LIVINGSTAFF = {
 			TITLE = "Living Staff",
 			BODY = [[
-				DAMAGE (REGULAR): 35 - COOLDOWN: 24*NEWLINE*NEWLINE
+				DAMAGE (REGULAR): 20 - COOLDOWN: 24*NEWLINE*NEWLINE
 				The Living Staff is a ranged weapon capable of creating a field of Life Blossoms that halve the damage taken by allies and slow the movement speed of opponents 
 				inside.*NEWLINE*NEWLINE
 			]]

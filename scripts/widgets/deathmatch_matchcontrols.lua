@@ -1,6 +1,7 @@
 local Widget = require("widgets/widget")
 local Image = require("widgets/image")
 local ImageButton = require("widgets/imagebutton")
+local DeathmatchMenu = require "widgets/deathmatch_menu"
 
 local arenas = require("prefabs/arena_defs")
 
@@ -143,8 +144,15 @@ local submenu_defs = {
 		}
 	},
 	{ name = "info",
-		str = "info",
+		str = DEATHMATCH_STRINGS.TIPS_BUTTON,
 		imgfn = function() return Image("images/matchcontrols_infobutton.xml", "matchcontrols_infobutton.tex") end,
+		onclickfn = function()
+			if TheFrontEnd:GetActiveScreen() == "Deathmatch_Menu" then
+				TheFrontEnd:PopScreen()
+			else
+				TheFrontEnd:PushScreen(DeathmatchMenu())
+			end
+		end,
 	}
 }
 
