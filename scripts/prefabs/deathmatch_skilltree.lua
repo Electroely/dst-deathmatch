@@ -105,7 +105,7 @@ local function onattacked_explode_bomb(inst, data)
 	end
 end
 
-local ONHIT_REFRESH_AMOUNT = 0.1
+local ONHIT_REFRESH_AMOUNT = 1.2
 local function onhit_refresh_cooldowns(inst, data)
 	if not onhit_regularattackcheck(data) then
 		return
@@ -115,14 +115,16 @@ local function onhit_refresh_cooldowns(inst, data)
 	if items then
 		for slot, item in pairs(items) do
 			if item and item.components.rechargeable and not item.components.rechargeable:IsCharged() then
-				item.components.rechargeable:SetPercent(math.min(item.components.rechargeable:GetPercent()+ONHIT_REFRESH_AMOUNT,1))
+				local recharge_amount = ONHIT_REFRESH_AMOUNT/item.components.rechargeable.chargetime
+				item.components.rechargeable:SetPercent(math.min(item.components.rechargeable:GetPercent()+recharge_amount,1))
 			end
 		end
 	end
 	if equips then
 		for slot, item in pairs(equips) do
 			if item and item.components.rechargeable and not item.components.rechargeable:IsCharged() then
-				item.components.rechargeable:SetPercent(math.min(item.components.rechargeable:GetPercent()+ONHIT_REFRESH_AMOUNT,1))
+				local recharge_amount = ONHIT_REFRESH_AMOUNT/item.components.rechargeable.chargetime
+				item.components.rechargeable:SetPercent(math.min(item.components.rechargeable:GetPercent()+recharge_amount,1))
 			end
 		end
 	end

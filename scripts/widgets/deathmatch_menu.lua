@@ -15,19 +15,24 @@ local ImageButton = require "widgets/imagebutton"
 local TIP_SORT_ORDER = 
 {
 	"WELCOME",
-	"TEAMS_ENABLED",
-	"TEAMMODE_HALF",
-	"TEAMMODE_PAIRS",
-	"CASTAOEEXPLAIN",
-	"FIREBOMBEXPLAIN",
-	"REVIVERHEARTEXPLAIN",
-	"PICKUPEXPLAIN",
-	"DESPAWNEXPLAIN",
-	"SIZETEST",
+	"TEAMS",
+	"ARENAS",
+	"SKILLTREE",
+	"FIREBOMB",
+	"FORGE_MELEE",
+	"PITHPIKE",
+	"SPIRALSPEAR",
+	"FORGINGHAMMER",
+	"BLACKSMITHSEDGE",
+	"FORGE_MAGE",
+	"INFERNALSTAFF",
+	"LIVINGSTAFF",
+	"TOMEOFBECKONING",
+	"CROWNOFTELEPORTATION",
 }
 
 local function GetDeathmatchPopupString(name)
-	local data = DEATHMATCH_STRINGS.POPUPS[name]
+	local data = DEATHMATCH_STRINGS.TIPS[name]
 	local body = string.gsub(data.BODY, "\n", "")
 	body = string.gsub(body, "\t", "")
 	body = string.gsub(body, "*NEWLINE", "\n")
@@ -58,11 +63,11 @@ local Deathmatch_Menu = Class(Screen, function(self)
 	self.tip_list = self.root:AddChild(self:BuildTipsMenu())
 	self.tip_list:SetPosition(-320, 0)
 
-	self.title = self.root:AddChild(Text(UIFONT, 30))
+	self.title = self.root:AddChild(Text(NEWFONT_OUTLINE, 30))
 	self.title:SetPosition(110, 215)
-	self.title:SetRegionSize(225, 35)
+	--self.title:SetRegionSize(225, 35)
 	
-	self.body = self.root:AddChild(Text(UIFONT, 25))
+	self.body = self.root:AddChild(Text(BODYTEXTFONT, 20))
 	self.body:SetPosition(110, -80)
 	self.body:EnableWordWrap(true)
 	self.body:SetRegionSize(550, 250)
@@ -72,7 +77,7 @@ local Deathmatch_Menu = Class(Screen, function(self)
 	local tip_grid_data = {}
 
 	for i, v in ipairs(TIP_SORT_ORDER) do
-		local tip = DEATHMATCH_STRINGS.POPUPS[v]
+		local tip = DEATHMATCH_STRINGS.TIPS[v]
 		if tip then
 			table.insert(tip_grid_data, {title = tip.TITLE, tip = v.BODY, popup = v})
 		end

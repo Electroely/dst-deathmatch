@@ -86,119 +86,152 @@ return {
 		GENERIC = "Team up with",
 		DISBAND = "Disband"
 	},
-	POPUPS = { --newlines and tabs are ignored when loading body strings
+	TIPS = { --newlines and tabs are ignored when loading body strings
 				--*NEWLINE gets parsed into a newline
 		WELCOME = {
-			TITLE = "Welcome to Deathmatch!",
+			TITLE = "Deathmatch",
 			BODY = [[
-				Welcome to Deathmatch! In this mode, you can fight 
-				other players in battle arenas using weapons from 
-				The Forge! This window will show you various tips as 
-				new things happen while you play. You can view all 
-				tips by typing "/dm help" in chat. 
-				You'll need two or more people to play. Once ready, you 
-				can type "/dm start" to start a match. Have fun!
+				Fight to the death!*NEWLINE*NEWLINE
+				The objective is simple. Be the last one standing.*NEWLINE
+				All the characters are exactly the same. Every weapon has a unique special attack. Stay near where the items show up to get an edge in battle!*NEWLINE*NEWLINE
+				To change the mode or arena, the majority of players have to agree on the same thing. By default, the game is a Free For All on the Atrium map.
 			]]
 		},
-		TEAMS_ENABLED = { --shows up when a match actually starts or when player enters a team
-			TITLE = "Team Battles",
+		TEAMS = {
+			TITLE = "Team Matches",
 			BODY = [[
-				In team battles, your goal is to be the last team standing. 
-				You can't hurt your teammates with any attacks.*NEWLINE
-				You can revive fallen teammates, too. Reviving someone the first time 
-				only takes a couple of seconds, but the time it takes doubles every 
-				time someone's revived. Reviving with a Telltale Heart equipped 
-				will always take 2 seconds, but comes with a cost...
+				Using the buttons in the top right, you can change the team mode to choose between Free For All, Red vs. Blue or 2-Player Teams.*NEWLINE*NEWLINE
+				- In a Free For All, it's every survivor for themself! Kill everyone else and stay the last one standing.*NEWLINE*NEWLINE
+				- In Red vs. Blue, everyone is split into two teams. Teammates can't hurt each other, and if one falls another can come to the rescue and revive them using 
+				either their bare hands or a Telltale Heart.*NEWLINE*NEWLINE
+				- The rules for 2-Player Teams are the same as Red vs. Blue. Only the grouping of players is different - everyone is paired with one other player to form a team.
 			]]
 		},
-		--teammode specific popups happen when the player enters lobby
-		--the first time after the teammode is enabled
-		TEAMMODE_HALF = {
-			TITLE = "Red vs. Blue",
+		ARENAS = {
+			TITLE = "Arenas",
 			BODY = [[
-				In the Red vs. Blue team mode, you're placed into one of 
-				two teams. You can type "/team" followed by "red", "blue", 
-				or "none" before a match starts to pick whether you want to be 
-				on a specific team or if you could go either way.*NEWLINE
-				It'd be a good idea to make sure none of your teammates are 
-				left alone. A numbers disadvantage is the last thing you'd want.
+				Using the buttons in the top right, you can change the battle arena to choose between The Atrium, The Badlands and Pig King's Village.*NEWLINE*NEWLINE
+				- The Atrium is a large arena with a packed center area and a spacious outer ring.*NEWLINE*NEWLINE
+				- The Badlands is an open area with few obstacles in the way of the battle.*NEWLINE*NEWLINE
+				- Pig King's Village is an open area inhabited by Pigs surrounding the Pig King. Every now and then, the full moon rises, bringing chaos to the village.
 			]]
 		},
-		TEAMMODE_PAIRS = {
-			TITLE = "2-Player Teams",
+		SKILLTREE = {
+			TITLE = "Insight",
 			BODY = [[
-				In the 2-Player Teams team mode, you're paired up with one 
-				other person. You can choose who to be paired with by clicking 
-				the player in the lobby, and telling them to do the same. *NEWLINE
-				Make sure to be there for your teammate when they need you, 
-				and revive them if they die!
+				You can use insight to get stronger! You start with 6 points, one of which must be used to select a loadout.*NEWLINE
+				Loadouts are sets of weapon you take to battle. By default, you use the Forge's Warrior loadout.*NEWLINE*NEWLINE
+				On the left, you can choose between stat increases, culminating in a powerful attack that activates every time you attack an enemy.*NEWLINE
+				In the middle, you can choose skills to improve Hearthsfire Crystals - powerful consumable items picked up during a match.
 			]]
 		},
-		--if a player goes for too long without using a weapon ability
-		CASTAOEEXPLAIN = {
-			TITLE = "Using the Weapons",
-			BODY = [[
-				The weapons you can use in this game mode each have a unique 
-				ability. You can use this ability by pressing the right mouse button 
-				with your weapon equipped. Different abilities are good at different 
-				jobs, so try to make use of them all. 
-			]]
-		},
-		--when a player picks up a firebomb
-		FIREBOMBEXPLAIN = {
+		FIREBOMB = {
 			TITLE = "Hearthsfire Crystals",
 			BODY = [[
-			
+				DAMAGE (REGULAR): 25 - DAMAGE (EXPLOSION): 150 - DAMAGE (SPECIAL): 200*NEWLINE*NEWLINE
+				Hearthsfire crystals are powerful consumable items you can pick up during a match.*NEWLINE*NEWLINE
+				Hearthsfire crystals will build up charge when attacking other players. When fully charged - after 3 hits - attacking with them again will 
+				cause them to explode, dealing lots of damage and stunning the target for a long time. Alternatively, they can be thrown to deal even more damage regardless of charge 
+				level. 
 			]]
 		},
-		--when a player picks up a telltale heart
-		REVIVERHEARTEXPLAIN = {
-			TITLE = "Telltale Hearts",
+		FORGE_MELEE = {
+			TITLE = "The Forge's Warrior",
 			BODY = [[
-			
+				Starts with: Pith Pike, Spiral Spear, Forging Hammer, Blacksmith's Edge.*NEWLINE*NEWLINE
+				The Forge's Warrior is a loadout with a variety of melee weapons that can put up a fight in any scenario.*NEWLINE*NEWLINE
+				The weapons allow for a lot of mobility which allows the user to dodge attacks and retaliate - sometimes at the same time! 
+				It's good at keeping constant pressure while also defending from incoming attackers.
 			]]
 		},
-		
-		------ below this line are tips only available through /dm help
-		PICKUPEXPLAIN = {
-			TITLE = "About Powerups",
+		PITHPIKE = {
+			TITLE = "Pith Pike",
 			BODY = [[
-				
+				DAMAGE (REGULAR): 50 - DAMAGE (SPECIAL): 150 - COOLDOWN: 12*NEWLINE*NEWLINE
+				The Pith Pike is a melee weapon that allows its user to dash in a straight line, damaging everything on the way.*NEWLINE*NEWLINE
+				It can be used while running away from someone to deal damage to them and change directions. It can also traverse short gaps 
+				and, with some prediction, hit someone trying to run away. It's very versatile!
 			]]
 		},
-		DESPAWNEXPLAIN = {
-			TITLE = "Changing Characters",
+		SPIRALSPEAR = {
+			TITLE = "Spiral Spear",
 			BODY = [[
-			
+				DAMAGE (REGULAR): 50 - DAMAGE (SPECIAL): 200 - COOLDOWN: 12*NEWLINE*NEWLINE
+				The Spiral Spear is a melee weapon with a high damage, long range jump that hits in a small area.*NEWLINE*NEWLINE
+				It can be used to dodge attacks, since the user is invulnerable while in the air. Dealing damage with it is 
+				very reliant on prediction, but to do it successfully is very rewarding as it deals high damage and stuns those 
+				hit by its special attack.
 			]]
 		},
-		
-		SIZETEST = {
-			TITLE = "AAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+		FORGINGHAMMER = {
+			TITLE = "Forging Hammer",
 			BODY = [[
-			AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA1
-			AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA2
-			AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA3
-			AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA4
-			AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA5
-			AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA6
-			AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA7
-			AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA8
-			AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA9
-			AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA1
-			AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA2
-			AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA3
-			AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA4
-			AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA5
-			AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA6
-			AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA7
-			AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA8
-			AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA9
-			AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA0
-			]],
+				DAMAGE (REGULAR): 50 - DAMAGE (SPECIAL): 100 - COOLDOWN: 12*NEWLINE*NEWLINE
+				The Forging Hammer is a melee weapon with a special attack that hits in a wide area, stunning those it hits.*NEWLINE*NEWLINE
+				While it doesn't deal as much damage as the other special attacks, its wide area of effect makes it easy to corner enemies and stun them, allowing for easier 
+				follow-up attacks.
+			]]
 		},
+		BLACKSMITHSEDGE = {
+			TITLE = "Blacksmith's Edge",
+			BODY = [[
+				DAMAGE (REGULAR): 50 - COOLDOWN: 12*NEWLINE*NEWLINE
+				The Blacksmith's Edge is a melee weapon that allows the user to parry attacks, reflecting the full damage back at the attacker.*NEWLINE*NEWLINE
+				While it's best used to parry special attacks, using it on a regular attack will add a stunning effect to the reflected damage.
+			]]
+		},
+		FORGE_MAGE = {
+			TITLE = "The Forge's Warlock",
+			BODY = [[
+				Starts with: Infernal Staff, Living Staff, Tome of Beckoning, Crown of Teleportation*NEWLINE*NEWLINE
+				The Forge's Warlock is a loadout that specializes in area control.*NEWLINE*NEWLINE
+				Using powerful spells from a long distance, Warlocks can set up the battlefield in their favor to take advantage of 
+				their increased attack range and items that appear during a match. If forced into close combat quarters, they can use the 
+				Tome of Beckoning to summon a Magma Golem to assist, or skip the reading and bash someone away with it! The Crown of Teleportation 
+				has a near-instant teleport that can give you an opening to cast one of the spells - they're not very quick to cast.
+			]]
+		},
+		INFERNALSTAFF = {
+			TITLE = "Infernal Staff",
+			BODY = [[
+				DAMAGE (REGULAR): 35 - DAMAGE (SPECIAL): 300 - COOLDOWN: 12*NEWLINE*NEWLINE
+				The Infernal Staff is a ranged weapon capable of calling a meteor that deals a massive amount of damage after a short delay.*NEWLINE*NEWLINE
+				The long time it takes to cast the meteor spell can make it difficult to land, but with its high casting range, thw whereabouts of the meteor 
+				can catch opponents off guard.
+			]]
+		},
+		LIVINGSTAFF = {
+			TITLE = "Living Staff",
+			BODY = [[
+				DAMAGE (REGULAR): 35 - COOLDOWN: 24*NEWLINE*NEWLINE
+				The Living Staff is a ranged weapon capable of creating a field of Life Blossoms that halve the damage taken by allies and slow the movement speed of opponents 
+				inside.*NEWLINE*NEWLINE
+			]]
+		},
+		TOMEOFBECKONING = {
+			TITLE = "Tome of Beckoning",
+			BODY = [[
+				DAMAGE (REGULAR): 50 - COOLDOWN: 24*NEWLINE
+				DAMAGE (SUMMON): 15 - HEALTH (SUMMON): 150*NEWLINE*NEWLINE
+				The Tome of Beckoning summons a Magma Golem that guards the area surrounding it, pelting opponents with fireballs.*NEWLINE*NEWLINE
+				The Magma Golem can be used as a guardian when being chased by an opponent - if there's no room to cast it, the tome can be used as 
+				a melee weapon to knock back opponents. The Magma Golem benefits from the Healing Staff's life blossoms, greatly increasing its survivability 
+				against strong attacks such as the Spiral Spear's Sky Lunge.
+			]]
+		},
+		CROWNOFTELEPORTATION = {
+			TITLE = "Crown of Teleportation",
+			BODY = [[
+				COOLDOWN: 12*NEWLINE*NEWLINE
+				The Crown of Teleportation is a spell that can be used to teleport to a desired location almost instantly.*NEWLINE*NEWLINE
+				As this is the Warlock's only form of mobility, it's best saved for when it's most important, such as when cornered or needing to 
+				get an item before anyone else can get to it.
+
+			]]
+		}
 	},
-	
+
+
 	INFO_POPUPS = {
 		JOIN = {
 			icon = "spear_rose.tex",

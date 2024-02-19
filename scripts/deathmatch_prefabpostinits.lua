@@ -1,10 +1,37 @@
 local G = GLOBAL
 local tonumber = G.tonumber
+local unpack = G.unpack
 
 local UpValues = require("deathmatch_upvaluehacker")
 local GetUpValue = UpValues.Get
 local ReplaceUpValue = UpValues.Replace
 
+local COMPONENT_ACTIONS = GetUpValue(G.EntityScript.CollectActions, "COMPONENT_ACTIONS")
+if COMPONENT_ACTIONS and COMPONENT_ACTIONS.INVENTORY then
+	local fn_old = COMPONENT_ACTIONS.INVENTORY.equippable
+	COMPONENT_ACTIONS.INVENTORY.equippable = function(inst, doer, actions, ...)
+		local rtn = {fn_old(inst, doer, actions, ...)}
+		if actions then
+			local remove_examine = false
+			for k, v in pairs(actions) do
+				if v == G.ACTIONS.UNEQUIP then
+					table.remove(actions, k)
+					remove_examine = true
+					break
+				end
+			end
+			if remove_examine then
+				for k, v in pairs(actions) do
+					if v == G.ACTIONS.LOOKAT then
+						table.remove(actions, k)
+						break
+					end
+				end
+			end
+		end
+		return unpack(rtn)
+	end
+end
 AddPrefabPostInit("dead_sea_bones", function(inst)
 	if inst.Physics ~= nil then
 		inst.Physics:SetActive(false)
