@@ -226,6 +226,11 @@ function TeammateHealthBadge:SetPercent(val)
 
     Badge.SetPercent(self, val)
 
+	if percent <= 0 then
+		self.head_animstate:SetMultColour(0.5,0.5,0.5,0.5)
+	else
+		self.head_animstate:SetMultColour(1,1,1,1)
+	end
 end
 
 return TeammateHealthBadge

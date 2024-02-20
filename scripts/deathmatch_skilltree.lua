@@ -108,7 +108,7 @@ end
 
 GLOBAL.RespecSkillsForPlayer = function(player)
     local matchstatus = GLOBAL.TheWorld.net.deathmatch_netvars.globalvars.matchstatus:value()
-    if matchstatus == 1 or matchstatus == 2 then
+    if matchstatus >= 1 then
         return
     end
     if player and player.components.skilltreeupdater then
