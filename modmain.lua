@@ -26,19 +26,11 @@ AddPrefabPostInit("player_classified", function(inst)
 	inst:ListenForEvent("arenachanged", function(inst, data)
 		G.TheWorld:PushEvent("applyarenaeffects", inst._arenaeffects:value())
 	end)
-	inst._choosinggear = G.net_bool(inst.GUID, "deathmatch.choosinggear", "choosinggearchanged")
 	inst._arenachoice = G.net_smallbyte(inst.GUID, "deathmatch.arenachoice", "arenachoicedirty")
 	inst._arenachoice:set(1) --default atrium
 	inst._modechoice = G.net_tinybyte(inst.GUID, "deathmatch.modechoice", "modechoicedirty")
 	inst._modechoice:set(1) --default ffa
 	if not G.TheWorld.ismastersim then
-		inst:ListenForEvent("choosinggearchanged", function(inst, data)
-			if inst._parent.HUD and inst._choosinggear:value() then
-				inst._parent.HUD.controls.deathmatch_chooseyourgear:Show()
-			elseif inst._parent.HUD then
-				inst._parent.HUD.controls.deathmatch_chooseyourgear:Hide()
-			end
-		end)
 		inst:ListenForEvent("arenachoicedirty", function(inst, data)
 			inst._parent.arenachoice = arenas.IDX[inst._arenachoice:value()]
 			inst._parent:PushEvent("arenachoicedirty", inst._arenachoice:value())
@@ -48,9 +40,6 @@ AddPrefabPostInit("player_classified", function(inst)
 			inst._parent:PushEvent("modechoicedirty", inst._modechoice:value())
 		end)
 	end
-	
-	G.TheWorld:ListenForEvent("startchoosinggear", function() inst._choosinggear:set(true) end)
-	G.TheWorld:ListenForEvent("donechoosinggear", function() inst._choosinggear:set(false) end)
 end)
 --G.getmetatable(G.TheNet).__index.GetDefaultVoteEnabled = function() return true end
 local announce_old = G.getmetatable(G.TheNet).__index.AnnounceResurrect
@@ -129,6 +118,11 @@ Assets = {
 	Asset("ATLAS", "images/matchcontrolsbutton_startmatch.xml"),
 	Asset("IMAGE", "images/matchcontrols_infobutton.tex"),
 	Asset("ATLAS", "images/matchcontrols_infobutton.xml"),
+
+	Asset("ATLAS", "images/teammatehealthbadge_frame.xml"),
+	Asset("IMAGE", "images/teammatehealthbadge_frame.tex"),
+	Asset("ATLAS", "images/teammatehealthbadge_rope.xml"),
+	Asset("IMAGE", "images/teammatehealthbadge_rope.tex"),
 
 	Asset("IMAGE", "images/map_icon_atrium.tex"),
 	Asset("ATLAS", "images/map_icon_atrium.xml"),
@@ -359,10 +353,6 @@ AddClassPostConstruct("widgets/controls", function(self, owner)
 
 		self.deathmatch_matchcontrols = self.topright_root:AddChild(require("widgets/deathmatch_matchcontrols")(owner))
 		self.deathmatch_matchcontrols:SetPosition(-150, -70)
-		
-		self.deathmatch_chooseyourgear = self.bottom_root:AddChild(G.require("widgets/deathmatch_chooseyourgear")(owner))
-		self.deathmatch_chooseyourgear:SetPosition(0,300)
-		self.deathmatch_chooseyourgear:Hide()
 
 		self.deathmatch_playerlist = self.bottom_root:AddChild(require("widgets/deathmatch_enemylist")(owner))
 		self.deathmatch_playerlist:SetPosition(-220, 70)
@@ -425,14 +415,6 @@ local function OnDespawnDM()
 	UserCommands.RunTextUserCommand("despawn", G.ThePlayer, false)
 end	
 
-local function OnInfoScreen()
-	if G.TheFrontEnd:GetActiveScreen() == "Deathmatch_Menu" then
-		G.TheFrontEnd:PopScreen()
-	else
-		G.TheFrontEnd:PushScreen(DeathmatchMenu(self))
-	end
-end
-
 local function OnRespecButton()
 	if G.ThePlayer then
 		G.RespecSkillsForPlayer(G.ThePlayer)
@@ -486,6 +468,7 @@ AddClassPostConstruct("screens/redux/lobbyscreen", function(self)
 end)
 
 ---------------------------------------------------------------------
+GLOBAL.STRINGS.SKILLTREE.INFOPANEL_DESC = GLOBAL.DEATHMATCH_STRINGS.SKILLTREE_DESC
 local _name = GLOBAL.STRINGS.NAMES
 
 _name.PICKUP_LIGHTDAMAGING = "Damage Boost\n+50% Damage Dealt\nLasts 10 Seconds"

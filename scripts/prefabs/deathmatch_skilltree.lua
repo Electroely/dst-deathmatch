@@ -2,39 +2,7 @@ local UI_LEFT, UI_RIGHT = -214, 228
 local UI_VERTICAL_MIDDLE = (UI_LEFT + UI_RIGHT) * 0.5
 local UI_TOP, UI_BOTTOM = 176, 20
 local TILE_SIZE, TILE_HALFSIZE = 34, 16
-local SKILLTREESTRINGS = {
-	LOADOUT_PICKONE_LOCK = "Choose a loadout before selecting any skills.",
-	LOADOUT_ONLYONE_LOCK = "You can choose one loadout to take to battle.",
-	
-	SPELLCASTER_COOLDOWN_ONE_TITLE = "Reduced Cooldowns 1",
-	SPELLCASTER_COOLDOWN_TWO_TITLE = "Reduced Cooldowns 2",
-	SPELLCASTER_REFRESH_ON_HIT_TITLE = "Refreshing Attacks",
-	BRAWLER_DAMAGE_ONE_TITLE = "Increased Damage 1",
-	BRAWLER_DAMAGE_TWO_TITLE = "Increased Damage 2",
-	BRAWLER_BUFF_ON_HIT_TITLE = "Strengthening Attacks",
-	IMPROVISER_BOUNCING_BOMBS_TITLE = "Bouncing Bottles",
-	IMPROVISER_HOMING_BOMBS_TITLE = "Homing Crystals",
-	IMPROVISER_PASSIVE_BOMBS_TITLE = "Pocket Bombs",
-	IMPROVISER_BURNING_BOMBS_TITLE = "Lingering Flames",
-	LOADOUT_FORGE_MELEE_TITLE = "Forge Warrior",
-	LOADOUT_FORGE_MAGE_TITLE = "Forge Warlock",
-	
-	SPELLCASTER_COOLDOWN_ONE_DESC = "Reduces special attack cooldowns by %d%%.",
-	SPELLCASTER_COOLDOWN_TWO_DESC = "Reduces special attack cooldowns by %d%%.",
-	SPELLCASTER_REFRESH_ON_HIT_DESC = "Regular attacks shorten active special attack cooldowns.",
-	
-	BRAWLER_DAMAGE_ONE_DESC = "Increases all damage dealt by %d%%.",
-	BRAWLER_DAMAGE_TWO_DESC = "Increases all damage dealt by %d%%.",
-	BRAWLER_BUFF_ON_HIT_DESC = "Regular attacks temporarily increase your damage by %d%%, stacking up to %d times.",
-	
-	IMPROVISER_BOUNCING_BOMBS_DESC = "Hearthsfire crystals will bounce in the air when landing after being thrown, causing them to explode again. Charging the crystals before throwing them causes them to bounce more times.",
-	IMPROVISER_PASSIVE_BOMBS_DESC = "Hearthsfire crystals will charge when you land regular attacks. Getting hit causes charged crystals to explode, damaging nearby enemies.",
-	IMPROVISER_HOMING_BOMBS_DESC = "Thrown Hearthsfire crystals will home in on nearby opponents. Crystals are thrown at a higher arc when this skill is active.",
-	IMPROVISER_BURNING_BOMBS_DESC = "Hearthsfire crystals will leave a ring of fire after exploding, dealing piercing damage to players inside.",
-	
-	LOADOUT_FORGE_MELEE_DESC = "The Forge's warriors use many melee weapons specializing in different situations for highly effective close-range combat.",
-	LOADOUT_FORGE_MAGE_DESC = "The Forge's warlocks make up for their lack of defensive capabilities with long range and powerful magic attacks.",
-}
+local SKILLTREESTRINGS = DEATHMATCH_STRINGS.SKILLTREE
 
 local SPELLCASTER_COL = -207
 local BRAWLER_COL = -124

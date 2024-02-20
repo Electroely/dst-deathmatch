@@ -518,7 +518,6 @@ function Deathmatch_Manager:StartDeathmatch()
 				local pos = self.inst.centerpoint:GetPosition()
 				if not v.components.health:IsDead() then v.sg:GoToState("idle") end
 				v:AddTag("notarget")
-				self.inst:PushEvent("startchoosinggear")
 				local theta = (k/getPlayerCount()* 2 * PI)
 				local radius = arena_configs[self.arena] ~= nil and arena_configs[self.arena].spawnradius or 10
 				local offset = GetValidPoint(pos, theta, radius)
@@ -869,7 +868,6 @@ function Deathmatch_Manager:BeginMatch()
 	self.pickuptask = self.inst:DoPeriodicTask(10, function() self:DoPickUpSpawn() end)
 	for k, v in pairs(self.players_in_match) do
 		v:RemoveTag("notarget")
-		self.inst:PushEvent("donechoosinggear")
 		v.revivals = 0
 		v:UpdateRevivalHealth()
 	end

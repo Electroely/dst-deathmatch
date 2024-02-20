@@ -15,6 +15,10 @@ local Deathmatch_EnemyList = Class(Widget, function(self, owner)
 	
 	self.widgets = {}
 	self.widgets_allies = {}
+
+	self.revive_text = self:AddChild(Text(NEWFONT_OUTLINE, 36, DEATHMATCH_STRINGS.REVIVE_TEAMMATE_PROMPT))
+	self.revive_text:SetPosition(220, 150)
+	self.revive_text:Hide()
 	
 	self:RefreshWidgets()
 
@@ -46,13 +50,16 @@ function Deathmatch_EnemyList:GetPlayerTable()
 		if a.team == b.team then
 			return a.health > b.health
 		end
+		if a.team == 0 or b.team == 0 then
+			return a.team > b.team
+		end
 		return a.team < b.team
 	end)
 	local allies = {}
 	local enemies = {}
 	local allyteam = self.owner.components.teamer:GetTeam()
 	for i, v in ipairs(ClientObjs) do
-		if v.userid == self.owner.userid then
+		if v.prefab == nil or (v.userid == self.owner.userid) then
 			--don't insert
 		elseif allyteam ~= 0 and v.team == allyteam then
 			table.insert(allies,v)
@@ -70,7 +77,7 @@ local function CreateDummyData(character)
 		base_skin = character.."_none",
 		userflags = 0,
 		name = STRINGS.NAMES[string.upper(character)],
-		team = math.random(1,8),
+		team = math.random(0,8),
 		health = math.random(),
 	}
 end
@@ -84,13 +91,16 @@ local function CreateDummyTable()
 		if a.team == b.team then
 			return a.health > b.health
 		end
+		if a.team == 0 or b.team == 0 then
+			return a.team > b.team
+		end
 		return a.team < b.team
 	end)
 	local allies = {}
 	local enemies = {}
 	local allyteam = ThePlayer.components.teamer:GetTeam()
 	for i, v in ipairs(data) do
-		if v.team == allyteam then
+		if allyteam ~= 0 and v.team == allyteam then
 			table.insert(allies,v)
 		else
 			table.insert(enemies,v)
@@ -126,6 +136,7 @@ function Deathmatch_EnemyList:RefreshWidgets()
 		end
 	end
 
+	local teammate_dead = false
 	for i = 1, math.max(#teammates, #self.widgets_allies) do
 		if self.widgets_allies[i] ~= nil then
 			if teammates[i] ~= nil then
@@ -137,6 +148,15 @@ function Deathmatch_EnemyList:RefreshWidgets()
 		elseif teammates[i] ~= nil then
 			table.insert(self.widgets_allies, self:MakeWidgetForPlayer(teammates[i]))
 		end
+
+		if teammates[i] ~= nil and teammates[i].health <= 0 then
+			teammate_dead = true
+		end
+	end
+	if teammate_dead then
+		self.revive_text:Show()
+	else
+		self.revive_text:Hide()
 	end
 	
 	--TODO: calculate spacing depending on number of widgets & screen size

@@ -237,7 +237,7 @@ AddUserCommand("setarena", {
     voteminpasscount = 1,
     votecountvisible = true,
     voteallownotvoted = true,
-    voteoptions = {"Atrium", "Desert", "Pig Village", "Forest", "The Shoal", "Random"}, 
+    voteoptions = {"The Atrium", "The Badlands", "Pig Village", "Random"}, 
     votetitlefmt = DEATHMATCH_STRINGS.USERCOMMANDS.SETARENA.VOTETITLE, 
     votenamefmt = DEATHMATCH_STRINGS.USERCOMMANDS.SETARENA.VOTENAME, 
     votepassedfmt = "Vote complete!", 

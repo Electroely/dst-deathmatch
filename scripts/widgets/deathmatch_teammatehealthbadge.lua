@@ -9,10 +9,12 @@ local function UpdateShaderParams(self)
 	local scale = self:GetScale().x
 	self.head_animstate:SetUILightParams(pos.x, pos.y, 24.0, scale)
 end
+local DEFAULT_ROPE_COLOUR = {140/255, 81/255, 57/255, 1}
 
 local TeammateHealthBadge = Class(Badge, function(self, owner)
     Badge._ctor(self, "lavaarena_partyhealth", owner, nil, nil, nil, nil, true)
 	self.anim:GetAnimState():Hide("stick")
+	self.anim:GetAnimState():HideSymbol("frame_circle")
     self:SetClickable(false)
 
     self.arrow = self.underNumber:AddChild(UIAnim())
@@ -25,6 +27,10 @@ local TeammateHealthBadge = Class(Badge, function(self, owner)
 	self.name = self:AddChild(Text(NEWFONT_OUTLINE_SMALL, 20, ""))
 	self.name:SetPosition(0, 50)
 	self.name:Hide()
+
+	self.frame = self:AddChild(Image("images/teammatehealthbadge_frame.xml", "teammatehealthbadge_frame.tex"))
+	self.rope = self:AddChild(Image("images/teammatehealthbadge_rope.xml", "teammatehealthbadge_rope.tex"))
+	self.rope:SetTint(unpack(DEFAULT_ROPE_COLOUR))
 
 	self.userid = nil
 	self.inst:ListenForEvent("deathmatch_playerhealthdirty", function(src)
@@ -183,9 +189,10 @@ local function CreateDummyData(character)
 	}
 end
 
+
 function TeammateHealthBadge:SetPlayer(data)
 	--local data = TheNet:GetClientTableForUser(player) or CreateDummyData(player)
-	
+	local changed_users = self.userid ~= data.userid
 	self.userid = data.userid
 
 	self.arrowdir = 0
@@ -197,36 +204,40 @@ function TeammateHealthBadge:SetPlayer(data)
 	
 	local health = data.health or TheWorld.net:GetPlayerHealth(self.userid)
 	if health then
-		self:SetPercent(health)
+		self:SetPercent(health, changed_users)
 	else
-		self:SetPercent(1)
+		self:SetPercent(1, changed_users)
 	end
 
 	local team = data.team or TheWorld.net:GetPlayerTeam(self.userid) or 0
 	if team == 0 then
 		self.name:SetColour(1,1,1,1)
+		self.rope:SetTint(unpack(DEFAULT_ROPE_COLOUR))
 	else
 		self.name:SetColour(unpack(DEATHMATCH_TEAMS[team].colour))
+		self.rope:SetTint(unpack(DEATHMATCH_TEAMS[team].colour))
 	end
 	
 end
 
-function TeammateHealthBadge:SetPercent(val)
+function TeammateHealthBadge:SetPercent(val, silent)
 	val = val == 0 and 0 or math.max(val, 0.001)
 
-    if self.percent < val then
-		if self.arrowdir <= 0 then
-		    self:PulseGreen()
-		end
-	elseif self.percent > val then
-		if self.arrowdir >= 0 then
-		    self:PulseRed()
+	if not silent then
+		if self.percent < val then
+			if self.arrowdir <= 0 then
+				self:PulseGreen()
+			end
+		elseif self.percent > val then
+			if self.arrowdir >= 0 then
+				self:PulseRed()
+			end
 		end
 	end
 
     Badge.SetPercent(self, val)
 
-	if percent <= 0 then
+	if self.percent <= 0 then
 		self.head_animstate:SetMultColour(0.5,0.5,0.5,0.5)
 	else
 		self.head_animstate:SetMultColour(1,1,1,1)

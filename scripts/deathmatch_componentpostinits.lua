@@ -227,6 +227,8 @@ AddClassPostConstruct("components/combat_replica", function(self, inst)
 			if guy and guy.components and
 			guy.components.teamer and guy.components.teamer:IsTeamedWith(self.inst) then
 				return true
+			elseif guy and (self.inst.components.follower and guy.components.follower and self.inst.components.follower:GetLeader() == guy.components.follower:GetLeader()) then
+				return true
 			else
 				return IsAlly_Old(self, guy)
 			end
