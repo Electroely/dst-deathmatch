@@ -1075,6 +1075,8 @@ function Deathmatch_Manager:ToggleSpectator(player)
 		OnPlayerDeath(self.inst, player)
 		player:PushEvent("ms_becamespectator")
 	end
+	--this is to update the player health badge
+	player.components.health:DoDelta(0)
 	if (self.doingreset or self.matchstarting) and self.gamemode ~= 0 then
 		self:GroupTeams(self.gamemodes[self.gamemode].teammode)
 	end

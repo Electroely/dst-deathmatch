@@ -166,6 +166,9 @@ local function fn(inst, prefab)
 	
 	inst:ListenForEvent("healthdelta", function(inst, data)
 		local newhealth = data and data.newpercent
+		if inst:HasTag("spectator") then
+			newhealth = 0
+		end
 		if newhealth then
 			local datatable = GetNetDMDataTable(inst.userid)
 			if datatable then
