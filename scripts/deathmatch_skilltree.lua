@@ -122,5 +122,20 @@ GLOBAL.RespecSkillsForPlayer = function(player)
             end
         end
         player.components.skilltreeupdater:SetSkipValidation(false)
+        if player == GLOBAL.ThePlayer then
+            player.new_skill_available_popup = true
+            player:PushEvent("newskillpointupdated")
+        end
     end
 end
+
+AddClassPostConstruct("widgets/redux/skilltreewidget", function(self)
+    local Kill_old = self.Kill
+    self.Kill = function(self, ...)
+        if GLOBAL.ThePlayer and GLOBAL.TheSkillTree:GetAvailableSkillPoints(GLOBAL.ThePlayer.prefab) > 0 then
+            GLOBAL.ThePlayer.new_skill_available_popup = true
+            GLOBAL.ThePlayer:PushEvent("newskillpointupdated")
+        end
+        return Kill_old(self, ...)
+    end
+end)

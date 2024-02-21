@@ -59,7 +59,7 @@ function Deathmatch_EnemyList:GetPlayerTable()
 	local enemies = {}
 	local allyteam = self.owner.components.teamer:GetTeam()
 	for i, v in ipairs(ClientObjs) do
-		if v.prefab == nil or (v.userid == self.owner.userid) then
+		if v.prefab == "" or (v.userid == self.owner.userid) then
 			--don't insert
 		elseif allyteam ~= 0 and v.team == allyteam then
 			table.insert(allies,v)

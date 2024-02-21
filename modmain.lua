@@ -36,7 +36,7 @@ AddPrefabPostInit("player_classified", function(inst)
 			inst._parent:PushEvent("arenachoicedirty", inst._arenachoice:value())
 		end)
 		inst:ListenForEvent("modechoicedirty", function(inst, data)
-			inst._parent.modechoice = arenas.IDX[inst._modechoice:value()]
+			inst._parent.modechoice = inst._modechoice:value()
 			inst._parent:PushEvent("modechoicedirty", inst._modechoice:value())
 		end)
 	end
