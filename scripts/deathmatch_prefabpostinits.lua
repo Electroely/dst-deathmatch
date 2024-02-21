@@ -428,6 +428,27 @@ for k, v in pairs({"tentacle", "pigman", "stalker_forest"}) do
 		end
 	end)
 end
+--special pigman behavior for the pig village map
+local function OnPigmanTryToHitOther(inst)
+	if inst.components.werebeast:IsInWereState() then
+		inst.forcetaunt = true
+	else
+		inst.components.combat:DropTarget()
+	end
+end
+AddPrefabPostInit("pigman", function(inst)
+	if not G.TheWorld.ismastersim then
+		return
+	end
+	inst:ListenForEvent("onmissother", OnPigmanTryToHitOther)
+	inst:ListenForEvent("onattackother", OnPigmanTryToHitOther)
+end)
+AddStategraphPostInit("werepig", function(self)
+	self.states.attack.events.animqueueover.fn = function(inst)
+		inst.sg:GoToState("howl")
+	end
+end)
+
 
 local function makeActiveSlotItemOnly(inst)
 	if G.TheWorld.ismastersim then

@@ -791,7 +791,7 @@ function Deathmatch_Manager:SetVotedArena()
 	local votes = {}
 	local highest = 0
 	for k, v in pairs(players) do
-		local choice = v.arenachoice or "random"
+		local choice = v.arenachoice or "atrium"
 		if votes[choice] == nil then
 			votes[choice] = 1
 		else
@@ -808,6 +808,7 @@ function Deathmatch_Manager:SetVotedArena()
 		end
 	end
 	if #winners == 1 then
+		print(winners[1])
 		self:SetNextArena(winners[1])
 	end
 end
