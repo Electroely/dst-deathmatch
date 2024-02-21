@@ -353,12 +353,15 @@ function Deathmatch_Manager:GiveLobbyInventory(player)
 	for k, v in pairs(inv.itemslots) do if v.prefab ~= "invslotdummy" then v:Remove() end end
 	for k, v in pairs(inv.equipslots) do v:Remove() end
 	for k, v in pairs(lobbyitems) do
-		inv:GiveItem(SpawnPrefab(v), k)
+		local weap = SpawnPrefab(v)
+		weap.forceslot = k
+		inv:GiveItem(weap, k)
 	end
 	for k, v in pairs(loadout_data.equip) do
 		local item = SpawnPrefab(v)
 		inv:GiveItem(item)
 		inv:Equip(item)
+		item.components.equippable:SetPreventUnequipping(true)
 	end
 end
 
@@ -484,7 +487,8 @@ function Deathmatch_Manager:StartDeathmatch()
 			AddTable(items, v.deathmatch_startitems)
 			for k2, v2 in pairs(items) do
 				local item = SpawnPrefab(v2)
-				v.components.inventory:GiveItem(item)
+				item.forceslot = k2
+				v.components.inventory:GiveItem(item, k2)
 				--if k2 == "autoequip" then v.components.inventory:Equip(item) end
 				if item.components.rechargeable then item.components.rechargeable:Discharge(DEFAULT_COOLDOWN_TIME) end
 				if item.components.inventoryitem then table.insert(self.spawneditems, item) end
@@ -493,6 +497,7 @@ function Deathmatch_Manager:StartDeathmatch()
 				local item = SpawnPrefab(v2)
 				v.components.inventory:GiveItem(item)
 				v.components.inventory:Equip(item)
+				v.components.equippable:SetPreventUnequipping(true)
 				
 				table.insert(self.spawnedgear, item)
 			end

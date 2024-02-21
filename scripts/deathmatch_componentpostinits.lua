@@ -62,6 +62,18 @@ AddComponentPostInit("inventory", function(self)
 				end
 				return GLOBAL.unpack(rtn)
 			end
+			if item and item.forceslot ~= nil then
+				local curslot = self:GetItemSlot(item)
+				if curslot == item.forceslot then
+					return --do nothing
+				else
+					local item_to_drop = self:GetItemInSlot(item.forceslot)
+					if item_to_drop ~= nil then
+						self:DropItem(item_to_drop)
+					end
+					return
+				end
+			end
 			return DropItem_old(self, item, ...)
 		end
 		local SetActiveItem_old = self.SetActiveItem
@@ -77,6 +89,19 @@ AddComponentPostInit("inventory", function(self)
 					self.silentfull = false
 				end
 				return GLOBAL.unpack(rtn)
+			end
+			if item and item.forceslot ~= nil then
+				local curslot = self:GetItemSlot(item)
+				if curslot == item.forceslot then
+					return --do nothing
+				else
+					local item_to_drop = self:GetItemInSlot(item.forceslot)
+					if item_to_drop ~= nil then
+						self:DropItem(item_to_drop)
+					end
+					self:GiveItem(item, item.forceslot)
+					return
+				end
 			end
 			return SetActiveItem_old(self, item, ...)
 		end
