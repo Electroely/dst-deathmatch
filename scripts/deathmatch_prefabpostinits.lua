@@ -334,6 +334,24 @@ for prefab, range in pairs(range_postinits) do
 		end
 	end)
 end
+local range_display_weapons = {
+	"hammer_mjolnir",
+	"spear_lance",
+	"book_elemental",
+	"fireballstaff",
+	"healingstaff",
+	"teleporterhat",
+}
+for k, prefab in pairs(range_display_weapons) do
+	AddPrefabPostInit(prefab, function(inst)
+		local StartTargeting_old = inst.components.aoetargeting.StartTargeting
+		inst.components.aoetargeting.StartTargeting = function(self, ...)
+			local indicator = GLOBAL.SpawnPrefab("deathmatch_range_indicator")
+			indicator:SetPlayer(GLOBAL.ThePlayer, self.range)
+			return StartTargeting_old(self, ...)
+		end
+	end)
+end
 AddPrefabPostInit("glommer", function(inst)
 	if not G.TheWorld.ismastersim then
 		return

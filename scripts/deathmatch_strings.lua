@@ -27,6 +27,9 @@ return {
 	TIPS_BUTTON = "Tips",
 
 	REVIVE_TEAMMATE_PROMPT = "A member of your team has fallen. Revive them!",
+	DEAD_ALONE_PROMPT = "You're out! Wait for the next match.",
+	DEAD_TEAM_PROMPT = "If you have any teammates, tell them to revive you!",
+	SKILLTREETOAST_PROMPT = "Insight Available!",
 	
 	SKILLTREE_DESC = "Become a powerful fighter!",
 	SKILLTREE = {

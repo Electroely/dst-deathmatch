@@ -14,7 +14,7 @@ local UserCommands = require("usercommands")
 require("deathmatch_debug")
 
 --mod import extra files
-modimport("scripts/deathmatch_teamchat")
+--modimport("scripts/deathmatch_teamchat")
 modimport("scripts/deathmatch_componentpostinits")
 modimport("scripts/deathmatch_prefabpostinits")
 modimport("scripts/deathmatch_usercommands")
@@ -88,6 +88,7 @@ PrefabFiles = {
 	"invslotdummy",
 	"firebomb_firecircle",
 	"deathmatch_healingstaffbuff",
+	"deathmatch_range_indicator",
 	
 	"maxwelllight",
 	"maxwelllight_flame",
@@ -467,8 +468,18 @@ AddClassPostConstruct("screens/redux/lobbyscreen", function(self)
 	self.deathmatch_timer:SetPosition(-160, 340)
 end)
 
+AddClassPostConstruct("widgets/playerdeathnotification", function(self)
+	local mode = G.TheWorld.net.deathmatch_netvars.globalvars.matchmode:value()
+	if mode == 1 then
+		self.revive_message:SetString(GLOBAL.DEATHMATCH_STRINGS.DEAD_ALONE_PROMPT)
+	else
+		self.revive_message:SetString(GLOBAL.DEATHMATCH_STRINGS.DEAD_TEAM_PROMPT)
+	end
+end)
+
 ---------------------------------------------------------------------
 GLOBAL.STRINGS.SKILLTREE.INFOPANEL_DESC = GLOBAL.DEATHMATCH_STRINGS.SKILLTREE_DESC
+GLOBAL.STRINGS.SKILLTREE.NEW_SKILL_POINT = GLOBAL.DEATHMATCH_STRINGS.SKILLTREETOAST_PROMPT
 local _name = GLOBAL.STRINGS.NAMES
 
 _name.PICKUP_LIGHTDAMAGING = "Damage Boost\n+50% Damage Dealt\nLasts 10 Seconds"

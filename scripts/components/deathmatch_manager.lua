@@ -279,18 +279,6 @@ local Deathmatch_Manager = Class(function(self, inst)
 	
 	self.announcestrings = DEATHMATCH_STRINGS.ANNOUNCE
 	
-	self.itemstable = {
-	"spear_gungnir",
-	"spear_lance",
-	"hammer_mjolnir",
-	"lavaarena_heavyblade",
-	}
-	self.choicegear = {
-	"lavaarena_armormediumdamager",
-	"lavaarena_armormediumrecharger",
-	"lavaarena_lightdamagerhat",
-	"lavaarena_rechargerhat",
-	}
 	self.pickupprefabs = {
 	"pickup_lightdamaging",
 	"pickup_lightdefense",
@@ -301,9 +289,13 @@ local Deathmatch_Manager = Class(function(self, inst)
 	}
 	self.gamemode = 0
 	self.gamemodes = {
-	{name="Free For All",teammode="ffa"},
-	{name="Red vs. Blue",teammode="half"},
-	{name="2-Player Teams",teammode="pairs"},
+	{name=DEATHMATCH_STRINGS.TEAMMODE_FFA,teammode="ffa"},
+	{name=DEATHMATCH_STRINGS.TEAMMODE_RVB,teammode="half"},
+	{name=DEATHMATCH_STRINGS.TEAMMODE_2PT,teammode="pairs"},
+	}
+
+	self.lobbyitems = {
+		"lavaarena_firebomb",
 	}
 	
 	self.enabled = true
@@ -348,7 +340,10 @@ end
 
 function Deathmatch_Manager:GiveLobbyInventory(player)
 	local loadout_data = self:GetLoadoutForPlayer(player)
-	local lobbyitems = loadout_data.weapons
+	local lobbyitems = deepcopy(loadout_data.weapons)
+	for k, v in pairs(self.lobbyitems) do
+		table.insert(lobbyitems, v)
+	end
 	local inv = player.components.inventory
 	for k, v in pairs(inv.itemslots) do if v.prefab ~= "invslotdummy" then v:Remove() end end
 	for k, v in pairs(inv.equipslots) do v:Remove() end
@@ -362,19 +357,6 @@ function Deathmatch_Manager:GiveLobbyInventory(player)
 		inv:GiveItem(item)
 		inv:Equip(item)
 		item.components.equippable:SetPreventUnequipping(true)
-	end
-end
-
-function Deathmatch_Manager:AddItem(prefab)
-	table.insert(self.itemstable, prefab)
-end
-
-function Deathmatch_Manager:RemoveItem(prefab)
-	for k, v in pairs(self.itemstable) do
-		if v == prefab then
-			table.remove(self.itemstable, k)
-			break
-		end
 	end
 end
 
@@ -497,7 +479,7 @@ function Deathmatch_Manager:StartDeathmatch()
 				local item = SpawnPrefab(v2)
 				v.components.inventory:GiveItem(item)
 				v.components.inventory:Equip(item)
-				v.components.equippable:SetPreventUnequipping(true)
+				item.components.equippable:SetPreventUnequipping(true)
 				
 				table.insert(self.spawnedgear, item)
 			end
