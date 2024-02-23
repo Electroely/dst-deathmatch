@@ -572,6 +572,18 @@ for stategraph, states in pairs(stategraph_postinits) do
 		AddStategraphState(stategraph, state)
 	end
 end
+--states that should prevent unequipping
+local aoecast_states = {
+	combat_lunge_start = true,
+	combat_lunge = true,
+	combat_superjump_start = true,
+	combat_superjump = true,
+	combat_leap_start = true,
+	combat_leap = true,
+	throw_line = true,
+	book = true,
+	castspell = true,
+}
 for k, v in pairs({ "wilson", "wilson_client" }) do
 	AddStategraphActionHandler(v, G.ActionHandler(G.ACTIONS.MAKEEXPLOSIVEBALLOON, "makeballoon"))
 	AddStategraphPostInit(v, function(self)
@@ -613,6 +625,30 @@ for k, v in pairs({ "wilson", "wilson_client" }) do
 					inst.components.combat.externaldamagetakenmultipliers:SetModifier("respawn", 1)
 				end)
 				return corpse_rebirth_onexit(inst, ...)
+			end
+		end
+
+		for aoestate, _ in pairs(aoecast_states) do
+			local onenter_old = self.states[aoestate].onenter
+			self.states[aoestate].onenter = function(inst, ...)
+				local weapon = inst.components.inventory:GetEquippedItem(GLOBAL.EQUIPSLOTS.HANDS)
+				if weapon then
+					inst.sg.statemem.aoecastweapon = weapon
+					weapon.components.equippable:SetPreventUnequipping(true)
+				end
+				if onenter_old then
+					return onenter_old(inst, ...)
+				end
+			end
+			local onexit_old = self.states[aoestate].onexit
+			self.states[aoestate].onexit = function (inst, ...)
+				if inst.sg.statemem.aoecastweapon then
+					local weapon = inst.sg.statemem.aoecastweapon
+					weapon.components.equippable:SetPreventUnequipping(false)
+				end
+				if onexit_old then
+					return onexit_old(inst, ...)
+				end
 			end
 		end
 	end)
