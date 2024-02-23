@@ -626,7 +626,7 @@ G.ACTIONS.PICKUP.fn = function(act, ...)
 		return pikcupact_fn_old(act, ...)
 	end
 end]]
-local spectator_actions = {LOOKAT = true, TALKTO = true, WALKTO = true}
+local spectator_actions = {LOOKAT = true, TALKTO = true, WALKTO = true, SITON = true,}
 for k, v in pairs(G.ACTIONS) do
 	if not spectator_actions[k] then
 		local actfn_old = v.fn
