@@ -289,7 +289,7 @@ local Deathmatch_Manager = Class(function(self, inst)
 	"pickup_cooldown",
 	--"blowdart_lava_temp"
 	}
-	self.perilpickup = "pickup_lighthealing",
+	self.perilpickup = "pickup_lighthealing"
 	self.gamemode = 0
 	self.gamemodes = {
 	{name=DEATHMATCH_STRINGS.TEAMMODE_FFA,teammode="ffa"},
@@ -745,7 +745,7 @@ function Deathmatch_Manager:DoPickUpSpawn()
 			fx.Transform:SetPosition((pos+offset):Get())
 			table.insert(self.spawnedpickups, item)
 			if item.Fade ~= nil then
-				item:DoTaskInTime(15, item.Fade)
+				item:DoTaskInTime(2, item.Fade)
 			end
 		end
 	end
