@@ -10,7 +10,7 @@ description = "WIP"
 author = "Electroely"
 
 --A version number so you can ask people if they are running an old version of your mod.
-version = "20.14"
+version = "21.11"
 
 --This lets other players know if your mod is out of date. This typically needs to be updated every time there's a new game update.
 api_version = 10
@@ -28,8 +28,6 @@ server_filter_tags = {"deathmatch", "arena", "arenas"}
 
 icon_atlas = "modicon.xml"
 icon = "modicon.tex"
-
-forumthread = ""
 
 configuration_options = {}
 

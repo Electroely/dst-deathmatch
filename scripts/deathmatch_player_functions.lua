@@ -3,9 +3,11 @@
 local function ApplyLobbyInvincibility(inst, enabled)
 	if enabled then
 		inst.components.combat.externaldamagetakenmultipliers:SetModifier("deathmatchinvincibility", 0)
+		inst.components.health:SetAbsorptionAmount(1)
 		inst.components.health:SetPercent(1)
 	else
 		inst.components.combat.externaldamagetakenmultipliers:SetModifier("deathmatchinvincibility", 1)
+		inst.components.health:SetAbsorptionAmount(0)
 	end
 end
 

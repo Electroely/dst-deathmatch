@@ -341,6 +341,7 @@ local range_display_weapons = {
 	"fireballstaff",
 	"healingstaff",
 	"teleporterhat",
+	"lavaarena_firebomb",
 }
 for k, prefab in pairs(range_display_weapons) do
 	AddPrefabPostInit(prefab, function(inst)
