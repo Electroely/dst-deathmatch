@@ -244,6 +244,7 @@ end
 local DEFAULT_LOADOUT = "forge_melee"
 local LOADOUTS = {
 	forge_melee = {
+		health = 150,
 		weapons = {
 			"spear_gungnir",
 			"spear_lance",
@@ -255,6 +256,7 @@ local LOADOUTS = {
 		}
 	},
 	forge_mage = {
+		health = 100,
 		weapons = {
 			"fireballstaff",
 			"healingstaff",
@@ -347,6 +349,7 @@ function Deathmatch_Manager:GiveLobbyInventory(player)
 	local inv = player.components.inventory
 	for k, v in pairs(inv.itemslots) do if v.prefab ~= "invslotdummy" then v:Remove() end end
 	for k, v in pairs(inv.equipslots) do v:Remove() end
+	player.components.health:SetMaxHealth(loadout_data.health)
 	for k, v in pairs(lobbyitems) do
 		local weap = SpawnPrefab(v)
 		weap.forceslot = k
@@ -467,6 +470,7 @@ function Deathmatch_Manager:StartDeathmatch()
 			local items = deepcopy(loadout_data.weapons)
 			AddTable(items, arena_configs[self.arena].extraitems)
 			AddTable(items, v.deathmatch_startitems)
+			v.components.health:SetMaxHealth(loadout_data.health)
 			for k2, v2 in pairs(items) do
 				local item = SpawnPrefab(v2)
 				item.forceslot = k2
