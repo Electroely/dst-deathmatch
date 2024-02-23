@@ -289,6 +289,7 @@ local Deathmatch_Manager = Class(function(self, inst)
 	"pickup_cooldown",
 	--"blowdart_lava_temp"
 	}
+	self.perilpickup = "pickup_lighthealing",
 	self.gamemode = 0
 	self.gamemodes = {
 	{name=DEATHMATCH_STRINGS.TEAMMODE_FFA,teammode="ffa"},
@@ -652,15 +653,35 @@ function Deathmatch_Manager:ResetDeathmatch()
 	self.doingreset = true
 end
 
+local PICKUP_RADIUS = DEATHMATCH_TUNING.PICKUP_RADIUS
 function Deathmatch_Manager:GetPickUpItemList(custompos)
 	local result = {}
 	
 	local count = getPlayerCount(true)
 	local pos = custompos or self.inst.centerpoint:GetPosition()
 	local nearbyplayers = 0
+	local highesthealth = 0
+	local lowhealthplayers = {}
 	for k, v in pairs(self.players_in_match) do
-		if v and v:IsValid() and not v.components.health:IsDead() and v:GetDistanceSqToPoint(pos) <= 8*8 then
-			nearbyplayers = nearbyplayers + 1
+		if v and v:IsValid() and not v.components.health:IsDead() then
+			local playerhealth = v.components.health.currenthealth
+			if playerhealth > highesthealth then
+				highesthealth = playerhealth
+			end
+			if v:GetDistanceSqToPoint(pos) <= PICKUP_RADIUS*PICKUP_RADIUS then
+				nearbyplayers = nearbyplayers + 1
+				if playerhealth < DEATHMATCH_TUNING.EQUALIZER_MAX_HEALTH then
+					table.insert(lowhealthplayers, v)
+				end
+			end
+		end
+	end
+	local perilplayers = {}
+	for k,player in pairs(lowhealthplayers) do
+		local playerhealth = player.components.health.currenthealth
+		local healthdiff = highesthealth-playerhealth
+		if healthdiff >= DEATHMATCH_TUNING.EQUALIZER_HEALTH_DIFF then
+			table.insert(perilplayers, player)
 		end
 	end
 	if self.enabledarts and (nearbyplayers > 0 and nearbyplayers <= count/2) then
@@ -683,13 +704,13 @@ function Deathmatch_Manager:GetPickUpItemList(custompos)
 			table.insert(result, "deathmatch_reviverheart")
 		end
 	end
-	return result
+	return result, perilplayers
 end
 
 function Deathmatch_Manager:DoPickUpSpawn()
 	if not self.enablepickups then return end
 	local custompos = (arena_configs[self.arena].custom_spawnpoint ~= nil and arena_configs[self.arena].custom_spawnpoint())
-	local items_to_spawn = self:GetPickUpItemList(custompos)
+	local items_to_spawn, players_in_peril = self:GetPickUpItemList(custompos)
 	for i, v in ipairs(items_to_spawn) do
 		local pos = custompos or self.inst.centerpoint:GetPosition()
 		local offset = nil
@@ -702,6 +723,23 @@ function Deathmatch_Manager:DoPickUpSpawn()
 		end)
 		if offset ~= nil then
 			local item = SpawnPrefab(v)
+			local fx = SpawnPrefab("small_puff")
+			item.Transform:SetPosition((pos+offset):Get())
+			fx.Transform:SetPosition((pos+offset):Get())
+			table.insert(self.spawnedpickups, item)
+			if item.Fade ~= nil then
+				item:DoTaskInTime(15, item.Fade)
+			end
+		end
+	end
+	for k, v in pairs(players_in_peril) do
+		local pos = v:GetPosition()
+		local offset = FindValidPositionByFan(math.random()*2*PI, 1, 10,
+		function(offset)
+			return TheWorld.Map:IsPassableAtPoint((pos+offset):Get())
+		end)
+		if offset ~= nil then
+			local item = SpawnPrefab(self.perilpickup)
 			local fx = SpawnPrefab("small_puff")
 			item.Transform:SetPosition((pos+offset):Get())
 			fx.Transform:SetPosition((pos+offset):Get())
