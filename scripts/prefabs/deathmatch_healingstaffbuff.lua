@@ -1,5 +1,5 @@
 local RANGE = 4
-local DEFENSE = 0.5
+local DEFENSE = DEATHMATCH_TUNING.FORGE_MAGE_HEALBLOOMS_DEFENSE
 local ALLIED_ADDCOLOR = {0.1, 0.3, 0.1, 1}
 local ENEMY_ADDCOLOR = {0, 0, 0.5, 1}
 local function OnAttached(inst, target)

@@ -244,7 +244,7 @@ end
 local DEFAULT_LOADOUT = "forge_melee"
 local LOADOUTS = {
 	forge_melee = {
-		health = 150,
+		health = DEATHMATCH_TUNING.FORGE_MELEE_HEALTH,
 		weapons = {
 			"spear_gungnir",
 			"spear_lance",
@@ -256,7 +256,7 @@ local LOADOUTS = {
 		}
 	},
 	forge_mage = {
-		health = 100,
+		health = DEATHMATCH_TUNING.FORGE_MAGE_HEALTH,
 		weapons = {
 			"fireballstaff",
 			"healingstaff",
