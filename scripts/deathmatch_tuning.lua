@@ -1,6 +1,6 @@
 return {
 	PICKUP_RADIUS = 8,
-	EQUALIZER_HEALTH_DIFF = 30,--how big the HP gap should be to activate equalizer
+	EQUALIZER_HEALTH_DIFF = 20,--how big the HP gap should be to activate equalizer
 	EQUALIZER_MAX_HEALTH = 30,--how little health a player should have for equalizer
 
 	FORGE_MELEE_HEALTH = 150,
@@ -11,7 +11,7 @@ return {
 
 	FORGE_MAGE_HEALTH = 100,
 	FORGE_MAGE_DAMAGE = 50,
-	FORGE_MAGE_BOOK_DAMAGE = 50,
+	FORGE_MAGE_BOOK_DAMAGE = 65,
 	FORGE_MAGE_METEOR_DAMAGE = 300,
 	FORGE_MAGE_SUMMON_DAMAGE = 30,
 	FORGE_MAGE_SUMMON_HEALTH = 150,

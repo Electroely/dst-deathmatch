@@ -161,6 +161,7 @@ local function fn()
 			team=net_byte(inst.GUID, "deathmatch_netteam"..tostring(i), "deathmatch_teamdirty"),
 			userid=net_string(inst.GUID, "deathmatch_netuserid"..tostring(i), "deathmatchdatadirty"),
 			health=net_byte(inst.GUID, "deathmatch_nethealth"..tostring(i), "deathmatch_playerhealthdirty"),
+			isinmatch = net_bool(inst.GUID, "deathmatch_isinmatch_"..tostring(i), "deathmatch_playerinmatchdirty"),
 		}
 	end
 	inst.deathmatch_netvars.globalvars = {
@@ -178,7 +179,7 @@ local function fn()
 				local clienttable = GetPlayerTable() or {}
 				if clienttable and v.userid and v.userid:value() == "" or not UserOnline(clienttable, v.userid:value()) then
 					v.userid:set(userid)
-					break
+					return v
 				end
 			end
 		end
@@ -189,6 +190,19 @@ local function fn()
 			return 1
 		end
 		return datatable.health:value()/255
+	end
+	function inst.IsPlayerInMatch(inst, userid)
+		local datatable = GetNetDMDataTable(userid)
+		if datatable == nil then
+			return false
+		end
+		return datatable.isinmatch:value()
+	end
+	function inst.GetMode(inst)
+		return inst.deathmatch_netvars.globalvars.matchmode:value()
+	end
+	function inst.GetMatchStatus(inst)
+		return inst.deathmatch_netvars.globalvars.matchstatus:value()
 	end
 	function inst.AddKill(inst,userid)
 		local datatable = GetNetDMDataTable(userid)

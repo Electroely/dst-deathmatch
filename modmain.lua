@@ -190,12 +190,15 @@ local function SetDirty(netvar, val)
 	netvar:set(val)
 end
 function G.GetNetDMDataTable(userid)
+	if userid == nil then
+		return nil
+	end
 	for _, v in pairs(G.TheWorld.net.deathmatch_netvars) do
 		if v.userid and v.userid:value() == userid then
 			return v
 		end
 	end
-	return nil
+	return G.TheWorld.net:FillNextEmptyDataSlot(userid)
 end
 local GetNetDMDataTable = G.GetNetDMDataTable
 
@@ -356,7 +359,7 @@ AddClassPostConstruct("widgets/controls", function(self, owner)
 		self.deathmatch_matchcontrols:SetPosition(-150, -70)
 
 		self.deathmatch_playerlist = self.bottom_root:AddChild(require("widgets/deathmatch_enemylist")(owner))
-		self.deathmatch_playerlist:SetPosition(-220, 70)
+		self.deathmatch_playerlist:SetPosition(-220, 37)
 
 		--self.deathmatch_infopopup = self.bottom_root:AddChild(Deathmatch_InfoPopup(owner))
 		--self.deathmatch_infopopup:SetPosition(0, 250)
@@ -402,7 +405,7 @@ AddClassPostConstruct("widgets/controls", function(self, owner)
 end)
 
 local function OnStartDM()
-	local status = G.TheWorld.net.deathmatch_netvars.globalvars.matchstatus:value()
+	local status = G.TheWorld.net:GetMatchStatus()
 	if status ~= nil then
 		if status == 1 then
 			UserCommands.RunTextUserCommand("dm stop", G.ThePlayer, false)
@@ -469,7 +472,7 @@ AddClassPostConstruct("screens/redux/lobbyscreen", function(self)
 end)
 
 AddClassPostConstruct("widgets/playerdeathnotification", function(self)
-	local mode = G.TheWorld.net.deathmatch_netvars.globalvars.matchmode:value()
+	local mode = G.TheWorld.net:GetMode()
 	if mode == 1 then
 		self.revive_message:SetString(GLOBAL.DEATHMATCH_STRINGS.DEAD_ALONE_PROMPT)
 	else
@@ -558,8 +561,8 @@ G.STRINGS.ACTIONS.DEATHMATCH_PAIRWITH = DEATHMATCH_STRINGS.PAIRWITH_ACTION
 AddComponentAction("SCENE", "teamer", function(inst, doer, actions, right)
 	--if right then
 		if inst:HasTag("spectator") or doer:HasTag("spectator") or inst == doer then return end
-		local mode = G.TheWorld.net.deathmatch_netvars.globalvars.matchmode:value() --3: 2pt
-		local matchstatus = G.TheWorld.net.deathmatch_netvars.globalvars.matchstatus:value()
+		local mode = G.TheWorld.net:GetMode() --3: 2pt
+		local matchstatus = G.TheWorld.net:GetMatchStatus()
 		if mode == 3 and (matchstatus == 0 or matchstatus == 2) then
 			table.insert(actions, G.ACTIONS.DEATHMATCH_PAIRWITH)
 		end
@@ -580,7 +583,6 @@ local aoecast_states = {
 	combat_superjump = true,
 	combat_leap_start = true,
 	combat_leap = true,
-	throw_line = true,
 	book = true,
 	castspell = true,
 }
@@ -626,31 +628,33 @@ for k, v in pairs({ "wilson", "wilson_client" }) do
 				end)
 				return corpse_rebirth_onexit(inst, ...)
 			end
+
+			for aoestate, _ in pairs(aoecast_states) do
+				local onenter_old = self.states[aoestate].onenter
+				self.states[aoestate].onenter = function(inst, ...)
+					local weapon = inst.components.inventory:GetEquippedItem(GLOBAL.EQUIPSLOTS.HANDS)
+					if weapon then
+						inst.sg.statemem.aoecastweapon = weapon
+						weapon.components.equippable:SetPreventUnequipping(true)
+					end
+					if onenter_old then
+						return onenter_old(inst, ...)
+					end
+				end
+				local onexit_old = self.states[aoestate].onexit
+				self.states[aoestate].onexit = function (inst, ...)
+					if inst.sg.statemem.aoecastweapon then
+						local weapon = inst.sg.statemem.aoecastweapon
+						weapon.components.equippable:SetPreventUnequipping(false)
+					end
+					if onexit_old then
+						return onexit_old(inst, ...)
+					end
+				end
+			end
 		end
 
-		for aoestate, _ in pairs(aoecast_states) do
-			local onenter_old = self.states[aoestate].onenter
-			self.states[aoestate].onenter = function(inst, ...)
-				local weapon = inst.components.inventory:GetEquippedItem(GLOBAL.EQUIPSLOTS.HANDS)
-				if weapon then
-					inst.sg.statemem.aoecastweapon = weapon
-					weapon.components.equippable:SetPreventUnequipping(true)
-				end
-				if onenter_old then
-					return onenter_old(inst, ...)
-				end
-			end
-			local onexit_old = self.states[aoestate].onexit
-			self.states[aoestate].onexit = function (inst, ...)
-				if inst.sg.statemem.aoecastweapon then
-					local weapon = inst.sg.statemem.aoecastweapon
-					weapon.components.equippable:SetPreventUnequipping(false)
-				end
-				if onexit_old then
-					return onexit_old(inst, ...)
-				end
-			end
-		end
+
 	end)
 end
 

@@ -7,6 +7,7 @@ local SPACING = 80
 local Y_OFFSET = 70
 
 local ALLIES_OFFSET = 510
+local ENEMIES_OFFSET = -30
 
 local Deathmatch_EnemyList = Class(Widget, function(self, owner)
 	Widget._ctor(self, "Deathmatch_EnemyList")
@@ -35,7 +36,6 @@ function Deathmatch_EnemyList:GetPlayerTable()
     if ClientObjs == nil then
         return {}, {}
 	end
-
     --remove dedicate host from player list and add team & hp data
     for i, v in ipairs(ClientObjs) do
         if v.performance ~= nil then
@@ -55,11 +55,13 @@ function Deathmatch_EnemyList:GetPlayerTable()
 		end
 		return a.team < b.team
 	end)
+	local status = TheWorld.net:GetMatchStatus()
+	local only_battlers = status ~= 0
 	local allies = {}
 	local enemies = {}
 	local allyteam = self.owner.components.teamer:GetTeam()
 	for i, v in ipairs(ClientObjs) do
-		if v.prefab == "" or (v.userid == self.owner.userid) then
+		if v.prefab == "" or (v.userid == self.owner.userid) or (not only_battlers or TheWorld.net:IsPlayerInMatch(v.userid)) then
 			--don't insert
 		elseif allyteam ~= 0 and v.team == allyteam then
 			table.insert(allies,v)
@@ -120,8 +122,8 @@ function Deathmatch_EnemyList:SetWidgetToPlayer(badge, data)
 end
 
 function Deathmatch_EnemyList:RefreshWidgets()
-	local players, teammates = self:GetPlayerTable()
-	--local players, teammates = CreateDummyTable()
+	--local players, teammates = self:GetPlayerTable()
+	local players, teammates = CreateDummyTable()
 	
 	for i = 1, math.max(#players, #self.widgets) do
 		if self.widgets[i] ~= nil then
@@ -162,17 +164,17 @@ function Deathmatch_EnemyList:RefreshWidgets()
 	--TODO: calculate spacing depending on number of widgets & screen size
 	for i, widget in ipairs(self.widgets) do
 		if i%2 == 1 then
-			widget:SetPosition(-(math.ceil(i/2)-1)*SPACING, 0)
+			widget:SetPosition(ENEMIES_OFFSET-(math.floor(i/2)-1)*SPACING - SPACING*0.5, Y_OFFSET)
 		else
-			widget:SetPosition(-((i/2)-1)*SPACING - SPACING*0.5, Y_OFFSET)
+			widget:SetPosition(ENEMIES_OFFSET-((i/2)-1)*SPACING, 0)
 		end
 	end
 
 	for i, widget in ipairs(self.widgets_allies) do
 		if i%2 == 1 then
-			widget:SetPosition(ALLIES_OFFSET+(math.ceil(i/2)-1)*SPACING, Y_OFFSET)
+			widget:SetPosition(ALLIES_OFFSET+(math.ceil(i/2)-1)*SPACING, 0)
 		else
-			widget:SetPosition(ALLIES_OFFSET+((i/2)-1)*SPACING + SPACING*0.5, 0)
+			widget:SetPosition(ALLIES_OFFSET+((i/2)-1)*SPACING + SPACING*0.5, Y_OFFSET)
 		end
 	end
 end

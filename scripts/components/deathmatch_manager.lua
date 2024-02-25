@@ -133,10 +133,7 @@ local function OnPlayerLeft(inst, player)
 	local self = inst.components.deathmatch_manager
 	self.damagedealt[player] = nil
 	OnPlayerDeath(player)
-	local contains, idx = TableContains(self.players_in_match, player)
-	if contains then
-		table.remove(self.players_in_match, idx)
-	end
+	self:RemovePlayerFromMatch(player)
 	local id = player.userid
 	inst:DoTaskInTime(FRAMES, function(inst)
 		if self.doingreset and UserOnline(id) then
@@ -365,9 +362,38 @@ function Deathmatch_Manager:GiveLobbyInventory(player)
 end
 
 function Deathmatch_Manager:IsPlayerInMatch(player)
-	local yes = TableContains(self.players_in_match, player)
-	return yes
+	return TableContains(self.players_in_match, player)
 end
+
+function Deathmatch_Manager:AddPlayerToMatch(player)
+	table.insert(self.players_in_match, player)
+	local datatable = GetNetDMDataTable(player.userid)
+	if datatable then
+		datatable.isinmatch:set(true)
+	end
+end
+
+function Deathmatch_Manager:RemovePlayerFromMatch(player)
+	local inmatch, idx = TableContains(self.players_in_match, player)
+	if inmatch then
+		table.remove(self.players_in_match, player)
+	end
+	local datatable = GetNetDMDataTable(player.userid)
+	if datatable then
+		datatable.isinmatch:set(false)
+	end
+end
+
+function Deathmatch_Manager:ClearPlayersInMatch()
+	for k, v in pairs(self.players_in_match) do
+		local datatable = GetNetDMDataTable(v.userid)
+		if datatable then
+			datatable.isinmatch:set(false)
+		end
+	end
+	self.players_in_match = {}
+end
+
 
 function Deathmatch_Manager:CountAlivePlayers(ignoretagged)
 	local count = 0
@@ -525,7 +551,7 @@ function Deathmatch_Manager:StartDeathmatch()
 					--end
 				end
 			end
-			table.insert(self.players_in_match, v)
+			self:AddPlayerToMatch(v)
 			v.components.locomotor:SetExternalSpeedMultiplier(self.inst, "deathmatch_speedmult", 0)
 		end
 		for k, v in pairs(spectators) do
@@ -621,7 +647,7 @@ function Deathmatch_Manager:StopDeathmatch()
 			end
 		end)
 	end
-	self.players_in_match = {}
+	self:ClearPlayersInMatch()
 end
 
 
@@ -1096,10 +1122,7 @@ function Deathmatch_Manager:ToggleSpectator(player)
 		if not self.doingreset and not self.matchstarting then
 			player.components.teamer:SetTeam(0)
 		end
-		local ingame, idx = TableContains(self.players_in_match, player)
-		if ingame then 
-			table.remove(self.players_in_match, idx) 
-		end
+		self:RemovePlayerFromMatch(player)
 		OnPlayerDeath(self.inst, player)
 		player:PushEvent("ms_becamespectator")
 	end

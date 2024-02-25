@@ -52,8 +52,8 @@ AddUserCommand("setteam", {
 		if caller:HasTag("spectator") then
 			G.Networking_SystemMessage("This command can't be used in spectator mode.")
 		end
-		local mode = G.TheWorld.net.deathmatch_netvars.globalvars.matchmode:value()
-		local matchstatus = G.TheWorld.net.deathmatch_netvars.globalvars.matchstatus:value()
+		local mode = G.TheWorld.net:GetMode()
+		local matchstatus = G.TheWorld.net:GetMatchStatus()
 		local teamnum = G.tonumber(params.team) 
 		teamnum = (teamnum ~= nil and teamnum >= 0 and teamnum <= #G.DEATHMATCH_TEAMS)
 				and teamnum or FindKeyFromName(params.team)
@@ -172,7 +172,7 @@ AddUserCommand("despawn", {
 		G.TheWorld:PushEvent("ms_playerdespawnanddelete", caller)
     end,
 	localfn = function(params, caller)
-		local status = G.TheWorld.net.deathmatch_netvars.globalvars.matchstatus:value()
+		local status = G.TheWorld.net:GetMatchStatus()
 		if status ~= nil then
 			if status == 1 then
 				G.Networking_SystemMessage(DEATHMATCH_STRINGS.CHATMESSAGES.DESPAWN_MIDMATCH)

@@ -176,6 +176,7 @@ local function fn(inst, prefab)
 			end
 		end
 	end)
+	inst.components.health:DoDelta(0) --inits netvars
 	
 	inst:ListenForEvent("attacked", function(inst, data)
 		if data then

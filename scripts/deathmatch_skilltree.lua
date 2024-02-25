@@ -107,7 +107,7 @@ SkillTreeData.ValidateCharacterData = function(self, characterprefab, activateds
 end
 
 GLOBAL.RespecSkillsForPlayer = function(player)
-    local matchstatus = GLOBAL.TheWorld.net.deathmatch_netvars.globalvars.matchstatus:value()
+    local matchstatus = GLOBAL.TheWorld.net:GetMatchStatus()
     if matchstatus >= 1 then
         return
     end

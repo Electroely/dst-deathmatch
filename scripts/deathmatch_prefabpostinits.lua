@@ -551,7 +551,7 @@ AddPrefabPostInit("world", function(inst) --can't this just go into prefabs/deat
 		inst:ListenForEvent("ms_playerjoined", function(inst)
 			inst.net:PushEvent("deathmatch_timercurrentchange", inst.components.deathmatch_manager.timer_current)
 			inst.net:PushEvent("deathmatch_matchmodechange", inst.components.deathmatch_manager.gamemode == 0 and 4 or inst.components.deathmatch_manager.gamemode)
-			inst.net:PushEvent("deathmatch_matchstatuschange", inst.net.deathmatch_netvars.globalvars.matchstatus:value())
+			inst.net:PushEvent("deathmatch_matchstatuschange", inst.net:GetMatchStatus())
 		end)
 	end
 	inst:ListenForEvent("ms_register_lavaarenacenter", function(world, center)

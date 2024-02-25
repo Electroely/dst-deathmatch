@@ -20,12 +20,12 @@ local Deathmatch_LobbyTimer = Class(Widget, function(self)
 		self:OnUpdate()
 	end)
 	
-	if TheWorld.net.deathmatch_netvars.globalvars.matchstatus:value() ~= 2 then
+	if TheWorld.net:GetMatchStatus() ~= 2 then
 		self:Hide()
 	end
 	
 	self.OnNetStatusDirty = function(wrld)
-		if TheWorld.net.deathmatch_netvars.globalvars.matchstatus:value() == 2 then
+		if TheWorld.net:GetMatchStatus() == 2 then
 			self:Show()
 		else
 			self:Hide()

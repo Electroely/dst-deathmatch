@@ -46,10 +46,10 @@ table.insert(arenalist, 0, "random")
 ]]
 
 local function GetTeamMode()
-	return TheWorld.net.deathmatch_netvars.globalvars.matchmode:value()
+	return TheWorld.net:GetMode()
 end
 local function GetMatchStatus()
-	return TheWorld.net.deathmatch_netvars.globalvars.matchstatus:value()
+	return TheWorld.net:GetMatchStatus()
 end
 local modes = {
 	"ffa",

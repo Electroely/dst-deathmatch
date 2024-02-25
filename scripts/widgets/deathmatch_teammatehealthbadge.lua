@@ -202,11 +202,10 @@ function TeammateHealthBadge:SetPlayer(data)
     self.anim:GetAnimState():HideSymbol("character_wilson")
 	self:SetHead(data.prefab, data.colour, data.ishost, data.userflags, data.base_skin)
 	
-	local health = data.health or TheWorld.net:GetPlayerHealth(self.userid)
+	local health = TheWorld.net:GetPlayerHealth(self.userid)
+	self.silent = true
 	if health then
-		self:SetPercent(health, changed_users)
-	else
-		self:SetPercent(1, changed_users)
+		self:SetPercent(health)
 	end
 
 	local team = data.team or TheWorld.net:GetPlayerTeam(self.userid) or 0
@@ -220,9 +219,9 @@ function TeammateHealthBadge:SetPlayer(data)
 	
 end
 
-function TeammateHealthBadge:SetPercent(val, silent)
+function TeammateHealthBadge:SetPercent(val)
 	val = val == 0 and 0 or math.max(val, 0.001)
-
+	local silent = self.silent
 	if not silent then
 		if self.percent < val then
 			if self.arrowdir <= 0 then
@@ -234,6 +233,7 @@ function TeammateHealthBadge:SetPercent(val, silent)
 			end
 		end
 	end
+	self.silent = nil
 
     Badge.SetPercent(self, val)
 
