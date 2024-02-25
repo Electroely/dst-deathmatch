@@ -376,7 +376,7 @@ end
 function Deathmatch_Manager:RemovePlayerFromMatch(player)
 	local inmatch, idx = TableContains(self.players_in_match, player)
 	if inmatch then
-		table.remove(self.players_in_match, player)
+		table.remove(self.players_in_match, idx)
 	end
 	local datatable = GetNetDMDataTable(player.userid)
 	if datatable then

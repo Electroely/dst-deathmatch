@@ -107,11 +107,10 @@ SkillTreeData.ValidateCharacterData = function(self, characterprefab, activateds
 end
 
 GLOBAL.RespecSkillsForPlayer = function(player)
-    local matchstatus = GLOBAL.TheWorld.net:GetMatchStatus()
-    if matchstatus >= 1 then
+    if player == nil or player.userid == nil or GLOBAL.TheWorld.net:IsPlayerInMatch(player.userid) then
         return
     end
-    if player and player.components.skilltreeupdater then
+    if player.components.skilltreeupdater then
         player.components.skilltreeupdater:SetSkipValidation(true)
         local skills = player.components.skilltreeupdater:GetActivatedSkills()
         if skills then

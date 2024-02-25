@@ -29,6 +29,7 @@ local Deathmatch_EnemyList = Class(Widget, function(self, owner)
 	self.inst:ListenForEvent("deathmatchdatadirty", refresh, TheWorld.net)
 	self.inst:ListenForEvent("deathmatch_playerhealthdirty", refresh, TheWorld.net)
 	self.inst:ListenForEvent("deathmatch_teamdirty", refresh, TheWorld.net)
+	self.inst:ListenForEvent("deathmatch_playerinmatchdirty", refresh, TheWorld.net)
 end)
 
 function Deathmatch_EnemyList:GetPlayerTable()
@@ -122,8 +123,8 @@ function Deathmatch_EnemyList:SetWidgetToPlayer(badge, data)
 end
 
 function Deathmatch_EnemyList:RefreshWidgets()
-	--local players, teammates = self:GetPlayerTable()
-	local players, teammates = CreateDummyTable()
+	local players, teammates = self:GetPlayerTable()
+	--local players, teammates = CreateDummyTable()
 	
 	for i = 1, math.max(#players, #self.widgets) do
 		if self.widgets[i] ~= nil then
