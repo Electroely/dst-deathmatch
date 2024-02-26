@@ -30,6 +30,8 @@ return {
 	DEAD_ALONE_PROMPT = "You're out! Wait for the next match.",
 	DEAD_TEAM_PROMPT = "If you have any teammates, tell them to revive you!",
 	SKILLTREETOAST_PROMPT = "Insight Available!",
+
+	CANT_DITCH_TEAMMATES_SPECTATE = "Your teammates can save you! You can't spectate now.",
 	
 	SKILLTREE_DESC = "Become a powerful fighter!",
 	SKILLTREE = {
@@ -190,7 +192,8 @@ return {
 		FORGE_MELEE = {
 			TITLE = "The Forge's Warrior",
 			BODY = [[
-				Starts with: Pith Pike, Spiral Spear, Forging Hammer, Blacksmith's Edge.*NEWLINE*NEWLINE
+				Starts with: Pith Pike, Spiral Spear, Forging Hammer, Blacksmith's Edge.*NEWLINE
+				Max Health: 150*NEWLINE*NEWLINE
 				The Forge's Warrior is a loadout with a variety of melee weapons that can put up a fight in any scenario.*NEWLINE*NEWLINE
 				The weapons allow for a lot of mobility which allows the user to dodge attacks and retaliate - sometimes at the same time! 
 				It's good at keeping constant pressure while also defending from incoming attackers.
@@ -235,7 +238,8 @@ return {
 		FORGE_MAGE = {
 			TITLE = "The Forge's Warlock",
 			BODY = [[
-				Starts with: Infernal Staff, Living Staff, Tome of Beckoning, Crown of Teleportation*NEWLINE*NEWLINE
+				Starts with: Infernal Staff, Living Staff, Tome of Beckoning, Crown of Teleportation*NEWLINE
+				Max Health: 100*NEWLINE*NEWLINE
 				The Forge's Warlock is a loadout that specializes in area control.*NEWLINE*NEWLINE
 				Using powerful spells from a long distance, Warlocks can set up the battlefield in their favor to take advantage of 
 				their increased attack range and items that appear during a match. If forced into close combat quarters, they can use the 
@@ -246,7 +250,7 @@ return {
 		INFERNALSTAFF = {
 			TITLE = "Infernal Staff",
 			BODY = [[
-				DAMAGE (REGULAR): 20 - DAMAGE (SPECIAL): 300 - COOLDOWN: 12*NEWLINE*NEWLINE
+				DAMAGE (REGULAR): 50 - DAMAGE (SPECIAL): 300 - COOLDOWN: 12*NEWLINE*NEWLINE
 				The Infernal Staff is a ranged weapon capable of calling a meteor that deals a massive amount of damage after a short delay.*NEWLINE*NEWLINE
 				The long time it takes to cast the meteor spell can make it difficult to land, but with its high casting range, thw whereabouts of the meteor 
 				can catch opponents off guard.
@@ -255,7 +259,7 @@ return {
 		LIVINGSTAFF = {
 			TITLE = "Living Staff",
 			BODY = [[
-				DAMAGE (REGULAR): 20 - COOLDOWN: 24*NEWLINE*NEWLINE
+				DAMAGE (REGULAR): 50 - COOLDOWN: 24*NEWLINE*NEWLINE
 				The Living Staff is a ranged weapon capable of creating a field of Life Blossoms that halve the damage taken by allies and slow the movement speed of opponents 
 				inside.*NEWLINE*NEWLINE
 			]]
@@ -263,8 +267,8 @@ return {
 		TOMEOFBECKONING = {
 			TITLE = "Tome of Beckoning",
 			BODY = [[
-				DAMAGE (REGULAR): 50 - COOLDOWN: 24*NEWLINE
-				DAMAGE (SUMMON): 15 - HEALTH (SUMMON): 150*NEWLINE*NEWLINE
+				DAMAGE (REGULAR): 65 - COOLDOWN: 24*NEWLINE
+				DAMAGE (SUMMON): 30 - HEALTH (SUMMON): 150*NEWLINE*NEWLINE
 				The Tome of Beckoning summons a Magma Golem that guards the area surrounding it, pelting opponents with fireballs.*NEWLINE*NEWLINE
 				The Magma Golem can be used as a guardian when being chased by an opponent - if there's no room to cast it, the tome can be used as 
 				a melee weapon to knock back opponents. The Magma Golem benefits from the Healing Staff's life blossoms, greatly increasing its survivability 

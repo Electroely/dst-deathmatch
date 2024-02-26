@@ -78,8 +78,15 @@ AddUserCommand("spectate", {
 	params = {},
 	vote = false,
 	serverfn = function(params, caller)
-		local self = G.TheWorld.components.deathmatch_manager
-		self:ToggleSpectator(caller)
+		if G.TheWorld.net:GetMode() == 1 or not G.TheWorld.net:IsPlayerInMatch(caller.userid) then
+			local self = G.TheWorld.components.deathmatch_manager
+			self:ToggleSpectator(caller)
+		end
+	end,
+	localfn = function(params, caller)
+		if not (G.TheWorld.net:GetMode() == 1 or not G.TheWorld.net:IsPlayerInMatch(caller.userid)) then
+			G.Networking_SystemMessage(DEATHMATCH_STRINGS.CANT_DITCH_TEAMMATES_SPECTATE)
+		end
 	end,
 })
 
@@ -96,9 +103,15 @@ AddUserCommand("afk", {
 		if caller:HasTag("spectator_perma") then 
 			caller:RemoveTag("spectator_perma") 
 			G.TheNet:Announce(caller:GetDisplayName().." is no longer AFK.", caller.entity, nil, "afk_stop")
+			if caller:HasTag("spectator") and (G.TheWorld.net:GetMatchStatus() == 0 or G.TheWorld.net:GetMatchStatus() == 2) then
+				G.TheWorld.components.deathmatch_manager:ToggleSpectator(caller)
+			end
 		else 
 			caller:AddTag("spectator_perma") 
 			G.TheNet:Announce(caller:GetDisplayName().." is now AFK.", caller.entity, nil, "afk_start")
+			if not (caller:HasTag("spectator") or G.TheWorld.net:IsPlayerInMatch(caller.userid)) then
+				G.TheWorld.components.deathmatch_manager:ToggleSpectator(caller)
+			end
 		end
 	end,
 })

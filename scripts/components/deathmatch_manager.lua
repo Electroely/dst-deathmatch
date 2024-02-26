@@ -115,6 +115,33 @@ local function OnPlayerDeath(inst, data)
 			TheWorld:PushEvent("wehaveawinner", self:GetWinner())
 			self:StopDeathmatch()
 		end
+		local player = data
+		if player and self:IsPlayerInMatch(player) then
+			local team = data.components.teamer:GetTeam()
+			if team == 0 then
+				self:RemovePlayerFromMatch(player)
+			else
+				local teammates = {}
+				local is_alive = false
+				for k, v in pairs(self.players_in_match) do
+					if v.components.teamer:GetTeam() == team then
+						if not v.components.health:IsDead() then
+							is_alive = true
+							print(v, "is still alive")
+							break
+						else
+							table.insert(teammates, v)
+						end
+					end
+				end
+				if not is_alive then
+					for k, v in pairs(teammates) do
+						print("removing",v,"because they are dead")
+						self:RemovePlayerFromMatch(v)
+					end
+				end
+			end
+		end
 	end
 end
 
@@ -159,8 +186,9 @@ local function OnPlayerJoined(inst, player)
 		--player.Transform:SetPosition(pos:Get())
 		player:DoDeathmatchTeleport(self.inst.lobbypoint:GetPosition())
 		if self.matchinprogress or self.matchstarting then
-			player:DoTaskInTime(1, function()
-				TheNet:SystemMessage(DEATHMATCH_STRINGS.CHATMESSAGES.JOIN_MIDMATCH)
+			player:DoTaskInTime(3, function(player)
+				--TheNet:SystemMessage(DEATHMATCH_STRINGS.CHATMESSAGES.JOIN_MIDMATCH)
+				self:ToggleSpectator(player)
 			end)
 		end
 		self:GiveLobbyInventory(player)
@@ -618,7 +646,7 @@ function Deathmatch_Manager:StopDeathmatch()
 			if not v.components.health:IsDead() then v.sg:GoToState("idle") end
 			if v:HasTag("spectator") and not v:HasTag("spectator_perma") then
 				self:ToggleSpectator(v)
-			elseif v:HasTag("spectator_perma") then
+			elseif not v:HasTag("spectator") and v:HasTag("spectator_perma") then
 				self:ToggleSpectator(v)
 			end
 			local pos = self.inst.lobbypoint:GetPosition()
@@ -762,7 +790,9 @@ function Deathmatch_Manager:DoPickUpSpawn()
 	end
 	for k, v in pairs(players_in_peril) do
 		local pos = v:GetPosition()
-		local offset = FindValidPositionByFan(math.random()*2*PI, 1, 10,
+		local dist = v.Physics:GetMotorVel()*0.7
+		local dir = v:GetRotation()
+		local offset = FindValidPositionByFan(dir*DEGREES, dist, 10,
 		function(offset)
 			return TheWorld.Map:IsPassableAtPoint((pos+offset):Get())
 		end)

@@ -208,7 +208,7 @@ end
 
 local function OnDeath(inst, data)
 	--G.TheWorld.net:PushEvent("deathmatch_death", { inst=inst, data=data })
-	G.TheWorld:PushEvent("playerdied")
+	G.TheWorld:PushEvent("playerdied", inst)
 end
 
 G.require("player_postinits_deathmatch") --so... why did i separate this into its own thing if im adding a postinit here regardless...?
