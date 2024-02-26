@@ -57,7 +57,7 @@ function Deathmatch_EnemyList:GetPlayerTable()
 		return a.team < b.team
 	end)
 	local status = TheWorld.net:GetMatchStatus()
-	local is_in_lobby = status == 0 or status == 1
+	local is_in_lobby = status == 0 or status == 2
 	local allies = {}
 	local enemies = {}
 	local allyteam = self.owner.components.teamer:GetTeam()
