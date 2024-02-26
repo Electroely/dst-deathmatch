@@ -57,12 +57,12 @@ function Deathmatch_EnemyList:GetPlayerTable()
 		return a.team < b.team
 	end)
 	local status = TheWorld.net:GetMatchStatus()
-	local only_battlers = status ~= 0
+	local is_in_lobby = status == 0 or status == 1
 	local allies = {}
 	local enemies = {}
 	local allyteam = self.owner.components.teamer:GetTeam()
 	for i, v in ipairs(ClientObjs) do
-		if v.prefab == "" or (v.userid == self.owner.userid) or (not only_battlers or TheWorld.net:IsPlayerInMatch(v.userid)) then
+		if v.prefab == "" or (v.userid == self.owner.userid) or not (is_in_lobby or TheWorld.net:IsPlayerInMatch(v.userid)) then
 			--don't insert
 		elseif allyteam ~= 0 and v.team == allyteam then
 			table.insert(allies,v)

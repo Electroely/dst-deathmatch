@@ -27,9 +27,9 @@ AddPrefabPostInit("player_classified", function(inst)
 		G.TheWorld:PushEvent("applyarenaeffects", inst._arenaeffects:value())
 	end)
 	inst._arenachoice = G.net_smallbyte(inst.GUID, "deathmatch.arenachoice", "arenachoicedirty")
-	inst._arenachoice:set(1) --default atrium
+	inst._arenachoice:set(63) --default no selection
 	inst._modechoice = G.net_tinybyte(inst.GUID, "deathmatch.modechoice", "modechoicedirty")
-	inst._modechoice:set(1) --default ffa
+	inst._modechoice:set(7) --default no selection
 	if not G.TheWorld.ismastersim then
 		inst:ListenForEvent("arenachoicedirty", function(inst, data)
 			inst._parent.arenachoice = arenas.IDX[inst._arenachoice:value()]
@@ -226,9 +226,15 @@ AddPlayerPostInit(function(inst)
 			end
 		end)
 		inst:ListenForEvent("changearenachoice", function(inst, data)
+			if arenas.IDX[data] == inst.arenachoice then
+				data = 63
+			end
 			SendModRPCToServer(GetModRPC(modname, "deathmatch_arenachoice"), data)
 		end)
 		inst:ListenForEvent("changemodechoice", function(inst, data)
+			if data == inst.modechoice then
+				data = 7
+			end
 			SendModRPCToServer(GetModRPC(modname, "deathmatch_modechoice"), data)
 		end)
 	end
@@ -694,23 +700,23 @@ end
 -----------------------------------------------------------------------------
 
 local function checkarenaid(v)
-	return type(v) == "number" and (v == 0 or arenas.VALID_ARENA_LOOKUP[v])
+	return type(v) == "number" and (v == 0 or arenas.VALID_ARENA_LOOKUP[v] or v == 63)
 end
 local function checkmodeid(v)
-	return type(v) == "number" and (v > 0 and v <= 3)
+	return type(v) == "number" and ((v >= 0 and v <= 3) or v == 7)
 end
 AddModRPCHandler(modname, "deathmatch_arenachoice", function(inst, arenaid)
 	print("got arena choice",inst,arenaid,checkarenaid(arenaid))
 	if (inst == nil or not checkarenaid(arenaid)) then return end
 	inst.player_classified._arenachoice:set(arenaid)
-	inst.arenachoice = arenas.IDX[arenaid]
+	inst.arenachoice = arenaid ~= 63 and arenas.IDX[arenaid] or nil
 	GLOBAL.TheWorld:PushEvent("ms_arenavote")
 end)
 AddModRPCHandler(modname, "deathmatch_modechoice", function(inst, modeid)
 	print("got mode choice",inst,modeid,checkmodeid(modeid))
 	if (inst == nil or not checkmodeid(modeid)) then return end
 	inst.player_classified._modechoice:set(modeid)
-	inst.modechoice = modeid
+	inst.modechoice = modeid ~= 7 and modeid or nil
 	GLOBAL.TheWorld:PushEvent("ms_modevote")
 end)
 

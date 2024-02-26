@@ -301,6 +301,7 @@ local Deathmatch_Manager = Class(function(self, inst)
 	self.enabled = true
 	self.arena = "atrium"
 	self.upcoming_arena = "atrium"
+	self.current_gamemode = 0
 	self.enablepickups = true
 	self.enabledarts = true
 	self.allow_teamswitch_user = true
@@ -570,6 +571,7 @@ function Deathmatch_Manager:StartDeathmatch()
 		if self.gamemode ~= 0 and self.gamemode <= #self.gamemodes then
 			self:GroupTeams(self.gamemodes[self.gamemode].teammode)
 		end
+		self.current_gamemode = self.gamemode
 		if self.gamemode == 0 then
 			self.allow_teamswitch_user = false
 		end
@@ -718,7 +720,7 @@ function Deathmatch_Manager:GetPickUpItemList(custompos)
 			table.insert(result, GetRandomItem(arena_configs[self.arena].overridepickups or self.pickupprefabs))
 		end
 	end
-	if self.gamemode ~= 1 then
+	if self.current_gamemode ~= 1 then
 		local heartcount = 0
 		for k, v in pairs(self.spawnedpickups) do
 			if v:IsValid() and v.prefab == "deathmatch_reviverheart" then
@@ -846,14 +848,16 @@ function Deathmatch_Manager:SetVotedArena()
 	local votes = {}
 	local highest = 0
 	for k, v in pairs(players) do
-		local choice = v.arenachoice or "atrium"
-		if votes[choice] == nil then
-			votes[choice] = 1
-		else
-			votes[choice] = votes[choice] + 1
-		end
-		if votes[choice] > highest then
-			highest = votes[choice]
+		local choice = v.arenachoice
+		if choice ~= nil then
+			if votes[choice] == nil then
+				votes[choice] = 1
+			else
+				votes[choice] = votes[choice] + 1
+			end
+			if votes[choice] > highest then
+				highest = votes[choice]
+			end
 		end
 	end
 	local winners = {}
@@ -862,7 +866,10 @@ function Deathmatch_Manager:SetVotedArena()
 			table.insert(winners, arena)
 		end
 	end
-	if #winners == 1 then
+	if #winners > 0 then
+		table.sort(winners, function(a,b)
+			return arenas.IDX_LOOKUP[a] < arenas.IDX_LOOKUP[b]
+		end)
 		print(winners[1])
 		self:SetNextArena(winners[1])
 	end
@@ -873,14 +880,16 @@ function Deathmatch_Manager:SetVotedMode()
 	local votes = {}
 	local highest = 0
 	for k, v in pairs(players) do
-		local choice = v.modechoice or 1
-		if votes[choice] == nil then
-			votes[choice] = 1
-		else
-			votes[choice] = votes[choice] + 1
-		end
-		if votes[choice] > highest then
-			highest = votes[choice]
+		local choice = v.modechoice
+		if choice ~= nil then
+			if votes[choice] == nil then
+				votes[choice] = 1
+			else
+				votes[choice] = votes[choice] + 1
+			end
+			if votes[choice] > highest then
+				highest = votes[choice]
+			end
 		end
 	end
 	local winners = {}
@@ -889,7 +898,10 @@ function Deathmatch_Manager:SetVotedMode()
 			table.insert(winners, mode)
 		end
 	end
-	if #winners == 1 then
+	if #winners > 0 then
+		table.sort(winners, function(a,b)
+			return a < b
+		end)
 		local winner = winners[1]
 		if winner ~= self.gamemode then
 			self:SetGamemode(winners[1])

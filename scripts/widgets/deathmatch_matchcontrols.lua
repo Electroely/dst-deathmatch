@@ -51,6 +51,9 @@ end
 local function GetMatchStatus()
 	return TheWorld.net:GetMatchStatus()
 end
+local function GetArena()
+	return TheWorld.net:GetArena()
+end
 local modes = {
 	"ffa",
 	"rvb",
@@ -119,25 +122,31 @@ local submenu_defs = {
 	{ name = "teammode",
 		str = DEATHMATCH_STRINGS.TEAMMODE,
 		imgfn = function()
+			if GetTeamMode() == 0 then
+				return Image("images/matchcontrols_infobutton.xml", "matchcontrols_infobutton.tex")
+			end
 			local mode = modes[GetTeamMode()]
 			return Image("images/modeselect_"..mode..".xml", "modeselect_"..mode..".tex")
 		end,
 		buttons = {
 			{ str = DEATHMATCH_STRINGS.TEAMMODE_FFA,
 			imgfn = function() return Image("images/modeselect_ffa.xml", "modeselect_ffa.tex") end,
-			onclickfn = function() ThePlayer:PushEvent("changemodechoice", 1) end, },
+			onclickfn = function() ThePlayer:PushEvent("changemodechoice", 1) end,
+			highlightfn = function() return ThePlayer.modechoice == 1 end, },
 			{ str = DEATHMATCH_STRINGS.TEAMMODE_RVB,
 			imgfn = function() return Image("images/modeselect_rvb.xml", "modeselect_rvb.tex") end,
-			onclickfn = function() ThePlayer:PushEvent("changemodechoice", 2) end, },
+			onclickfn = function() ThePlayer:PushEvent("changemodechoice", 2) end,
+			highlightfn = function() return ThePlayer.modechoice == 2 end, },
 			{ str = DEATHMATCH_STRINGS.TEAMMODE_2PT,
 			imgfn = function() return Image("images/modeselect_2pt.xml", "modeselect_2pt.tex") end,
-			onclickfn = function() ThePlayer:PushEvent("changemodechoice", 3) end, },
+			onclickfn = function() ThePlayer:PushEvent("changemodechoice", 3) end,
+			highlightfn = function() return ThePlayer.modechoice == 3 end, },
 		}
 	},
 	{ name = "map",
 		str = DEATHMATCH_STRINGS.ARENAS,
 		imgfn = function() 
-			local map = ThePlayer.arenachoice or "random"
+			local map = arenas.IDX[GetArena()]
 			return Image("images/map_icon_"..map..".xml", "map_icon_"..map..".tex")
 		end,
 		buttons = {
@@ -166,7 +175,8 @@ for k, v in pairs(arenalist) do
 		end,
 		imgfn = function(button)
 			return Image("images/map_icon_"..v..".xml", "map_icon_"..v..".tex")
-		end
+		end,
+		highlightfn = function() return ThePlayer.arenachoice == v end,
 	}
 	table.insert(submenu_defs[3].buttons, buttondata)
 end
@@ -270,6 +280,9 @@ function Deathmatch_MatchControls:BuildWidgets()
 			w.extraimage = w.image:AddChild(v.imgfn(w))
 		end
 		w.frame = w.image:AddChild(Image(FRAME_ATLAS, FRAME_IMAGE))
+		if v.highlightfn and v.highlightfn() then
+			w.frame:SetTint(0.3, 1, 0.3, 1)
+		end
 		table.insert(self.subwidgets, w)
 	end
 	

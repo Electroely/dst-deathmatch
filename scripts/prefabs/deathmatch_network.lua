@@ -204,6 +204,9 @@ local function fn()
 	function inst.GetMatchStatus(inst)
 		return inst.deathmatch_netvars.globalvars.matchstatus:value()
 	end
+	function inst.GetArena(inst)
+		return inst.deathmatch_netvars.globalvars.arena:value()
+	end
 	function inst.AddKill(inst,userid)
 		local datatable = GetNetDMDataTable(userid)
 		if inst.deathmatch[userid] == nil then
