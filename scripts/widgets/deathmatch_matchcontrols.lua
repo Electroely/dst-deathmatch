@@ -15,6 +15,7 @@ local SUBBUTTON_SCALE_FOCUS = {0.5,0.5,0.5}
 
 local SUBBUTTON_STARTANGLE = 210*DEGREES
 local SUBBUTTON_ENDANGLE = 330*DEGREES
+local SUBBUTON_EXTRASPACING = 30*DEGREES
 local SUBBUTTON_RADIUS = 80
 
 local BUTTON_ATLAS = "images/matchcontrolsbutton_bg.xml"
@@ -63,6 +64,8 @@ local arena_icons = {
 	atrium = true,
 	desert = true,
 	pigvillage = true,
+	moonisland = true,
+	stalker = true,
 	random = true,
 }
 local function GetPlayerTeam()
@@ -303,6 +306,10 @@ function Deathmatch_MatchControls:BuildWidgets()
 	local count = #self.subwidgets
 	local startangle = SUBBUTTON_STARTANGLE
 	local endangle = SUBBUTTON_ENDANGLE
+	if count > 4 then
+		startangle = startangle - SUBBUTON_EXTRASPACING*(count-4)/2
+		endangle = endangle + SUBBUTON_EXTRASPACING*(count-4)/2
+	end
 	local radius = SUBBUTTON_RADIUS
 	for i, w in ipairs(self.subwidgets) do
 		local i2 = count <= 2 and i or i-1

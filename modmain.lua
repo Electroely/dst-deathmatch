@@ -132,6 +132,10 @@ Assets = {
 	Asset("ATLAS", "images/map_icon_desert.xml"),
 	Asset("IMAGE", "images/map_icon_pigvillage.tex"),
 	Asset("ATLAS", "images/map_icon_pigvillage.xml"),
+	Asset("IMAGE", "images/map_icon_moonisland.tex"),
+	Asset("ATLAS", "images/map_icon_moonisland.xml"),
+	Asset("IMAGE", "images/map_icon_stalker.tex"),
+	Asset("ATLAS", "images/map_icon_stalker.xml"),
 	Asset("IMAGE", "images/map_icon_random.tex"),
 	Asset("ATLAS", "images/map_icon_random.xml"),
 	

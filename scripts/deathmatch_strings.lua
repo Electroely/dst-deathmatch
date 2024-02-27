@@ -17,6 +17,8 @@ return {
 	
 	ARENA_ATRIUM = "The Atrium",
 	ARENA_DESERT = "The Badlands",
+	ARENA_MOONISLAND = "Lunar Island",
+	ARENA_STALKER = "The Forest",
 	ARENA_PIGVILLAGE = "Pig King's Village",
 	ARENA_RANDOM = "Random",
 	

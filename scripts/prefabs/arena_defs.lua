@@ -171,7 +171,7 @@ local ARENA_DEFS = {
 	},
 	
 	moonisland = {
-		name = "Lunar Island",
+		name = DEATHMATCH_STRINGS.ARENA_MOONISLAND,
 		--
 		spawnradius = 16,
 		min_pickup_dist = 0,
@@ -204,9 +204,7 @@ local ARENA_DEFS = {
 		end,
 		matchendfn = function()
 			local self = TheWorld.components.deathmatch_manager
-			for k, fissure in pairs(self.moonisland_fissures) do
-				moonisland_deactivatefissure(fissure)
-			end
+			moonisland_deactivatefissure(self.moonisland_fissures[self.current_fissure])
 		end,
 		onpickupspawn = function()
 			moonisland_changefissure()
@@ -278,10 +276,10 @@ local ARENA_DEFS = {
 	},
 
 	stalker = {
-		name = "Forest",
+		name = DEATHMATCH_STRINGS.ARENA_STALKER,
 		--
 		spawnradius = 14,
-		nopowerpickups = true,
+		--nopowerpickups = true,
 		custom_spawnpoint = function()
 			local stalker = TheSim:FindFirstEntityWithTag("stalker")
 			return stalker and stalker:GetPosition()
@@ -333,11 +331,12 @@ local ARENA_DEFS = {
 local ARENA_IDX = {
 	"atrium",
 	"desert",
-	"pigvillage",
 	"moonisland",
+	"stalker",
+	"pigvillage",
 	"malbatross",
 	"grotto",
-	"stalker"
+	
 }
 
 ARENA_IDX[0] = "random"
@@ -351,6 +350,8 @@ end
 local VALID_ARENA_LIST = {
 	"atrium",
 	"desert",
+	"moonisland",
+	"stalker",
 	"pigvillage",
 }
 
