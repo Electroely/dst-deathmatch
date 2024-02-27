@@ -12,7 +12,7 @@ local DEATHMATCH_GAMEMODES = { --TODO
 	{name="2-Player Teams"},
 	{name="Custom Teams"}
 }
-
+local arena_defs = require("prefabs/arena_defs")
 local ARENAS = { --TODO
 	"Random",
 	"Atrium",
@@ -92,7 +92,7 @@ local Deathmatch_Status = Class(Widget, function(self, owner)
 	self.arena = self:AddChild(Text(NEWFONT_OUTLINE, 20))
 	self.arena:SetPosition(50, -45)
 	self.arena.Update = function(arenastr)
-		arenastr:SetString("|  " .. ARENAS[self.data.arena+1])
+		arenastr:SetString("|  " .. arena_defs.CONFIGS[arena_defs.IDX[self.data.arena]].name)
 	end
 end)
 

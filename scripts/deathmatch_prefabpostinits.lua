@@ -413,11 +413,11 @@ for k, v in pairs({ "lavaarena_elemental", "abigail", "balloon", "boaron" }) do
 	end)
 end
 -- non pickable entities
-for k, v in pairs({"berrybush", "flower", "cactus", "marsh_bush"}) do
+for k, v in pairs({"berrybush", "flower", "cactus", "oasis_cactus", "marsh_bush", "sapling", "sapling_moon"}) do
 	AddPrefabPostInit(v, function(inst)
 		if G.TheNet:GetServerGameMode() == "deathmatch" then
 			inst:RemoveComponent("pickable")
-			if v == "cactus" then
+			if v == "cactus" or v == "oasis_cactus" then
 				inst.OnEntityWake = nil
 			end
 		end

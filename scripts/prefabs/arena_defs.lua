@@ -45,6 +45,27 @@ local fullmoonfn = function(inst)
 	end
 end
 
+local function moonisland_activatefissure(fissure)
+	fissure.level = 5
+	fissure:UpdateState(0.5)
+end
+local function moonisland_deactivatefissure(fissure)
+	fissure.level = 1
+	fissure:UpdateState(0.5)
+end
+local function moonisland_changefissure()
+	local self = TheWorld.components.deathmatch_manager
+	moonisland_deactivatefissure(self.moonisland_fissures[self.current_fissure])
+	local new_fissures = {}
+	for k, v in pairs(self.moonisland_fissures) do
+		if k ~= self.current_fissure then
+			table.insert(new_fissures, k)
+		end
+	end
+	self.current_fissure = new_fissures[math.random(#new_fissures)]
+	moonisland_activatefissure(self.moonisland_fissures[self.current_fissure])
+end
+
 ---------------------------------------------------
 
 local ARENA_DEFS = {
@@ -60,7 +81,7 @@ local ARENA_DEFS = {
 	},
 	
 	atrium = {
-		name = "Atrium",
+		name = DEATHMATCH_STRINGS.ARENA_ATRIUM,
 		--
 		spawnradius = 20.5,
 		matchstartfn = function()
@@ -96,7 +117,7 @@ local ARENA_DEFS = {
 	},
 	
 	desert = {
-		name = "Desert",
+		name = DEATHMATCH_STRINGS.ARENA_DESERT,
 		--
 		spawnradius = 16,
 		--
@@ -109,7 +130,7 @@ local ARENA_DEFS = {
 	},
 	
 	pigvillage = {
-		name = "Pig Village",
+		name = DEATHMATCH_STRINGS.ARENA_PIGVILLAGE,
 		--
 		postinit = pigvillage_postinit,
 		--
@@ -149,16 +170,52 @@ local ARENA_DEFS = {
 		}
 	},
 	
-	spring = {
-		name = "Spring Island",
+	moonisland = {
+		name = "Lunar Island",
 		--
 		spawnradius = 16,
-		nopickups = true,
+		min_pickup_dist = 0,
+		max_pickup_dist = 3.5,
+		custom_spawnpoint = function()
+			local self = TheWorld.components.deathmatch_manager
+			if self.current_fissure then
+				return self.moonisland_fissures[self.current_fissure]:GetPosition()
+			end
+		end,
+		matchstartfn = function()
+			local self = TheWorld.components.deathmatch_manager
+			if self.moonisland_fissures == nil then
+				self.moonisland_fissures = {}
+				local pos = self.inst.centerpoint:GetPosition()
+				self.moonisland_fissures = TheSim:FindEntities(pos.x, pos.y, pos.z, 30, {"deathmatch_fissure"})
+			end
+			local closestdist = 30*30
+			local closest = nil
+			for i = 1, #self.moonisland_fissures do
+				local fissure = self.moonisland_fissures[i]
+				local distsq = self.inst.centerpoint:GetDistanceSqToPoint(fissure.Transform:GetWorldPosition())
+				if distsq < closestdist then
+					closestdist = distsq
+					closest = i
+				end
+			end
+			self.current_fissure = closest
+			moonisland_activatefissure(self.moonisland_fissures[self.current_fissure])
+		end,
+		matchendfn = function()
+			local self = TheWorld.components.deathmatch_manager
+			for k, fissure in pairs(self.moonisland_fissures) do
+				moonisland_deactivatefissure(fissure)
+			end
+		end,
+		onpickupspawn = function()
+			moonisland_changefissure()
+		end,
 		--
 		CONFIGS = {
 			lighting = {200 / 255, 200 / 255, 200 / 255},
 			colourcube = "spring_day_cc",
-			music = "dontstarve_DLC001/music/music_epicfight_spring",
+			music = "moonstorm/creatures/boss/alterguardian2/music_epicfight",
 			waves = true,
 		},
 	},
@@ -277,7 +334,7 @@ local ARENA_IDX = {
 	"atrium",
 	"desert",
 	"pigvillage",
-	"spring",
+	"moonisland",
 	"malbatross",
 	"grotto",
 	"stalker"

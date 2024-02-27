@@ -807,6 +807,9 @@ function Deathmatch_Manager:DoPickUpSpawn()
 			end
 		end
 	end
+	if arena_configs[self.arena].onpickupspawn ~= nil then
+		arena_configs[self.arena].onpickupspawn()
+	end
 end
 
 function Deathmatch_Manager:GetDrowningRespawnPos()

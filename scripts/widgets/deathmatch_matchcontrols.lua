@@ -59,6 +59,12 @@ local modes = {
 	"rvb",
 	"2pt"
 }
+local arena_icons = {
+	atrium = true,
+	desert = true,
+	pigvillage = true,
+	random = true,
+}
 local function GetPlayerTeam()
 	return ThePlayer.components.teamer:GetTeam()
 end
@@ -122,11 +128,12 @@ local submenu_defs = {
 	{ name = "teammode",
 		str = DEATHMATCH_STRINGS.TEAMMODE,
 		imgfn = function()
-			if GetTeamMode() == 0 then
+			local mode = modes[GetTeamMode()]
+			if mode then
+				return Image("images/modeselect_"..mode..".xml", "modeselect_"..mode..".tex")
+			else
 				return Image("images/matchcontrols_infobutton.xml", "matchcontrols_infobutton.tex")
 			end
-			local mode = modes[GetTeamMode()]
-			return Image("images/modeselect_"..mode..".xml", "modeselect_"..mode..".tex")
 		end,
 		buttons = {
 			{ str = DEATHMATCH_STRINGS.TEAMMODE_FFA,
@@ -147,7 +154,11 @@ local submenu_defs = {
 		str = DEATHMATCH_STRINGS.ARENAS,
 		imgfn = function() 
 			local map = arenas.IDX[GetArena()]
-			return Image("images/map_icon_"..map..".xml", "map_icon_"..map..".tex")
+			if arena_icons[map] then
+				return Image("images/map_icon_"..map..".xml", "map_icon_"..map..".tex")
+			else
+				return Image("images/matchcontrols_infobutton.xml", "matchcontrols_infobutton.tex")
+			end
 		end,
 		buttons = {
 		}
@@ -208,10 +219,11 @@ local Deathmatch_MatchControls = Class(Widget, function(self, owner)
 		self:BuildWidgets()
 	end
 	self.inst:ListenForEvent("arenachoicedirty", rebuild, owner)
+	self.inst:ListenForEvent("modechoicedirty", rebuild, owner)
 	self.inst:ListenForEvent("teamdirty", rebuild, owner)
 	self.inst:ListenForEvent("deathmatch_matchmodedirty", rebuild, TheWorld.net)
 	self.inst:ListenForEvent("deathmatch_matchstatusdirty", rebuild, TheWorld.net)
-	
+	self.inst:ListenForEvent("deathmatch_arenadirty", rebuild, TheWorld.net)
 end)
 
 function Deathmatch_MatchControls:BuildWidgets()
@@ -249,41 +261,43 @@ function Deathmatch_MatchControls:BuildWidgets()
 		buttons = buttons()
 	end
 	buttons = deepcopy(buttons)
-	local invalid = {}
-	for k, v in pairs(buttons) do
-		if v.validfn and not v.validfn() then
-			table.insert(invalid, k)
-		end
-	end
-	for k, v in pairs(invalid) do
-		buttons[v] = nil
-	end
-	
-	for k, v in pairs(buttons) do
-		local w = self:AddChild(ImageButton(BUTTON_ATLAS, BUTTON_IMAGE, nil, nil, nil, nil, SUBBUTTON_SCALE))
-		w.focus_scale = SUBBUTTON_SCALE_FOCUS
-		w.normal_scale = SUBBUTTON_SCALE
-		w.imagedisabledcolour = {0.2, 0.2, 0.2, 1}
-		w:SetTooltip(v.str)
-		w.onclick = function()
-		--TODO: no local references
-			if v.buttons and self.submenu == nil then
-				self.submenu = k
-				self:BuildWidgets()
-			elseif v.onclickfn ~= nil then
-				v.onclickfn()
-				self.submenu = nil
-				self:BuildWidgets()
+	if buttons then
+		local invalid = {}
+		for k, v in pairs(buttons) do
+			if v.validfn and not v.validfn() then
+				table.insert(invalid, k)
 			end
 		end
-		if v.imgfn then
-			w.extraimage = w.image:AddChild(v.imgfn(w))
+		for k, v in pairs(invalid) do
+			buttons[v] = nil
 		end
-		w.frame = w.image:AddChild(Image(FRAME_ATLAS, FRAME_IMAGE))
-		if v.highlightfn and v.highlightfn() then
-			w.frame:SetTint(0.3, 1, 0.3, 1)
+		
+		for k, v in pairs(buttons) do
+			local w = self:AddChild(ImageButton(BUTTON_ATLAS, BUTTON_IMAGE, nil, nil, nil, nil, SUBBUTTON_SCALE))
+			w.focus_scale = SUBBUTTON_SCALE_FOCUS
+			w.normal_scale = SUBBUTTON_SCALE
+			w.imagedisabledcolour = {0.2, 0.2, 0.2, 1}
+			w:SetTooltip(v.str)
+			w.onclick = function()
+			--TODO: no local references
+				if v.buttons and self.submenu == nil then
+					self.submenu = k
+					self:BuildWidgets()
+				elseif v.onclickfn ~= nil then
+					v.onclickfn()
+					self.submenu = nil
+					self:BuildWidgets()
+				end
+			end
+			if v.imgfn then
+				w.extraimage = w.image:AddChild(v.imgfn(w))
+			end
+			w.frame = w.image:AddChild(Image(FRAME_ATLAS, FRAME_IMAGE))
+			if v.highlightfn and v.highlightfn() then
+				w.frame:SetTint(0.3, 1, 0.3, 1)
+			end
+			table.insert(self.subwidgets, w)
 		end
-		table.insert(self.subwidgets, w)
 	end
 	
 	local count = #self.subwidgets

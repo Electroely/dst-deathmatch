@@ -89,6 +89,7 @@ PrefabFiles = {
 	"firebomb_firecircle",
 	"deathmatch_healingstaffbuff",
 	"deathmatch_range_indicator",
+	"deathmatch_moon_fissure",
 	
 	"maxwelllight",
 	"maxwelllight_flame",

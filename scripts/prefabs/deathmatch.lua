@@ -336,8 +336,6 @@ local function common_postinit(inst)
     end
 	
 	inst:DoTaskInTime(0, function(inst)
-		--no more of that wormwood bloom (also spring map is dead now)
-		--inst.state.isspring = true 
 		inst.state.isautumn = true
 	end)
 	
