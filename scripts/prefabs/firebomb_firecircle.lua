@@ -27,7 +27,7 @@ end
 
 local RANGE = 2
 local DAMAGE = DEATHMATCH_TUNING.SKILLTREE_FIREBOMB_FIRECIRCLE_DAMAGE_PER_LEVEL
-local DURATION = 5
+local DURATION = DEATHMATCH_TUNING.SKILLTREE_FIREBOMB_FIRECIRCLE_DURATION
 local function DamageNearbyEntities(inst)
 	if inst.caster == nil or not inst.caster:IsValid() then
 		inst:Remove()

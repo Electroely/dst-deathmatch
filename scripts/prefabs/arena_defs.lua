@@ -325,6 +325,10 @@ local ARENA_DEFS = {
 			colourcube = "night03_cc",
 			music = "dontstarve/music/music_epicfight",
 		}
+	},
+
+	random = {
+		name = DEATHMATCH_STRINGS.ARENA_RANDOM,
 	}
 }
 

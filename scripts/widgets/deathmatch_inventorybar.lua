@@ -27,8 +27,10 @@ local CURSOR_STRING_DELAY = 10
 local TIP_YFUDGE = 16
 local HINT_UPDATE_INTERVAL = 2.0 -- once per second
 
-local function UpdateHandSlot(self)
-    if self.owner.replica.inventory:GetEquippedItem(EQUIPSLOTS.HANDS) ~= nil then
+local function UpdateHandSlot(self, equippeditem)
+    equippeditem = equippeditem or self.owner.replica.inventory:GetEquippedItem(EQUIPSLOTS.HANDS)
+    local equipslot = self.equip[EQUIPSLOTS.HANDS]
+    if equippeditem ~= nil then
         local dummyslot = nil
         local items = self.owner.replica.inventory:GetItems()
         for k, v in pairs(items) do
@@ -41,8 +43,16 @@ local function UpdateHandSlot(self)
             self.inv[self.dummyslot]:Show()
             self.dummyslot = nil
         end
-        if dummyslot ~= nil then
-            local equipslot = self.equip[EQUIPSLOTS.HANDS]
+        if dummyslot == nil then
+            local items = self.owner.replica.inventory:GetItems()
+            for slot, item in pairs(items) do
+                if item == equippeditem then
+                    dummyslot = slot
+                    break
+                end
+            end
+        end
+        if dummyslot ~= nil and equipslot ~= nil then
             equipslot:SetPosition(self.inv[dummyslot]:GetPosition():Get())
             if dummyslot <= 4 then
                 equipslot:SetScale(1.5,1.5,1.5)
@@ -58,7 +68,9 @@ local function UpdateHandSlot(self)
             self.inv[dummyslot]:Hide()
         end
     else
-        self.equip[EQUIPSLOTS.HANDS]:Hide()
+        if equipslot ~= nil then
+            equipslot:Hide()
+        end
 		if self.dummyslot ~= nil then
 			self.inv[self.dummyslot]:Show()
 			self.dummyslot = nil
@@ -401,6 +413,7 @@ local function RebuildLayout(self, inventory, overflow, do_integrated_backpack, 
             self:UpdatePosition()
         end
     end
+    UpdateHandSlot(self)
 end
 
 function Inv:Rebuild()
@@ -1396,43 +1409,16 @@ function Inv:OnItemEquip(item, slot)
     if slot ~= nil and self.equip[slot] ~= nil then
         self.equip[slot]:SetTile(ItemTile(item))
     end
-	if slot == EQUIPSLOTS.HANDS then
-		local dummyslot = nil
-		local items = self.owner.replica.inventory:GetItems()
-		for k, v in pairs(items) do
-			if v:HasTag("invslotdummy") then
-				dummyslot = k
-				break
-			end
-		end
-		if self.dummyslot ~= nil then
-			self.inv[self.dummyslot]:Show()
-			self.dummyslot = nil
-		end
-		if dummyslot ~= nil then
-			local equipslot = self.equip[EQUIPSLOTS.HANDS]
-			equipslot:SetPosition(self.inv[dummyslot]:GetPosition():Get())
-			if dummyslot <= 4 then
-				equipslot:SetScale(1.5,1.5,1.5)
-				equipslot.base_scale = 1.5
-				equipslot.highlight_scale = 1.8
-			else
-				equipslot:SetScale(1,1,1)
-				equipslot.base_scale = 1
-				equipslot.highlight_scale = 1.3
-			end
-			equipslot:Show()
-			self.dummyslot = dummyslot
-			self.inv[dummyslot]:Hide()
-		end
-	end
+    if slot == EQUIPSLOTS.HANDS then
+	    UpdateHandSlot(self, item)
+    end
 end
 
 function Inv:OnItemUnequip(item, slot)
     if slot ~= nil and self.equip[slot] ~= nil then
         self.equip[slot]:SetTile(nil)
 		self.equip[slot]:Hide()
-		UpdateHandSlot(self)
+        UpdateHandSlot(self)
     end
 end
 

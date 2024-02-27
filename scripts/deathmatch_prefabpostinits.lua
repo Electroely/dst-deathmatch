@@ -8,24 +8,27 @@ local ReplaceUpValue = UpValues.Replace
 
 local COMPONENT_ACTIONS = GetUpValue(G.EntityScript.CollectActions, "COMPONENT_ACTIONS")
 if COMPONENT_ACTIONS and COMPONENT_ACTIONS.INVENTORY then
-	local fn_old = COMPONENT_ACTIONS.INVENTORY.equippable
+	local equippable_fn_old = COMPONENT_ACTIONS.INVENTORY.equippable
 	COMPONENT_ACTIONS.INVENTORY.equippable = function(inst, doer, actions, ...)
-		local rtn = {fn_old(inst, doer, actions, ...)}
+		local rtn = {equippable_fn_old(inst, doer, actions, ...)}
 		if actions then
-			local remove_examine = false
 			for k, v in pairs(actions) do
 				if v == G.ACTIONS.UNEQUIP then
 					table.remove(actions, k)
-					remove_examine = true
 					break
 				end
 			end
-			if remove_examine then
-				for k, v in pairs(actions) do
-					if v == G.ACTIONS.LOOKAT then
-						table.remove(actions, k)
-						break
-					end
+		end
+		return unpack(rtn)
+	end
+	local inspectable_fn_old = COMPONENT_ACTIONS.INVENTORY.inspectable
+	COMPONENT_ACTIONS.INVENTORY.inspectable = function(inst, doer, actions, ...)
+		local rtn = {inspectable_fn_old(inst, doer, actions, ...)}
+		if actions and inst.replica.equippable and inst.replica.equippable:IsEquipped() then
+			for k, v in pairs(actions) do
+				if v == G.ACTIONS.LOOKAT then
+					table.remove(actions, k)
+					break
 				end
 			end
 		end

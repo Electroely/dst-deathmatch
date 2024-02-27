@@ -87,7 +87,12 @@ local custom_master_postinits = {
 	wortox = function(inst)
 		inst.customidleanim = "idle_wortox"
 	end,
-	wormwood = nil,
+	wormwood = function(inst)
+		inst.endtalksound = "dontstarve/characters/wormwood/end"
+		inst.customidleanim = function(inst)
+			return inst.AnimState:CompareSymbolBuilds("hand", "hand_idle_wormwood") and "idle_wormwood" or nil
+		end
+	end,
 	wurt = function(inst)
 
 	end,
@@ -176,26 +181,18 @@ end
 -- wormwood
 AddPrefabPostInit("wormwood", function(inst)
 	if not G.TheWorld.ismastersim then return end
-	inst.OnLoad = nil
-	inst.OnNewSpawn = nil
-	inst.OnPreLoad = nil
-	inst._forcestage = true
-	--perk modification code
-	inst.components.bloomness.calcratefn = function() return 0 end
-	ReplaceUpValue(inst.UpdateBloomStage, "SetStatsLevel", function() end)
-	inst:ListenForEvent("ms_becameghost", function(inst)
-		inst:DoTaskInTime(0, function(inst)
-			inst:ChangeCosmeticState(inst.cosmeticstate)
-		end)
-	end)
 	--new function for /setstate
 	inst.cosmeticstate = inst.cosmeticstate or 1
 	inst.maxcosmeticstate = 4
 	function inst:ChangeCosmeticState(num) --input: number 1-4
 		if not IsValidSkin(self) then return end
-		if num >= 1 and num <= 4 and self.components.bloomness then
+		if num >= 1 and num <= 4 then
 			--self:SetBloomStage(num-1)
-			self.components.bloomness:SetLevel(num-1)
+			if num == 1 then
+				self.components.skinner:SetSkinMode("normal_skin", "wormwood")
+			else
+				self.components.skinner:SetSkinMode("stage_"..tostring(num), "wormwood")
+			end
 			self.cosmeticstate = num
 		end
 	end

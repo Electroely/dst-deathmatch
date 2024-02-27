@@ -216,6 +216,29 @@ local function OnDeath(inst, data)
 	G.TheWorld:PushEvent("playerdied", inst)
 end
 
+local function checkarenaid(v)
+	return type(v) == "number" and (v == 0 or arenas.VALID_ARENA_LOOKUP[v] or v == 63)
+end
+local function checkmodeid(v)
+	return type(v) == "number" and ((v >= 0 and v <= 3) or v == 7)
+end
+local function arenachoicehandler(inst, arenaid)
+	print("got arena choice",inst,arenaid,checkarenaid(arenaid))
+	if (inst == nil or not checkarenaid(arenaid)) then return end
+	inst.player_classified._arenachoice:set(arenaid)
+	inst.arenachoice = arenaid ~= 63 and arenas.IDX[arenaid] or nil
+	GLOBAL.TheWorld:PushEvent("ms_arenavote")
+end
+local function modechoicehandler(inst, modeid)
+	print("got mode choice",inst,modeid,checkmodeid(modeid))
+	if (inst == nil or not checkmodeid(modeid)) then return end
+	inst.player_classified._modechoice:set(modeid)
+	inst.modechoice = modeid ~= 7 and modeid or nil
+	GLOBAL.TheWorld:PushEvent("ms_modevote")
+end
+AddModRPCHandler(modname, "deathmatch_arenachoice", arenachoicehandler)
+AddModRPCHandler(modname, "deathmatch_modechoice", modechoicehandler)
+
 G.require("player_postinits_deathmatch") --so... why did i separate this into its own thing if im adding a postinit here regardless...?
 --TODO: move all of the code here to player_postinits_deathmatch and organize it better
 --character-specific changes go into charperkremoval.lua
@@ -230,19 +253,28 @@ AddPlayerPostInit(function(inst)
 				SendModRPCToServer(GetModRPC(modname, "locationrequest"), x, z)
 			end
 		end)
-		inst:ListenForEvent("changearenachoice", function(inst, data)
-			if arenas.IDX[data] == inst.arenachoice then
-				data = 63
-			end
-			SendModRPCToServer(GetModRPC(modname, "deathmatch_arenachoice"), data)
-		end)
-		inst:ListenForEvent("changemodechoice", function(inst, data)
-			if data == inst.modechoice then
-				data = 7
-			end
-			SendModRPCToServer(GetModRPC(modname, "deathmatch_modechoice"), data)
-		end)
+
 	end
+	inst:ListenForEvent("changearenachoice", function(inst, data)
+		if arenas.IDX[data] == inst.arenachoice then
+			data = 63
+		end
+		if G.TheWorld.ismastersim then
+			arenachoicehandler(inst, data)
+		else
+			SendModRPCToServer(GetModRPC(modname, "deathmatch_arenachoice"), data)
+		end
+	end)
+	inst:ListenForEvent("changemodechoice", function(inst, data)
+		if data == inst.modechoice then
+			data = 7
+		end
+		if G.TheWorld.ismastersim then
+			modechoicehandler(inst, data)
+		else
+			SendModRPCToServer(GetModRPC(modname, "deathmatch_modechoice"), data)
+		end
+	end)
 	if G.TheNet:GetServerGameMode() == "deathmatch" then
 		---------- extra code
 		G.require("deathmatch_player_functions")(inst)
@@ -294,11 +326,11 @@ AddPlayerPostInit(function(inst)
 			
 			inst:ListenForEvent("onhitother", function(inst, data)
 				if data.target and data.target:HasTag("player") then
-					G.TheWorld:PushEvent("registerdamagedealt", {player = inst, damage = data.damage})
+					G.TheWorld:PushEvent("registerdamagedealt", {player = inst, damage = data.damageresolved})
 				end
-				if data and data.damage then
+				if data and data.target and (data.damageresolved or data.damage) then
 					local ind = G.SpawnPrefab("damagenumber")
-					ind:Push(inst, data.target, math.floor(data.damage), data.stimuli~=nil)
+					ind:Push(inst, data.target, math.floor(data.damageresolved or data.damage), data.stimuli~=nil)
 				end
 			end)
 			local health = 150
@@ -483,12 +515,7 @@ AddClassPostConstruct("screens/redux/lobbyscreen", function(self)
 end)
 
 AddClassPostConstruct("widgets/playerdeathnotification", function(self)
-	local mode = G.TheWorld.net:GetMode()
-	if mode == 1 then
-		self.revive_message:SetString(GLOBAL.DEATHMATCH_STRINGS.DEAD_ALONE_PROMPT)
-	else
-		self.revive_message:SetString(GLOBAL.DEATHMATCH_STRINGS.DEAD_TEAM_PROMPT)
-	end
+	self.revive_message:SetString(GLOBAL.DEATHMATCH_STRINGS.DEAD_ALONE_PROMPT)
 end)
 
 ---------------------------------------------------------------------
@@ -701,29 +728,6 @@ G.ACTIONS.LOOKAT.fn = function(act, ...)
 	end
 	return worked
 end
-
------------------------------------------------------------------------------
-
-local function checkarenaid(v)
-	return type(v) == "number" and (v == 0 or arenas.VALID_ARENA_LOOKUP[v] or v == 63)
-end
-local function checkmodeid(v)
-	return type(v) == "number" and ((v >= 0 and v <= 3) or v == 7)
-end
-AddModRPCHandler(modname, "deathmatch_arenachoice", function(inst, arenaid)
-	print("got arena choice",inst,arenaid,checkarenaid(arenaid))
-	if (inst == nil or not checkarenaid(arenaid)) then return end
-	inst.player_classified._arenachoice:set(arenaid)
-	inst.arenachoice = arenaid ~= 63 and arenas.IDX[arenaid] or nil
-	GLOBAL.TheWorld:PushEvent("ms_arenavote")
-end)
-AddModRPCHandler(modname, "deathmatch_modechoice", function(inst, modeid)
-	print("got mode choice",inst,modeid,checkmodeid(modeid))
-	if (inst == nil or not checkmodeid(modeid)) then return end
-	inst.player_classified._modechoice:set(modeid)
-	inst.modechoice = modeid ~= 7 and modeid or nil
-	GLOBAL.TheWorld:PushEvent("ms_modevote")
-end)
 
 -----------------------------------------------------------------------------
 local function checknumber(v)

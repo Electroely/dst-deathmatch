@@ -122,6 +122,7 @@ AddComponentPostInit("inventory", function(self)
 				end
 				local rtn = {Equip_old(self, inst, ...)}
 				self:GiveItem(dummy, oldslot)
+				self.inst:PushEvent("refreshinventory")
 				return GLOBAL.unpack(rtn)
 			end
 			return Equip_old(self, inst, ...)

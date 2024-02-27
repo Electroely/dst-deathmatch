@@ -62,10 +62,12 @@ local function onhit_charge_bomb(inst, data)
 end
 local function onattacked_explode_bomb(inst, data)
 	local items = inst.components.inventory and inst.components.inventory.itemslots or nil
-	if items then
+	local last_explosion_time = inst.last_firebomb_explosion_time
+	if items and (last_explosion_time == nil or GetTime()-last_explosion_time >= DEATHMATCH_TUNING.SKILLTREE_FIREBOMB_PASSIVE_COOLDOWN) then
 		for i = 1, inst.components.inventory.maxslots do
 			local item = items[i]
 			if item and item.sparklevel ~= nil and item.sparklevel_max ~= nil and item.sparklevel >= item.sparklevel_max and item.DoExplosion then
+				inst.last_firebomb_explosion_time = GetTime()
 				item:DoExplosion(inst, inst:GetPosition(), true)
 				break
 			end

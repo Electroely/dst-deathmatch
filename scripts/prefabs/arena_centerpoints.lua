@@ -112,8 +112,10 @@ end
 
 local centerpoints = {}
 for k, data in pairs(ARENA_DEFS) do
-    local pref = MakeArenaCenterpoint(k, data.postinit)
-	table.insert(centerpoints, pref)
+	if k ~= "random" then
+		local pref = MakeArenaCenterpoint(k, data.postinit)
+		table.insert(centerpoints, pref)
+	end
 end
 
 return unpack(centerpoints)
