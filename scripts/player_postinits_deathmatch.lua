@@ -145,16 +145,6 @@ end
 local function fn(inst, prefab)
 	
 	if not TheWorld.ismastersim then
-		--VERY hacky method to make PlayerController send RPCs for actions despite the idle state.
-		--this issue heavily affects players with higher ping so if this solves it then that'd be great
-		local HasTag_old = inst.HasTag
-		inst.HasTag = function(inst, tag, ...)
-			if tag == "idle" then
-				return true
-			end
-			return HasTag_old(inst, tag, ...)
-		end
-		
 		return
 	end
 	
