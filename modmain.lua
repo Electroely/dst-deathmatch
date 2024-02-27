@@ -518,6 +518,38 @@ AddClassPostConstruct("widgets/playerdeathnotification", function(self)
 	self.revive_message:SetString(GLOBAL.DEATHMATCH_STRINGS.DEAD_ALONE_PROMPT)
 end)
 
+require("skinsutils")
+local GetPlayerBadgeData_old = GLOBAL.GetPlayerBadgeData
+GLOBAL.GetPlayerBadgeData = function(character, ghost, state_1, state_2, state_3, ...)
+	local rtn = {GetPlayerBadgeData_old(character, ghost, state_1, state_2, state_3, ...)}
+	if character == "wolfgang" then
+		--0: normal, 1: wimpy, 2: mighty
+		if state_1 then
+			rtn[3] = "wimpy_skin"
+		elseif state_2 then
+			rtn[3] = "mighty_skin"
+		else
+			rtn[3] = "normal_skin"
+		end
+	elseif character == "wanda" then
+		--normal, young, old
+		if state_1 then
+			rtn[3] = "young_skin"
+		elseif state_2 then
+			rtn[3] = "old_skin"
+		else
+			rtn[3] = "normal_skin"
+		end
+	elseif character == "wurt" then
+		--normal, warpaint
+		if state_1 then
+			rtn[3] = "powerup"
+		else
+			rtn[3] = "normal_skin"
+		end
+	end
+	return GLOBAL.unpack(rtn)
+end
 ---------------------------------------------------------------------
 GLOBAL.STRINGS.SKILLTREE.INFOPANEL_DESC = GLOBAL.DEATHMATCH_STRINGS.SKILLTREE_DESC
 GLOBAL.STRINGS.SKILLTREE.NEW_SKILL_POINT = GLOBAL.DEATHMATCH_STRINGS.SKILLTREETOAST_PROMPT

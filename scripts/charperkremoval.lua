@@ -177,6 +177,18 @@ local function IsValidSkin(inst)
 	return base_skin ~= nil and G.Prefabs[base_skin] ~= nil and
 		G.Prefabs[base_skin].base_prefab == inst.prefab
 end
+local function SetUserFlagLevel(inst, level)
+    --No bit ops support, but in this case, + results in same as |
+    local flags = GLOBAL.USERFLAGS.CHARACTER_STATE_1 + GLOBAL.USERFLAGS.CHARACTER_STATE_2 + GLOBAL.USERFLAGS.CHARACTER_STATE_3
+    if level > 0 then
+        local addflag = GLOBAL.USERFLAGS["CHARACTER_STATE_"..tostring(level)]
+        --No bit ops support, but in this case, - results in same as &~
+        inst.Network:RemoveUserFlag(flags - addflag)
+        inst.Network:AddUserFlag(addflag)
+    else
+        inst.Network:RemoveUserFlag(flags)
+    end
+end
 
 -- wormwood
 AddPrefabPostInit("wormwood", function(inst)
@@ -193,6 +205,7 @@ AddPrefabPostInit("wormwood", function(inst)
 			else
 				self.components.skinner:SetSkinMode("stage_"..tostring(num), "wormwood")
 			end
+			SetUserFlagLevel(inst,num-1)
 			self.cosmeticstate = num
 		end
 	end
@@ -240,18 +253,21 @@ AddPrefabPostInit("wolfgang", function(inst)
 				self.hurtsoundoverride = "dontstarve/characters/wolfgang/hurt_small"
 				self.customidleanim = "idle_wolfgang_skinny"
 				self.AnimState:SetScale(0.9, 0.9, 0.9)
+				SetUserFlagLevel(inst, 1)
 			elseif num == 2 then
 				self.components.skinner:SetSkinMode("normal_skin", "wolfgang")
 				self.talksoundoverride = nil
 				self.hurtsoundoverride = nil
 				self.customidleanim = "idle_wolfgang"
 				self.AnimState:SetScale(1,1,1)
+				SetUserFlagLevel(inst, 0)
 			else
 				self.components.skinner:SetSkinMode("mighty_skin", "wolfgang_mighty")
 				self.talksoundoverride = "dontstarve/characters/wolfgang/talk_large_LP"
 				self.hurtsoundoverride = "dontstarve/characters/wolfgang/hurt_large"
 				self.customidleanim = "idle_wolfgang_mighty"
 				self.AnimState:SetScale(1.2,1.2,1.2)
+				SetUserFlagLevel(inst, 2)
 			end
 			self.cosmeticstate = num
 		end
@@ -269,14 +285,17 @@ AddPrefabPostInit("wanda", function(inst)
 				inst.components.skinner:SetSkinMode("young_skin", "wilson")
 				inst.talksoundoverride = "wanda2/characters/wanda/talk_young_LP"
 				--inst.hurtsoundoverride = "dontstarve/characters/wolfgang/hurt_large"
+				SetUserFlagLevel(inst, 1)
 			elseif num == 2 then
 				inst.components.skinner:SetSkinMode("normal_skin", "wilson")
 				inst.talksoundoverride = nil
 				inst.hurtsoundoverride = nil
+				SetUserFlagLevel(inst, 0)
 			elseif num == 3 then
 				inst.components.skinner:SetSkinMode("old_skin", "wilson")
 				inst.talksoundoverride = "wanda2/characters/wanda/talk_old_LP"
 				--inst.hurtsoundoverride = "dontstarve/characters/wolfgang/hurt_small"
+				SetUserFlagLevel(inst, 2)
 			end
 			inst.cosmeticstate = num
 		end
@@ -316,8 +335,10 @@ AddPrefabPostInit("wurt", function(inst)
 		if num >= 1 and num <= 2 then
 			if num == 1 then
 				self.components.skinner:SetSkinMode("normal_skin", "wurt")
+				SetUserFlagLevel(inst, 0)
 			else
 				self.components.skinner:SetSkinMode("powerup", "wurt_stage2")
+				SetUserFlagLevel(inst, 1)
 			end
 			self.cosmeticstate = num
 		end
