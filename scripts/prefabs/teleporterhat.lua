@@ -12,9 +12,7 @@ local prefabs =
 	"lavaarena_portal_player_fx",
 }
 local function onequip(inst, owner)
-	if inst.components.rechargeable and inst.components.rechargeable:GetTimeToCharge() <= EQUIP_COOLDOWN_TIME then
-		inst.components.rechargeable:Discharge(EQUIP_COOLDOWN_TIME)
-	end
+	DoEquipCooldown(inst)
 end
 
 local function onunequip(inst, owner)

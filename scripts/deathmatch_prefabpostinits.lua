@@ -212,6 +212,11 @@ for k, prefab in pairs(range_display_weapons) do
 		end
 	end)
 end
+
+AddPrefabPostInit("lavaarena_firebomb_projectile", function(inst)
+	inst.entity:AddDynamicShadow()
+	inst.DynamicShadow:SetSize(1.3, 1)
+end)
 AddPrefabPostInit("glommer", function(inst)
 	if not G.TheWorld.ismastersim then
 		return

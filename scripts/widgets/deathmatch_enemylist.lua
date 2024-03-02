@@ -30,6 +30,8 @@ local Deathmatch_EnemyList = Class(Widget, function(self, owner)
 	self.inst:ListenForEvent("deathmatch_playerhealthdirty", refresh, TheWorld.net)
 	self.inst:ListenForEvent("deathmatch_teamdirty", refresh, TheWorld.net)
 	self.inst:ListenForEvent("deathmatch_playerinmatchdirty", refresh, TheWorld.net)
+	self.inst:ListenForEvent("ms_playerjoined", refresh, TheWorld)
+	self.inst:ListenForEvent("ms_playerleft", refresh, TheWorld)
 end)
 
 function Deathmatch_EnemyList:GetPlayerTable()
@@ -38,11 +40,13 @@ function Deathmatch_EnemyList:GetPlayerTable()
         return {}, {}
 	end
     --remove dedicate host from player list and add team & hp data
-    for i, v in ipairs(ClientObjs) do
-        if v.performance ~= nil then
-            table.remove(ClientObjs, i)
+	if TheNet:GetServerIsDedicated() then
+		for i, v in ipairs(ClientObjs) do
+			if v.performance ~= nil then
+				table.remove(ClientObjs, i)
+			end
 		end
-    end
+	end
 	for k, v in pairs(ClientObjs) do
 		v.health = TheWorld.net:GetPlayerHealth(v.userid) or 1
 		v.team = TheWorld.net:GetPlayerTeam(v.userid) or 0

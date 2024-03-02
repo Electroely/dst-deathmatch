@@ -195,9 +195,21 @@ for k, v in pairs(arenalist) do
 	table.insert(submenu_defs[3].buttons, buttondata)
 end
 
+local function HideDuringMatch(self)
+	if self.owner and self.owner.userid then
+		if TheWorld.net:IsPlayerInMatch(self.owner.userid) 
+		and (GetMatchStatus() == DEATHMATCH_MATCHSTATUS.INMATCH or GetMatchStatus() == DEATHMATCH_MATCHSTATUS.STARTING) then
+			self:Hide()
+		else
+			self:Show()
+		end
+	end
+end
+
 local Deathmatch_MatchControls = Class(Widget, function(self, owner)
 	
 	Widget._ctor(self, "Deathmatch_MatchControls")
+	self.owner = owner
 	
 	self.submenu = nil
 	
@@ -206,12 +218,7 @@ local Deathmatch_MatchControls = Class(Widget, function(self, owner)
 	
 	self.mainbutton_def = {
 		onclickfn = function()
-			local status = GetMatchStatus()
-			if status == 1 then
-				UserCommands.RunTextUserCommand("dm stop", ThePlayer, false)
-			else
-				UserCommands.RunTextUserCommand("dm start", ThePlayer, false)
-			end
+			UserCommands.RunTextUserCommand("dm start", ThePlayer, false)
 		end
 	}
 
@@ -220,6 +227,7 @@ local Deathmatch_MatchControls = Class(Widget, function(self, owner)
 	--rebuild events
 	local function rebuild()
 		self:BuildWidgets()
+		HideDuringMatch(self)
 	end
 	self.inst:ListenForEvent("arenachoicedirty", rebuild, owner)
 	self.inst:ListenForEvent("modechoicedirty", rebuild, owner)
@@ -227,6 +235,7 @@ local Deathmatch_MatchControls = Class(Widget, function(self, owner)
 	self.inst:ListenForEvent("deathmatch_matchmodedirty", rebuild, TheWorld.net)
 	self.inst:ListenForEvent("deathmatch_matchstatusdirty", rebuild, TheWorld.net)
 	self.inst:ListenForEvent("deathmatch_arenadirty", rebuild, TheWorld.net)
+	self.inst:ListenForEvent("deathmatch_playerinmatchdirty", rebuild, TheWorld.net)
 end)
 
 function Deathmatch_MatchControls:BuildWidgets()
@@ -245,7 +254,7 @@ function Deathmatch_MatchControls:BuildWidgets()
 	self.mainwidget.imagedisabledcolour = {0.2, 0.2, 0.2, 1}
 	self.mainwidget.frame = self.mainwidget.image:AddChild(Image(FRAME_ATLAS, FRAME_IMAGE))
 	self.mainwidget.image:AddChild(self.submenu ~= nil and Image(GOBACK_ATLAS, GOBACK_IMAGE) or Image(STARTMATCH_ATLAS, STARTMATCH_IMAGE))
-	self.mainwidget:SetTooltip(self.submenu ~= nil and DEATHMATCH_STRINGS.GOBACK or (GetMatchStatus() == 1 and DEATHMATCH_STRINGS.STOPMATCH or DEATHMATCH_STRINGS.STARTMATCH))
+	self.mainwidget:SetTooltip(self.submenu ~= nil and DEATHMATCH_STRINGS.GOBACK or DEATHMATCH_STRINGS.STARTMATCH)
 	if self.submenu == nil and self.mainbutton_def.validfn and not self.mainbutton_def.validfn() then
 		self.mainwidget:Disable()
 	end

@@ -512,5 +512,10 @@
   <object type="dead_sea_bones" x="784" y="2857" width="13" height="13"/>
   <object type="dead_sea_bones" x="664" y="2657" width="13" height="13"/>
   <object type="driftwood_small1" x="652" y="2459" width="13" height="13"/>
+  <object type="pickup_cooldown_spawner" x="832" y="720"/>
+  <object type="pickup_lighthealing_spawner" x="736" y="720"/>
+  <object type="pickup_lightdamaging_spawner" x="784" y="720"/>
+  <object type="pickup_lightspeed_spawner" x="880" y="720"/>
+  <object type="pickup_lightdefense_spawner" x="928" y="720"/>
  </objectgroup>
 </map>

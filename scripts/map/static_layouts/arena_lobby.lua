@@ -4458,6 +4458,61 @@ return {
           height = 13,
           visible = true,
           properties = {}
+        },
+        {
+          name = "",
+          type = "pickup_cooldown_spawner",
+          shape = "rectangle",
+          x = 832,
+          y = 720,
+          width = 0,
+          height = 0,
+          visible = true,
+          properties = {}
+        },
+        {
+          name = "",
+          type = "pickup_lighthealing_spawner",
+          shape = "rectangle",
+          x = 736,
+          y = 720,
+          width = 0,
+          height = 0,
+          visible = true,
+          properties = {}
+        },
+        {
+          name = "",
+          type = "pickup_lightdamaging_spawner",
+          shape = "rectangle",
+          x = 784,
+          y = 720,
+          width = 0,
+          height = 0,
+          visible = true,
+          properties = {}
+        },
+        {
+          name = "",
+          type = "pickup_lightspeed_spawner",
+          shape = "rectangle",
+          x = 880,
+          y = 720,
+          width = 0,
+          height = 0,
+          visible = true,
+          properties = {}
+        },
+        {
+          name = "",
+          type = "pickup_lightdefense_spawner",
+          shape = "rectangle",
+          x = 928,
+          y = 720,
+          width = 0,
+          height = 0,
+          visible = true,
+          properties = {}
         }
       }
     }

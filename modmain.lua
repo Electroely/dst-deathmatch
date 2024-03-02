@@ -24,7 +24,9 @@ modimport("scripts/deathmatch_skilltree")
 AddPrefabPostInit("player_classified", function(inst)
 	inst._arenaeffects = G.net_string(inst.GUID, "deathmatch.arenaeffect", "arenachanged")
 	inst:ListenForEvent("arenachanged", function(inst, data)
-		G.TheWorld:PushEvent("applyarenaeffects", inst._arenaeffects:value())
+		if inst._parent == GLOBAL.ThePlayer then
+			G.TheWorld:PushEvent("applyarenaeffects", inst._arenaeffects:value())
+		end
 	end)
 	inst._arenachoice = G.net_smallbyte(inst.GUID, "deathmatch.arenachoice", "arenachoicedirty")
 	inst._arenachoice:set(63) --default no selection
@@ -59,6 +61,13 @@ G.DEATHMATCH_TEAMS = {
 {name="Cyan", colour={0.5,1,1,1}},
 {name="Pink", colour={1,0.5,1,1}},
 {name="Black", colour={97/255, 80/255, 132/255, 1}},
+}
+
+G.DEATHMATCH_MATCHSTATUS = {
+	IDLE = 0,
+	INMATCH = 1,
+	PREPARING = 2,
+	STARTING = 3,
 }
 
 PrefabFiles = {

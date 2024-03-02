@@ -162,13 +162,29 @@ for name, data in pairs(pickup_data) do
 	end
 end
 
+local function spawner_spawnifmissing(inst)
+	if inst.pickup == nil or not inst.pickup:IsValid() then
+		inst.pickup = SpawnPrefab(inst.pickupname)
+		inst.pickup.Transform:SetPosition(inst.Transform:GetWorldPosition())
+		inst.pickup.persists = false
+		local fx = SpawnPrefab("small_puff")
+		fx.Transform:SetPosition(inst.Transform:GetWorldPosition())
+		inst.pickup.spawner = inst
+		inst.pickup:ListenForEvent("onremove", function(pickup)
+			if pickup.spawner ~= nil and pickup.spawner:IsValid() then
+				pickup.spawner:DoTaskInTime(1, spawner_spawnifmissing)
+			end
+		end)
+	end
+end
+
 
 local prefabs = {
 "small_puff"
 }
 
 local assets = {
-	Asset("ANIM", "anim/pickup.zip")
+	Asset("ANIM", "anim/deathmatch_pickup.zip")
 }
 
 local function MakePickUp(name)
@@ -180,14 +196,20 @@ local function MakePickUp(name)
 		inst.entity:AddTransform()
 		inst.entity:AddAnimState()
 		inst.entity:AddNetwork()
+		inst.entity:AddDynamicShadow()
 		
 		MakeInventoryPhysics(inst)
 		
-		inst.AnimState:SetBuild("pickup")
-		inst.AnimState:SetBank("pickup")
-		inst.AnimState:PlayAnimation("idle")
-		inst.AnimState:OverrideSymbol("symbol_nil", "pickup", "symbol_"..data.symbol)
+		--inst.AnimState:SetBloomEffectHandle("shaders/anim.ksh")
+		inst.AnimState:SetLightOverride(1)
+		inst.AnimState:SetBuild("deathmatch_pickup")
+		inst.AnimState:SetBank("deathmatch_pickup")
+		inst.AnimState:PlayAnimation("idle", true)
+		inst.AnimState:OverrideSymbol("symbol_nil", "deathmatch_pickup", "symbol_"..data.symbol)
+		inst.AnimState:SetFrame(math.random(inst.AnimState:GetCurrentAnimationNumFrames()) - 1)
 		inst.AnimState:SetMultColour(unpack(data.colour))
+
+		inst.DynamicShadow:SetSize(1.3, 1)
 		
 		if not TheWorld.ismastersim then
 			return inst
@@ -235,13 +257,32 @@ local function MakePickUp(name)
 		
 		return inst
 	end
-	return Prefab("pickup_"..name, fn, assets, prefabs)
+	local function spawner_fn()
+		local inst = CreateEntity()
+
+		--Non-networked entity
+		inst.entity:AddTransform()
+
+		if not TheWorld.ismastersim then
+			inst:DoTaskInTime(0, inst.Remove)
+			return inst
+		end
+
+		inst.pickupname = "pickup_"..name
+
+		inst:DoTaskInTime(0, spawner_spawnifmissing)
+		
+		return inst
+	end
+	return Prefab("pickup_"..name, fn, assets, prefabs), Prefab("pickup_"..name.."_spawner", spawner_fn, assets, prefabs)
 end
 
 ---------------------------------------------------------------------------
 local res = {}
 for k,v in pairs(pickup_data) do
-	table.insert(res, MakePickUp(k))
+	local pickup, spawner = MakePickUp(k)
+	table.insert(res, pickup)
+	table.insert(res, spawner)
 end
 for k,v in pairs(buff_prefabs) do
 	table.insert(res, v)
