@@ -527,6 +527,7 @@ function Deathmatch_Manager:StartDeathmatch()
 			AddTable(items, arena_configs[self.arena].extraitems)
 			AddTable(items, v.deathmatch_startitems)
 			v.components.health:SetMaxHealth(loadout_data.health)
+			v:PushEvent("clearpickupbuffs")
 			for k2, v2 in pairs(items) do
 				local item = SpawnPrefab(v2)
 				item.forceslot = k2

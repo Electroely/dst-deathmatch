@@ -142,7 +142,7 @@ for name, data in pairs(pickup_data) do
 			if buff.speed then
 				target.components.locomotor:SetExternalSpeedMultiplier(target, "pickup_"..name, buff.speed)
 			end
-			inst:ListenForEvent("clearpickupbuffs", function() inst.components.debuff:Stop() end, inst)
+			inst:ListenForEvent("clearpickupbuffs", function() inst.components.debuff:Stop() end, target)
 		end
 		local function OnExtended(inst, target)
 

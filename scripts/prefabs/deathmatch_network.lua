@@ -146,7 +146,6 @@ local function fn()
 		TheWorld.state.atrium_active = data
 	end, TheWorld)
 
-	if TheNet:GetServerGameMode() == "deathmatch" then
 	inst.deathmatch = {}
 	inst.deathmatch_netvars = {}
 	local clienttbl = TheNet:GetClientTable() or {}
@@ -342,14 +341,10 @@ local function fn()
 	inst:ListenForEvent("deathmatch_matchmodedirty", refreshdmstatuswidget)
 	inst:ListenForEvent("deathmatch_matchstatusdirty", refreshdmstatuswidget)
 	inst:ListenForEvent("deathmatch_arenadirty", refreshdmstatuswidget)
-	if not TheWorld.ismastersim then
-		inst:DoPeriodicTask(3, function() inst:PushEvent("deathmatchdatadirty") end)
-	end
+	inst:DoPeriodicTask(3, function() inst:PushEvent("deathmatchdatadirty") end)
 	inst:ListenForEvent("deathmatch_killsdirty", function(inst) inst:PushEvent("deathmatchdatadirty") end)
 	--inst:ListenForEvent("deathmatch_deathsdirty", function(inst) inst:PushEvent("deathmatchdatadirty") end)
 	inst:ListenForEvent("deathmatch_teamdirty", function(inst) inst:PushEvent("deathmatchdatadirty") end)
-	
-end
 	
     return inst
 end
