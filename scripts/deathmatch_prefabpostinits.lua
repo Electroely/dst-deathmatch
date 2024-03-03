@@ -21,10 +21,23 @@ if COMPONENT_ACTIONS and COMPONENT_ACTIONS.INVENTORY then
 		end
 		return unpack(rtn)
 	end
-	local inspectable_fn_old = COMPONENT_ACTIONS.INVENTORY.inspectable
+	local inventory_inspectable_fn_old = COMPONENT_ACTIONS.INVENTORY.inspectable
 	COMPONENT_ACTIONS.INVENTORY.inspectable = function(inst, doer, actions, ...)
-		local rtn = {inspectable_fn_old(inst, doer, actions, ...)}
+		local rtn = {inventory_inspectable_fn_old(inst, doer, actions, ...)}
 		if actions and inst.replica.equippable and inst.replica.equippable:IsEquipped() then
+			for k, v in pairs(actions) do
+				if v == G.ACTIONS.LOOKAT then
+					table.remove(actions, k)
+					break
+				end
+			end
+		end
+		return unpack(rtn)
+	end
+	local scene_inspectable_fn_old = COMPONENT_ACTIONS.SCENE.inspectable
+	COMPONENT_ACTIONS.SCENE.inspectable = function(inst, doer, actions, ...)
+		local rtn = {scene_inspectable_fn_old(inst, doer, actions, ...)}
+		if actions and inst:HasTag("player") and GLOBAL.TheWorld.net:IsPlayerInMatch(doer.userid) then
 			for k, v in pairs(actions) do
 				if v == G.ACTIONS.LOOKAT then
 					table.remove(actions, k)

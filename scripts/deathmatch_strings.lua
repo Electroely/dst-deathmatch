@@ -34,6 +34,34 @@ return {
 	SKILLTREETOAST_PROMPT = "Insight Available!",
 
 	CANT_DITCH_TEAMMATES_SPECTATE = "Your teammates can save you! You can't spectate now.",
+
+	BUFFS = {
+		buff_pickup_lightdamaging = {
+			TITLE = "Damage Boost",
+			DESC = "+50% damage dealt",
+		},
+		buff_pickup_lightdefense = {
+			TITLE = "Defense Boost",
+			DESC = "-50% damage taken",
+		},
+		buff_pickup_lightspeed = {
+			TITLE = "Speed Boost",
+			DESC = "+50% movement speed"
+		},
+		buff_healingstaff_ally = {
+			TITLE = "Life Blossoms",
+			DESC = "-25% damage taken"
+		},
+		buff_healingstaff_enemy = {
+			TITLE = "Hindering Life Blossoms",
+			DESC = "-40% movement speed"
+		},
+		buff_deathmatch_damagestack = {
+			TITLE = "Strengthening Attacks",
+			DESC = "+%2d%% damage dealt"
+		},
+		TIMERSTRING = "%2d seconds remaining",
+	},
 	
 	SKILLTREE_DESC = "Become a powerful fighter!",
 	SKILLTREE = {
@@ -141,8 +169,8 @@ return {
 			BODY = [[
 				Fight to the death!*NEWLINE*NEWLINE
 				The objective is simple. Be the last one standing.*NEWLINE
-				All the characters are exactly the same. Every weapon has a unique special attack. Stay near where the items show up to get an edge in battle!*NEWLINE*NEWLINE
-				To change the mode or arena, the majority of players have to agree on the same thing. By default, the game is a Free For All on the Atrium map.
+				All the characters are the same. Every weapon has a unique special attack. Stay near where the items show up to get an edge in battle!*NEWLINE*NEWLINE
+				To change the mode or arena, use the top right buttons! Most players must agree on the same options. By default, the game is a Free For All at The Atrium.
 			]]
 		},
 		TEAMS = {
@@ -159,16 +187,15 @@ return {
 			TITLE = "Arenas",
 			BODY = [[
 				Using the buttons in the top right, you can change the battle arena to choose between The Atrium, The Badlands and Pig King's Village.*NEWLINE*NEWLINE
-				- The Atrium is a large arena with a packed center area and a spacious outer ring.*NEWLINE*NEWLINE
-				- The Badlands is an open area with few obstacles in the way of the battle.*NEWLINE*NEWLINE
-				- Pig King's Village is an open area inhabited by Pigs surrounding the Pig King. Every now and then, the full moon rises, bringing chaos to the village.
+				- In The Atrium, The Badlands and Pig King's Village, you might fight over control of the center of the map to gain powerful items.*NEWLINE*NEWLINE
+				- In the Lunar Island and The Forest, items don't always spawn in the center - follow their source to stay at the top!
 			]]
 		},
 		SKILLTREE = {
 			TITLE = "Insight",
 			BODY = [[
 				You can use insight to get stronger! You start with 6 points, one of which must be used to select a loadout.*NEWLINE
-				Loadouts are sets of weapon you take to battle. By default, you use the Forge's Warrior loadout.*NEWLINE*NEWLINE
+				Loadouts are sets of weapons you take to battle. By default, you use the Forge's Warrior loadout.*NEWLINE*NEWLINE
 				On the left, you can choose between stat increases, culminating in a powerful effect that activates every time you attack an enemy.*NEWLINE
 				In the middle, you can choose skills to improve Hearthsfire Crystals - powerful consumable items picked up during a match.
 			]]
@@ -214,7 +241,7 @@ return {
 			TITLE = "Spiral Spear",
 			BODY = [[
 				DAMAGE (REGULAR): 50 - DAMAGE (SPECIAL): 200 - COOLDOWN: 12*NEWLINE*NEWLINE
-				The Spiral Spear is a melee weapon with a high damage, long range jump that hits in a small area.*NEWLINE*NEWLINE
+				The Spiral Spear is a melee weapon with a high damage, long range jump that hits a small area.*NEWLINE*NEWLINE
 				It can be used to dodge attacks, since the user is invulnerable while in the air. Dealing damage with it is 
 				very reliant on prediction, but to do it successfully is very rewarding as it deals high damage and stuns those 
 				hit by its special attack.
@@ -224,7 +251,7 @@ return {
 			TITLE = "Forging Hammer",
 			BODY = [[
 				DAMAGE (REGULAR): 50 - DAMAGE (SPECIAL): 100 - COOLDOWN: 12*NEWLINE*NEWLINE
-				The Forging Hammer is a melee weapon with a special attack that hits in a wide area, stunning those it hits.*NEWLINE*NEWLINE
+				The Forging Hammer is a melee weapon with a special attack that hits a wide area, stunning those it hits.*NEWLINE*NEWLINE
 				While it doesn't deal as much damage as the other special attacks, its wide area of effect makes it easy to corner enemies and stun them, allowing for easier 
 				follow-up attacks.
 			]]
@@ -254,7 +281,7 @@ return {
 			BODY = [[
 				DAMAGE (REGULAR): 50 - DAMAGE (SPECIAL): 300 - COOLDOWN: 12*NEWLINE*NEWLINE
 				The Infernal Staff is a ranged weapon capable of calling a meteor that deals a massive amount of damage after a short delay.*NEWLINE*NEWLINE
-				The long time it takes to cast the meteor spell can make it difficult to land, but with its high casting range, thw whereabouts of the meteor 
+				The long time it takes to cast the meteor spell can make it difficult to land, but with its high casting range, the whereabouts of the meteor 
 				can catch opponents off guard.
 			]]
 		},
@@ -262,19 +289,21 @@ return {
 			TITLE = "Living Staff",
 			BODY = [[
 				DAMAGE (REGULAR): 50 - COOLDOWN: 24*NEWLINE*NEWLINE
-				The Living Staff is a ranged weapon capable of creating a field of Life Blossoms that halve the damage taken by allies and slow the movement speed of opponents 
+				The Living Staff is a ranged weapon capable of creating a field of Life Blossoms that reduce the damage taken by allies and slow the movement speed of opponents 
 				inside.*NEWLINE*NEWLINE
+				Opponents caught within the Life Blossoms are susceptible to ranged attacks.
+				The protection they offer can be helpful for casting other spells without too much risk. 
 			]]
 		},
 		TOMEOFBECKONING = {
 			TITLE = "Tome of Beckoning",
 			BODY = [[
 				DAMAGE (REGULAR): 65 - COOLDOWN: 24*NEWLINE
-				DAMAGE (SUMMON): 30 - HEALTH (SUMMON): 150*NEWLINE*NEWLINE
+				DAMAGE (SUMMON): 10-30 - HEALTH (SUMMON): 150*NEWLINE*NEWLINE
 				The Tome of Beckoning summons a Magma Golem that guards the area surrounding it, pelting opponents with fireballs.*NEWLINE*NEWLINE
 				The Magma Golem can be used as a guardian when being chased by an opponent - if there's no room to cast it, the tome can be used as 
 				a melee weapon to knock back opponents. The Magma Golem benefits from the Healing Staff's life blossoms, greatly increasing its survivability 
-				against strong attacks such as the Spiral Spear's Sky Lunge.
+				against opposing Magma Golems or the Pith Pike's Pyre Poker attack.
 			]]
 		},
 		CROWNOFTELEPORTATION = {

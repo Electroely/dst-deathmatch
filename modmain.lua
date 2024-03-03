@@ -9,6 +9,9 @@ local DEATHMATCH_POPUPS = DEATHMATCH_STRINGS.POPUPS
 
 local arenas = require("prefabs/arena_defs")
 
+local net_bool = GLOBAL.net_bool
+local net_tinybyte = GLOBAL.net_tinybyte
+
 local UserCommands = require("usercommands")
 
 require("deathmatch_debug")
@@ -30,8 +33,34 @@ AddPrefabPostInit("player_classified", function(inst)
 	end)
 	inst._arenachoice = G.net_smallbyte(inst.GUID, "deathmatch.arenachoice", "arenachoicedirty")
 	inst._arenachoice:set(63) --default no selection
-	inst._modechoice = G.net_tinybyte(inst.GUID, "deathmatch.modechoice", "modechoicedirty")
+	inst._modechoice = net_tinybyte(inst.GUID, "deathmatch.modechoice", "modechoicedirty")
 	inst._modechoice:set(7) --default no selection
+	inst._buffs = { --the ones that have a duration need their own ondirty events
+		buff_pickup_lightdamaging = net_bool(inst.GUID, "deathmatch.buff.pickup_lightdamaging", "deathmatchbuffsdirty_lightdamaging"),
+		buff_pickup_lightdefense = net_bool(inst.GUID, "deathmatch.buff.pickup_lightdefense", "deathmatchbuffsdirty_lightdefense"),
+		buff_pickup_lightspeed = net_bool(inst.GUID, "deathmatch.buff.pickup_lightspeed", "deathmatchbuffsdirty_lightspeed"),
+		buff_deathmatch_damagestack = net_tinybyte(inst.GUID, "deathmatch.buff.damagestack", "deathmatchbuffsdirty_damagestack"),
+		buff_healingstaff_ally = net_bool(inst.GUID, "deathmatch.buff.healingstaff_ally", "deathmatchbuffsdirty_healingstaff"),
+		buff_healingstaff_enemy = net_bool(inst.GUID, "deathmatch.buff.healingstaff_enemy", "deathmatchbuffsdirty_healingstaff"),
+	}
+	if not G.TheNet:IsDedicated() then
+		inst:ListenForEvent("deathmatchbuffsdirty_lightdamaging", function(inst)
+			inst._parent:PushEvent("deathmatch_buff_changed", {buff="buff_pickup_lightdamaging", value=inst._buffs.buff_pickup_lightdamaging:value()})
+		end)
+		inst:ListenForEvent("deathmatchbuffsdirty_lightdefense", function(inst)
+			inst._parent:PushEvent("deathmatch_buff_changed", {buff="buff_pickup_lightdefense", value=inst._buffs.buff_pickup_lightdefense:value()})
+		end)
+		inst:ListenForEvent("deathmatchbuffsdirty_lightspeed", function(inst)
+			inst._parent:PushEvent("deathmatch_buff_changed", {buff="buff_pickup_lightspeed", value=inst._buffs.buff_pickup_lightspeed:value()})
+		end)
+		inst:ListenForEvent("deathmatchbuffsdirty_damagestack", function(inst)
+			inst._parent:PushEvent("deathmatch_buff_changed", {buff="buff_deathmatch_damagestack", value=inst._buffs.buff_deathmatch_damagestack:value()})
+		end)
+		inst:ListenForEvent("deathmatchbuffsdirty_healingstaff", function(inst)
+			inst._parent:PushEvent("deathmatch_buff_changed", {buff="buff_healingstaff_ally", value=inst._buffs.buff_healingstaff_ally:value()})
+			inst._parent:PushEvent("deathmatch_buff_changed", {buff="buff_healingstaff_enemy", value=inst._buffs.buff_healingstaff_enemy:value()})
+		end)
+	end
 	if not G.TheWorld.ismastersim then
 		inst:ListenForEvent("arenachoicedirty", function(inst, data)
 			inst._parent.arenachoice = arenas.IDX[inst._arenachoice:value()]
@@ -117,6 +146,8 @@ Assets = {
 	Asset("IMAGE", "images/deathmatch_skilltree_bg.tex"),
 	Asset("ATLAS", "images/deathmatch_skilltree_icons.xml"),
 	Asset("IMAGE", "images/deathmatch_skilltree_icons.tex"),
+	Asset("ATLAS", "images/deathmatch_buff_icons.xml"),
+	Asset("IMAGE", "images/deathmatch_buff_icons.tex"),
 	
 	Asset("IMAGE", "images/matchcontrolsbutton_bg.tex"),
 	Asset("ATLAS", "images/matchcontrolsbutton_bg.xml"),
@@ -439,6 +470,8 @@ AddClassPostConstruct("widgets/controls", function(self, owner)
 			self.status.inspirationbadge:Hide()
 			self.status.inspirationbadge.Show = function() end
 		end
+
+		self.deathmatch_buffs = self.status:AddChild(require("widgets/deathmatch_bufficons")(self.owner))
 		
 		self.inst:DoTaskInTime(0, function() --Hide Combined Status elements
 			if self.seasonclock ~= nil then

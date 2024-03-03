@@ -64,13 +64,13 @@ local function OnTimerDone(inst, data)
 end
 
 local function MakeBuff(name, onattachedfn, onextendedfn, ondetachedfn, duration)
+	name = "buff_"..name
     local function OnAttached(inst, target)
         inst.entity:SetParent(target.entity)
         inst.Transform:SetPosition(0, 0, 0) --in case of loading
         inst:ListenForEvent("death", function()
             inst.components.debuff:Stop()
         end, target)
-
         if onattachedfn ~= nil then
             onattachedfn(inst, target)
         end
@@ -79,7 +79,6 @@ local function MakeBuff(name, onattachedfn, onextendedfn, ondetachedfn, duration
     local function OnExtended(inst, target)
         inst.components.timer:StopTimer("buffover")
         inst.components.timer:StartTimer("buffover", duration)
-
         if onextendedfn ~= nil then
             onextendedfn(inst, target)
         end
@@ -124,7 +123,7 @@ local function MakeBuff(name, onattachedfn, onextendedfn, ondetachedfn, duration
         return inst
     end
 
-    return Prefab("buff_"..name, fn)
+    return Prefab(name, fn)
 end
 
 ------------------------------------------------------------------------
@@ -142,10 +141,16 @@ for name, data in pairs(pickup_data) do
 			if buff.speed then
 				target.components.locomotor:SetExternalSpeedMultiplier(target, "pickup_"..name, buff.speed)
 			end
+			if target.player_classified and target.player_classified._buffs["buff_pickup_"..name] then
+				target.player_classified._buffs["buff_pickup_"..name]:set(true)
+			end
 			inst:ListenForEvent("clearpickupbuffs", function() inst.components.debuff:Stop() end, target)
 		end
 		local function OnExtended(inst, target)
-
+			if target.player_classified and target.player_classified._buffs["buff_pickup_"..name] then
+				target.player_classified._buffs["buff_pickup_"..name]:set_local(true)
+				target.player_classified._buffs["buff_pickup_"..name]:set(true)
+			end
 		end
 		local function OnDetached(inst, target)
 			if buff.damage then
@@ -156,6 +161,9 @@ for name, data in pairs(pickup_data) do
 			end
 			if buff.speed then
 				target.components.locomotor:RemoveExternalSpeedMultiplier(target, "pickup_"..name)
+			end
+			if target.player_classified and target.player_classified._buffs["buff_pickup_"..name] then
+				target.player_classified._buffs["buff_pickup_"..name]:set(false)
 			end
 		end
 		table.insert(buff_prefabs, MakeBuff("pickup_"..name, OnAttached, OnExtended, OnDetached, data.buff.duration))
@@ -295,16 +303,26 @@ local DAMAGESTACK_DAMAGE_PER_STACK = DEATHMATCH_TUNING.SKILLTREE_DAMAGE_BUFF_AMO
 local DAMAGESTACK_MAX_STACKS = DEATHMATCH_TUNING.SKILLTREE_DAMAGE_BUFF_STACKS
 local function damagestack_OnAttach(inst, target)
 	inst.stacks = 1
+	if target.player_classified and target.player_classified._buffs["buff_deathmatch_damagestack"] then
+		target.player_classified._buffs["buff_deathmatch_damagestack"]:set(1)
+	end
 	target.components.combat.externaldamagemultipliers:SetModifier("deathmatch_damagestack", 1 + DAMAGESTACK_DAMAGE_PER_STACK*inst.stacks)
 end
 local function damagestack_OnExtend(inst, target)
 	if inst.stacks < DAMAGESTACK_MAX_STACKS then
 		inst.stacks = inst.stacks + 1
 	end
+	if target.player_classified and target.player_classified._buffs["buff_deathmatch_damagestack"] then
+		target.player_classified._buffs["buff_deathmatch_damagestack"]:set_local(inst.stacks)
+		target.player_classified._buffs["buff_deathmatch_damagestack"]:set(inst.stacks)
+	end
 	target.components.combat.externaldamagemultipliers:SetModifier("deathmatch_damagestack", 1 + DAMAGESTACK_DAMAGE_PER_STACK*inst.stacks)
 end
 local function damagestack_OnDetach(inst, target)
 	target.components.combat.externaldamagemultipliers:RemoveModifier("deathmatch_damagestack")
+	if target.player_classified and target.player_classified._buffs["buff_deathmatch_damagestack"] then
+		target.player_classified._buffs["buff_deathmatch_damagestack"]:set(0)
+	end
 end
 table.insert(res, MakeBuff("deathmatch_damagestack", damagestack_OnAttach, damagestack_OnExtend, damagestack_OnDetach, DAMAGESTACK_DURATION))
 

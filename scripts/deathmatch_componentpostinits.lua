@@ -329,7 +329,7 @@ AddComponentPostInit("playercontroller", function(self)
 				force_target = backup_target
 			end
 		end
-		print("doing spacebar with ",force_target)
+		--print("doing spacebar with ",force_target)
 		return GetActionButtonAction_old(self, force_target, ...)
 	end
 	

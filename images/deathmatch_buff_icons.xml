@@ -1,0 +1,11 @@
+<Atlas>
+	<Texture filename="deathmatch_buff_icons.tex" />
+	<Elements>
+		<Element name="buff_deathmatch_damagestack.tex" u1="0.001953125" u2="0.248046875" v1="0.50390625" v2="0.99609375" />
+		<Element name="buff_healingstaff_ally.tex" u1="0.251953125" u2="0.498046875" v1="0.50390625" v2="0.99609375" />
+		<Element name="buff_healingstaff_enemy.tex" u1="0.501953125" u2="0.748046875" v1="0.50390625" v2="0.99609375" />
+		<Element name="buff_pickup_lightdamaging.tex" u1="0.751953125" u2="0.998046875" v1="0.50390625" v2="0.99609375" />
+		<Element name="buff_pickup_lightdefense.tex" u1="0.001953125" u2="0.248046875" v1="0.00390625" v2="0.49609375" />
+		<Element name="buff_pickup_lightspeed.tex" u1="0.251953125" u2="0.498046875" v1="0.00390625" v2="0.49609375" />
+	</Elements>
+</Atlas>

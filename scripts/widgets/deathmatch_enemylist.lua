@@ -6,7 +6,7 @@ local TeammateHealthBadge = require("widgets/deathmatch_teammatehealthbadge")
 local SPACING = 80
 local Y_OFFSET = 70
 
-local ALLIES_OFFSET = 510
+local ALLIES_OFFSET = 520
 local ENEMIES_OFFSET = -30
 
 local Deathmatch_EnemyList = Class(Widget, function(self, owner)

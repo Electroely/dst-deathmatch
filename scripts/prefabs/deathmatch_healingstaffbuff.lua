@@ -22,6 +22,10 @@ local function OnAttached(inst, target)
 	if target.components.colouradder then
 		target.components.colouradder:PushColour(inst, unpack(inst.allied and ALLIED_ADDCOLOR or ENEMY_ADDCOLOR))
 	end
+	local buffname = "buff_healingstaff_"..(inst.allied and "ally" or "enemy")
+	if target.player_classified and target.player_classified._buffs[buffname] then
+		target.player_classified._buffs[buffname]:set(true)
+	end
 end
 
 local function OnExtended(inst, target)
@@ -37,6 +41,10 @@ local function OnDetached(inst, target)
 		if target.components.grogginess then
 			target.components.grogginess:SetDecayRate(1)
 		end
+	end
+	local buffname = "buff_healingstaff_"..(inst.allied and "ally" or "enemy")
+	if target.player_classified and target.player_classified._buffs[buffname] then
+		target.player_classified._buffs[buffname]:set(false)
 	end
 	inst:Remove()
 end
