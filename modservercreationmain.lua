@@ -65,7 +65,7 @@ if servercreationscreen and servercreationscreen.name == "ServerCreationScreen" 
 	local server_name = server_settings.server_name
 	if server_name.textbox:GetString() == GLOBAL.TheNet:GetLocalUserName().."'s World" then
 		print("default server name, changing")
-		local new_name = GLOBAL.TheNet:GetLocalUserName().."'s Deathmatch"
+		local new_name = GLOBAL.TheNet:GetLocalUserName().."'s Arena"
 		server_name.textbox:SetString(new_name)
 		server_name.textbox:OnTextInputted()
 	end

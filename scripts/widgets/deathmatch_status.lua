@@ -23,7 +23,9 @@ local warnings = {
 	},
 	{
 		fn = function()
-			return ThePlayer and ThePlayer:HasTag("spectator_perma")
+			local matchstatus = TheWorld.net:GetMatchStatus()
+			local in_lobby = matchstatus == DEATHMATCH_MATCHSTATUS.IDLE or matchstatus == DEATHMATCH_MATCHSTATUS.STARTING
+			return in_lobby and ThePlayer and ThePlayer:HasTag("spectator_perma")
 		end,
 		str = DEATHMATCH_STRINGS.WARNINGS.AFK_MANUAL,
 	},
@@ -41,6 +43,8 @@ local warnings = {
 	}
 }
 
+local MODE_ARENA_SEPARATOR = 0
+local SEPARATOR_SPACING = 10
 local WARNINGS_OFFSET = -110
 local WARNINGS_SPACING = -30
 local Text = require("widgets/text")
@@ -79,18 +83,13 @@ local Deathmatch_Status = Class(Widget, function(self, owner)
 	
 	self.mode = self:AddChild(Text(NEWFONT_OUTLINE, 20))
 	self.mode:SetPosition(-98, -45)
+	--self.mode:SetHAlign(ANCHOR_RIGHT)
 	self.mode.Update = function(mode)
-		local regionsizeold_x, _ = mode:GetRegionSize()
-		self.mode:SetString(DEATHMATCH_GAMEMODES[self.data.match_mode].name)
-		if mode:GetRegionSize() ~= nil then
-			if regionsizeold_x > 999999 or regionsizeold_x < -99999 then
-				regionsizeold_x = 0 
-			end
-			local x, y, z = mode:GetPosition():Get()
-			local xoffset, _ = mode:GetRegionSize()
-			xoffset = (xoffset/2) 
-			mode:SetPosition((x-regionsizeold_x/2)+xoffset, y, z)
-		end
+		mode:SetString(DEATHMATCH_GAMEMODES[self.data.match_mode].name)
+		local regionsize_x, _ = mode:GetRegionSize()
+		local pos = mode:GetPosition()
+		local xpos = MODE_ARENA_SEPARATOR - regionsize_x/2 - SEPARATOR_SPACING
+		mode:SetPosition(xpos, pos.y, pos.z)
 	end
 	
 	self.timer = self:AddChild(Text(NEWFONT_OUTLINE, 40))
@@ -103,9 +102,17 @@ local Deathmatch_Status = Class(Widget, function(self, owner)
 	
 	self.arena = self:AddChild(Text(NEWFONT_OUTLINE, 20))
 	self.arena:SetPosition(50, -45)
+	--self.mode:SetHAlign(ANCHOR_LEFT)
 	self.arena.Update = function(arenastr)
-		arenastr:SetString("|  " .. arena_defs.CONFIGS[arena_defs.IDX[self.data.arena]].name)
+		arenastr:SetString(arena_defs.CONFIGS[arena_defs.IDX[self.data.arena]].name)
+		local regionsize_x, _ = arenastr:GetRegionSize()
+		local pos = arenastr:GetPosition()
+		local xpos = MODE_ARENA_SEPARATOR + regionsize_x/2 + SEPARATOR_SPACING
+		arenastr:SetPosition(xpos, pos.y, pos.z)
 	end
+
+	self.separator = self:AddChild(Text(NEWFONT_OUTLINE, 20, "|"))
+	self.separator:SetPosition(MODE_ARENA_SEPARATOR, -45)
 
 	self.warnings = {}
 	for k, v in pairs(warnings) do
