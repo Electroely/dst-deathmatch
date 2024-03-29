@@ -48,7 +48,7 @@ return {
 		AFK_MANUAL = "You're AFK. You will spectate matches until you type /afk again.",
 		AFK_AUTO =  "You're AFK. You will spectate matches until you move again.",
 		REVIVE_TEAMMATE = "A member of your team has fallen. Revive them!",
-		SKILLTREE = "You have unused Insight points!",
+		SKILLTREE = "You have unused Insight!",
 	},
 
 	BUFFS = {
@@ -66,7 +66,7 @@ return {
 		},
 		buff_healingstaff_ally = {
 			TITLE = "Life Blossoms",
-			DESC = "-25% damage taken"
+			DESC = subfmt("-{reduction}% damage taken", {reduction=math.floor((1-DEATHMATCH_TUNING.FORGE_MAGE_HEALBLOOMS_DEFENSE)*100)})
 		},
 		buff_healingstaff_enemy = {
 			TITLE = "Hindering Life Blossoms",
@@ -221,13 +221,13 @@ return {
 		},
 		FIREBOMB = {
 			TITLE = "Hearthsfire Crystals",
-			BODY = [[
-				DAMAGE (REGULAR): 25 - DAMAGE (EXPLOSION): 150 - DAMAGE (SPECIAL): 200*NEWLINE*NEWLINE
+			BODY = subfmt([[
+				DAMAGE (REGULAR): {melee} - DAMAGE (EXPLOSION): {explosion} - DAMAGE (SPECIAL): {special}*NEWLINE*NEWLINE
 				Hearthsfire crystals are powerful consumable items you can pick up during a match.*NEWLINE*NEWLINE
 				Hearthsfire crystals will build up charge when attacking other players. When fully charged - after 3 hits - attacking with them again will 
 				cause them to explode, dealing lots of damage and stunning the target for a long time. Alternatively, they can be thrown to deal even more damage regardless of charge 
 				level. 
-			]]
+			]], {melee = DEATHMATCH_TUNING.FIREBOMB_MELEE_DAMAGE, explosion = DEATHMATCH_TUNING.FIREBOMB_MELEE_EXPLOSION_DAMAGE, special = DEATHMATCH_TUNING.FIREBOMB_THROW_EXPLOSION_DAMAGE})
 		},
 		REVIVERHEART = {
 			TITLE = "Telltale Hearts",
@@ -239,91 +239,92 @@ return {
 		},
 		FORGE_MELEE = {
 			TITLE = "The Forge's Warrior",
-			BODY = [[
+			BODY = subfmt([[
 				Starts with: Pith Pike, Spiral Spear, Forging Hammer, Blacksmith's Edge.*NEWLINE
-				Max Health: 150*NEWLINE*NEWLINE
+				Max Health: {health}*NEWLINE*NEWLINE
 				The Forge's Warrior is a loadout with a variety of melee weapons that can put up a fight in any scenario.*NEWLINE*NEWLINE
 				The weapons allow for a lot of mobility which allows the user to dodge attacks and retaliate - sometimes at the same time! 
 				It's good at keeping constant pressure while also defending from incoming attackers.
-			]]
+			]], {health = DEATHMATCH_TUNING.FORGE_MELEE_HEALTH})
 		},
 		PITHPIKE = {
 			TITLE = "Pith Pike",
-			BODY = [[
-				DAMAGE (REGULAR): 50 - DAMAGE (SPECIAL): 150 - COOLDOWN: 12*NEWLINE*NEWLINE
+			BODY = subfmt([[
+				DAMAGE (REGULAR): {melee} - DAMAGE (SPECIAL): {special} - COOLDOWN: 12*NEWLINE*NEWLINE
 				The Pith Pike is a melee weapon that allows its user to dash in a straight line, damaging everything on the way.*NEWLINE*NEWLINE
 				It can be used while running away from someone to deal damage to them and change directions. It can also traverse short gaps 
 				and, with some prediction, hit someone trying to run away. It's very versatile!
-			]]
+			]], {melee = DEATHMATCH_TUNING.FORGE_MELEE_DAMAGE, special = DEATHMATCH_TUNING.FORGE_MELEE_PIKE_DAMAGE})
 		},
 		SPIRALSPEAR = {
 			TITLE = "Spiral Spear",
-			BODY = [[
-				DAMAGE (REGULAR): 50 - DAMAGE (SPECIAL): 200 - COOLDOWN: 12*NEWLINE*NEWLINE
+			BODY = subfmt([[
+				DAMAGE (REGULAR): {melee} - DAMAGE (SPECIAL): {special} - COOLDOWN: 12*NEWLINE*NEWLINE
 				The Spiral Spear is a melee weapon with a high damage, long range jump that hits a small area.*NEWLINE*NEWLINE
 				It can be used to dodge attacks, since the user is invulnerable while in the air. Dealing damage with it is 
 				very reliant on prediction, but to do it successfully is very rewarding as it deals high damage and stuns those 
 				hit by its special attack.
-			]]
+			]], {melee = DEATHMATCH_TUNING.FORGE_MELEE_DAMAGE, special = DEATHMATCH_TUNING.FORGE_MELEE_SPEAR_DAMAGE})
 		},
 		FORGINGHAMMER = {
 			TITLE = "Forging Hammer",
-			BODY = [[
-				DAMAGE (REGULAR): 50 - DAMAGE (SPECIAL): 100 - COOLDOWN: 12*NEWLINE*NEWLINE
+			BODY = subfmt([[
+				DAMAGE (REGULAR): {melee} - DAMAGE (SPECIAL): {special} - COOLDOWN: 12*NEWLINE*NEWLINE
 				The Forging Hammer is a melee weapon with a special attack that hits a wide area, stunning those it hits.*NEWLINE*NEWLINE
 				While it doesn't deal as much damage as the other special attacks, its wide area of effect makes it easy to corner enemies and stun them, allowing for easier 
 				follow-up attacks.
-			]]
+			]], {melee = DEATHMATCH_TUNING.FORGE_MELEE_DAMAGE, special = DEATHMATCH_TUNING.FORGE_MELEE_HAMMER_DAMAGE})
 		},
 		BLACKSMITHSEDGE = {
 			TITLE = "Blacksmith's Edge",
-			BODY = [[
-				DAMAGE (REGULAR): 50 - COOLDOWN: 12*NEWLINE*NEWLINE
+			BODY = subfmt([[
+				DAMAGE (REGULAR): {melee} - COOLDOWN: 12*NEWLINE*NEWLINE
 				The Blacksmith's Edge is a melee weapon that allows the user to parry attacks, reflecting the full damage back at the attacker.*NEWLINE*NEWLINE
 				While it's best used to parry special attacks, using it on a regular attack will add a stunning effect to the reflected damage.
-			]]
+			]], {melee = DEATHMATCH_TUNING.FORGE_MELEE_DAMAGE})
 		},
 		FORGE_MAGE = {
 			TITLE = "The Forge's Warlock",
-			BODY = [[
+			BODY = subfmt([[
 				Starts with: Infernal Staff, Living Staff, Tome of Beckoning, Crown of Teleportation*NEWLINE
-				Max Health: 100*NEWLINE*NEWLINE
+				Max Health: {health}*NEWLINE*NEWLINE
 				The Forge's Warlock is a loadout that specializes in area control.*NEWLINE*NEWLINE
 				Using powerful spells from a long distance, Warlocks can set up the battlefield in their favor to take advantage of 
 				their increased attack range and items that appear during a match. If forced into close combat quarters, they can use the 
 				Tome of Beckoning to summon a Magma Golem to assist, or skip the reading and bash someone away with it! The Crown of Teleportation 
 				has a near-instant teleport that can give you an opening to cast one of the spells - they're not very quick to cast.
-			]]
+			]], {health = DEATHMATCH_TUNING.FORGE_MAGE_HEALTH})
 		},
 		INFERNALSTAFF = {
 			TITLE = "Infernal Staff",
-			BODY = [[
-				DAMAGE (REGULAR): 50 - DAMAGE (SPECIAL): 300 - COOLDOWN: 12*NEWLINE*NEWLINE
+			BODY = subfmt([[
+				DAMAGE (REGULAR): {melee} - DAMAGE (SPECIAL): {special} - COOLDOWN: 12*NEWLINE*NEWLINE
 				The Infernal Staff is a ranged weapon capable of calling a meteor that deals a massive amount of damage after a short delay.*NEWLINE*NEWLINE
 				The long time it takes to cast the meteor spell can make it difficult to land, but with its high casting range, the whereabouts of the meteor 
 				can catch opponents off guard.
-			]]
+			]], {melee = DEATHMATCH_TUNING.FORGE_MAGE_DAMAGE, special = DEATHMATCH_TUNING.FORGE_MAGE_METEOR_DAMAGE})
 		},
 		LIVINGSTAFF = {
 			TITLE = "Living Staff",
-			BODY = [[
-				DAMAGE (REGULAR): 50 - COOLDOWN: 24*NEWLINE*NEWLINE
+			BODY = subfmt([[
+				DAMAGE (REGULAR): {melee} - COOLDOWN: 24*NEWLINE*NEWLINE
 				The Living Staff is a ranged weapon capable of creating a field of Life Blossoms that reduce the damage taken by allies and slow the movement speed of opponents 
 				inside.*NEWLINE*NEWLINE
 				Opponents caught within the Life Blossoms are susceptible to ranged attacks.
 				The protection they offer can be helpful for casting other spells without too much risk. 
-			]]
+			]], {melee = DEATHMATCH_TUNING.FORGE_MAGE_DAMAGE})
 		},
 		TOMEOFBECKONING = {
 			TITLE = "Tome of Beckoning",
-			BODY = [[
-				DAMAGE (REGULAR): 65 - COOLDOWN: 24*NEWLINE
-				DAMAGE (SUMMON): 10-30 - HEALTH (SUMMON): 150*NEWLINE*NEWLINE
+			BODY = subfmt([[
+				DAMAGE (REGULAR): {melee} - COOLDOWN: 24*NEWLINE
+				DAMAGE (SUMMON): {mindamage}-{damage} - HEALTH (SUMMON): {health}*NEWLINE*NEWLINE
 				The Tome of Beckoning summons a Magma Golem that guards the area surrounding it, pelting opponents with fireballs.*NEWLINE*NEWLINE
 				The Magma Golem can be used as a guardian when being chased by an opponent - if there's no room to cast it, the tome can be used as 
 				a melee weapon to knock back opponents. The Magma Golem benefits from the Healing Staff's life blossoms, greatly increasing its survivability 
 				against opposing Magma Golems or the Pith Pike's Pyre Poker attack.
-			]]
+			]], {melee = DEATHMATCH_TUNING.FORGE_MAGE_BOOK_DAMAGE, damage = DEATHMATCH_TUNING.FORGE_MAGE_SUMMON_DAMAGE,
+			 mindamage = math.floor(DEATHMATCH_TUNING.FORGE_MAGE_SUMMON_DAMAGE*DEATHMATCH_TUNING.FORGE_MAGE_SUMMON_DAMAGE_PENALTY), health = DEATHMATCH_TUNING.FORGE_MAGE_SUMMON_HEALTH})
 		},
 		CROWNOFTELEPORTATION = {
 			TITLE = "Crown of Teleportation",

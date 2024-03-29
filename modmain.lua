@@ -2,8 +2,8 @@ local G = GLOBAL
 local tonumber = G.tonumber
 local debug = G.debug
 local gamemodename = "deathmatch" 
+G.DEATHMATCH_TUNING = require("deathmatch_tuning") --tuning needs to be loaded before strings because some strings use tuning values
 G.DEATHMATCH_STRINGS = G.require("deathmatch_strings")
-G.DEATHMATCH_TUNING = require("deathmatch_tuning")
 local DEATHMATCH_STRINGS = G.DEATHMATCH_STRINGS
 local DEATHMATCH_POPUPS = DEATHMATCH_STRINGS.POPUPS
 
