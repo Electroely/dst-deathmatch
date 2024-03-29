@@ -7,10 +7,10 @@ local function SecondsToTimer(secs)
 	return "00:00" 
 end 
 local DEATHMATCH_GAMEMODES = { --TODO
-	{name="Free For All"},
-	{name="Red vs. Blue"},
-	{name="2-Player Teams"},
-	{name="Custom Teams"}
+	{name=DEATHMATCH_STRINGS.TEAMMODE_FFA},
+	{name=DEATHMATCH_STRINGS.TEAMMODE_RVB},
+	{name=DEATHMATCH_STRINGS.TEAMMODE_2PT},
+	{name=DEATHMATCH_STRINGS.TEAMMODE_CUSTOM}
 }
 local arena_defs = require("prefabs/arena_defs")
 
@@ -24,7 +24,7 @@ local warnings = {
 	{
 		fn = function()
 			local matchstatus = TheWorld.net:GetMatchStatus()
-			local in_lobby = matchstatus == DEATHMATCH_MATCHSTATUS.IDLE or matchstatus == DEATHMATCH_MATCHSTATUS.STARTING
+			local in_lobby = matchstatus == DEATHMATCH_MATCHSTATUS.IDLE or matchstatus == DEATHMATCH_MATCHSTATUS.PREPARING
 			return in_lobby and ThePlayer and ThePlayer:HasTag("spectator_perma")
 		end,
 		str = DEATHMATCH_STRINGS.WARNINGS.AFK_MANUAL,

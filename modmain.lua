@@ -136,6 +136,7 @@ PrefabFiles = {
 Assets = {
 	Asset("ANIM", "anim/hat_snortoise.zip"),
 	Asset("ANIM", "anim/partyhealth_extras.zip"),
+	Asset("ANIM", "anim/deathmatch_poi_marker.zip"),
 	
 	Asset("IMAGE", "images/changeTeamPole.tex"),
 	Asset("ATLAS", "images/changeTeamPole.xml"),
@@ -200,6 +201,9 @@ Assets = {
 
 	Asset("ATLAS", "images/inventoryimages/teleporterhat.xml"),
 	Asset("IMAGE", "images/inventoryimages/teleporterhat.tex"),
+
+	Asset("ATLAS", "images/avatar_reviver.xml"),
+	Asset("IMAGE", "images/avatar_reviver.tex"),
 	
 	Asset("SHADER", "shaders/characterhead.ksh"),
 }
@@ -528,6 +532,9 @@ AddClassPostConstruct("widgets/targetindicator", function(self)
 	self.head_animstate:SetDefaultEffectHandle(resolvefilepath("shaders/characterhead.ksh"))
 	self.head_animstate:UseColourCube(true)
 
+	self.heart = self.icon:AddChild(Image(resolvefilepath("images/avatar_reviver.xml"), "avatar_reviver.tex"))
+	self.heart:Hide()
+
 	self.prefabname = ""
 	self.is_mod_character = false
 	self.userflags = 0
@@ -594,16 +601,36 @@ AddClassPostConstruct("widgets/targetindicator", function(self)
 
 	local OnUpdate_old = self.OnUpdate
 	function self:OnUpdate(...)
+		local revive = false
 		if self.target and self.target.userid then
-			local userflags = self.target.Network ~= nil and self.target.Network:GetUserFlags() or 0
-			local data = G.TheNet:GetClientTableForUser(self.target.userid) or {base_skin = self.target.prefab .. "_none"}
-			self:UpdateHead(self.target.prefab, nil, nil, userflags, data.base_skin)
+			local is_ally = self.target.components.teamer and self.target.components.teamer:IsTeamedWith(G.ThePlayer)
+			local is_dead = self.target.AnimState:IsCurrentAnimation("death2_idle")
+			if (is_ally and is_dead) or self.target:HasTag("deadteammatetest") then
+				self.head_anim:Hide()
+				self.head:Hide()
+				revive = true
+				self.heart:Show()
+			else
+				self.heart:Hide()
+				local userflags = self.target.Network ~= nil and self.target.Network:GetUserFlags() or 0
+				local data = G.TheNet:GetClientTableForUser(self.target.userid) or {base_skin = self.target.prefab .. "_none"}
+				self:UpdateHead(self.target.prefab, nil, nil, userflags, data.base_skin)
+			end
+		else
+			self.head_anim:Hide()
+			self.head:Show()
+			self.heart:Hide()
 		end
 		OnUpdate_old(self, ...)
 		local pos = self:GetWorldPosition()
-		local scale = self:GetScale().x
-		self.head_animstate:SetUILightParams(pos.x, pos.y, 28.0, scale)
+		local scale = self:GetScale()
+		self.head_animstate:SetUILightParams(pos.x, pos.y, 28.0, scale.x)
 		self.owner = G.TheFocalPoint
+		if revive then
+			scale = scale * 2
+			self:SetScale(scale:Get())
+			self.headframe:SetTint(204/255, 86/255, 86/255, 1)
+		end
 	end
 end)
 

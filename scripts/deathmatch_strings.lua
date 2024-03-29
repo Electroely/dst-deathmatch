@@ -14,6 +14,7 @@ return {
 	TEAMMODE_FFA = "Free For All",
 	TEAMMODE_RVB = "Red vs. Blue",
 	TEAMMODE_2PT = "2-Player Teams",
+	TEAMMODE_CUSTOM = "Custom Teams",
 	
 	ARENA_ATRIUM = "The Atrium",
 	ARENA_DESERT = "The Badlands",

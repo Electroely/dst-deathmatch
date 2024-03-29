@@ -1,12 +1,10 @@
 require("reload")
-local DeathmatchMenu = require "widgets/deathmatch_menu"
 
-buffs = nil
-function CreateBuffIcons()
-	if buffs ~= nil then
-		buffs:Kill()
+arrows = nil
+function CreateAllyArrows()
+	if arrows ~= nil then
+		arrows:Kill()
 	end
 	DoReload()
-	buffs = ThePlayer.HUD.controls.status:AddChild(require("widgets/deathmatch_bufficons")(ThePlayer))
-	--buffs:SetPosition(-220, 70)
+	arrows = ThePlayer.HUD:AddChild(require("widgets/deathmatch_allyindicator")(ThePlayer))
 end
