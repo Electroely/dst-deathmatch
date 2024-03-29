@@ -98,6 +98,7 @@ G.DEATHMATCH_MATCHSTATUS = {
 	PREPARING = 2,
 	STARTING = 3,
 }
+local DEATHMATCH_MATCHSTATUS = G.DEATHMATCH_MATCHSTATUS
 
 PrefabFiles = {
 	"lavaarena", --to load the assets
@@ -428,7 +429,7 @@ AddClassPostConstruct("widgets/controls", function(self, owner)
 	if G.TheNet:GetServerGameMode() == "deathmatch" then
 		self.deathmatch_status = self.top_root:AddChild(G.require("widgets/deathmatch_status")(owner))
 		self.deathmatch_status:SetPosition(0,-20)
-		self.deathmatch_status.inst:DoPeriodicTask(3, function() self.deathmatch_status:Refresh() end)
+		self.deathmatch_status.inst:DoPeriodicTask(0.5, function() self.deathmatch_status:Refresh() end)
 		
 		self.deathmatch_spectatorspinner = self.bottom_root:AddChild(G.require("widgets/deathmatch_spectatorspinner")(owner))
 		self.deathmatch_spectatorspinner:SetPosition(0,150)
@@ -487,6 +488,22 @@ AddClassPostConstruct("widgets/controls", function(self, owner)
 			end
 		end)
 	end
+end)
+
+AddClassPostConstruct("screens/playerhud", function(self)
+	local OpenPlayerInfoScreen_old = self.OpenPlayerInfoScreen
+	function self:OpenPlayerInfoScreen(player_name, data, show_net_profile, force, ...)
+		if not force and self.owner ~= nil and (data and data.userid ~= self.owner.userid) and G.TheWorld.net:IsPlayerInMatch(self.owner.userid) and G.TheWorld.net:GetMatchStatus() == DEATHMATCH_MATCHSTATUS.INMATCH then
+			return false
+		end
+		return OpenPlayerInfoScreen_old(self, player_name, data, show_net_profile, force, ...)
+	end
+
+	self.inst:ListenForEvent("deathmatch_matchstatusdirty", function()
+		if self.owner ~= nil and G.TheWorld.net:IsPlayerInMatch(self.owner.userid) and G.TheWorld.net:GetMatchStatus() == DEATHMATCH_MATCHSTATUS.INMATCH then
+			self:ClosePlayerInfoScreen()
+		end
+	end, G.TheWorld.net)
 end)
 
 local function OnStartDM()
@@ -698,6 +715,7 @@ local aoecast_states = {
 	book = true,
 	castspell = true,
 }
+
 for k, v in pairs({ "wilson", "wilson_client" }) do
 	AddStategraphActionHandler(v, G.ActionHandler(G.ACTIONS.MAKEEXPLOSIVEBALLOON, "makeballoon"))
 	AddStategraphPostInit(v, function(self)

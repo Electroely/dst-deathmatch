@@ -13,19 +13,39 @@ local DEATHMATCH_GAMEMODES = { --TODO
 	{name="Custom Teams"}
 }
 local arena_defs = require("prefabs/arena_defs")
-local ARENAS = { --TODO
-	"Random",
-	"Atrium",
-	"Desert",
-	"Pig Village",
-	"Spring Island",
-	"The Shoal", --malbatross
-	"Lunar Grotto",
-	"Forest", --stalker
+
+local warnings = {
+	{
+		fn = function()
+			return ThePlayer and ThePlayer:HasTag("afk")
+		end,
+		str = DEATHMATCH_STRINGS.WARNINGS.AFK_AUTO,
+	},
+	{
+		fn = function()
+			return ThePlayer and ThePlayer:HasTag("spectator_perma")
+		end,
+		str = DEATHMATCH_STRINGS.WARNINGS.AFK_MANUAL,
+	},
+	{
+		fn = function()
+			return ThePlayer and ThePlayer.teammate_dead
+		end,
+		str = DEATHMATCH_STRINGS.WARNINGS.REVIVE_TEAMMATE,
+	},
+	{
+		fn = function()
+			return ThePlayer and TheSkillTree:GetAvailableSkillPoints(ThePlayer.prefab) > 0
+		end,
+		str = DEATHMATCH_STRINGS.WARNINGS.SKILLTREE,
+	}
 }
 
+local WARNINGS_OFFSET = -110
+local WARNINGS_SPACING = -30
 local Text = require("widgets/text")
 local Widget = require("widgets/widget")
+local strings = DEATHMATCH_STRINGS.STATUS
 
 local Deathmatch_Status = Class(Widget, function(self, owner)
 
@@ -39,21 +59,13 @@ local Deathmatch_Status = Class(Widget, function(self, owner)
 		arena = 0, -- 0= random, next numbs are atrium, desert, pigvillage
 	}
 	
-	self.title = self:AddChild(Text(NEWFONT_OUTLINE, 30, "Deathmatch Status:"))
+	self.title = self:AddChild(Text(NEWFONT_OUTLINE, 30, strings.TITLE))
 	
 	self.status = self:AddChild(Text(NEWFONT_OUTLINE, 20))
 	self.status:SetPosition(-98, -25)
 	self.status.Update = function(status)
 		local regionsizeold_x, _ = status:GetRegionSize()
-		if self.data.match_status == 0 then
-			status:SetString("Waiting for next match...")
-		elseif self.data.match_status == 1 then
-			status:SetString("Match in progress!")
-		elseif self.data.match_status == 2 then
-			status:SetString("Preparing next match...")
-		elseif self.data.match_status == 3 then
-			status:SetString("Starting next match...")
-		end
+		status:SetString(strings.MATCHSTATUS[self.data.match_status])
 		if status:GetRegionSize() ~= nil then
 			if regionsizeold_x > 999999 or regionsizeold_x < -99999 then
 				regionsizeold_x = 0 
@@ -94,6 +106,13 @@ local Deathmatch_Status = Class(Widget, function(self, owner)
 	self.arena.Update = function(arenastr)
 		arenastr:SetString("|  " .. arena_defs.CONFIGS[arena_defs.IDX[self.data.arena]].name)
 	end
+
+	self.warnings = {}
+	for k, v in pairs(warnings) do
+		local str = self:AddChild(Text(NEWFONT_OUTLINE, 35, v.str, {1,0.2,0.2,1}))
+		table.insert(self.warnings, str)
+		str:Hide()
+	end
 end)
 
 function Deathmatch_Status:Refresh()
@@ -108,6 +127,17 @@ function Deathmatch_Status:Refresh()
 	self.status:Update()
 	self.mode:Update()
 	self.arena:Update()
+
+	local hidden_warnings = 0
+	for k, v in pairs(warnings) do
+		if v.fn() then
+			self.warnings[k]:Show()
+			self.warnings[k]:SetPosition(0, WARNINGS_OFFSET + WARNINGS_SPACING*(k-hidden_warnings-1))
+		else
+			self.warnings[k]:Hide()
+			hidden_warnings = hidden_warnings + 1
+		end
+	end
 end
 
 return Deathmatch_Status

@@ -400,29 +400,3 @@ AddPrefabPostInit("lavaarena_center", function(inst)
 		G.TheWorld:PushEvent("ms_register_lavaarenacenter", inst)
 	end
 end)
-
-AddPrefabPostInit("world", function(inst) --can't this just go into prefabs/deathmatch.lua?
-	if inst.ismastersim and G.TheNet:GetServerGameMode() == "deathmatch" then
-		inst:AddComponent("deathmatch_manager")
-		inst:DoTaskInTime(0, function(inst)
-			inst.components.deathmatch_manager:SetGamemode(1, true)
-			inst.components.deathmatch_manager:SetNextArena("atrium")
-		end)
-		inst:ListenForEvent("wehaveawinner", function(world, winner)
-			if type(winner) == "number" then
-				G.TheNet:Announce(G.DEATHMATCH_TEAMS[winner].name .. " Team wins!")
-			elseif type(winner) == "table" then
-				G.TheNet:Announce(winner:GetDisplayName() .. " wins with "..tostring(math.ceil(winner.components.health.currenthealth)).." health remaining!")
-			end
-		end)
-		inst:ListenForEvent("ms_playerjoined", function(inst)
-			inst.net:PushEvent("deathmatch_timercurrentchange", inst.components.deathmatch_manager.timer_current)
-			inst.net:PushEvent("deathmatch_matchmodechange", inst.components.deathmatch_manager.gamemode == 0 and 4 or inst.components.deathmatch_manager.gamemode)
-			inst.net:PushEvent("deathmatch_matchstatuschange", inst.net:GetMatchStatus())
-		end)
-	end
-	inst:ListenForEvent("ms_register_lavaarenacenter", function(world, center)
-		world.centerpoint = center
-	end)
-end)
-

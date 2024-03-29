@@ -28,12 +28,28 @@ return {
 	SETSTATE = "Change Look",
 	TIPS_BUTTON = "Tips",
 
-	REVIVE_TEAMMATE_PROMPT = "A member of your team has fallen. Revive them!",
+	
 	DEAD_ALONE_PROMPT = "You're out! Wait for the next match.",
 	DEAD_TEAM_PROMPT = "If you have any teammates, tell them to revive you!",
 	SKILLTREETOAST_PROMPT = "Insight Available!",
 
 	CANT_DITCH_TEAMMATES_SPECTATE = "Your teammates can save you! You can't spectate now.",
+
+	STATUS = {
+		TITLE = "Deathmatch Status:",
+		MATCHSTATUS = {
+			[0] = "Waiting for next match...",
+			[1] = "Match in progress!",
+			[2] = "Preparing next match...",
+			[3] = "Starting next match...",
+		}
+	},
+	WARNINGS = {
+		AFK_MANUAL = "You're AFK. You will spectate matches until you type /afk again.",
+		AFK_AUTO =  "You're AFK. You will spectate matches until you move again.",
+		REVIVE_TEAMMATE = "A member of your team has fallen. Revive them!",
+		SKILLTREE = "You have unused Insight points!",
+	},
 
 	BUFFS = {
 		buff_pickup_lightdamaging = {
@@ -114,6 +130,9 @@ return {
 		MATCHBEGIN = "Deathmatch started!",
 		LATEJOIN = "Player joined late! Restarting deathmatch initiation!",
 		NEARSTARTDESPAWN = "Restarting deathmatch initiation for despawning player.",
+
+		WINNER_TEAM = "{team} Team wins!",
+		WINNER_SOLO = "{player} wins with {health} health remaining!",
 		
 		SETTEAMMODE = "Set deathmatch team mode to %s.",
 		SETTEAMMODE_CUSTOM = "Set deathmatch mode to custom. Use /setteam before a match starts to assign custom teams.",

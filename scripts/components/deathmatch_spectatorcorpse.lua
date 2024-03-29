@@ -68,7 +68,7 @@ local function OnPlayerActivated(inst)
     local self = inst.components.deathmatch_spectatorcorpse
     if not self.active then
         self.active = true
-        if not TheWorld.ismastersim then
+        if not TheNet:IsDedicated() then
             inst:ListenForEvent("deathmatch_isspectatingdirty", OnIsSpectatingDirty)
         end
         OnIsSpectatingDirty(inst)
@@ -79,7 +79,7 @@ local function OnPlayerDeactivated(inst)
     local self = inst.components.deathmatch_spectatorcorpse
     if self.active then
         self.active = false
-        if not TheWorld.ismastersim then
+        if not TheNet:IsDedicated() then
             inst:RemoveEventCallback("deathmatch_isspectatingdirty", OnIsSpectatingDirty)
         end
     end

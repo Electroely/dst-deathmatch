@@ -127,7 +127,6 @@ local function OnPlayerDeath(inst, data)
 					if v.components.teamer:GetTeam() == team then
 						if not v.components.health:IsDead() then
 							is_alive = true
-							print(v, "is still alive")
 							break
 						else
 							table.insert(teammates, v)
@@ -136,7 +135,6 @@ local function OnPlayerDeath(inst, data)
 				end
 				if not is_alive then
 					for k, v in pairs(teammates) do
-						print("removing",v,"because they are dead")
 						self:RemovePlayerFromMatch(v)
 					end
 				end
@@ -642,12 +640,15 @@ function Deathmatch_Manager:StopDeathmatch()
 		self.allow_teamswitch_user = true
 	end
 	for k, v in pairs(AllPlayers) do
+		if v.afkcheck then
+			v:EnableAFK()
+		end
 		v:DoTaskInTime(5, function(v)
 			v:PushEvent("respawnfromcorpse",{quick=true, delay = 1})
 			if not v.components.health:IsDead() then v.sg:GoToState("idle") end
-			if v:HasTag("spectator") and not v:HasTag("spectator_perma") then
+			if v:HasTag("spectator") and not (v:HasTag("afk") or v:HasTag("spectator_perma")) then
 				self:ToggleSpectator(v)
-			elseif not v:HasTag("spectator") and v:HasTag("spectator_perma") then
+			elseif not v:HasTag("spectator") and (v:HasTag("afk") or v:HasTag("spectator_perma")) then
 				self:ToggleSpectator(v)
 			end
 			local pos = self.inst.lobbypoint:GetPosition()
@@ -972,6 +973,7 @@ function Deathmatch_Manager:BeginMatch()
 		v:RemoveTag("notarget")
 		v.revivals = 0
 		v:UpdateRevivalHealth()
+		v.afkcheck = true --if this is still true at the end of the match, then the player is AFK
 	end
 	for k, v in pairs(self.spawnedgear) do
 		if not v.components.equippable:IsEquipped() then

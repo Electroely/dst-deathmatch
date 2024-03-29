@@ -140,13 +140,34 @@ local function UpdateMalbatrossFeatherStats(inst)
 	end
 end
 ---------------------------------------------------------------
-
+local anti_afk_states = {
+	combat_lunge_start = true,
+	combat_lunge = true,
+	combat_superjump_start = true,
+	combat_superjump = true,
+	combat_leap_start = true,
+	combat_leap = true,
+	book = true,
+	castspell = true,
+	parry_pre = true,
+	run_start = true,
+}
 ---------------------------------------------------------------
 local function fn(inst, prefab)
 	
 	if not TheWorld.ismastersim then
 		return
 	end
+	
+	inst.afkcheck = false
+	inst:ListenForEvent("newstate", function(inst, data)
+		if data and anti_afk_states[data.statename] then
+			inst.afkcheck = false
+			if inst:HasTag("afk") then
+				inst:PushEvent("afk_end")
+			end
+		end
+	end)
 	
 	inst.revive = function(inst)
 		inst.sg:GoToState("idle")

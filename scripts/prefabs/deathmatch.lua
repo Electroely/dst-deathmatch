@@ -403,6 +403,27 @@ local function master_postinit(inst)
 			end
 		end)
 	end)
+
+	inst:AddComponent("deathmatch_manager")
+	inst:DoTaskInTime(0, function(inst)
+		inst.components.deathmatch_manager:SetGamemode(1, true)
+		inst.components.deathmatch_manager:SetNextArena("atrium")
+	end)
+	inst:ListenForEvent("wehaveawinner", function(world, winner)
+		if type(winner) == "number" then
+			G.TheNet:Announce(subfmt(DEATHMATCH_STRINGS.ANNOUNCE.WINNER_TEAM, {team = DEATHMATCH_TEAMS[winner].name}))
+		elseif type(winner) == "table" then
+			G.TheNet:Announce(subfmt(DEATHMATCH_STRINGS.ANNOUNCE.WINNER_SOLO, {player=winner:GetDisplayName(),health=tostring(math.ceil(winner.components.health.currenthealth))}))
+		end
+	end)
+	inst:ListenForEvent("ms_playerjoined", function(inst)
+		inst.net:PushEvent("deathmatch_timercurrentchange", inst.components.deathmatch_manager.timer_current)
+		inst.net:PushEvent("deathmatch_matchmodechange", inst.components.deathmatch_manager.gamemode == 0 and 4 or inst.components.deathmatch_manager.gamemode)
+		inst.net:PushEvent("deathmatch_matchstatuschange", inst.net:GetMatchStatus())
+	end)
+	inst:ListenForEvent("ms_register_lavaarenacenter", function(world, center)
+		world.centerpoint = center
+	end)
 	
 	inst.OnSave = OnSave --does this even work with worlds? Hornet: Yes, it does. I believe OnSave and OnLoad works for entities with the Transform functions
 	inst.OnLoad = OnLoad

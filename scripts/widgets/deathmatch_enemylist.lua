@@ -16,10 +16,6 @@ local Deathmatch_EnemyList = Class(Widget, function(self, owner)
 	
 	self.widgets = {}
 	self.widgets_allies = {}
-
-	self.revive_text = self:AddChild(Text(NEWFONT_OUTLINE, 36, DEATHMATCH_STRINGS.REVIVE_TEAMMATE_PROMPT))
-	self.revive_text:SetPosition(220, 150)
-	self.revive_text:Hide()
 	
 	self:RefreshWidgets()
 
@@ -160,11 +156,7 @@ function Deathmatch_EnemyList:RefreshWidgets()
 			teammate_dead = true
 		end
 	end
-	if teammate_dead then
-		self.revive_text:Show()
-	else
-		self.revive_text:Hide()
-	end
+	self.owner.teammate_dead = teammate_dead
 	
 	--TODO: calculate spacing depending on number of widgets & screen size
 	for i, widget in ipairs(self.widgets) do

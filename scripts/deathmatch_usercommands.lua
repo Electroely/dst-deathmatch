@@ -100,18 +100,10 @@ AddUserCommand("afk", {
 	params = {},
 	vote = false,
 	serverfn = function(params, caller)
-		if caller:HasTag("spectator_perma") then 
-			caller:RemoveTag("spectator_perma") 
-			G.TheNet:Announce(caller:GetDisplayName().." is no longer AFK.", caller.entity, nil, "afk_stop")
-			if caller:HasTag("spectator") and (G.TheWorld.net:GetMatchStatus() == 0 or G.TheWorld.net:GetMatchStatus() == 2) then
-				G.TheWorld.components.deathmatch_manager:ToggleSpectator(caller)
-			end
+		if caller:HasTag("spectator_perma") or caller:HasTag("afk") then 
+			caller:DisableAFK()
 		else 
-			caller:AddTag("spectator_perma") 
-			G.TheNet:Announce(caller:GetDisplayName().." is now AFK.", caller.entity, nil, "afk_start")
-			if not (caller:HasTag("spectator") or G.TheWorld.net:IsPlayerInMatch(caller.userid)) then
-				G.TheWorld.components.deathmatch_manager:ToggleSpectator(caller)
-			end
+			caller:EnableAFK(true)
 		end
 	end,
 })
@@ -205,7 +197,7 @@ AddUserCommand("setteammode", {
     usermenu = false,
     servermenu = true,
     params = {"teammode"},
-    vote = true,
+    vote = false, --no longer a vote option
     votetimeout = 30,
     voteminstartage = 0,
     voteminpasscount = 1,
@@ -244,7 +236,7 @@ AddUserCommand("setarena", {
     usermenu = false,
     servermenu = true,
     params = {"arena"},
-    vote = true,
+    vote = false, --no longer a vote option
     votetimeout = 15,
     voteminstartage = 0,
     voteminpasscount = 1,
