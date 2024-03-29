@@ -646,6 +646,12 @@ function Deathmatch_Manager:StopDeathmatch()
 		v:DoTaskInTime(5, function(v)
 			v:PushEvent("respawnfromcorpse",{quick=true, delay = 1})
 			if not v.components.health:IsDead() then v.sg:GoToState("idle") end
+			if v.sg.currentstate.name == "death" then
+				--need to despawn a little later. don't wanna mess with interrupting the death state
+				v:DoTaskInTime(4, function(inst)
+					inst:PushEvent("respawnfromcorpse",{quick=true, delay = 1})
+				end)
+			end
 			if v:HasTag("spectator") and not (v:HasTag("afk") or v:HasTag("spectator_perma")) then
 				self:ToggleSpectator(v)
 			elseif not v:HasTag("spectator") and (v:HasTag("afk") or v:HasTag("spectator_perma")) then

@@ -411,9 +411,9 @@ local function master_postinit(inst)
 	end)
 	inst:ListenForEvent("wehaveawinner", function(world, winner)
 		if type(winner) == "number" then
-			G.TheNet:Announce(subfmt(DEATHMATCH_STRINGS.ANNOUNCE.WINNER_TEAM, {team = DEATHMATCH_TEAMS[winner].name}))
+			TheNet:Announce(subfmt(DEATHMATCH_STRINGS.ANNOUNCE.WINNER_TEAM, {team = DEATHMATCH_TEAMS[winner].name}))
 		elseif type(winner) == "table" then
-			G.TheNet:Announce(subfmt(DEATHMATCH_STRINGS.ANNOUNCE.WINNER_SOLO, {player=winner:GetDisplayName(),health=tostring(math.ceil(winner.components.health.currenthealth))}))
+			TheNet:Announce(subfmt(DEATHMATCH_STRINGS.ANNOUNCE.WINNER_SOLO, {player=winner:GetDisplayName(),health=tostring(math.ceil(winner.components.health.currenthealth))}))
 		end
 	end)
 	inst:ListenForEvent("ms_playerjoined", function(inst)

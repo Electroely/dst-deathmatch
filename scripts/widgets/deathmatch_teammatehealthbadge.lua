@@ -74,49 +74,7 @@ function TeammateHealthBadge:_SetupHeads()
 	self.head_animstate:SetDefaultEffectHandle(resolvefilepath("shaders/characterhead.ksh"))
 	self.head_animstate:UseColourCube(true)
 end
-local function GetPlayerBadgeData_Override(character, ghost, state_1, state_2, state_3, ...)
-	--fix player head sizes
-	local rtn = { GetPlayerBadgeData(character, ghost, state_1, state_2, state_3, ...) }
-	-- bank, animation, skin_mode, scale, y_offset, [x_offset]
-	-- default y_offset: -50
-	-- default scale: .23
-	if character == "willow" then
-		rtn[4] = .25
-		rtn[5] = -47
-	elseif character == "wolfgang" then
-		rtn[4] = .27
-	elseif character == "wendy" then
-		rtn[4] = .25
-		rtn[5] = -47
-	elseif character == "wx78" then
-		rtn[4] = .27
-	elseif character == "wickerbottom" then
-		rtn[4] = .25
-	elseif character == "woodie" then
-		rtn[4] = .26
-	elseif character == "wes" then
-		rtn[4] = .26
-		rtn[6] = -3
-	elseif character == "waxwell" then
-		rtn[4] = .26
-		rtn[5] = -46
-	elseif character == "wathgrithr" then
-		rtn[4] = .25
-		rtn[5] = -45
-	elseif character == "webber" then
-		rtn[4] = .25
-		rtn[5] = -45
-	elseif character == "winona" then
-		rtn[4] = .22
-		rtn[5] = -47
-	elseif character == "wurt" then
-		rtn[4] = .24
-		rtn[5] = -46
-	elseif character == "walter" then
-		rtn[5] = -47
-	end
-	return unpack(rtn)
-end
+
 function TeammateHealthBadge:SetHead(prefab, colour, ishost, userflags, base_skin)
     local dirty = false
 

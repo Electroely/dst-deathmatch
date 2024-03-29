@@ -506,6 +506,107 @@ AddClassPostConstruct("screens/playerhud", function(self)
 	end, G.TheWorld.net)
 end)
 
+local UIAnim = require "widgets/uianim"
+local checkbit = GLOBAL.checkbit
+local resolvefilepath = GLOBAL.resolvefilepath
+local unpack = GLOBAL.unpack
+
+AddClassPostConstruct("widgets/targetindicator", function(self)
+    self.head_anim = self:AddChild(UIAnim())
+    self.head_animstate = self.head_anim:GetAnimState()
+
+	self.head_anim:SetFacing(GLOBAL.FACING_DOWN)
+
+    self.head_animstate:Hide("ARM_carry")
+    self.head_animstate:Hide("HAIR_HAT")
+	self.head_animstate:Hide("HEAD_HAT")
+	self.head_animstate:Hide("HEAD_HAT_NOHELM")
+	self.head_animstate:Hide("HEAD_HAT_HELM")
+	
+	self.head_anim:Hide()
+	
+	self.head_animstate:SetDefaultEffectHandle(resolvefilepath("shaders/characterhead.ksh"))
+	self.head_animstate:UseColourCube(true)
+
+	self.prefabname = ""
+	self.is_mod_character = false
+	self.userflags = 0
+
+	function self:UpdateHead(prefab, colour, ishost, userflags, base_skin)
+		local dirty = false
+
+		if self.ishost ~= ishost then
+			self.ishost = ishost
+			dirty = true
+		end
+	
+		if self.base_skin ~= base_skin then
+			self.base_skin = base_skin
+			dirty = true
+		end
+	
+		if self.prefabname ~= prefab then
+			if table.contains(DST_CHARACTERLIST, prefab) then
+				self.prefabname = prefab
+				self.is_mod_character = false
+			elseif table.contains(MODCHARACTERLIST, prefab) then
+				self.prefabname = prefab
+				self.is_mod_character = true
+			elseif prefab == "random" then
+				self.prefabname = "random"
+				self.is_mod_character = false
+			else
+				self.prefabname = ""
+				self.is_mod_character = (prefab ~= nil and #prefab > 0)
+			end
+			dirty = true
+		end
+		if self.userflags ~= userflags then
+			self.userflags = userflags
+			dirty = true
+		end
+		if dirty then
+			self.head:Hide()
+			self.head_anim:Show()
+			local character_state_1 = checkbit(userflags, G.USERFLAGS.CHARACTER_STATE_1)
+			local character_state_2 = checkbit(userflags, G.USERFLAGS.CHARACTER_STATE_2)
+			local character_state_3 = checkbit(userflags, G.USERFLAGS.CHARACTER_STATE_3)
+			local bank, animation, skin_mode, scale, y_offset, x_offset = G.GetPlayerBadgeData_Override( prefab, false, character_state_1, character_state_2, character_state_3)
+			x_offset = x_offset or 0
+	
+			self.head_animstate:SetBank(bank)
+			self.head_animstate:PlayAnimation(animation, true)
+			
+			self.head_animstate:SetTime(0)
+			self.head_animstate:Pause()
+			
+			self.head_anim:SetScale(scale*0.7)
+			self.head_anim:SetPosition(1+x_offset,y_offset+11, 0)
+	
+			local skindata = GLOBAL.GetSkinData(base_skin or self.prefabname.."_none")
+			local base_build = self.prefabname
+			if skindata.skins ~= nil then
+				base_build = skindata.skins[skin_mode]
+			end
+			GLOBAL.SetSkinsOnAnim( self.head_animstate, self.prefabname, base_build, {}, nil, skin_mode)
+		end
+	end
+
+	local OnUpdate_old = self.OnUpdate
+	function self:OnUpdate(...)
+		if self.target and self.target.userid then
+			local userflags = self.target.Network ~= nil and self.target.Network:GetUserFlags() or 0
+			local data = G.TheNet:GetClientTableForUser(self.target.userid) or {base_skin = self.target.prefab .. "_none"}
+			self:UpdateHead(self.target.prefab, nil, nil, userflags, data.base_skin)
+		end
+		OnUpdate_old(self, ...)
+		local pos = self:GetWorldPosition()
+		local scale = self:GetScale().x
+		self.head_animstate:SetUILightParams(pos.x, pos.y, 28.0, scale)
+		self.owner = G.TheFocalPoint
+	end
+end)
+
 local function OnStartDM()
 	local status = G.TheWorld.net:GetMatchStatus()
 	if status ~= nil then
@@ -608,6 +709,50 @@ GLOBAL.GetPlayerBadgeData = function(character, ghost, state_1, state_2, state_3
 		end
 	end
 	return GLOBAL.unpack(rtn)
+end
+
+function G.GetPlayerBadgeData_Override(character, ghost, state_1, state_2, state_3, ...)
+	--fix player head sizes
+	local rtn = { GLOBAL.GetPlayerBadgeData(character, ghost, state_1, state_2, state_3, ...) }
+	-- bank, animation, skin_mode, scale, y_offset, [x_offset]
+	-- default y_offset: -50
+	-- default scale: .23
+	if character == "willow" then
+		rtn[4] = .25
+		rtn[5] = -47
+	elseif character == "wolfgang" then
+		rtn[4] = .27
+	elseif character == "wendy" then
+		rtn[4] = .25
+		rtn[5] = -47
+	elseif character == "wx78" then
+		rtn[4] = .27
+	elseif character == "wickerbottom" then
+		rtn[4] = .25
+	elseif character == "woodie" then
+		rtn[4] = .26
+	elseif character == "wes" then
+		rtn[4] = .26
+		rtn[6] = -3
+	elseif character == "waxwell" then
+		rtn[4] = .26
+		rtn[5] = -46
+	elseif character == "wathgrithr" then
+		rtn[4] = .25
+		rtn[5] = -45
+	elseif character == "webber" then
+		rtn[4] = .25
+		rtn[5] = -45
+	elseif character == "winona" then
+		rtn[4] = .22
+		rtn[5] = -47
+	elseif character == "wurt" then
+		rtn[4] = .24
+		rtn[5] = -46
+	elseif character == "walter" then
+		rtn[5] = -47
+	end
+	return unpack(rtn)
 end
 ---------------------------------------------------------------------
 GLOBAL.STRINGS.SKILLTREE.INFOPANEL_DESC = GLOBAL.DEATHMATCH_STRINGS.SKILLTREE_DESC
