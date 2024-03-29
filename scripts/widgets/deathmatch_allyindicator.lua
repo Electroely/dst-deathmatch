@@ -102,7 +102,9 @@ local Deathmatch_AllyIndicator = Class(Widget, function(self, owner)
 end)
 
 function Deathmatch_AllyIndicator:OnUpdate(dt)
-
+	if self.owner == nil then
+		self.owner = ThePlayer
+	end
 	for k, v in pairs(AllPlayers) do
 		if v ~= self.owner and IsAlly(self.owner, v) and not isOffScreen(v) then
 			if self.arrows[v] == nil then
