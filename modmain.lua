@@ -495,6 +495,7 @@ AddClassPostConstruct("widgets/controls", function(self, owner)
 end)
 
 AddClassPostConstruct("screens/playerhud", function(self)
+	self.allyindicator = self:AddChild(require("widgets/deathmatch_allyindicator")(self.owner))
 	local OpenPlayerInfoScreen_old = self.OpenPlayerInfoScreen
 	function self:OpenPlayerInfoScreen(player_name, data, show_net_profile, force, ...)
 		if not force and self.owner ~= nil and (data and data.userid ~= self.owner.userid) and G.TheWorld.net:IsPlayerInMatch(self.owner.userid) and G.TheWorld.net:GetMatchStatus() == DEATHMATCH_MATCHSTATUS.INMATCH then
