@@ -68,7 +68,7 @@ AddComponentPostInit("inventory", function(self)
 					return --do nothing
 				else
 					local item_to_drop = self:GetItemInSlot(item.forceslot)
-					if item_to_drop ~= nil then
+					if item_to_drop ~= nil and item_to_drop ~= item then  --check to prevent infinite recursion
 						self:DropItem(item_to_drop)
 					end
 					return
@@ -96,7 +96,7 @@ AddComponentPostInit("inventory", function(self)
 					return --do nothing
 				else
 					local item_to_drop = self:GetItemInSlot(item.forceslot)
-					if item_to_drop ~= nil then
+					if item_to_drop ~= nil and item_to_drop ~= item then --check to prevent infinite recursion
 						self:DropItem(item_to_drop)
 					end
 					self:GiveItem(item, item.forceslot)
@@ -107,13 +107,6 @@ AddComponentPostInit("inventory", function(self)
 		end
 		local Equip_old = self.Equip
 		function self:Equip(inst, ...)
-			if inst and inst.itemcountlimit then
-				local count = self:GetTotalItemCount(inst.prefab) - (self:IsHolding(inst) and 1 or 0)
-				if count >= inst.itemcountlimit then
-					self:DropItem(inst, true, true)
-					return
-				end
-			end
 			if inst and inst.components.equippable and inst.components.equippable.equipslot == GLOBAL.EQUIPSLOTS.HANDS then
 				local oldslot = self:GetItemSlot(inst) or GetDummySlot(self)
 				local dummy = GLOBAL.SpawnPrefab("invslotdummy")
@@ -331,6 +324,20 @@ AddComponentPostInit("playercontroller", function(self)
 		end
 		--print("doing spacebar with ",force_target)
 		return GetActionButtonAction_old(self, force_target, ...)
+	end
+
+	local DoCameraControl_old = self.DoCameraControl
+	function self:DoCameraControl(...)
+		local forced = false
+		if self.classified ~= nil and not self.classified.iscontrollerenabled:value() 
+			and self.inst.components.deathmatch_spectatorcorpse and self.inst.components.deathmatch_spectatorcorpse.active then
+			forced = true
+			self.classified.iscontrollerenabled:set_local(true)
+		end
+		DoCameraControl_old(self, ...)
+		if forced then
+			self.classified.iscontrollerenabled:set_local(false)
+		end
 	end
 	
 	--no need to hold force attack for players

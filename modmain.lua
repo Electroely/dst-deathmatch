@@ -435,8 +435,8 @@ AddClassPostConstruct("widgets/controls", function(self, owner)
 		self.deathmatch_status:SetPosition(0,-20)
 		self.deathmatch_status.inst:DoPeriodicTask(0.5, function() self.deathmatch_status:Refresh() end)
 		
-		self.deathmatch_spectatorspinner = self.bottom_root:AddChild(G.require("widgets/deathmatch_spectatorspinner")(owner))
-		self.deathmatch_spectatorspinner:SetPosition(0,150)
+		self.deathmatch_spectatorspinner = self.top_root:AddChild(G.require("widgets/deathmatch_spectatorspinner")(owner))
+		self.deathmatch_spectatorspinner:SetPosition(0,-235)
 		if owner.components.deathmatch_spectatorcorpse and owner.components.deathmatch_spectatorcorpse.active then
 			self.deathmatch_spectatorspinner:Show()
 		else

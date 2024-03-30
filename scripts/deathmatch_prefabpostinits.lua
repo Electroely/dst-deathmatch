@@ -240,13 +240,13 @@ end)
 
 local function launchitem(item, angle)
     local speed = math.random() * 1.5 + 5
-    angle = (angle + math.random() * 60 - 30) * G.DEGREES
-    item.Physics:SetVel(speed * math.cos(angle), math.random() * 2 + 8, speed * math.sin(angle))
+    angle = angle * G.DEGREES --(angle + math.random() * 60 - 30) * G.DEGREES
+    item.Physics:SetVel(speed * math.sin(angle), math.random() * 2 + 8, speed * math.cos(angle))
 end
 
 local function SpawnPickup(inst)
 	local pos = G.TheWorld.centerpoint:GetPosition()
-	local items = G.TheWorld.components.deathmatch_manager:GetPickUpItemList(pos)
+	local items, players_in_peril = G.TheWorld.components.deathmatch_manager:GetPickUpItemList(pos)
 	
 	for k, v in pairs(items) do
 		local angle = math.random(360)
@@ -255,6 +255,14 @@ local function SpawnPickup(inst)
 		launchitem(item, angle)
 		table.insert(G.TheWorld.components.deathmatch_manager.spawnedpickups, item)
 		if item.Fade ~= nil then item:DoTaskInTime(15, item.Fade) end
+	end
+	for k, v in pairs(players_in_peril) do
+		local angle = inst:GetAngleToPoint(v.Transform:GetWorldPosition())+90
+		local item = G.SpawnPrefab(G.TheWorld.components.deathmatch_manager.perilpickup)
+		item.Transform:SetPosition(pos.x, 4.5, pos.z)
+		launchitem(item, angle)
+		table.insert(G.TheWorld.components.deathmatch_manager.spawnedpickups, item)
+		if item.Fade ~= nil then item:DoTaskInTime(2, item.Fade) end
 	end
 	
 end

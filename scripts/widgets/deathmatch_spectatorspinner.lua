@@ -41,13 +41,14 @@ local Deathmatch_SpectatorSpinner = Class(Widget, function(self, owner)
 		end
 	end)
 	
+	--[[
 	self.spectatebutton = self:AddChild(TextButton())
 	self.spectatebutton:SetPosition(0, 70)
 	self.spectatebutton:SetTextSize(40)
 	self.spectatebutton:SetText("󰀉")
 	self.spectatebutton:SetOnClick(function()
 		UserCommands.RunTextUserCommand("spectate", ThePlayer, false)
-	end)
+	end)]]
 	
 	if not initlisteners then
 		TheWorld:ListenForEvent("playerexited", function(player)
