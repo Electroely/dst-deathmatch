@@ -65,7 +65,7 @@ local Deathmatch_SpectatorSpinner = Class(Widget, function(self, owner)
 	self.inst:ListenForEvent("stopspectating", function(player)
 		self.spinner:SetSelected(self.owner)
 		self:Hide()
-	end)
+	end, self.owner)
 end)
 
 local Show_old = Deathmatch_SpectatorSpinner.Show
