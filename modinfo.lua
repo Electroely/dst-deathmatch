@@ -10,7 +10,7 @@ description = "WIP"
 author = "Electroely"
 
 --A version number so you can ask people if they are running an old version of your mod.
-version = "21.91"
+version = "22.0"
 
 --This lets other players know if your mod is out of date. This typically needs to be updated every time there's a new game update.
 api_version = 10
@@ -24,7 +24,7 @@ all_clients_require_mod = true
 client_only_mod = false
 
 --This lets people search for servers with this mod by these tags
-server_filter_tags = {"deathmatch", "arena", "arenas"}
+server_filter_tags = {"deathmatch", "arena", "arenas", "brawl", "arena brawl"}
 
 icon_atlas = "modicon.xml"
 icon = "modicon.tex"
@@ -70,6 +70,4 @@ game_modes = {
 	}
 }
 
-priority = 9999999999999999
--- a
---test commit
+priority = 999999999999999
