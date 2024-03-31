@@ -51,6 +51,8 @@ local TeammateHealthBadge = Class(Badge, function(self, owner)
 		self:SetClickable(false)
 	end, owner)
 
+	self.num.Show = function() end
+
 	self:_SetupHeads()
 	self:StartUpdating()
 end)
