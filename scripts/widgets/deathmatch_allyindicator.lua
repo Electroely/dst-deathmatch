@@ -90,18 +90,8 @@ local function CreateIndicator(target)
 end
 
 
-
-local Deathmatch_AllyIndicator = Class(Widget, function(self, owner)
-	Widget._ctor(self, "Deathmatch_AllyIndicator")
-
-	self.owner = owner
-
-	self.arrows = {}
-
-	self:StartUpdating()
-end)
-
-function Deathmatch_AllyIndicator:OnUpdate(dt)
+local UPDATE_PERIOD = 10*FRAMES
+local function OnUpdate(inst, self)
 	if self.owner == nil then
 		self.owner = ThePlayer
 	end
@@ -126,7 +116,16 @@ function Deathmatch_AllyIndicator:OnUpdate(dt)
 			end
 		end
 	end
-
 end
+local Deathmatch_AllyIndicator = Class(Widget, function(self, owner)
+	Widget._ctor(self, "Deathmatch_AllyIndicator")
+
+	self.owner = owner
+
+	self.arrows = {}
+
+	--self:StartUpdating()
+	self.inst:DoPeriodicTask(UPDATE_PERIOD, OnUpdate, 0, self)
+end)
 
 return Deathmatch_AllyIndicator

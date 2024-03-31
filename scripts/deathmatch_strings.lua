@@ -29,6 +29,7 @@ return {
 	SETSTATE = "Change Look",
 	TIPS_BUTTON = "Tips",
 
+	MATCH_STARTING_HURRY = "A new match starts in %s, hurry up!",
 	
 	DEAD_ALONE_PROMPT = "You're out! Wait for the next match.",
 	DEAD_TEAM_PROMPT = "If you have any teammates, tell them to revive you!",

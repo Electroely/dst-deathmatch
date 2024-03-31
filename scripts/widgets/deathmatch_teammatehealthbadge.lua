@@ -15,7 +15,11 @@ local TeammateHealthBadge = Class(Badge, function(self, owner)
     Badge._ctor(self, "lavaarena_partyhealth", owner, nil, nil, nil, nil, true)
 	self.anim:GetAnimState():Hide("stick")
 	self.anim:GetAnimState():HideSymbol("frame_circle")
-    self:SetClickable(false)
+	if owner and owner.components.deathmatch_spectatorcorpse and owner.components.deathmatch_spectatorcorpse.active then
+		self:SetClickable(true)
+	else
+    	self:SetClickable(false)
+	end
 
     self.arrow = self.underNumber:AddChild(UIAnim())
     self.arrow:GetAnimState():SetBank("sanity_arrow")
@@ -39,10 +43,25 @@ local TeammateHealthBadge = Class(Badge, function(self, owner)
 			self:SetPercent(health)
 		end
 	end, TheWorld.net)
+
+	self.inst:ListenForEvent("deathmatch_isspectatingdirty", function(src)
+		if src.components.deathmatch_spectatorcorpse.active then
+			self:SetClickable(true)
+		else
+			self:SetClickable(false)
+		end
+	end, owner)
 	
 	self:_SetupHeads()
 	self:StartUpdating()
 end)
+
+function TeammateHealthBadge:OnMouseButton(button, down, x, y)
+	local target = UserToPlayer(self.userid)
+	if down and button == MOUSEBUTTON_LEFT and target and self.owner and self.owner.HUD and self.owner.HUD.controls and self.owner.HUD.controls.deathmatch_spectatorspinner then
+		self.owner.HUD.controls.deathmatch_spectatorspinner.spinner:SetSelected(target)
+	end
+end
 
 function TeammateHealthBadge:OnUpdate(dt)
 	UpdateShaderParams(self)
