@@ -28,19 +28,11 @@ local function OnIsSpectatingDirty(inst)
     local self = inst.components.deathmatch_spectatorcorpse
     if self._isspectating:value() then
 		self.active = true
-		if ThePlayer and ThePlayer.HUD.controls.deathmatch_spectatorspinner ~= nil then
-			local ctrls = ThePlayer.HUD.controls
-			ctrls.deathmatch_spectatorspinner.spinner:SetSelected(ThePlayer)
-			ctrls.deathmatch_spectatorspinner:Show()
-		end
+		self.inst:PushEvent("startspectating")
     else
 		ReattachToPlayer()
 		self.active = false
-		if ThePlayer and ThePlayer.HUD.controls.deathmatch_spectatorspinner ~= nil then
-			local ctrls = ThePlayer.HUD.controls
-			ctrls.deathmatch_spectatorspinner.spinner:SetSelected(ThePlayer)
-			ctrls.deathmatch_spectatorspinner:Hide()
-		end
+		self.inst:PushEvent("stopspectating")
     end
 end
 

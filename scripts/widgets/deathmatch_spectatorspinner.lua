@@ -31,8 +31,8 @@ local Deathmatch_SpectatorSpinner = Class(Widget, function(self, owner)
 	
 	self.spinner = self:AddChild(Spinner(GetOptionsList(), 300, 40, false, false, nil, nil, true))
 	self.spinner:SetOnChangedFn(function(selected, old)
-		if selected ~= nil and ThePlayer.components.deathmatch_spectatorcorpse then
-			local sc_dm = ThePlayer.components.deathmatch_spectatorcorpse
+		if selected ~= nil and self.owner.components.deathmatch_spectatorcorpse then
+			local sc_dm = self.owner.components.deathmatch_spectatorcorpse
 			if sc_dm.active then
 				sc_dm:SetTarget(selected)
 			else
@@ -50,22 +50,22 @@ local Deathmatch_SpectatorSpinner = Class(Widget, function(self, owner)
 		UserCommands.RunTextUserCommand("spectate", ThePlayer, false)
 	end)]]
 	
-	if not initlisteners then
-		TheWorld:ListenForEvent("playerexited", function(player)
-			local spinner = ThePlayer and ThePlayer.HUD.controls.deathmatch_spectatorspinner or nil
-			if spinner and spinner.inst:IsValid() and spinner.shown then
-				spinner.spinner:SetOptions(GetOptionsList())
-			end
-		end)
-		
-		TheWorld:ListenForEvent("playerentered", function(player)
-			local spinner = ThePlayer and ThePlayer.HUD.controls.deathmatch_spectatorspinner or nil
-			if spinner and spinner.inst:IsValid() and spinner.shown then
-				spinner.spinner:SetOptions(GetOptionsList())
-			end
-		end)
-		initlisteners = true
-	end
+	self.inst:ListenForEvent("playerexited", function(world, player)
+		self.spinner:SetOptions(GetOptionsList())
+	end, TheWorld)
+	
+	self.inst:ListenForEvent("playerentered", function(world, player)
+		self.spinner:SetOptions(GetOptionsList())
+	end, TheWorld)
+
+	self.inst:ListenForEvent("startspectating", function(player)
+		self:Show()
+		self:SetSelected(self.owner)
+	end, self.owner)
+	self.inst:ListenForEvent("stopspectating", function(player)
+		self:SetSelected(self.owner)
+		self:Hide()
+	end)
 end)
 
 local Show_old = Deathmatch_SpectatorSpinner.Show

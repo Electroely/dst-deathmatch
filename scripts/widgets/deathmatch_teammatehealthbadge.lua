@@ -44,14 +44,13 @@ local TeammateHealthBadge = Class(Badge, function(self, owner)
 		end
 	end, TheWorld.net)
 
-	self.inst:ListenForEvent("deathmatch_isspectatingdirty", function(src)
-		if src.components.deathmatch_spectatorcorpse.active then
-			self:SetClickable(true)
-		else
-			self:SetClickable(false)
-		end
+	self.inst:ListenForEvent("startspectating", function(src)
+		self:SetClickable(true)
 	end, owner)
-	
+	self.inst:ListenForEvent("stopspectating", function(src)
+		self:SetClickable(false)
+	end, owner)
+
 	self:_SetupHeads()
 	self:StartUpdating()
 end)
