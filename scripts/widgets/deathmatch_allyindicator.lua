@@ -95,8 +95,8 @@ local function OnUpdate(inst, self)
 	if self.owner == nil then
 		self.owner = ThePlayer
 	end
-	for k, v in pairs(AllPlayers) do
-		if v ~= self.owner and IsAlly(self.owner, v) and not isOffScreen(v) then
+	for v, _ in pairs(DEATHMATCH_TEAMERS) do
+		if v:IsValid() and v ~= self.owner and IsAlly(self.owner, v) and not isOffScreen(v) then
 			if self.arrows[v] == nil then
 				local indicator = CreateIndicator(v)
 				self.arrows[v] = indicator
@@ -113,6 +113,9 @@ local function OnUpdate(inst, self)
 			if self.arrows[v] then
 				self.arrows[v]:Remove()
 				self.arrows[v] = nil
+			end
+			if not v:IsValid() then
+				DEATHMATCH_TEAMERS[v] = nil
 			end
 		end
 	end

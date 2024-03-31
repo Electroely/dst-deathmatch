@@ -33,11 +33,14 @@ local function DamageNearbyEntities(inst)
 		inst:Remove()
 		return
 	end
+	if inst.overridepkname == nil then
+		inst.overridepkname = inst.caster:GetDisplayName()
+	end
 	local x,y,z = inst.Transform:GetWorldPosition()
 	local ents = TheSim:FindEntities(x,y,z, RANGE, {"_combat"})
 	for k, v in pairs(ents) do
 		if v.components.health and inst.caster.components.combat:IsValidTarget(v) then
-			v.components.health:DoDelta(-DAMAGE*inst.sparklevel)
+			v.components.health:DoDelta(-DAMAGE*inst.sparklevel, false, inst)
 		end
 	end
 end

@@ -63,9 +63,13 @@ local function UpdateHandSlot(self, equippeditem)
                 equipslot.base_scale = 1
                 equipslot.highlight_scale = 1.3
             end
+            equipslot.slot = dummyslot
             equipslot:Show()
             self.dummyslot = dummyslot
             self.inv[dummyslot]:Hide()
+            if self.active_slot == self.inv[dummyslot] then
+                self.active_slot = equipslot
+            end
         end
     else
         if equipslot ~= nil then
@@ -287,6 +291,7 @@ local function RebuildLayout(self, inventory, overflow, do_integrated_backpack, 
 	for k = 1, 4 do
 		local slot = InvSlot(k, HUD_ATLAS, "inv_slot.tex", self.owner, self.owner.replica.inventory)
 		self.inv[k] = self.toprow:AddChild(slot)
+        slot.slot = k
 		slot:SetPosition(-210 + 140*(k-1), 15, 0)
 		slot.top_align_tip = W * .5 + YSEP
 		slot.base_scale = 1.5
@@ -301,6 +306,7 @@ local function RebuildLayout(self, inventory, overflow, do_integrated_backpack, 
 	for k = 5, 9 do
 		local slot = InvSlot(k, HUD_ATLAS, "inv_slot.tex", self.owner, self.owner.replica.inventory)
 		self.inv[k] = self.toprow:AddChild(slot)
+        slot.slot = k
 		slot:SetPosition(-180 + 90*(k-5), 125, 0)
 		slot.top_align_tip = W * .5 + YSEP
 		
@@ -644,24 +650,11 @@ function Inv:PinBarNav(select_pin)
 end
 
 function Inv:GetInventoryLists(same_container_only)
-    if same_container_only then
-        local lists = {self.current_list}
-
-        if self.current_list == self.inv then
-            table.insert(lists, self.equip)
-        elseif self.current_list == self.equip then
-            table.insert(lists, self.inv)
-        end
-
-        return lists
-    else
-        local lists = {self.inv, self.equip, self.backpackinv}
-		for _, v in pairs(self.owner.HUD.controls.containers) do
-            table.insert(lists, v.inv)
-		end
-
-        return lists
+    local lists = {self.inv}
+    if self.dummyslot ~= nil then
+        table.insert(lists, self.equip)
     end
+    return lists
 end
 
 function Inv:CursorNav(dir, same_container_only)
@@ -686,6 +679,7 @@ function Inv:CursorNav(dir, same_container_only)
         self.current_list = list
         return self:SelectSlot(slot)
     end
+    return true
 end
 
 function Inv:CursorLeft()
@@ -768,13 +762,18 @@ function Inv:GetClosestWidget(lists, pos, dir)
 
     for kk, vv in pairs(lists) do
         for k,v in pairs(vv) do
-            if v ~= self.active_slot then
+            if v ~= self.active_slot and (v.slot == nil or v.equipslot or v.slot ~= self.dummyslot) then
 				local vx, vy = v.inst.UITransform:GetWorldPosition()
 				local local_dir_x, local_dir_y = vx-x, vy-y
 
 				local dot = VecUtil_Dot(local_dir_x, local_dir_y, dir_x, dir_y)
                 if dot > 0 then
 					local score = local_dir_x * local_dir_x + local_dir_y * local_dir_y
+                    if self.active_slot.slot and v.slot then
+                        if (self.active_slot.slot <= 4 and v.slot <= 4) or (self.active_slot.slot > 4 and v.slot > 4) then
+                            score = score * 0.6
+                        end
+                    end
 	                if not closest or score < closest_score then
 	                    closest = v
 	                    closest_score = score
@@ -784,7 +783,6 @@ function Inv:GetClosestWidget(lists, pos, dir)
 	        end
         end
     end
-
     return closest, closest_list
 end
 

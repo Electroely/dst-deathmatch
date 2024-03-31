@@ -2,6 +2,7 @@ local Widget = require("widgets/widget")
 local Text = require("widgets/text")
 local TextButton = require("widgets/textbutton")
 local Spinner = require("widgets/spinner")
+local TEMPLATES = require "widgets/redux/templates"
 
 local UserCommands = require("usercommands")
 
@@ -25,6 +26,11 @@ local Deathmatch_SpectatorSpinner = Class(Widget, function(self, owner)
 
 	self.owner = owner
 	Widget._ctor(self, "Deathmatch_SpectatorSpinner")
+
+	self.bg = self:AddChild(TEMPLATES.RectangleWindow(215, 80))
+    local r,g,b = unpack(UICOLOURS.BROWN_DARK)
+    self.bg:SetBackgroundTint(r,g,b,0.8)
+	self.bg:SetPosition(0, 17)
 	
 	self.title = self:AddChild(Text(NEWFONT_OUTLINE, 30, "Currently Spectating:"))
 	self.title:SetPosition(0, 40)

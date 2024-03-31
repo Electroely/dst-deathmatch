@@ -403,3 +403,7 @@ AddComponentPostInit("playercontroller", function(self)
 		-- end
 	-- end
 end)
+
+AddComponentPostInit("builder", function(self)
+	self.MakeRecipe = function() end --absolutely no crafting in this mode (for now?)
+end)

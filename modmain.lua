@@ -6,6 +6,7 @@ G.DEATHMATCH_TUNING = require("deathmatch_tuning") --tuning needs to be loaded b
 G.DEATHMATCH_STRINGS = G.require("deathmatch_strings")
 local DEATHMATCH_STRINGS = G.DEATHMATCH_STRINGS
 local DEATHMATCH_POPUPS = DEATHMATCH_STRINGS.POPUPS
+G.DEATHMATCH_TEAMERS = {} --table of teamer entities for client side map markers
 
 local arenas = require("prefabs/arena_defs")
 
@@ -1003,6 +1004,16 @@ AddModRPCHandler(modname, "deathmatch_respec", function(inst)
 	if inst == nil then return end
 	G.RespecSkillsForPlayer(inst)
 end)
+
+-----------------------------------------------------------------------------
+local CONTROL_CRAFTING_MODIFIER = G.CONTROL_CRAFTING_MODIFIER
+local IsControlPressed_old = G.TheInput.IsControlPressed
+G.TheInput.IsControlPressed = function(self, control, ...)
+	if control == CONTROL_CRAFTING_MODIFIER then
+		return false
+	end
+	return IsControlPressed_old(self, control, ...)
+end
 -- AddModRPCHandler(modname, "deathmatch_currentreticule_change", function(inst, slot)
 	-- if inst == nil or slot == nil then return end
 	-- if inst.components.playercontroller then

@@ -107,6 +107,27 @@ local function UserOnline(userid)
 	return found
 end
 
+local function EliminateTeam(inst, team)
+	local self = TheWorld.components.deathmatch_manager
+	local teammates = {}
+	local is_alive = false
+	for k, v in pairs(self.players_in_match) do
+		if v.components.teamer:GetTeam() == team then
+			if not v.components.health:IsDead() then
+				is_alive = true
+				break
+			else
+				table.insert(teammates, v)
+			end
+		end
+	end
+	if not is_alive then
+		for k, v in pairs(teammates) do
+			self:RemovePlayerFromMatch(v)
+		end
+	end
+end
+
 local function OnPlayerDeath(inst, data)
 	if TheWorld ~= nil and TheWorld.components.deathmatch_manager and TheWorld.components.deathmatch_manager.enabled then
 		local self = TheWorld.components.deathmatch_manager
@@ -116,7 +137,7 @@ local function OnPlayerDeath(inst, data)
 			self:StopDeathmatch()
 		end
 		local player = data
-		if player and self:IsPlayerInMatch(player) then
+		if player then
 			local team = data.components.teamer:GetTeam()
 			if team == 0 then
 				self:RemovePlayerFromMatch(player)
@@ -134,9 +155,7 @@ local function OnPlayerDeath(inst, data)
 					end
 				end
 				if not is_alive then
-					for k, v in pairs(teammates) do
-						self:RemovePlayerFromMatch(v)
-					end
+					inst:DoTaskInTime(5, EliminateTeam, team)
 				end
 			end
 		end
@@ -748,7 +767,7 @@ function Deathmatch_Manager:GetPickUpItemList(custompos)
 			table.insert(perilplayers, player)
 		end
 	end
-	if self.enabledarts and (nearbyplayers > 0 and nearbyplayers <= count/2) then
+	if self.enabledarts and (nearbyplayers > 0) then
 		table.insert(result, "deathmatch_oneusebomb")
 	end
 	if not arena_configs[self.arena].nopowerpickups then
@@ -885,7 +904,7 @@ function Deathmatch_Manager:SetNextArena(arena)
 end
 
 function Deathmatch_Manager:SetVotedArena()
-	local players = getPlayers(true)
+	local players = getPlayers()
 	local votes = {}
 	local highest = 0
 	for k, v in pairs(players) do
@@ -917,7 +936,7 @@ function Deathmatch_Manager:SetVotedArena()
 end
 
 function Deathmatch_Manager:SetVotedMode()
-	local players = getPlayers(true)
+	local players = getPlayers()
 	local votes = {}
 	local highest = 0
 	for k, v in pairs(players) do

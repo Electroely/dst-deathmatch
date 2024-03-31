@@ -59,7 +59,6 @@ local Deathmatch_Menu = Class(Screen, function(self)
     self.detail_panel_frame = self.root:AddChild(TEMPLATES.RectangleWindow(800, 500))
     local r,g,b = unpack(UICOLOURS.BROWN_DARK)
     self.detail_panel_frame:SetBackgroundTint(r,g,b,0.6)
-    self.detail_panel_frame.top:Hide()
     
 	self.tip_list = self.root:AddChild(self:BuildTipsMenu())
 	self.tip_list:SetPosition(-320, 0)

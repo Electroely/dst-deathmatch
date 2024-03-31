@@ -9,6 +9,10 @@ local Teamer = Class(function(self, inst)
 	self.team = 0
 	
 	self.net_team = net_byte(inst.GUID, "teamer.net_team", "teamdirty")
+
+	if not TheNet:IsDedicated() then
+		DEATHMATCH_TEAMERS[inst] = true
+	end
 	
 	inst:ListenForEvent("teamdirty", OnTeamDirty)
 end)
@@ -29,9 +33,20 @@ function Teamer:SetTeam(teamnum)
 end
 
 function Teamer:IsTeamedWith(target)
-	if self.team ~= 0 and target and target.components and target.components.teamer then
+	if self.inst == target then
+		return true
+	elseif self.team ~= 0 and target and target.components and target.components.teamer then
 		return target.components.teamer.team == self.team
 	else
+		local ourleader = self.inst.replica.follower and self.inst.replica.follower:GetLeader()
+		if ourleader == target then
+			return true
+		end
+		local theirleader = target.replica and target.replica.follower and target.replica.follower:GetLeader()
+		if theirleader == self.inst or (theirleader ~= nil and ourleader == theirleader) then
+			return true
+		end
+
 		return false
 	end
 end
