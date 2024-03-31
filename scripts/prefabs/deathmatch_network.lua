@@ -105,6 +105,40 @@ end
 
 --------------------------------------------------------------------------
 
+local function playerdatafn()
+	local net = TheWorld.net
+	local inst = CreateEntity()
+
+    inst.entity:SetCanSleep(false)
+    inst.persists = false
+
+	inst.entity:AddNetwork()
+
+	inst:AddTag("classified")
+
+	inst.kills = net_ushortint(inst.GUID, "deathmatch.netkills", "deathmatch_killsdirty")
+	inst.team = net_byte(inst.GUID, "deathmatch.netteam", "deathmatch_teamdirty")
+	inst.userid = net_string(inst.GUID, "deathmatch.netuserid", "deathmatchdatadirty")
+	inst.health = net_byte(inst.GUID, "deathmatch.nethealth", "deathmatch_playerhealthdirty")
+	inst.isinmatch = net_bool(inst.GUID, "deathmatch.isinmatch", "deathmatch_playerinmatchdirty")
+
+	inst.entity:SetPristine()
+
+	--limit one event per frame
+	for k, event in pairs({"deathmatch_killsdirty", "deathmatch_teamdirty", "deathmatchdatadirty", "deathmatch_playerhealthdirty", "deathmatch_playerinmatchdirty"}) do
+		inst:ListenForEvent(event, function(inst, data)
+			if not net[event.."_task"] then
+				net[event.."_task"] = net:DoTaskInTime(0, function(net)
+					net:PushEvent(event, data)
+					net[event.."_task"] = nil
+				end)
+			end
+		end)
+	end
+
+	return inst
+end
+
 local function fn()
     local inst = CreateEntity()
 
@@ -155,13 +189,7 @@ local function fn()
 		end
 	end
 	for i = 1, TheNet:GetServerMaxPlayers() do
-		inst.deathmatch_netvars[i] = {
-			kills=net_ushortint(inst.GUID, "deathmatch.netkills"..tostring(i), "deathmatch_killsdirty"),
-			team=net_byte(inst.GUID, "deathmatch_netteam"..tostring(i), "deathmatch_teamdirty"),
-			userid=net_string(inst.GUID, "deathmatch_netuserid"..tostring(i), "deathmatchdatadirty"),
-			health=net_byte(inst.GUID, "deathmatch_nethealth"..tostring(i), "deathmatch_playerhealthdirty"),
-			isinmatch = net_bool(inst.GUID, "deathmatch_isinmatch_"..tostring(i), "deathmatch_playerinmatchdirty"),
-		}
+		inst.deathmatch_netvars[i] = SpawnPrefab("deathmatch_network_playerdata")
 	end
 	inst.deathmatch_netvars.globalvars = {
 		timertime = net_ushortint(inst.GUID, "deathmatch_timertime", "deathmatch_timertimedirty"),
@@ -349,5 +377,5 @@ local function fn()
     return inst
 end
 
-return Prefab("deathmatch_network", fn)
+return Prefab("deathmatch_network", fn), Prefab("deathmatch_network_playerdata", playerdatafn)
 

@@ -20,9 +20,9 @@ function Teamer:SetTeam(teamnum)
 		if TheWorld.net.deathmatch and TheWorld.net.deathmatch[self.inst.userid] then
 			TheWorld.net.deathmatch[self.inst.userid].team_local = teamnum
 			TheWorld.net:SetTeam(self.inst.userid, teamnum)
-			if oldteam ~= teamnum then
-				self.inst:PushEvent("teamchange", { team = teamnum })
-			end
+		end
+		if oldteam ~= teamnum then
+			self.inst:PushEvent("teamchange", { team = teamnum })
 		end
 	end
 	self.team = teamnum
