@@ -128,8 +128,8 @@ local function playerdatafn()
 	for k, event in pairs({"deathmatch_killsdirty", "deathmatch_teamdirty", "deathmatchdatadirty", "deathmatch_playerhealthdirty", "deathmatch_playerinmatchdirty"}) do
 		inst:ListenForEvent(event, function(inst, data)
 			if not net[event.."_task"] then
+				net:PushEvent(event, data)
 				net[event.."_task"] = net:DoTaskInTime(0, function(net)
-					net:PushEvent(event, data)
 					net[event.."_task"] = nil
 				end)
 			end
