@@ -116,6 +116,7 @@ local function playerdatafn()
 
 	inst:AddTag("classified")
 
+	inst.slot = net_byte(inst.GUID, "deathmatch.slot", "slotdirty")
 	inst.kills = net_ushortint(inst.GUID, "deathmatch.netkills", "deathmatch_killsdirty")
 	inst.team = net_byte(inst.GUID, "deathmatch.netteam", "deathmatch_teamdirty")
 	inst.userid = net_string(inst.GUID, "deathmatch.netuserid", "deathmatchdatadirty")
@@ -123,6 +124,12 @@ local function playerdatafn()
 	inst.isinmatch = net_bool(inst.GUID, "deathmatch.isinmatch", "deathmatch_playerinmatchdirty")
 
 	inst.entity:SetPristine()
+
+	if not TheWorld.ismastersim then
+		inst:ListenForEvent("slotdirty", function(inst)
+			TheWorld.net.deathmatch_netvars[inst.slot:value()] = inst
+		end)
+	end
 
 	--limit one event per frame
 	for k, event in pairs({"deathmatch_killsdirty", "deathmatch_teamdirty", "deathmatchdatadirty", "deathmatch_playerhealthdirty", "deathmatch_playerinmatchdirty"}) do
@@ -188,9 +195,13 @@ local function fn()
 			InitDeathmatchData(v.userid)
 		end
 	end
-	for i = 1, TheNet:GetServerMaxPlayers() do
-		inst.deathmatch_netvars[i] = SpawnPrefab("deathmatch_network_playerdata")
+	if TheWorld.ismastersim then
+		for i = 1, TheNet:GetServerMaxPlayers() do
+			inst.deathmatch_netvars[i] = SpawnPrefab("deathmatch_network_playerdata")
+			inst.deathmatch_netvars[i].slot:set(i)
+		end
 	end
+
 	inst.deathmatch_netvars.globalvars = {
 		timertime = net_ushortint(inst.GUID, "deathmatch_timertime", "deathmatch_timertimedirty"),
 		timercurrent = net_ushortint(inst.GUID, "deathmatch_timercurrent", "deathmatch_timercurrentdirty"),
