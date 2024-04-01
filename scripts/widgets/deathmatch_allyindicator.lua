@@ -84,7 +84,7 @@ local function CreateIndicator(target)
 	end
 	stand:SetHeight(ARROW_OFFSET)
 
-	inst:ListenForEvent("onremove", function() inst:Remove() end, stand)
+	stand:ListenForEvent("onremove", function() stand:Remove() end, inst)
 
     return stand
 end

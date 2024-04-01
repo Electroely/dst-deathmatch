@@ -10,7 +10,7 @@ description = "WIP"
 author = "Electroely"
 
 --A version number so you can ask people if they are running an old version of your mod.
-version = "22.0"
+version = "22.01"
 
 --This lets other players know if your mod is out of date. This typically needs to be updated every time there's a new game update.
 api_version = 10

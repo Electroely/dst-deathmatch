@@ -970,7 +970,7 @@ G.ACTIONS.PICKUP.fn = function(act, ...)
 		return pikcupact_fn_old(act, ...)
 	end
 end]]
-local spectator_actions = {LOOKAT = true, TALKTO = true, WALKTO = true, SITON = true,}
+local spectator_actions = {LOOKAT = true, TALKTO = true, WALKTO = true,}
 for k, v in pairs(G.ACTIONS) do
 	if not spectator_actions[k] then
 		local actfn_old = v.fn
@@ -981,18 +981,6 @@ for k, v in pairs(G.ACTIONS) do
 			return actfn_old(act, ...)
 		end
 	end
-end
-
-local lookatfn_old = G.ACTIONS.LOOKAT.fn
-G.ACTIONS.LOOKAT.fn = function(act, ...)
-	local worked = lookatfn_old(act, ...)
-	if worked then
-		local targ = act.target or act.invobject
-		if targ:HasTag("event_inspect") then
-			targ:PushEvent("inspected", act.doer)
-		end
-	end
-	return worked
 end
 
 -----------------------------------------------------------------------------
@@ -1006,6 +994,7 @@ AddModRPCHandler(modname, "deathmatch_respec", function(inst)
 end)
 
 -----------------------------------------------------------------------------
+--[[
 local CONTROL_CRAFTING_MODIFIER = G.CONTROL_CRAFTING_MODIFIER
 local IsControlPressed_old = G.TheInput.IsControlPressed
 G.TheInput.IsControlPressed = function(self, control, ...)
@@ -1013,7 +1002,7 @@ G.TheInput.IsControlPressed = function(self, control, ...)
 		return false
 	end
 	return IsControlPressed_old(self, control, ...)
-end
+end]]
 -- AddModRPCHandler(modname, "deathmatch_currentreticule_change", function(inst, slot)
 	-- if inst == nil or slot == nil then return end
 	-- if inst.components.playercontroller then

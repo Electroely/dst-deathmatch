@@ -25,6 +25,11 @@ local function fx_fn()
 	return inst
 end
 
+local function SetCaster(inst, caster)
+	inst.caster = caster
+	inst.overridepkname = caster:GetDisplayName()
+end
+
 local RANGE = 2
 local DAMAGE = DEATHMATCH_TUNING.SKILLTREE_FIREBOMB_FIRECIRCLE_DAMAGE_PER_LEVEL
 local DURATION = DEATHMATCH_TUNING.SKILLTREE_FIREBOMB_FIRECIRCLE_DURATION
@@ -33,14 +38,11 @@ local function DamageNearbyEntities(inst)
 		inst:Remove()
 		return
 	end
-	if inst.overridepkname == nil then
-		inst.overridepkname = inst.caster:GetDisplayName()
-	end
 	local x,y,z = inst.Transform:GetWorldPosition()
 	local ents = TheSim:FindEntities(x,y,z, RANGE, {"_combat"})
 	for k, v in pairs(ents) do
 		if v.components.health and inst.caster.components.combat:IsValidTarget(v) then
-			v.components.health:DoDelta(-DAMAGE*inst.sparklevel, false, inst)
+			v.components.health:DoDelta(-DAMAGE*inst.sparklevel, false, nil, nil, inst)
 		end
 	end
 end
@@ -84,9 +86,12 @@ local function fn()
 				local x = math.cos(angle*DEGREES)*dist
 				local z = math.sin(angle*DEGREES)*dist
 				inst:DoTaskInTime(FRAMES*(i-1), function(inst)
-					local fx = SpawnFX(inst)
-					fx.Transform:SetPosition(x,0,z)
-					table.insert(inst.fx, fx)
+					local pos = inst:GetPosition()
+					if TheWorld.Map:IsVisualGroundAtPoint(pos.x+x, 0, pos.z+z) then
+						local fx = SpawnFX(inst)
+						fx.Transform:SetPosition(x,0,z)
+						table.insert(inst.fx, fx)
+					end
 				end)
 			end
 		end
@@ -102,6 +107,7 @@ local function fn()
 		end
 		inst:DoTaskInTime(0.5, inst.Remove)
 	end
+	inst.SetCaster = SetCaster
 	
 	inst.damagetask = inst:DoPeriodicTask(1, DamageNearbyEntities)
 	inst.killtask = inst:DoTaskInTime(DURATION+0.1, inst.Kill)

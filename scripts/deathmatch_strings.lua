@@ -83,6 +83,12 @@ return {
 	
 	SKILLTREE_DESC = "Become a powerful fighter!",
 	SKILLTREE = {
+		PANELS = {
+			SPELLCASTER = "SPECIAL",
+			BRAWLER = "DAMAGE",
+			IMPROVISER = "HEARTHSFIRE\nCRYSTALS",
+			LOADOUT = "LOADOUTS",
+		},
 		LOADOUT_PICKONE_LOCK = "Choose a loadout before selecting any skills.",
 		LOADOUT_ONLYONE_LOCK = "You can choose one loadout to take to battle.",
 		

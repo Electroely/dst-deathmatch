@@ -6,6 +6,7 @@ local SKILLTREESTRINGS = DEATHMATCH_STRINGS.SKILLTREE
 
 local SPELLCASTER_COL = -207
 local BRAWLER_COL = -124
+local TITLE_OFFSET = 30
 local LEFT_ROWS = {
 	175,
 	142,
@@ -112,12 +113,14 @@ end
 
 local ORDERS =
 {
-    { "spellcaster",   { UI_LEFT, UI_TOP } },
-	{ "brawler",   { UI_LEFT, UI_TOP } },
-	{ "improviser",   { UI_LEFT, UI_TOP } },
-	{ "loadout",   { UI_RIGHT, UI_TOP } },
+    { "spellcaster",   { SPELLCASTER_COL, LEFT_ROWS[1]+TITLE_OFFSET } },
+	{ "brawler",   { BRAWLER_COL, LEFT_ROWS[1]+TITLE_OFFSET } },
+	{ "improviser",   { IMPROVISER_LOCK_POS[1], IMPROVISER_LOCK_POS[2]+90 } },
+	{ "loadout",   { 163, 205 } },
 }
-
+for k, v in pairs(DEATHMATCH_STRINGS.SKILLTREE.PANELS) do
+	STRINGS.SKILLTREE.PANELS[k] = v
+end
 local LOADOUTS = {
 	"forge_melee",
 	"forge_mage",
