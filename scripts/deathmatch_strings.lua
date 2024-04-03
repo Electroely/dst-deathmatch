@@ -80,6 +80,11 @@ return {
 		},
 		TIMERSTRING = "%2d seconds remaining",
 	},
+
+	CHARACTER_DESCRIPTIONS = "*Is a capable fighter",
+	CHARACTER_SURVIVABILITY = "Slim",
+	STARTING_ITEMS_TITLE = "Enters the Arena With",
+	STARTING_ITEMS_NONE = "Various weapons",
 	
 	SKILLTREE_DESC = "Become a powerful fighter!",
 	SKILLTREE = {
@@ -139,8 +144,9 @@ return {
 		LATEJOIN = "Player joined late! Restarting deathmatch initiation!",
 		NEARSTARTDESPAWN = "Restarting deathmatch initiation for despawning player.",
 
-		WINNER_TEAM = "{team} Team wins!",
+		WINNER_TEAM = "{team} wins!",
 		WINNER_SOLO = "{player} wins with {health} health remaining!",
+		WINNER_DUO = "{player1} and {player2} win!"
 		
 		SETTEAMMODE = "Set deathmatch team mode to %s.",
 		SETTEAMMODE_CUSTOM = "Set deathmatch mode to custom. Use /setteam before a match starts to assign custom teams.",

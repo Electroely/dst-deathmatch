@@ -40,7 +40,6 @@ game_modes = {
 *Stay near the middle to pick up boosts and gain an advantage!
 *Brawl in a free-for-all or team up with your friends!]],
 		settings = {
-			internal = true,
 			level_type = "DEATHMATCH",
 			spawn_mode = "fixed",
 			resource_renewal = false,
@@ -61,9 +60,9 @@ game_modes = {
 			no_avatar_popup = true,
 			no_morgue_record = true,
 			--override_normal_mix = "lavaarena_normal",
-			override_lobby_music = "dontstarve/creatures/together/hutch/one_man_band",
+			--override_lobby_music = "dontstarve/creatures/together/hutch/one_man_band",
 			--lobbywaitforallplayers = true,
-			hide_worldgen_loading_screen = true,
+			--hide_worldgen_loading_screen = true,
 			--hide_received_gifts = true,
 			--skin_tag = "LAVA",
 		},

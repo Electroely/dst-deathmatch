@@ -58,7 +58,7 @@ AddUserCommand("setteam", {
 		teamnum = (teamnum ~= nil and teamnum >= 0 and teamnum <= #G.DEATHMATCH_TEAMS)
 				and teamnum or FindKeyFromName(params.team)
 		if mode == 4 and (matchstatus == 0 or matchstatus == 2) then -- custom teams
-			local teamname = teamnum == 0 and "to be teamless" or G.DEATHMATCH_TEAMS[teamnum].name.." Team"
+			local teamname = teamnum == 0 and "to be teamless" or G.DEATHMATCH_TEAMS[teamnum].name
 			G.Networking_SystemMessage("You've chosen "..teamname..".")
 		elseif mode == 2 then --rvb
 			teamnum = math.clamp(teamnum, 0, 2)

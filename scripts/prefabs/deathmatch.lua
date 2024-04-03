@@ -411,8 +411,21 @@ local function master_postinit(inst)
 	end)
 	inst:ListenForEvent("wehaveawinner", function(world, winner)
 		if type(winner) == "number" then
-			TheNet:Announce(subfmt(DEATHMATCH_STRINGS.ANNOUNCE.WINNER_TEAM, {team = DEATHMATCH_TEAMS[winner].name}))
-		elseif type(winner) == "table" then
+			local winners = {}
+			for k, v in pairs(AllPlayers) do
+				if v.components.teamer:GetTeam() == winner then
+					table.insert(winners, v)
+				end
+			end
+			if #winners == 1 then
+				winner = winners[1]
+			elseif #winners == 2 then
+				TheNet:Announce(subfmt(DEATHMATCH_STRINGS.ANNOUNCE.WINNER_DUO, {player1=winners[1]:GetDisplayName(), player2=winners[2]:GetDisplayName()}))
+			else
+				TheNet:Announce(subfmt(DEATHMATCH_STRINGS.ANNOUNCE.WINNER_TEAM, {team = DEATHMATCH_TEAMS[winner].name}))
+			end
+		end
+		if type(winner) == "table" then
 			TheNet:Announce(subfmt(DEATHMATCH_STRINGS.ANNOUNCE.WINNER_SOLO, {player=winner:GetDisplayName(),health=tostring(math.ceil(winner.components.health.currenthealth))}))
 		end
 	end)

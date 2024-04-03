@@ -1,5 +1,6 @@
 local G = GLOBAL
 local tonumber = G.tonumber
+local tostring = G.tostring
 local debug = G.debug
 local gamemodename = "deathmatch" 
 G.DEATHMATCH_TUNING = require("deathmatch_tuning") --tuning needs to be loaded before strings because some strings use tuning values
@@ -83,15 +84,22 @@ G.getmetatable(G.TheNet).__index.AnnounceResurrect = function(self, announcement
 end
 
 G.DEATHMATCH_TEAMS = {
-{name="Red", colour={1,0.5,0.5,1}},
-{name="Blue", colour={0.5,0.5,1,1}},
-{name="Yellow", colour={1,1,0.5,1}},
-{name="Green", colour={0.25,1,0.25,1}},
-{name="Orange", colour={1,0.5,0,1}},
-{name="Cyan", colour={0.5,1,1,1}},
-{name="Pink", colour={1,0.5,1,1}},
-{name="Black", colour={97/255, 80/255, 132/255, 1}},
+{name="Red Team", colour={1,0.5,0.5,1}},
+{name="Blue Team", colour={0.5,0.5,1,1}},
+{name="Yellow Team", colour={1,1,0.5,1}},
+{name="Green Team", colour={0.25,1,0.25,1}},
+{name="Orange Team", colour={1,0.5,0,1}},
+{name="Cyan Team", colour={0.5,1,1,1}},
+{name="Pink Team", colour={1,0.5,1,1}},
+{name="Black Team", colour={97/255, 80/255, 132/255, 1}},
 }
+--if a server is bigger than 16 players, we'll have these teams for them
+for i = 9, 32 do
+	table.insert(G.DEATHMATCH_TEAMS, {
+		name = "Team "..tostring(i),
+		colour = {math.random(), math.random(), math.random(), 1},
+	})
+end
 
 G.DEATHMATCH_MATCHSTATUS = {
 	IDLE = 0,
@@ -704,7 +712,18 @@ AddClassPostConstruct("screens/redux/lobbyscreen", function(self)
 end)
 
 AddClassPostConstruct("widgets/playerdeathnotification", function(self)
-	self.revive_message:SetString(GLOBAL.DEATHMATCH_STRINGS.DEAD_ALONE_PROMPT)
+	--self.revive_message:SetString(GLOBAL.DEATHMATCH_STRINGS.DEAD_ALONE_PROMPT)
+	self.Show = function() end
+	self:Hide()
+end)
+
+AddClassPostConstruct("widgets/redux/characterselect", function(self)
+	if self.selectedportrait.health_status and self.selectedportrait.hunger_status and self.selectedportrait.sanity_status then
+		local pos = self.selectedportrait.hunger_status:GetPosition()
+		self.selectedportrait.health_status:SetPosition(pos:Get())
+		self.selectedportrait.hunger_status:Hide()
+		self.selectedportrait.sanity_status:Hide()
+	end
 end)
 
 require("skinsutils")
@@ -801,7 +820,25 @@ _name.DEATHMATCH_INFOSIGN = "Info Sign"
 _name.DUMMYTARGET = "Target Dummy"
 _name.DEATHMATCH_REVIVERHEART = "Telltale Heart"
 
+for k, v in pairs(GLOBAL.STRINGS.CHARACTER_DESCRIPTIONS) do
+	if k ~= "random" then
+	GLOBAL.STRINGS.CHARACTER_DESCRIPTIONS[k] = DEATHMATCH_STRINGS.CHARACTER_DESCRIPTIONS
+	end
+end
+for k, v in pairs(GLOBAL.STRINGS.CHARACTER_SURVIVABILITY) do
+	GLOBAL.STRINGS.CHARACTER_SURVIVABILITY[k] = DEATHMATCH_STRINGS.CHARACTER_SURVIVABILITY
+end
+GLOBAL.STRINGS.CHARACTER_DETAILS.STARTING_ITEMS_TITLE = DEATHMATCH_STRINGS.STARTING_ITEMS_TITLE
+GLOBAL.STRINGS.CHARACTER_DETAILS.STARTING_ITEMS_NONE = DEATHMATCH_STRINGS.STARTING_ITEMS_NONE
+
 local _tuning = GLOBAL.TUNING
+_tuning.GAMEMODE_STARTING_ITEMS.deathmatch = {}
+for k, v in pairs(_tuning.CHARACTER_DETAILS_OVERRIDE) do
+	_tuning.CHARACTER_DETAILS_OVERRIDE[k] = nil
+end
+for k, v in pairs(GLOBAL.DST_CHARACTERLIST) do
+	_tuning[string.upper(v.."_health")] = 150
+end
 _tuning.REVIVE_CORPSE_ACTION_TIME = 2 --in deathmatch, revivals start out fast but get slower
 
 _tuning.STARFISH_TRAP_NOTDAY_RESET.BASE = 15

@@ -85,7 +85,7 @@ local submenu_defs = {
 			w1:AddChild(w2)
 			return w1
 		end,
-		validfn = function() return not (GetTeamMode() == 1) end,
+		validfn = function() return (GetTeamMode() == 2) end,
 		buttons = function()
 			if GetTeamMode() == 2 then
 				return {

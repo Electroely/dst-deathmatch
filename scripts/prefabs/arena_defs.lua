@@ -83,7 +83,7 @@ local ARENA_DEFS = {
 	atrium = {
 		name = DEATHMATCH_STRINGS.ARENA_ATRIUM,
 		--
-		spawnradius = 20.5,
+		spawnradius = 18.5,
 		matchstartfn = function()
 			local self = TheWorld.components.deathmatch_manager
 			if self.atrium_gate == nil then
