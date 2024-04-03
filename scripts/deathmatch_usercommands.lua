@@ -16,7 +16,7 @@ local function FindKeyFromName(name)
 end
 
 local SPAMCHECK_TIMER = 1
-local SPAMCHECK_MAX = 5
+local SPAMCHECK_MAX = 7
 local function SpamCheck(caller)
 	if caller._recentusercommands == nil then
 		caller._recentusercommands = 0
