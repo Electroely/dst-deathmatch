@@ -64,7 +64,6 @@ if servercreationscreen and servercreationscreen.name == "ServerCreationScreen" 
 	local server_settings = servercreationscreen.server_settings_tab
 	local server_name = server_settings.server_name
 	if server_name.textbox:GetString() == GLOBAL.TheNet:GetLocalUserName().."'s World" then
-		print("default server name, changing")
 		local new_name = GLOBAL.TheNet:GetLocalUserName().."'s Arena"
 		server_name.textbox:SetString(new_name)
 		server_name.textbox:OnTextInputted()
@@ -74,6 +73,28 @@ if servercreationscreen and servercreationscreen.name == "ServerCreationScreen" 
 	game_mode.spinner:SetSelected("deathmatch")
 	local pvp = server_settings.pvp
 	pvp.spinner:SetSelected(true)
-else
-	
+end
+
+
+local FrontendUnloadMod_old = GLOBAL.ModManager.FrontendUnloadMod
+function GLOBAL.ModManager:FrontendUnloadMod(mname, ...)
+    if mname == nil or mname == modname then
+        local servercreationscreen = GLOBAL.TheFrontEnd:GetActiveScreen()
+        if servercreationscreen and servercreationscreen.name == "ServerCreationScreen" then
+            local server_settings = servercreationscreen.server_settings_tab
+            local server_name = server_settings.server_name
+            if server_name.textbox:GetString() == GLOBAL.TheNet:GetLocalUserName().."'s Arena" then
+                local new_name = GLOBAL.TheNet:GetLocalUserName().."'s World"
+                server_name.textbox:SetString(new_name)
+                server_name.textbox:OnTextInputted()
+            end
+            server_settings:UpdateModeSpinner()
+            local game_mode = server_settings.game_mode
+            game_mode.spinner:SetSelected("survival")
+            local pvp = server_settings.pvp
+            pvp.spinner:SetSelected(false)
+        end
+        GLOBAL.ModManager.FrontendUnloadMod = FrontendUnloadMod_old
+    end
+    return FrontendUnloadMod_old(self, mname, ...)
 end
