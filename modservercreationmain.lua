@@ -77,7 +77,7 @@ end
 
 
 local FrontendUnloadMod_old = GLOBAL.ModManager.FrontendUnloadMod
-function GLOBAL.ModManager:FrontendUnloadMod(mname, ...)
+local function FrontendUnloadMod(self, mname, ...)
     if mname == nil or mname == modname then
         local servercreationscreen = GLOBAL.TheFrontEnd:GetActiveScreen()
         if servercreationscreen and servercreationscreen.name == "ServerCreationScreen" then
@@ -94,7 +94,10 @@ function GLOBAL.ModManager:FrontendUnloadMod(mname, ...)
             local pvp = server_settings.pvp
             pvp.spinner:SetSelected(false)
         end
-        GLOBAL.ModManager.FrontendUnloadMod = FrontendUnloadMod_old
+        if GLOBAL.ModManager.FrontendUnloadMod == FrontendUnloadMod then
+            GLOBAL.ModManager.FrontendUnloadMod = FrontendUnloadMod_old
+        end
     end
     return FrontendUnloadMod_old(self, mname, ...)
 end
+function GLOBAL.ModManager.FrontendUnloadMod = FrontendUnloadMod
