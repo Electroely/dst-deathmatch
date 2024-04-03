@@ -146,7 +146,7 @@ return {
 
 		WINNER_TEAM = "{team} wins!",
 		WINNER_SOLO = "{player} wins with {health} health remaining!",
-		WINNER_DUO = "{player1} and {player2} win!"
+		WINNER_DUO = "{player1} and {player2} win!",
 		
 		SETTEAMMODE = "Set deathmatch team mode to %s.",
 		SETTEAMMODE_CUSTOM = "Set deathmatch mode to custom. Use /setteam before a match starts to assign custom teams.",

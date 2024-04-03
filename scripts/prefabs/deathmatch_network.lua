@@ -201,7 +201,6 @@ local function fn()
 			inst.deathmatch_netvars[i].slot:set(i)
 		end
 	end
-
 	inst.deathmatch_netvars.globalvars = {
 		timertime = net_ushortint(inst.GUID, "deathmatch_timertime", "deathmatch_timertimedirty"),
 		timercurrent = net_ushortint(inst.GUID, "deathmatch_timercurrent", "deathmatch_timercurrentdirty"),

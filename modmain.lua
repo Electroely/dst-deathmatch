@@ -93,14 +93,14 @@ G.DEATHMATCH_TEAMS = {
 {name="Pink Team", colour={1,0.5,1,1}},
 {name="Black Team", colour={97/255, 80/255, 132/255, 1}},
 }
---if a server is bigger than 16 players, we'll have these teams for them
-for i = 9, 32 do
-	table.insert(G.DEATHMATCH_TEAMS, {
-		name = "Team "..tostring(i),
-		colour = {math.random(), math.random(), math.random(), 1},
-	})
-end
-
+AddSimPostInit(function()
+	for i = 9, math.ceil(G.TheNet:GetServerMaxPlayers()/2) do
+		table.insert(G.DEATHMATCH_TEAMS, {
+			name = "Team "..tostring(i),
+			colour = {math.random(), math.random(), math.random(), 1},
+		})
+	end
+end)
 G.DEATHMATCH_MATCHSTATUS = {
 	IDLE = 0,
 	INMATCH = 1,

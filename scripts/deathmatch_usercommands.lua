@@ -15,6 +15,22 @@ local function FindKeyFromName(name)
 	end
 end
 
+local SPAMCHECK_TIMER = 1
+local SPAMCHECK_MAX = 5
+local function SpamCheck(caller)
+	if caller._recentusercommands == nil then
+		caller._recentusercommands = 0
+	end
+	if not caller:IsValid() or caller._recentusercommands > SPAMCHECK_MAX then
+		return true
+	end
+	caller._recentusercommands = caller._recentusercommands + 1
+	caller:DoTaskInTime(SPAMCHECK_TIMER, function(caller) 
+		caller._recentusercommands = caller._recentusercommands - 1
+	end)
+	return false
+end
+
 local VoteUtil = G.require("voteutil")
 G.require("builtinusercommands")
 G.require("usercommands").GetCommandFromName("regenerate").vote = false
@@ -31,6 +47,9 @@ AddUserCommand("setteam", {
 	params = {"team"},
 	vote = false,
 	serverfn = function(params, caller)
+		if SpamCheck(caller) then
+			return
+		end
 		if caller:HasTag("spectator") then return end
 		local teamnum = G.tonumber(params.team)
 		if G.TheWorld.components.deathmatch_manager.allow_teamswitch_user then --custom teams
@@ -78,6 +97,9 @@ AddUserCommand("spectate", {
 	params = {},
 	vote = false,
 	serverfn = function(params, caller)
+		if SpamCheck(caller) then
+			return
+		end
 		if G.TheWorld.net:GetMode() == 1 or not G.TheWorld.net:IsPlayerInMatch(caller.userid) then
 			local self = G.TheWorld.components.deathmatch_manager
 			self:ToggleSpectator(caller)
@@ -100,6 +122,9 @@ AddUserCommand("afk", {
 	params = {},
 	vote = false,
 	serverfn = function(params, caller)
+		if SpamCheck(caller) then
+			return
+		end
 		if caller:HasTag("spectator_perma") or caller:HasTag("afk") then 
 			caller:DisableAFK()
 		else 
@@ -119,6 +144,9 @@ AddUserCommand("setstate", {
 	params = {"num"},
 	vote = false,
 	serverfn = function(params, caller)
+		if SpamCheck(caller) then
+			return
+		end
 		local num = tonumber(params.num) or 0
 		if caller.ChangeCosmeticState then
 			if num == 0 then
@@ -143,6 +171,9 @@ AddUserCommand("deathmatch", {
 	params = {"action"},
 	vote = false,
 	serverfn = function(params, caller)
+		if SpamCheck(caller) then
+			return
+		end
 		local dm = G.TheWorld.components.deathmatch_manager
 		if params.action == "start" then
 			if G.TheWorld.net.components.worldvoter:IsVoteActive() then
@@ -169,6 +200,9 @@ AddUserCommand("despawn", {
     params = {},
     vote = false,
     serverfn = function(params, caller)
+		if SpamCheck(caller) then
+			return
+		end
 		local dm = G.TheWorld.components.deathmatch_manager
 		if not (caller and caller.IsValid and caller:IsValid()) or dm.doingreset or dm:IsPlayerInMatch(caller) then
 			return
