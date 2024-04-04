@@ -1,5 +1,4 @@
-PERKS_ENABLED = false
-SHADOW_ENABLED = true
+SHADOW_ENABLED = false
 -------------------------------------------
 local UpValues = require("deathmatch_upvaluehacker")
 local GetUpValue = UpValues.Get
@@ -278,87 +277,6 @@ local function fn(inst, prefab)
 			self.dest_x, self.dest_y, self.dest_z = TheWorld.components.deathmatch_manager:GetDrowningRespawnPos()
 		end
 	end
-	
-	if not PERKS_ENABLED then return end
-	--------------------------------------------------------------------------------------
-	if prefab == "willow" and TheWorld.ismastersim then
-		inst.components.health.fire_damage_scale = 0
-		local function OnAttack(inst, data)
-			if math.random() > 0.8 then
-				local fire = SpawnPrefab("houndfire")
-				fire.Transform:SetPosition(inst:GetPosition():Get())
-				fire.Physics:SetVel(math.random(-7,7), 0, math.random(-7,7))
-			end
-		end
-		inst:ListenForEvent("onattackother", OnAttack)
-		inst:ListenForEvent("onmissother", OnAttack)
-	end
-	----------------------------------------------------------------------------------------
-	if prefab == "wendy" and TheWorld.ismastersim then
-		inst.abi = nil
-		local function KillAbi(abi)
-			abi.components.health:Kill()
-		end
-		local function SpawnAbi(inst, target)
-			local abi = SpawnPrefab("abigail")
-			inst.abi = abi
-			abi:AddTag("notarget")
-			inst.components.leader:AddFollower(abi)
-			abi.Transform:SetPosition(inst:GetPosition():Get())
-			abi.components.combat:SetTarget(target)
-			abi.components.combat.externaldamagetakenmultipliers:SetModifier("abi", 0)
-			abi.components.combat:SetPlayerStunlock(PLAYERSTUNLOCK.NEVER)
-			abi.components.teamer:SetTeam(inst.components.teamer.team)
-			abi:ListenForEvent("teamchange", function(abi, data) abi.components.teamer:SetTeam(data.team) end, inst)
-			abi.killtask = abi:DoTaskInTime(3, KillAbi)
-			abi:ListenForEvent("onremove", function()
-				inst.abi = nil
-			end)
-		end
-		local function RefreshAbi(inst, target)
-			if inst.abi ~= nil and not inst.abi.components.health:IsDead() then
-				if inst.abi.killtask ~= nil then
-					inst.abi.killtask:Cancel()
-					inst.abi.killtask = nil
-				end
-				inst.abi.killtask = inst.abi:DoTaskInTime(3, KillAbi)
-				inst.abi.components.combat:SetTarget(target)
-			end
-		end
-		local function OnAttackOrMiss(inst, data)
-			if inst.abi == nil and data.target ~= nil then
-				SpawnAbi(inst, data.target)
-			elseif data.target ~= nil then
-				RefreshAbi(inst, data.target)
-			end
-		end
-		local function OnAttacked(inst, data)
-			if inst.abi == nil and data.attacker ~= nil then
-				SpawnAbi(inst, data.attacker)
-			elseif data.attacker ~= nil then
-				RefreshAbi(inst, data.attacker)
-			end
-		end
-		inst:ListenForEvent("onattackother", OnAttackOrMiss)
-		inst:ListenForEvent("onmissother", OnAttackOrMiss)
-		inst:ListenForEvent("attacked", OnAttacked)
-	end
-	---------------------------------------------------------------------------
-	if prefab == "wx78" then
-		inst.components.inventory.IsInsulated = function() return true end -- immune to stun
-		local hitcountdown = 4
-		local function OnAttack(inst, data)
-			hitcountdown = hitcountdown - 1
-			if hitcountdown == 0 then
-				if data.target ~= nil and data.target:HasTag("player") then
-					data.target.sg:GoToState("electrocute")
-				end
-				hitcountdown = 4
-			end
-		end
-		inst:ListenForEvent("onattackother", OnAttack)
-	end
-	---------------------------------------------------------------------------- 
 	
 end
 

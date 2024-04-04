@@ -16,7 +16,9 @@ local net_tinybyte = GLOBAL.net_tinybyte
 
 local UserCommands = require("usercommands")
 
-require("deathmatch_debug")
+if modname == "dst-deathmatch" then
+	require("deathmatch_debug")
+end
 
 --mod import extra files
 --modimport("scripts/deathmatch_teamchat")
@@ -113,26 +115,13 @@ PrefabFiles = {
 	"lavaarena", --to load the assets
 	--quagmire",
 	"deathmatch_pickups",
-	"explosiveballoons_empty",
 	"teleporterhat",
-	"armorstealth",
-	"laserhat",
-	"armorjump",
-	"blowdart_lava_temp",
-	"snortoisehat",
-	"fakesnortoise",
 	"deathmatch",
 	"deathmatch_network",
-	"deathmatch_infosign",
 	"arena_centerpoints",
 	"atrium_key_light",
-	"fakeplayer",
 	"deathmatch_oneusebomb",
 	"deathmatch_reviverheart",
-	"deathmatch_bugnet",
-	"powerflier",
-	"powerup_flower",
-	"shadowweapons",
 	"invslotdummy",
 	"firebomb_firecircle",
 	"deathmatch_healingstaffbuff",
@@ -146,12 +135,6 @@ Assets = {
 	Asset("ANIM", "anim/hat_snortoise.zip"),
 	Asset("ANIM", "anim/partyhealth_extras.zip"),
 	Asset("ANIM", "anim/deathmatch_poi_marker.zip"),
-	
-	Asset("IMAGE", "images/changeTeamPole.tex"),
-	Asset("ATLAS", "images/changeTeamPole.xml"),
-	
-	Asset("IMAGE", "images/changeTeamFlag.tex"),
-	Asset("ATLAS", "images/changeTeamFlag.xml"),
 	
 	Asset("ATLAS", "images/deathmatch_skilltree_bg.xml"),
 	Asset("IMAGE", "images/deathmatch_skilltree_bg.tex"),
@@ -986,7 +969,9 @@ for k, v in pairs({ "wilson", "wilson_client" }) do
 				self.states[aoestate].onexit = function (inst, ...)
 					if inst.sg.statemem.aoecastweapon then
 						local weapon = inst.sg.statemem.aoecastweapon
-						weapon.components.equippable:SetPreventUnequipping(false)
+						if weapon and weapon:IsValid() then
+							weapon.components.equippable:SetPreventUnequipping(false)
+						end
 					end
 					if onexit_old then
 						return onexit_old(inst, ...)

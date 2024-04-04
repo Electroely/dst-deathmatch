@@ -176,10 +176,10 @@ end
 local function OnPlayerLeft(inst, player)
 	local self = inst.components.deathmatch_manager
 	self.damagedealt[player] = nil
-	OnPlayerDeath(player)
 	self:RemovePlayerFromMatch(player)
 	local id = player.userid
 	inst:DoTaskInTime(FRAMES, function(inst)
+		OnPlayerDeath()
 		if self.doingreset and UserOnline(id) then
 			TheNet:Announce(self.announcestrings.NEARSTARTDESPAWN)
 			self:ResetDeathmatch()

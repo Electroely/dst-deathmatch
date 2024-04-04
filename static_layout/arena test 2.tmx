@@ -280,108 +280,8 @@
   <object type="arena_centerpoint_pigvillage" x="4800" y="704"/>
   <object type="arena_centerpoint_malbatross" x="5088" y="2592"/>
   <object type="oceanfish_shoalspawner" x="5088" y="2592"/>
-  <object type="arena_centerpoint_grotto" x="0" y="0"/>
-  <object type="mushtree_moon" x="0" y="4306"/>
-  <object type="grotto_pool_small" x="0" y="0"/>
-  <object type="mushtree_moon" x="550" y="4450"/>
-  <object type="mushtree_moon" x="646" y="4464"/>
-  <object type="mushtree_moon" x="560" y="4616"/>
-  <object type="grotto_pool_small" x="929" y="4552"/>
-  <object type="mushtree_moon" x="658" y="4584"/>
-  <object type="mushtree_moon" x="736" y="4584"/>
-  <object type="mushtree_moon" x="830" y="4466"/>
-  <object type="mushtree_moon" x="808" y="4556"/>
-  <object type="mushtree_moon" x="0" y="4296"/>
-  <object type="mushtree_moon" x="954" y="4466"/>
-  <object type="mushtree_moon" x="0" y="0"/>
-  <object type="grotto_pool_small" x="0" y="0"/>
-  <object type="grotto_pool_small" x="0" y="0"/>
-  <object type="mushtree_moon" x="0" y="0"/>
-  <object type="mushtree_moon" x="0" y="0"/>
-  <object type="mushtree_moon" x="0" y="0"/>
-  <object type="mushtree_moon" x="0" y="0"/>
-  <object type="mushtree_moon" x="0" y="0"/>
-  <object type="mushtree_moon" x="0" y="0"/>
-  <object type="mushtree_moon" x="0" y="0"/>
-  <object type="mushtree_moon" x="0" y="4920"/>
-  <object type="mushtree_moon" x="1344" y="4842"/>
-  <object type="mushtree_moon" x="1278" y="4862"/>
-  <object type="mushtree_moon" x="892" y="4984"/>
-  <object type="mushtree_moon" x="1066" y="5014"/>
-  <object type="grotto_pool_small" x="896" y="5074"/>
-  <object type="mushtree_moon" x="994" y="5050"/>
-  <object type="mushtree_moon" x="944" y="5190"/>
-  <object type="mushtree_moon" x="1048" y="5178"/>
-  <object type="mushtree_moon" x="1146" y="5182"/>
-  <object type="mushtree_moon" x="1298" y="5068"/>
-  <object type="mushtree_moon" x="804" y="4658"/>
-  <object type="mushtree_moon" x="594" y="4716"/>
-  <object type="mushtree_moon" x="558" y="4790"/>
-  <object type="grotto_pool_small" x="0" y="0"/>
-  <object type="mushtree_moon" x="638" y="4940"/>
-  <object type="mushtree_moon" x="1616" y="4724"/>
-  <object type="mushtree_moon" x="0" y="0"/>
-  <object type="mushtree_moon" x="1534" y="4780"/>
-  <object type="mushtree_moon" x="1448" y="4824"/>
-  <object type="mushtree_moon" x="1542" y="4854"/>
-  <object type="grotto_pool_small" x="1386" y="4900"/>
-  <object type="mushtree_moon" x="710" y="4980"/>
-  <object type="mushtree_moon" x="672" y="5068"/>
-  <object type="mushtree_moon" x="766" y="5060"/>
-  <object type="mushtree_moon" x="792" y="4914"/>
-  <object type="mushtree_moon" x="0" y="0"/>
-  <object type="powerup_flower" x="1007" y="4755"/>
-  <object type="powerup_flower" x="0" y="4693"/>
-  <object type="powerup_flower" x="0" y="0"/>
-  <object type="powerup_flower" x="1070" y="4916"/>
-  <object type="powerup_flower" x="0" y="0"/>
-  <object type="powerup_flower" x="0" y="0"/>
-  <object type="powerup_flower" x="0" y="4744"/>
-  <object type="powerup_flower" x="0" y="4768"/>
-  <object type="powerup_flower" x="0" y="0"/>
-  <object type="powerup_flower" x="0" y="4670"/>
-  <object type="powerup_flower" x="0" y="0"/>
-  <object type="powerup_flower" x="740" y="4458"/>
-  <object type="powerup_flower" x="964" y="4220"/>
-  <object type="powerup_flower" x="980" y="4404"/>
-  <object type="powerup_flower" x="0" y="4220"/>
-  <object type="powerup_flower" x="0" y="0"/>
-  <object type="powerup_flower" x="1176" y="4416"/>
-  <object type="powerup_flower" x="0" y="0"/>
-  <object type="powerup_flower" x="0" y="4411"/>
-  <object type="powerup_flower" x="0" y="0"/>
-  <object type="powerup_flower" x="0" y="4516"/>
-  <object type="powerup_flower" x="1606" y="4628"/>
-  <object type="powerup_flower" x="0" y="0"/>
-  <object type="powerup_flower" x="0" y="0"/>
-  <object type="powerup_flower" x="0" y="0"/>
-  <object type="powerup_flower" x="0" y="0"/>
-  <object type="powerup_flower" x="0" y="5114"/>
-  <object type="powerup_flower" x="1142" y="4974"/>
-  <object type="powerup_flower" x="0" y="0"/>
-  <object type="powerup_flower" x="0" y="0"/>
-  <object type="powerup_flower" x="0" y="0"/>
-  <object type="powerup_flower" x="0" y="4426"/>
-  <object type="powerup_flower" x="0" y="0"/>
-  <object type="powerup_flower" x="0" y="0"/>
-  <object type="powerup_flower" x="0" y="0"/>
-  <object type="powerup_flower" x="0" y="4618"/>
-  <object type="powerup_flower" x="0" y="0"/>
-  <object type="powerup_flower" x="0" y="0"/>
-  <object type="powerup_flower" x="1124" y="4608"/>
-  <object type="powerup_flower" x="0" y="0"/>
-  <object type="powerup_flower" x="0" y="4664"/>
-  <object type="powerup_flower" x="0" y="0"/>
-  <object type="arena_centerpoint_stalker" x="0" y="4520"/>
-  <object type="evergreen" x="0" y="0"/>
-  <object type="evergreen" x="0" y="0"/>
-  <object type="evergreen" x="0" y="0"/>
-  <object type="evergreen" x="0" y="0"/>
   <object type="evergreen" x="2846" y="4692" width="13" height="13"/>
   <object type="evergreen" x="2874" y="4336" width="13" height="13"/>
-  <object type="evergreen" x="0" y="0"/>
-  <object type="evergreen" x="0" y="0"/>
-  <object type="evergreen" x="0" y="0"/>
   <object type="maxwelllight" x="2912" y="4448"/>
   <object type="maxwelllight" x="2912" y="4704"/>
   <object type="maxwelllight" x="3168" y="4448"/>
@@ -390,15 +290,9 @@
   <object type="marblepillar" x="4992" y="4608"/>
   <object type="marblepillar" x="4864" y="4736"/>
   <object type="marblepillar" x="4992" y="4736"/>
-  <object type="trap_starfish" x="0" y="0"/>
-  <object type="trap_starfish" x="0" y="0"/>
-  <object type="trap_starfish" x="0" y="2610"/>
-  <object type="trap_starfish" x="0" y="2788"/>
   <object type="trap_starfish" x="5226" y="2734"/>
-  <object type="trap_starfish" x="0" y="0"/>
   <object type="trap_starfish" x="5288" y="2602"/>
   <object type="trap_starfish" x="5248" y="2432"/>
-  <object type="trap_starfish" x="0" y="2786"/>
   <object type="trap_starfish" x="5042" y="2394"/>
   <object type="dead_sea_bones" x="4896" y="2372"/>
   <object type="dead_sea_bones" x="4795" y="2601"/>

@@ -21,7 +21,7 @@ local function SpamCheck(caller)
 	if caller._recentusercommands == nil then
 		caller._recentusercommands = 0
 	end
-	if not caller:IsValid() or caller._recentusercommands > SPAMCHECK_MAX then
+	if not (caller and caller.IsValid and caller:IsValid()) or caller._recentusercommands > SPAMCHECK_MAX then
 		return true
 	end
 	caller._recentusercommands = caller._recentusercommands + 1
