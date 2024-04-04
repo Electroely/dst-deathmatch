@@ -132,8 +132,6 @@ PrefabFiles = {
 	"maxwelllight_flame",
 }
 Assets = {
-	Asset("ANIM", "anim/hat_snortoise.zip"),
-	Asset("ANIM", "anim/partyhealth_extras.zip"),
 	Asset("ANIM", "anim/deathmatch_poi_marker.zip"),
 	
 	Asset("ATLAS", "images/deathmatch_skilltree_bg.xml"),
