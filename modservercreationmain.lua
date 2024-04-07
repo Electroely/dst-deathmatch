@@ -100,4 +100,4 @@ local function FrontendUnloadMod(self, mname, ...)
     end
     return FrontendUnloadMod_old(self, mname, ...)
 end
-function GLOBAL.ModManager.FrontendUnloadMod = FrontendUnloadMod
+GLOBAL.ModManager.FrontendUnloadMod = FrontendUnloadMod

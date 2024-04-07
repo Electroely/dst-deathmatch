@@ -1023,74 +1023,97 @@ G.TheInput.IsControlPressed = function(self, control, ...)
 	end
 	return IsControlPressed_old(self, control, ...)
 end]]
--- AddModRPCHandler(modname, "deathmatch_currentreticule_change", function(inst, slot)
-	-- if inst == nil or slot == nil then return end
-	-- if inst.components.playercontroller then
-		-- local valid = false
-		-- for k, v in pairs(G.EQUIPSLOTS) do
-			-- if slot == v then
-				-- valid = true
-				-- break
-			-- end
-		-- end
-		-- if not valid then return end
-		-- inst.components.playercontroller.reticuleitemslot = slot
-	-- end
--- end)
 
--- AddModRPCHandler(modname, "locationrequest", function(inst, x, z)
-	-- if not (checknumber(x) and checknumber(z)) then
-		-- return
-	-- end
-	-- local pos = G.Vector3(x, 0, z)
-	-- inst._spintargetpos = pos
--- end)
 
--- G.TheInput:AddKeyDownHandler(G.KEY_R, function()
-	-- if G.TheFrontEnd and G.TheFrontEnd:GetActiveScreen().name == "HUD" then
-		-- if G.ThePlayer and G.ThePlayer.components.playercontroller then
-			-- if G.ThePlayer.components.playercontroller.reticule == nil then
-				-- G.ThePlayer.components.playercontroller:TryAOETargeting("head")
-			-- else
-				-- G.ThePlayer.components.playercontroller:CancelAOETargeting()
-			-- end
-		-- end
-	-- end
--- end)
+------------------------------------------ FORGE CODE --------------------------------------------------
+GLOBAL.DEFAULT_COOLDOWN_TIME = 12
+GLOBAL.EQUIP_COOLDOWN_TIME = 0
 
--- G.TheInput:AddKeyDownHandler(G.KEY_Z, function()
-	-- if G.TheFrontEnd and G.TheFrontEnd:GetActiveScreen().name == "HUD" then
-		-- if G.ThePlayer and G.ThePlayer.components.playercontroller then
-			-- if G.ThePlayer.components.playercontroller.reticule == nil then
-				-- G.ThePlayer.components.playercontroller:TryAOETargeting("body")
-			-- else
-				-- G.ThePlayer.components.playercontroller:CancelAOETargeting()
-			-- end
-		-- end
-	-- end
--- end)
-
---send crash logs to discord
---yes, you can spam me with messages with this. please don't
-local _DisplayError = G.DisplayError
-function G.DisplayError(error, ...)
-	local modnames = G.ModManager:GetEnabledModNames()
-	local modnamesstr = "List of Mods: "
-	if #modnames > 0 then
-		for k,modname in ipairs(modnames) do
-            modnamesstr = modnamesstr.."\""..G.KnownModIndex:GetModFancyName(modname).."\" "
-        end
+GLOBAL.DoEquipCooldown = function(inst)
+	if GLOBAL.EQUIP_COOLDOWN_TIME > 0 and inst.components.rechargeable and inst.components.rechargeable:GetTimeToCharge() <= GLOBAL.EQUIP_COOLDOWN_TIME then
+		inst.components.rechargeable:Discharge(GLOBAL.EQUIP_COOLDOWN_TIME)
 	end
-	G.TheSim:QueryServer(
-        "https://canary.discord.com/api/webhooks/799011101147922433/bfF-yZx3mVhvlnGz5rNTP-IE1BlHKPLN_boZFmRMUOfpubva98DOmisQRCjoqHu5sHAy",
-        function(...)
-            print("Sending Error Log to Deathmatch Developers")
-            print(...)
-        end,
-        "POST",
-        G.json.encode({
-			content = "```lua\n"..string.gsub(error,"'","’").."\n\n"..string.gsub(modnamesstr,"'","’").."```",
-        })
-    )
-	_DisplayError(error, ...)
+end
+
+local SourceModifierList = G.require("util/sourcemodifierlist")
+
+local function UpdateRechargeables(inst)
+	local inv = inst.components.inventory
+	local items = {}
+	for k, v in pairs(inv.itemslots) do
+		if v.components.rechargeable then
+			table.insert(items, v)
+		end
+	end
+	for k, v in pairs(inv.equipslots) do
+		if v.components.rechargeable then
+			table.insert(items, v)
+		end
+	end
+	local overflow = inv:GetOverflowContainer()
+	if overflow then
+		for k, v in pairs(overflow.itemslots) do
+			if v.components.rechargeable then
+				table.insert(items, v)
+			end
+		end
+	end
+
+	for k, v in pairs(items) do
+		v.components.rechargeable:SetChargeTimeMod(inst, "equipcdmods", -inst.cooldownmodifiers:Get())
+	end
+end
+
+local function player_onequip_cooldown(inst, data)
+	if data ~= nil then
+		local item = data.item
+		if item.components.equippable.cooldownmultiplier ~= nil then
+			inst.cooldownmodifiers:SetModifier(item, item.components.equippable.cooldownmultiplier)
+		end
+		UpdateRechargeables(inst)
+	end
+end
+
+local function player_onunequip_cooldown(inst, data)
+	if data ~= nil then
+		local item = data.item
+		if item.components.equippable.cooldownmultiplier ~= nil then
+			inst.cooldownmodifiers:RemoveModifier(item)
+		end
+		UpdateRechargeables(inst)
+	end
+end
+
+local function onitemget(inst, data)
+	if data and data.item and data.item.components.rechargeable then
+		data.item.components.rechargeable:SetChargeTimeMod(inst, "equipcdmods", -inst.cooldownmodifiers:Get())
+	end
+end
+local function onitemlose(inst, data)
+	if data and data.item and data.item.components.rechargeable then
+		data.item.components.rechargeable:SetChargeTimeMod(inst, "equipcdmods", 0)
+	end
+end
+
+AddPlayerPostInit(function(inst)
+	if not G.TheWorld.ismastersim then
+		return
+	end
+	inst.cooldownmodifiers = SourceModifierList(inst, 0, SourceModifierList.additive)
+
+	inst:ListenForEvent("equip", player_onequip_cooldown)
+	inst:ListenForEvent("unequip", player_onunequip_cooldown)
+	inst:ListenForEvent("itemget",onitemget)
+	inst:ListenForEvent("itemlose",onitemlose)
+	inst:ListenForEvent("cooldownmodifier", UpdateRechargeables)
+end)
+
+local requireeventfile_old = G.requireeventfile
+G.requireeventfile = function(filepath)
+	local _filepath = G.softresolvefilepath("scripts/"..filepath..".lua")
+	if _filepath ~= nil then
+		return G.require(filepath)
+	else
+		return requireeventfile_old(filepath)
+	end
 end
