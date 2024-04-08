@@ -4,13 +4,17 @@ if folder_name == "dst-deathmatch" then
 	name = "Deathmatch (GIT)"
 end
 --A description of the mod.
-description = "WIP"
+description = [[A new gamemode where you can fight your friends using weapons from the Forge!
 
+Create a new world with the mod enabled to get started!
+
+If any issues arise, please ensure the game mode is set to "Deathmatch" and that PvP is enabled.
+]]
 --Who wrote this awesome mod?
 author = "Electroely"
 
 --A version number so you can ask people if they are running an old version of your mod.
-version = "22.4"
+version = "1"
 
 --This lets other players know if your mod is out of date. This typically needs to be updated every time there's a new game update.
 api_version = 10

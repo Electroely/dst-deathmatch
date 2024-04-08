@@ -7,7 +7,7 @@ local function OnLand(inst)
 	local ents = TheSim:FindEntities(x, 0, z, inst.range)
 	for _, ent in pairs(ents) do 
 		if ent.components.combat and (TheNet:GetPVPEnabled() or not ent:HasTag("player")) and (ent ~= inst.caster)
-			and (inst.caster == nil or (inst.caster.components.combat:IsValidTarget(ent) and not inst.caster.components.combat:IsAlly(ent))) then
+			and (inst.caster == nil or (inst.caster:IsValid() and inst.caster.components.combat:IsValidTarget(ent) and not inst.caster.components.combat:IsAlly(ent))) then
 			inst:OnHit(ent)
 		end
 	end

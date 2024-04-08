@@ -3,8 +3,8 @@
 --easier translation in case that becomes a thing
 return {
 
-	STARTMATCH = "Start Deathmatch",
-	STOPMATCH = "Stop Deathmatch",
+	STARTMATCH = "Start Match",
+	STOPMATCH = "Stop Match",
 	TEAMSELECT = "Team Select",
 	TEAMMODE = "Game Mode",
 	ARENAS = "Arena Select",
@@ -137,20 +137,20 @@ return {
 		JOIN_LOBBY = "Welcome to Deathmatch! Use \"/dm start\" to start a match.",
 	},
 	ANNOUNCE = {
-		MATCHOVER = "Deathmatch is over!",
-		MATCHRESET = "Starting next deathmatch in 10 seconds...",
+		MATCHOVER = "Match is over!",
+		MATCHRESET = "Starting next match in 10 seconds...",
 		MATCHINIT = "Preparing players for next match...",
-		MATCHBEGIN = "Deathmatch started!",
-		LATEJOIN = "Player joined late! Restarting deathmatch initiation!",
-		NEARSTARTDESPAWN = "Restarting deathmatch initiation for despawning player.",
+		MATCHBEGIN = "Match started!",
+		LATEJOIN = "A player joined late! Restarting match initiation!",
+		NEARSTARTDESPAWN = "Restarting match initiation for despawning player.",
 
 		WINNER_TEAM = "{team} wins!",
 		WINNER_SOLO = "{player} wins with {health} health remaining!",
 		WINNER_DUO = "{player1} and {player2} win!",
 		
-		SETTEAMMODE = "Set deathmatch team mode to %s.",
-		SETTEAMMODE_CUSTOM = "Set deathmatch mode to custom. Use /setteam before a match starts to assign custom teams.",
-		SETTEAMMODE_RVB = "Set deathmatch mode to %s. Use /team to pick a side, or stay neutral to be randomized.",
+		SETTEAMMODE = "Set team mode to %s.",
+		SETTEAMMODE_CUSTOM = "Set mode to custom. Use /setteam before a match starts to assign custom teams.",
+		SETTEAMMODE_RVB = "Set mode to %s. Use /team to pick a side, or stay neutral to be randomized.",
 	},
 	USERCOMMANDS = {
 		SETTEAM = {
